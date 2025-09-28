@@ -1,11 +1,11 @@
-import { OptionCard } from "../components/option-card"
-import { useStepperContext } from "../onboarding-stepper"
-import { useOnboardingForm } from "../onboarding-context"
-import { Button } from "@/modules/shared/components/ui/button"
-import { NoteIcon } from "@/modules/shared/components/icons/note"
-import { CodeClipboardIcon } from "@/modules/shared/components/icons/code-clipboard"
 import { AwardIcon } from "@/modules/shared/components/icons/award"
+import { CodeClipboardIcon } from "@/modules/shared/components/icons/code-clipboard"
 import { CodeMessageIcon } from "@/modules/shared/components/icons/code-message"
+import { NoteIcon } from "@/modules/shared/components/icons/note"
+import { Button } from "@/modules/shared/components/ui/button"
+import { OptionCard } from "../components/option-card"
+import { useOnboardingForm } from "../onboarding-context"
+import { useOnboardingStepper } from "../onboarding-stepper"
 
 const levelOptions = [
   {
@@ -52,7 +52,7 @@ const levelOptions = [
 
 export function ChooseLevelStep() {
   const form = useOnboardingForm()
-  const { nextStep } = useStepperContext()
+  const { nextStep } = useOnboardingStepper()
 
   const handleLevelSelect = (level: (typeof levelOptions)[0]["id"]) => {
     form.setFieldValue("level", level)

@@ -1,7 +1,7 @@
+import { Button } from "@/modules/shared/components/ui/button"
+import type { ReactNode } from "react"
 import { createContext, useContext, useState } from "react"
 import { ProgressBar } from "./components/progress-bar"
-import type { ReactNode } from "react"
-import { Button } from "@/modules/shared/components/ui/button"
 
 export type OnboardingStep = "goal" | "level" | "status" | "welcome"
 
@@ -14,7 +14,7 @@ type StepperContextType = {
   previousStep: () => void
 }
 
-const StepperContext = createContext<null | StepperContextType>(null)
+const StepperContext = createContext({} as StepperContextType)
 
 const stepOrder: Array<OnboardingStep> = ["level", "goal", "status", "welcome"]
 
@@ -104,9 +104,6 @@ export function OnboardingStepper({
   )
 }
 
-export function useStepperContext() {
-  const context = useContext(StepperContext)
-  if (!context)
-    throw new Error("useStepperContext must be used within a StepperProvider")
-  return context
+export function useOnboardingStepper() {
+  return useContext(StepperContext)
 }

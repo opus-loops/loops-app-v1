@@ -1,0 +1,38 @@
+import { useQueryClient } from "@tanstack/react-query"
+import { useServerFn } from "@tanstack/react-start"
+import { useCallback } from "react"
+import type { StartSequenceOrderWire } from "./start-sequence-order-fn.server"
+import { startSequenceOrderFn } from "./start-sequence-order-fn.server"
+
+export function useStartSequenceOrder() {
+  const queryClient = useQueryClient()
+  const startSequenceOrder = useServerFn(startSequenceOrderFn)
+
+  const handleStartSequenceOrder = useCallback(
+    async ({
+      categoryId,
+      quizId,
+      questionId,
+    }: {
+      categoryId: string
+      quizId: string
+      questionId: string
+    }) => {
+      // Call server function → returns JSON-safe union
+      const response = (await startSequenceOrder({
+        data: { categoryId, quizId, questionId },
+      })) as StartSequenceOrderWire
+
+      if (response._tag === "Success") {
+        await queryClient.invalidateQueries({
+          queryKey: ["sub-quiz-content", categoryId, quizId, questionId],
+        })
+      }
+
+      return response
+    },
+    [startSequenceOrder, queryClient],
+  )
+
+  return { handleStartSequenceOrder }
+}

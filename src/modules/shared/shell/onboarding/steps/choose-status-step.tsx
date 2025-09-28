@@ -5,7 +5,7 @@ import { TeacherIcon } from "@/modules/shared/components/icons/teacher"
 import { Button } from "@/modules/shared/components/ui/button"
 import { OptionCard } from "../components/option-card"
 import { useOnboardingForm } from "../onboarding-context"
-import { useStepperContext } from "../onboarding-stepper"
+import { useOnboardingStepper } from "../onboarding-stepper"
 
 const statusOptions = [
   {
@@ -52,7 +52,7 @@ const statusOptions = [
 
 export function ChooseStatusStep() {
   const form = useOnboardingForm()
-  const { nextStep } = useStepperContext()
+  const { nextStep } = useOnboardingStepper()
 
   const handleStatusSelect = (status: (typeof statusOptions)[0]["id"]) => {
     form.setFieldValue("status", status)

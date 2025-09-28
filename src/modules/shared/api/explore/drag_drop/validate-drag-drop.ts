@@ -17,7 +17,7 @@ import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
 import { Schema } from "effect"
 
-const validateDragDropArgsSchema = Schema.Struct({
+export const validateDragDropArgsSchema = Schema.Struct({
   categoryId: Schema.String,
   quizId: Schema.String,
   questionId: Schema.String,

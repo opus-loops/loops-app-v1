@@ -1,7 +1,7 @@
-import { useStepperContext } from "../onboarding-stepper"
+import { useOnboardingStepper } from "../onboarding-stepper"
 
 export function ProgressBar() {
-  const { getStepProgress } = useStepperContext()
+  const { getStepProgress } = useOnboardingStepper()
   const progress = getStepProgress()
 
   return (

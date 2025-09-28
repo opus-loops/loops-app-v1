@@ -1,8 +1,8 @@
-import { OptionCard } from "../components/option-card"
-import { useOnboardingForm } from "../onboarding-context"
-import { useStepperContext } from "../onboarding-stepper"
 import { ClockIcon } from "@/modules/shared/components/icons/clock"
 import { Button } from "@/modules/shared/components/ui/button"
+import { OptionCard } from "../components/option-card"
+import { useOnboardingForm } from "../onboarding-context"
+import { useOnboardingStepper } from "../onboarding-stepper"
 
 const goalOptions = [
   {
@@ -53,7 +53,7 @@ const goalOptions = [
 
 export function ChooseGoalsStep() {
   const form = useOnboardingForm()
-  const { nextStep } = useStepperContext()
+  const { nextStep } = useOnboardingStepper()
 
   const handleGoalSelect = (goal: (typeof goalOptions)[0]["id"]) => {
     form.setFieldValue("dailyGoal", goal)
