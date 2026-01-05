@@ -9,6 +9,7 @@ export const startedQuizSchema = Schema.Struct({
   completedQuestions: Schema.Number.pipe(Schema.int()),
   spentTime: Schema.Number.pipe(Schema.int()),
   correctQuestionCount: Schema.Number.pipe(Schema.int()),
+  progressPointer: Schema.optional(Schema.String),
   createdAt: Schema.DateFromString,
   updatedAt: Schema.DateFromString,
 })

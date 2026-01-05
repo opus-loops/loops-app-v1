@@ -9,7 +9,7 @@ type QuizStepperContextType = {
   goToStep: (step: QuizStep) => void
 }
 
-const QuizStepperContext = createContext<null | QuizStepperContextType>(null)
+const QuizStepperContext = createContext({} as QuizStepperContextType)
 
 type QuizStepperProps = {
   quizItem: CategoryContentItem & { contentType: "quizzes" }
@@ -29,19 +29,8 @@ export function QuizStepper({
 
   return (
     <QuizStepperContext.Provider value={{ currentStep, goToStep }}>
-      {quizItem.startedQuiz &&
-        (quizItem.startedQuiz.status === "completed" ||
-          quizItem.startedQuiz.status === "not_started" ||
-          (quizItem.startedQuiz.status === "in_progress" &&
-            quizItem.startedQuiz.completedQuestions === 0)) &&
-        currentStep === "welcome" &&
-        welcome}
-
-      {quizItem.startedQuiz &&
-        quizItem.startedQuiz.status === "in_progress" &&
-        quizItem.startedQuiz.completedQuestions !== 0 &&
-        currentStep === "sub-quizzes" &&
-        subQuizzesNavigator}
+      {currentStep === "welcome" && welcome}
+      {currentStep === "sub-quizzes" && subQuizzesNavigator}
       {currentStep === "statistics" && statistics}
     </QuizStepperContext.Provider>
   )

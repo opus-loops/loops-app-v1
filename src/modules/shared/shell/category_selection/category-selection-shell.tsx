@@ -1,8 +1,8 @@
 import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn.server"
 import { useExploreCategories } from "@/modules/content-management/features/category-selection/services/use-explore-categories"
 import { CategoriesListSkeleton } from "@/modules/shared/components/common/categories-list-skeleton"
+import { CategoryContentSkeleton } from "@/modules/shared/components/common/category-content-skeleton"
 import { CategoryDetailsSkeleton } from "@/modules/shared/components/common/category-details-skeleton"
-import { ContentSkeleton } from "@/modules/shared/components/common/content-skeleton"
 import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
 import type { User } from "@/modules/shared/domain/entities/user"
 import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
@@ -36,7 +36,7 @@ export function CategorySelectionShell({
     if (searchParams.category !== "all" && searchParams.type === "details")
       return <CategoryDetailsSkeleton />
     if (searchParams.category !== "all" && searchParams.type === "content")
-      return <ContentSkeleton />
+      return <CategoryContentSkeleton />
     return <CategoriesListSkeleton />
   }, [searchParams])
 

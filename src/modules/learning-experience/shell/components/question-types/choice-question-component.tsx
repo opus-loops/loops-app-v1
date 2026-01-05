@@ -1,0 +1,159 @@
+import { cn } from "@/modules/shared/lib/utils"
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+import { useState } from "react"
+
+type ChoiceQuestionComponentProps = {
+  subQuiz: EnhancedSubQuiz & { questionType: "choice_question" }
+}
+
+export function ChoiceQuestionComponent({
+  subQuiz,
+}: ChoiceQuestionComponentProps) {
+  const [selectedChoice, setSelectedChoice] = useState<number | null>(null)
+
+  const question = subQuiz.content
+  const completedQuestion = subQuiz.completedChoiceQuestion
+
+  if (!question) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="text-loops-light">Question content not available</p>
+      </div>
+    )
+  }
+
+  const handleChoiceSelect = (index: number) => {
+    if (!isValidated) {
+      setSelectedChoice(index)
+    }
+  }
+
+  const getChoiceStyle = (index: number) => {
+    if (!isValidated) {
+      // Non-validated state
+      return cn(
+        "flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all",
+        "bg-slate-800 border-slate-600 text-white hover:border-slate-500",
+        selectedChoice === index && "border-cyan-400 bg-slate-700",
+      )
+    } else {
+      // Validated state - show correct/incorrect
+      const isCorrect = question.idealOptions.includes(index)
+      const wasSelected =
+        completedQuestion?.userAnswer?.includes(index) ?? false
+
+      if (isCorrect) {
+        return cn(
+          "flex items-center p-4 rounded-lg border-2",
+          "bg-green-900/30 border-green-500 text-white",
+        )
+      } else if (wasSelected) {
+        return cn(
+          "flex items-center p-4 rounded-lg border-2",
+          "bg-red-900/30 border-red-500 text-white",
+        )
+      } else {
+        return cn(
+          "flex items-center p-4 rounded-lg border-2",
+          "bg-slate-800 border-slate-600 text-white opacity-60",
+        )
+      }
+    }
+  }
+
+  const getChoiceIcon = (index: number) => {
+    if (!isValidated) {
+      return (
+        <div
+          className={cn(
+            "mr-3 flex h-6 w-6 items-center justify-center rounded-full border-2",
+            selectedChoice === index
+              ? "border-cyan-400 bg-cyan-400"
+              : "border-slate-400",
+          )}
+        >
+          {selectedChoice === index && (
+            <div className="h-2 w-2 rounded-full bg-white" />
+          )}
+        </div>
+      )
+    } else {
+      const isCorrect = question.idealOptions.includes(index)
+      const wasSelected =
+        completedQuestion?.userAnswer?.includes(index) ?? false
+
+      if (isCorrect) {
+        return (
+          <div className="mr-3 flex h-6 w-6 items-center justify-center rounded-full bg-green-500">
+            <svg
+              className="h-4 w-4 text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+        )
+      } else if (wasSelected) {
+        return (
+          <div className="mr-3 flex h-6 w-6 items-center justify-center rounded-full bg-red-500">
+            <svg
+              className="h-4 w-4 text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+        )
+      } else {
+        return (
+          <div className="mr-3 h-6 w-6 rounded-full border-2 border-slate-400" />
+        )
+      }
+    }
+  }
+
+  return (
+    <div className="mx-auto max-w-2xl">
+      {/* Question Text */}
+      <div className="mb-8">
+        <h2 className="text-xl leading-relaxed font-medium text-white">
+          {question.headline[0].content}
+        </h2>
+      </div>
+
+      {/* Choices */}
+      <div className="space-y-4">
+        {question.choices.map((choice, index) => {
+          const choiceText =
+            choice.find((c) => c.language === question.defaultLanguage)
+              ?.content ||
+            choice[0]?.content ||
+            ""
+
+          return (
+            <div
+              key={index}
+              className={getChoiceStyle(index)}
+              onClick={() => handleChoiceSelect(index)}
+            >
+              {getChoiceIcon(index)}
+              <span className="text-base">
+                {String.fromCharCode(65 + index)}) {choiceText}
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}

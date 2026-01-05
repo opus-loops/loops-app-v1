@@ -1,11 +1,11 @@
-import { Schema } from "effect"
-import type { Effect } from "effect"
 import { invalidCredentialsErrorSchema } from "@/modules/shared/domain/errors/invalid-credentials"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
 import { loginTokensSchema } from "@/modules/shared/domain/types/login-tokens"
-import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
+import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
 import { instance } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
+import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
+import type { Effect } from "effect"
+import { Schema } from "effect"
 
 const loginArgsSchema = Schema.Struct({
   password: Schema.String,

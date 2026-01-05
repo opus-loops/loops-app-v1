@@ -11,7 +11,10 @@ import tsConfigPaths from "vite-tsconfig-paths"
 export default defineConfig({
   plugins: [
     tsConfigPaths(),
-    tanstackStart({ customViteReactPlugin: true, target: "node-server" }),
+    tanstackStart({
+      customViteReactPlugin: true,
+      target: "node-server",
+    }),
     VitePWA({
       devOptions: { enabled: true },
       manifest: {
@@ -34,27 +37,27 @@ export default defineConfig({
         icons: [
           {
             sizes: "72x72",
-            src: "./assets/72x72.png",
+            src: "./assets/icons/72x72.png",
             type: "image/png",
           },
           {
             sizes: "128x128",
-            src: "./assets/128x128.png",
+            src: "./assets/icons/128x128.png",
             type: "image/png",
           },
           {
             sizes: "144x144",
-            src: "./assets/144x144.png",
+            src: "./assets/icons/144x144.png",
             type: "image/png",
           },
           {
             sizes: "192x192",
-            src: "./assets/192x192.png",
-            type: "image/png",
+            src: "./assets/icons/192x192.png",
+            type: "image/pnsg",
           },
           {
             sizes: "512x512",
-            src: "./assets/512x512.png",
+            src: "./assets/icons/512x512.png",
             type: "image/png",
           },
         ],

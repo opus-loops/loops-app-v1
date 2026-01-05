@@ -367,26 +367,23 @@ export function useContentNavigation({
     await Effect.runPromise(routerEffect)
   }, [selectedItem, router, clearSelectedContent, resetNavigationState])
 
-  const validateAndStartItem = useCallback(
-    async (): Promise<boolean> => {
-      if (!selectedItem) return false
+  const validateAndStartItem = useCallback(async (): Promise<boolean> => {
+    if (!selectedItem) return false
 
-      // Get the next item ID from the current item
-      const nextItemId = selectedItem.nextCategoryItem
-      if (!nextItemId) return false
+    // Get the next item ID from the current item
+    const nextItemId = selectedItem.nextCategoryItem
+    if (!nextItemId) return false
 
-      // Find the next item in the categoryItems array
-      const nextItem = categoryItems.find(
-        (item) => item.categoryItemId === nextItemId,
-      )
+    // Find the next item in the categoryItems array
+    const nextItem = categoryItems.find(
+      (item) => item.categoryItemId === nextItemId,
+    )
 
-      if (!nextItem) return false
+    if (!nextItem) return false
 
-      // Validate and start the next item
-      return await completionService.validateAndStartItem(nextItem)
-    },
-    [completionService, selectedItem, categoryItems],
-  )
+    // Validate and start the next item
+    return await completionService.validateAndStartItem(nextItem)
+  }, [completionService, selectedItem, categoryItems])
 
   const isItemCompleted = useCallback(
     (item: CategoryContentItem): boolean =>

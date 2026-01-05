@@ -5,3 +5,6 @@ dev-dist/
 .figma/
 .nitro/
 .output/
+.env
+
+

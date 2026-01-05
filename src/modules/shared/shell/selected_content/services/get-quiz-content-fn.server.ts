@@ -2,10 +2,6 @@ import type { getCompletedChoiceQuestionErrorsSchema } from "@/modules/shared/ap
 import { getCompletedChoiceQuestion } from "@/modules/shared/api/explore/choice_question/get-completed-choice-question"
 import type { getExploreChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"
 import { getExploreChoiceQuestion } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"
-import type { getCompletedDragDropErrorsSchema } from "@/modules/shared/api/explore/drag_drop/get-completed-drag-drop"
-import { getCompletedDragDrop } from "@/modules/shared/api/explore/drag_drop/get-completed-drag-drop"
-import type { getExploreDragDropErrorsSchema } from "@/modules/shared/api/explore/drag_drop/get-explore-drag-drop"
-import { getExploreDragDrop } from "@/modules/shared/api/explore/drag_drop/get-explore-drag-drop"
 import type { listExploreSubQuizzesErrorsSchema } from "@/modules/shared/api/explore/quiz/list-explore-sub-quizzes"
 import { listExploreSubQuizzes } from "@/modules/shared/api/explore/quiz/list-explore-sub-quizzes"
 import type { getCompletedSequenceOrderErrorsSchema } from "@/modules/shared/api/explore/sequence_order/get-completed-sequence-order"
@@ -13,7 +9,6 @@ import { getCompletedSequenceOrder } from "@/modules/shared/api/explore/sequence
 import type { getExploreSequenceOrderErrorsSchema } from "@/modules/shared/api/explore/sequence_order/get-explore-sequence-order"
 import { getExploreSequenceOrder } from "@/modules/shared/api/explore/sequence_order/get-explore-sequence-order"
 import { ChoiceQuestion } from "@/modules/shared/domain/entities/choice-question"
-import { DragDrop } from "@/modules/shared/domain/entities/drag-drop"
 import { SequenceOrder } from "@/modules/shared/domain/entities/sequence-order"
 import { SubQuiz } from "@/modules/shared/domain/entities/sub-quiz"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
@@ -26,8 +21,6 @@ export type GetQuizContentErrors =
   | typeof listExploreSubQuizzesErrorsSchema.Type
   | typeof getCompletedChoiceQuestionErrorsSchema.Type
   | typeof getExploreChoiceQuestionErrorsSchema.Type
-  | typeof getCompletedDragDropErrorsSchema.Type
-  | typeof getExploreDragDropErrorsSchema.Type
   | typeof getCompletedSequenceOrderErrorsSchema.Type
   | typeof getExploreSequenceOrderErrorsSchema.Type
   | typeof unknownErrorSchema.Type
@@ -96,49 +89,6 @@ const fetchSubQuizContentEffect = (
           questionType: "choice_question" as const,
           completedChoiceQuestion,
           content: choiceQuestionContent,
-        }
-      })
-    } else if (questionType === "drag_drop") {
-      return Effect.gen(function* () {
-        // Try to fetch completed drag drop (optional)
-        const completedDragDropExit = yield* Effect.promise(() =>
-          Effect.runPromiseExit(
-            getCompletedDragDrop({
-              categoryId,
-              quizId,
-              questionId,
-            }),
-          ),
-        )
-
-        const completedDragDrop =
-          completedDragDropExit._tag === "Success"
-            ? completedDragDropExit.value.completedDragDrop
-            : undefined
-
-        // Fetch drag drop content if completed exists
-        let dragDropContent: DragDrop | undefined = undefined
-        if (completedDragDrop) {
-          const dragDropContentExit = yield* Effect.promise(() =>
-            Effect.runPromiseExit(
-              getExploreDragDrop({
-                categoryId,
-                quizId,
-                questionId,
-              }),
-            ),
-          )
-
-          if (dragDropContentExit._tag === "Success") {
-            dragDropContent = dragDropContentExit.value.dragDrop
-          }
-        }
-
-        return {
-          ...subQuiz,
-          questionType: "drag_drop" as const,
-          completedDragDrop,
-          content: dragDropContent,
         }
       })
     } else if (questionType === "sequence_order") {

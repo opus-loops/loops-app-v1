@@ -187,13 +187,17 @@ export const categoryContentFn = createServerFn({
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
-        // Fallback if you sometimes throw defects: map to a typed error variant in your union
-        return {
-          code: "UnknownError" as const,
-          message: "Unexpected error occurred while fetching category content",
-        }
-      })
+      const failure = Option.getOrElse(
+        Cause.failureOption(exit.cause), //
+        () => {
+          // Fallback if you sometimes throw defects: map to a typed error variant in your union
+          return {
+            code: "UnknownError" as const,
+            message:
+              "Unexpected error occurred while fetching category content",
+          }
+        },
+      )
       wire = { _tag: "Failure", error: failure }
     }
 

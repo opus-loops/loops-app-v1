@@ -1,6 +1,6 @@
 import { motion } from "framer-motion"
 
-export function ContentSkeleton() {
+export function CategoryContentSkeleton() {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
@@ -11,7 +11,7 @@ export function ContentSkeleton() {
         </div>
 
         <h1 className="font-outfit text-loops-light text-xl font-bold tracking-tight">
-          Category details
+          Category content
         </h1>
       </div>
 
