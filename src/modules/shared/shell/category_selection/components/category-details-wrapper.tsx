@@ -1,4 +1,4 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn.server"
+import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { useExploreCategory } from "@/modules/content-management/features/content-detail/services/use-explore-category"
 import type { User } from "@/modules/shared/domain/entities/user"
 import { CategoryDetails } from "./category-details"

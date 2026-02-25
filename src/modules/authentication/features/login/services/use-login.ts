@@ -1,9 +1,8 @@
-// src/hooks/useLogin.ts
 import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
-import type { LoginWire } from "./login-fn.server"
-import { loginFn } from "./login-fn.server"
+import type { LoginWire } from "./login-fn"
+import { loginFn } from "./login-fn"
 
 export function useLogin() {
   const logUser = useServerFn(loginFn)

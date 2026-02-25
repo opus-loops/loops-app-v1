@@ -1,40 +1,44 @@
+import type {
+  startQuizErrorsSchema,
+  startQuizSuccessSchema,
+} from "@/modules/shared/api/explore/quiz/start-quiz"
+import { startQuiz } from "@/modules/shared/api/explore/quiz/start-quiz"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
-import type {
-  confirmAccountErrorsSchema,
-  confirmAccountSuccessSchema,
-} from "@/modules/shared/api/account/confirm-account"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { confirmAccount } from "@/modules/shared/api/account/confirm-account"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
-export type ConfirmAccountErrors =
-  | typeof confirmAccountErrorsSchema.Type
+export type StartQuizErrors =
+  | typeof startQuizErrorsSchema.Type
   | typeof unknownErrorSchema.Type
 
-export type ConfirmAccountSuccess = typeof confirmAccountSuccessSchema.Type
+export type StartQuizSuccess = typeof startQuizSuccessSchema.Type
 
 // JSON-safe wire union
-export type ConfirmAccountWire =
-  | { _tag: "Failure"; error: ConfirmAccountErrors }
-  | { _tag: "Success"; value: ConfirmAccountSuccess }
+export type StartQuizWire =
+  | { _tag: "Failure"; error: StartQuizErrors }
+  | { _tag: "Success"; value: StartQuizSuccess }
 
 // --- SERVER FUNCTION ---------------------------------------------------------
-export const confirmAccountFn = createServerFn({
-  method: "POST",
-  response: "data",
-})
-  .validator((data) => data as { confirmationCode: number })
-  .handler(async (ctx) => {
+export const startQuizFn = createServerFn({ method: "POST" })
+  .inputValidator(
+    (data) =>
+      data as {
+        readonly categoryId: string
+        readonly quizId: string
+      },
+  )
+  .handler(async (ctx): Promise<StartQuizWire> => {
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(
-      confirmAccount({
-        confirmationCode: ctx.data.confirmationCode,
+      startQuiz({
+        categoryId: ctx.data.categoryId,
+        quizId: ctx.data.quizId,
       }),
     )
 
     // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)
-    let wire: ConfirmAccountWire
+    let wire: StartQuizWire
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {

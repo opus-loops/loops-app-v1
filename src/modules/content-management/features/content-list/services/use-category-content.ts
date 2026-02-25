@@ -1,5 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
-import { categoryContentFn } from "./category-content-fn.server"
+import { categoryContentFn } from "./category-content-fn"
 
 interface CategoryContentParams {
   categoryId: string
@@ -16,10 +16,8 @@ export const categoryContentQuery = (params: CategoryContentParams) =>
           size: params.size,
         },
       })
-      if (response._tag === "Failure") {
-        const message = `Failed to fetch category content: ${response.error.message}`
-        throw new Error(message)
-      }
+      if (response._tag === "Failure")
+        throw new Error("Failed to fetch category content")
       return response.value
     },
   })

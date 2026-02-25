@@ -1,40 +1,39 @@
 import type {
-  submitVoucherErrorsSchema,
-  submitVoucherSuccessSchema,
-} from "@/modules/shared/api/voucher/submit-voucher"
-import { submitVoucher } from "@/modules/shared/api/voucher/submit-voucher"
+  confirmAccountErrorsSchema,
+  confirmAccountSuccessSchema,
+} from "@/modules/shared/api/account/confirm-account"
+import { confirmAccount } from "@/modules/shared/api/account/confirm-account"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
-export type SubmitVoucherErrors =
-  | typeof submitVoucherErrorsSchema.Type
+export type ConfirmAccountErrors =
+  | typeof confirmAccountErrorsSchema.Type
   | typeof unknownErrorSchema.Type
 
-export type SubmitVoucherSuccess = typeof submitVoucherSuccessSchema.Type
+export type ConfirmAccountSuccess = typeof confirmAccountSuccessSchema.Type
 
-export type SubmitVoucherWire =
-  | { _tag: "Success"; value: SubmitVoucherSuccess }
-  | { _tag: "Failure"; error: SubmitVoucherErrors }
+// JSON-safe wire union
+export type ConfirmAccountWire =
+  | { _tag: "Failure"; error: ConfirmAccountErrors }
+  | { _tag: "Success"; value: ConfirmAccountSuccess }
 
 // --- SERVER FUNCTION ---------------------------------------------------------
-export const submitVoucherFn = createServerFn({
+export const confirmAccountFn = createServerFn({
   method: "POST",
-  response: "data",
 })
-  .validator((data) => data as { categoryId: string; code: number })
+  .inputValidator((data) => data as { confirmationCode: number })
   .handler(async (ctx) => {
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(
-      submitVoucher({
-        categoryId: ctx.data.categoryId,
-        code: ctx.data.code,
+      confirmAccount({
+        confirmationCode: ctx.data.confirmationCode,
       }),
     )
 
     // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)
-    let wire: SubmitVoucherWire
+    let wire: ConfirmAccountWire
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {

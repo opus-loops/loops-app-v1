@@ -4,8 +4,8 @@ import { useCallback } from "react"
 import type {
   ValidateSequenceOrderArgs,
   ValidateSequenceOrderWire,
-} from "./validate-sequence-order-fn.server"
-import { validateSequenceOrderFn } from "./validate-sequence-order-fn.server"
+} from "./validate-sequence-order-fn"
+import { validateSequenceOrderFn } from "./validate-sequence-order-fn"
 
 export function useValidateSequenceOrder() {
   const queryClient = useQueryClient()

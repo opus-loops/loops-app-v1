@@ -27,9 +27,8 @@ export type ValidateSequenceOrderWire =
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const validateSequenceOrderFn = createServerFn({
   method: "POST",
-  response: "data",
 })
-  .validator((data) => data as ValidateSequenceOrderArgs)
+  .inputValidator((data) => data as ValidateSequenceOrderArgs)
   .handler(async (ctx): Promise<ValidateSequenceOrderWire> => {
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(validateSequenceOrder(ctx.data))

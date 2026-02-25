@@ -1,4 +1,4 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn.server"
+import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
 import { DifficultyTag } from "@/modules/shared/components/common/difficulty-tag"
 import { CodeCircleIcon } from "@/modules/shared/components/icons/code-circle"

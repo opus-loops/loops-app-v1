@@ -56,9 +56,8 @@ const fetchContentEffect = (url: string) =>
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const fetchContentFn = createServerFn({
   method: "POST",
-  response: "data",
 })
-  .validator((data) => data as { url: string })
+  .inputValidator((data) => data as { url: string })
   .handler(async (ctx): Promise<FetchContentWire> => {
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(fetchContentEffect(ctx.data.url))

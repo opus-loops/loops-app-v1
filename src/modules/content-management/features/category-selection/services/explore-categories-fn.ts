@@ -36,7 +36,7 @@ const fetchExploreCategoriesEffect = () =>
   Effect.gen(function* () {
     // 1) First, fetch all categories
     const categoriesExit = yield* Effect.promise(() =>
-      Effect.runPromiseExit(listExploreCategories())
+      Effect.runPromiseExit(listExploreCategories()),
     )
 
     if (categoriesExit._tag === "Failure") {
@@ -45,7 +45,7 @@ const fetchExploreCategoriesEffect = () =>
         () => ({
           code: "UnknownError" as const,
           message: "Failed to fetch categories",
-        })
+        }),
       )
       return yield* Effect.fail(failure)
     }
@@ -56,7 +56,9 @@ const fetchExploreCategoriesEffect = () =>
     // 2) For each category, try to fetch its started category data
     for (const category of categoriesData.categories) {
       const startedCategoryExit = yield* Effect.promise(() =>
-        Effect.runPromiseExit(getStartedCategory({ categoryId: category.categoryId }))
+        Effect.runPromiseExit(
+          getStartedCategory({ categoryId: category.categoryId }),
+        ),
       )
 
       let categoryWithStartedData: CategoryWithStartedCategory = { ...category }
@@ -77,12 +79,15 @@ const fetchExploreCategoriesEffect = () =>
       // If one has startedCategory and the other doesn't, prioritize the one with startedCategory
       if (a.startedCategory && !b.startedCategory) return -1
       if (!a.startedCategory && b.startedCategory) return 1
-      
+
       // If both have startedCategory, sort by updatedAt descending (most recent first)
       if (a.startedCategory && b.startedCategory) {
-        return b.startedCategory.updatedAt.getTime() - a.startedCategory.updatedAt.getTime()
+        return (
+          b.startedCategory.updatedAt.getTime() -
+          a.startedCategory.updatedAt.getTime()
+        )
       }
-      
+
       // If neither has startedCategory, maintain original order
       return 0
     })
@@ -99,7 +104,6 @@ const fetchExploreCategoriesEffect = () =>
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const exploreCategoriesFn = createServerFn({
   method: "GET",
-  response: "data",
 }).handler(async (): Promise<ExploreCategoriesWire> => {
   // 1) Run your Effect on the server
   const exit = await Effect.runPromiseExit(fetchExploreCategoriesEffect())

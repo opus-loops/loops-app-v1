@@ -1,50 +1,44 @@
 import type {
-  startChoiceQuestionErrorsSchema,
-  startChoiceQuestionSuccessSchema,
-} from "@/modules/shared/api/explore/choice_question/start-choice-question"
-import { startChoiceQuestion } from "@/modules/shared/api/explore/choice_question/start-choice-question"
+  startSkillErrorsSchema,
+  startSkillSuccessSchema,
+} from "@/modules/shared/api/explore/skill/start-skill"
+import { startSkill } from "@/modules/shared/api/explore/skill/start-skill"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
-export type StartChoiceQuestionErrors =
-  | typeof startChoiceQuestionErrorsSchema.Type
+export type StartSkillErrors =
+  | typeof startSkillErrorsSchema.Type
   | typeof unknownErrorSchema.Type
 
-export type StartChoiceQuestionSuccess =
-  typeof startChoiceQuestionSuccessSchema.Type
+export type StartSkillSuccess = typeof startSkillSuccessSchema.Type
 
 // JSON-safe wire union
-export type StartChoiceQuestionWire =
-  | { _tag: "Failure"; error: StartChoiceQuestionErrors }
-  | { _tag: "Success"; value: StartChoiceQuestionSuccess }
+export type StartSkillWire =
+  | { _tag: "Failure"; error: StartSkillErrors }
+  | { _tag: "Success"; value: StartSkillSuccess }
 
 // --- SERVER FUNCTION ---------------------------------------------------------
-export const startChoiceQuestionFn = createServerFn({
-  method: "POST",
-  response: "data",
-})
-  .validator(
+export const startSkillFn = createServerFn({ method: "POST" })
+  .inputValidator(
     (data) =>
       data as {
         readonly categoryId: string
-        readonly quizId: string
-        readonly questionId: string
+        readonly skillId: string
       },
   )
-  .handler(async (ctx): Promise<StartChoiceQuestionWire> => {
+  .handler(async (ctx): Promise<StartSkillWire> => {
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(
-      startChoiceQuestion({
+      startSkill({
         categoryId: ctx.data.categoryId,
-        quizId: ctx.data.quizId,
-        questionId: ctx.data.questionId,
+        skillId: ctx.data.skillId,
       }),
     )
 
     // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)
-    let wire: StartChoiceQuestionWire
+    let wire: StartSkillWire
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
@@ -52,7 +46,7 @@ export const startChoiceQuestionFn = createServerFn({
         // Fallback if you sometimes throw defects: map to a typed error variant in your union
         return {
           code: "UnknownError" as const,
-          message: "Unexpected error occurred while starting choice question",
+          message: "Unexpected error",
         }
       })
       wire = { _tag: "Failure", error: failure }

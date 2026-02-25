@@ -1,4 +1,4 @@
-import { singleCategoryItemFn } from "@/modules/content-management/features/single-item/services/single-category-item-fn.server"
+import { singleCategoryItemFn } from "@/modules/content-management/features/single-item/services/single-category-item-fn"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { Effect } from "effect"
 
@@ -38,9 +38,7 @@ export function getCategoryContentItemById(
       })
 
       if (response._tag === "Failure")
-        throw new Error(
-          `Failed to fetch category item: ${response.error.message}`,
-        )
+        throw new Error("Failed to fetch category item")
 
       return response.value.categoryItem
     },

@@ -1,4 +1,4 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn.server"
+import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { LockIcon } from "@/modules/shared/components/icons/lock"
 import { cn } from "@/modules/shared/lib/utils"
 import { motion } from "framer-motion"

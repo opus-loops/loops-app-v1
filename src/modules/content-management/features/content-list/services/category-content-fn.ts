@@ -166,9 +166,8 @@ const fetchCategoryContentEffect = (params: CategoryContentParams) =>
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const categoryContentFn = createServerFn({
   method: "GET",
-  response: "data",
 })
-  .validator(
+  .inputValidator(
     (data) =>
       data as {
         readonly categoryId: string

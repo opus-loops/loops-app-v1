@@ -1,5 +1,5 @@
-import type { CompleteSkillWire } from "@/modules/shared/shell/category_selection/services/complete-skill-fn.server"
-import { completeSkillFn } from "@/modules/shared/shell/category_selection/services/complete-skill-fn.server"
+import type { CompleteSkillWire } from "@/modules/shared/shell/category_selection/services/complete-skill-fn"
+import { completeSkillFn } from "@/modules/shared/shell/category_selection/services/complete-skill-fn"
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"

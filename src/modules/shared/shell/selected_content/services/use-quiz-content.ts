@@ -1,5 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
-import { getQuizContentFn } from "./get-quiz-content-fn.server"
+import { getQuizContentFn } from "./get-quiz-content-fn"
 
 interface QuizContentParams {
   categoryId: string
@@ -17,10 +17,8 @@ export const quizContentQuery = (params: QuizContentParams) =>
         },
       })
 
-      if (response._tag === "Failure") {
-        const message = `Failed to fetch quiz content: ${response.error.message}`
-        throw new Error(message)
-      }
+      if (response._tag === "Failure")
+        throw new Error("Failed to fetch quiz content")
 
       return response.value
     },

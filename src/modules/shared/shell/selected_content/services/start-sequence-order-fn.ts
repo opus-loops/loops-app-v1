@@ -23,9 +23,8 @@ export type StartSequenceOrderWire =
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const startSequenceOrderFn = createServerFn({
   method: "POST",
-  response: "data",
 })
-  .validator(
+  .inputValidator(
     (data) =>
       data as {
         readonly categoryId: string

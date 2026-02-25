@@ -175,9 +175,8 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const singleCategoryItemFn = createServerFn({
   method: "GET",
-  response: "data",
 })
-  .validator(
+  .inputValidator(
     (data) =>
       data as {
         readonly categoryId: string

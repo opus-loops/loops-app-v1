@@ -41,8 +41,8 @@ function convertFormToApiData(formData: {
 }
 
 // --- SERVER FUNCTION ---------------------------------------------------------
-export const onboardingFn = createServerFn({ method: "POST", response: "data" })
-  .validator(
+export const onboardingFn = createServerFn({ method: "POST" })
+  .inputValidator(
     (data) =>
       data as {
         readonly dailyGoal: string

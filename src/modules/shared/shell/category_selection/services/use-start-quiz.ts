@@ -1,8 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
-import type { StartQuizWire } from "./start-quiz-fn.server"
-import { startQuizFn } from "./start-quiz-fn.server"
+import type { StartQuizWire } from "./start-quiz-fn"
+import { startQuizFn } from "./start-quiz-fn"
 
 export function useStartQuiz() {
   const startQuizServer = useServerFn(startQuizFn)

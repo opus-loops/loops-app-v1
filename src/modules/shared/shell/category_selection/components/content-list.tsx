@@ -1,4 +1,4 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn.server"
+import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
 import { motion, Variants } from "framer-motion"
 import { BackButton } from "./back-button"

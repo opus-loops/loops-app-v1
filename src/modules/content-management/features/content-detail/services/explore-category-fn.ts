@@ -73,11 +73,8 @@ const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
   })
 
 // --- SERVER FUNCTION ---------------------------------------------------------
-export const exploreCategoryFn = createServerFn({
-  method: "GET",
-  response: "data",
-})
-  .validator(
+export const exploreCategoryFn = createServerFn({ method: "GET" })
+  .inputValidator(
     (data) =>
       data as {
         readonly categoryId: string

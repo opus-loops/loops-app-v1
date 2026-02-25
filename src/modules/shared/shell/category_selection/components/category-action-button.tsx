@@ -1,4 +1,4 @@
-import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn.server"
+import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { Button } from "@/modules/shared/components/ui/button"
 import type { User } from "@/modules/shared/domain/entities/user"
 import { useQueryClient } from "@tanstack/react-query"

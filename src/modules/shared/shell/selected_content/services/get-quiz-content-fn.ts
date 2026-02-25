@@ -194,9 +194,8 @@ const fetchQuizContentEffect = (
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const getQuizContentFn = createServerFn({
   method: "GET",
-  response: "data",
 })
-  .validator(
+  .inputValidator(
     (data) =>
       data as {
         readonly categoryId: string

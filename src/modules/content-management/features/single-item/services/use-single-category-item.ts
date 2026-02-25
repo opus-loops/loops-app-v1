@@ -5,7 +5,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query"
 import { useEffect } from "react"
-import { singleCategoryItemFn } from "./single-category-item-fn.server"
+import { singleCategoryItemFn } from "./single-category-item-fn"
 
 interface SingleCategoryItemParams {
   categoryId: string
@@ -22,10 +22,8 @@ export const singleCategoryItemQuery = (params: SingleCategoryItemParams) =>
           itemId: params.itemId,
         },
       })
-      if (response._tag === "Failure") {
-        const message = `Failed to fetch category item: ${response.error.message}`
-        throw new Error(message)
-      }
+      if (response._tag === "Failure")
+        throw new Error("Failed to fetch category item")
       return response.value
     },
   })

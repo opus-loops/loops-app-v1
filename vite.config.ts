@@ -11,10 +11,7 @@ import tsConfigPaths from "vite-tsconfig-paths"
 export default defineConfig({
   plugins: [
     tsConfigPaths(),
-    tanstackStart({
-      customViteReactPlugin: true,
-      target: "node-server",
-    }),
+    tanstackStart(),
     VitePWA({
       devOptions: { enabled: true },
       manifest: {

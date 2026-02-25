@@ -4,8 +4,8 @@ import { useCallback } from "react"
 import type {
   ValidateChoiceQuestionArgs,
   ValidateChoiceQuestionWire,
-} from "./validate-choice-question-fn.server"
-import { validateChoiceQuestionFn } from "./validate-choice-question-fn.server"
+} from "./validate-choice-question-fn"
+import { validateChoiceQuestionFn } from "./validate-choice-question-fn"
 
 export function useValidateChoiceQuestion() {
   const queryClient = useQueryClient()

@@ -1,5 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
-import { exploreCategoryFn } from "./explore-category-fn.server"
+import { exploreCategoryFn } from "./explore-category-fn"
 
 interface ExploreCategoryParams {
   categoryId: string
@@ -14,7 +14,7 @@ export const exploreCategoryQuery = (params: ExploreCategoryParams) =>
       })
 
       if (response._tag === "Failure") {
-        const message = `Failed to fetch explore category: ${response.error.message}`
+        const message = "Failed to fetch explore category"
         throw new Error(message)
       }
       return response.value

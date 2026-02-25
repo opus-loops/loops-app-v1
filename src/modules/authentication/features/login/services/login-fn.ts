@@ -1,13 +1,13 @@
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
 import type {
   loginErrorsSchema,
   loginSuccessSchema,
 } from "@/modules/shared/api/auth/login"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { login } from "@/modules/shared/api/auth/login"
-import { interceptRequests } from "@/modules/shared/utils/axios"
 import { createSession } from "@/modules/shared/shell/session"
+import { interceptRequests } from "@/modules/shared/utils/axios"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type LoginErrors =
@@ -22,8 +22,8 @@ export type LoginWire =
   | { _tag: "Success"; value: LoginSuccess }
 
 // --- SERVER FUNCTION ---------------------------------------------------------
-export const loginFn = createServerFn({ method: "POST", response: "data" })
-  .validator(
+export const loginFn = createServerFn({ method: "POST" })
+  .inputValidator(
     (data) =>
       data as {
         readonly password: string

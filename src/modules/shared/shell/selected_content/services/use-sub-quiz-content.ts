@@ -1,5 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
-import { getSubQuizContentFn } from "./get-sub-quiz-content-fn.server"
+import { getSubQuizContentFn } from "./get-sub-quiz-content-fn"
 
 interface SubQuizContentParams {
   categoryId: string
@@ -9,7 +9,12 @@ interface SubQuizContentParams {
 
 export const subQuizContentQuery = (params: SubQuizContentParams) =>
   queryOptions({
-    queryKey: ["sub-quiz-content", params.categoryId, params.quizId, params.questionId],
+    queryKey: [
+      "sub-quiz-content",
+      params.categoryId,
+      params.quizId,
+      params.questionId,
+    ],
     queryFn: async () => {
       const response = await getSubQuizContentFn({
         data: {
@@ -19,10 +24,8 @@ export const subQuizContentQuery = (params: SubQuizContentParams) =>
         },
       })
 
-      if (response._tag === "Failure") {
-        const message = `Failed to fetch sub-quiz content: ${response.error.message}`
-        throw new Error(message)
-      }
+      if (response._tag === "Failure")
+        throw new Error("Failed to fetch sub-quiz content")
 
       return response.value
     },

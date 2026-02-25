@@ -1,5 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
-import { fetchContentFn } from "./fetch-content-fn.server"
+import { fetchContentFn } from "./fetch-content-fn"
 
 export const skillContentQuery = (url: string) =>
   queryOptions({

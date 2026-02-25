@@ -27,9 +27,8 @@ export type ValidateChoiceQuestionWire =
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const validateChoiceQuestionFn = createServerFn({
   method: "POST",
-  response: "data",
 })
-  .validator((data) => data as ValidateChoiceQuestionArgs)
+  .inputValidator((data) => data as ValidateChoiceQuestionArgs)
   .handler(async (ctx): Promise<ValidateChoiceQuestionWire> => {
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(validateChoiceQuestion(ctx.data))

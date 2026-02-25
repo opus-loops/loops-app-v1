@@ -56,9 +56,8 @@ const fetchSubQuizContentEffect = (params: GetSubQuizContentParams) =>
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const getSubQuizContentFn = createServerFn({
   method: "GET",
-  response: "data",
 })
-  .validator(
+  .inputValidator(
     (data) =>
       data as {
         readonly categoryId: string
@@ -81,8 +80,7 @@ export const getSubQuizContentFn = createServerFn({
         // Fallback if you sometimes throw defects: map to a typed error variant in your union
         return {
           code: "UnknownError" as const,
-          message:
-            "Unexpected error occurred while fetching sub-quiz content",
+          message: "Unexpected error occurred while fetching sub-quiz content",
         }
       })
       wire = { _tag: "Failure", error: failure }

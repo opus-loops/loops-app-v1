@@ -1,8 +1,8 @@
 // src/features/request_confirm/use-request-confirm.ts
-import { useCallback } from "react"
 import { useServerFn } from "@tanstack/react-start"
-import { requestConfirmFn } from "./request-confirm-fn.server"
-import type { RequestConfirmWire } from "./request-confirm-fn.server"
+import { useCallback } from "react"
+import type { RequestConfirmWire } from "./request-confirm-fn"
+import { requestConfirmFn } from "./request-confirm-fn"
 
 export function useRequestConfirm() {
   const requestConfirmServer = useServerFn(requestConfirmFn)

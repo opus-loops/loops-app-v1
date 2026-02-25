@@ -1,8 +1,8 @@
-import { useCallback } from "react"
-import { useServerFn } from "@tanstack/react-start"
 import { useQueryClient } from "@tanstack/react-query"
-import { submitVoucherFn } from "./submit-voucher-fn.server"
-import type { SubmitVoucherWire } from "./submit-voucher-fn.server"
+import { useServerFn } from "@tanstack/react-start"
+import { useCallback } from "react"
+import type { SubmitVoucherWire } from "./submit-voucher-fn"
+import { submitVoucherFn } from "./submit-voucher-fn"
 
 export function useSubmitVoucher() {
   const submitVoucherServer = useServerFn(submitVoucherFn)

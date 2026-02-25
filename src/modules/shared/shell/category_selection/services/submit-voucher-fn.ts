@@ -1,53 +1,44 @@
 import type {
-  completeSkillErrorsSchema,
-  completeSkillSuccessSchema,
-} from "@/modules/shared/api/explore/skill/complete-skill"
-import { completeSkill } from "@/modules/shared/api/explore/skill/complete-skill"
+  submitVoucherErrorsSchema,
+  submitVoucherSuccessSchema,
+} from "@/modules/shared/api/voucher/submit-voucher"
+import { submitVoucher } from "@/modules/shared/api/voucher/submit-voucher"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
-export type CompleteSkillErrors =
-  | typeof completeSkillErrorsSchema.Type
+export type SubmitVoucherErrors =
+  | typeof submitVoucherErrorsSchema.Type
   | typeof unknownErrorSchema.Type
 
-export type CompleteSkillSuccess = typeof completeSkillSuccessSchema.Type
+export type SubmitVoucherSuccess = typeof submitVoucherSuccessSchema.Type
 
-// JSON-safe wire union
-export type CompleteSkillWire =
-  | { _tag: "Failure"; error: CompleteSkillErrors }
-  | { _tag: "Success"; value: CompleteSkillSuccess }
+export type SubmitVoucherWire =
+  | { _tag: "Success"; value: SubmitVoucherSuccess }
+  | { _tag: "Failure"; error: SubmitVoucherErrors }
 
 // --- SERVER FUNCTION ---------------------------------------------------------
-export const completeSkillFn = createServerFn({
+export const submitVoucherFn = createServerFn({
   method: "POST",
-  response: "data",
 })
-  .validator(
-    (data) =>
-      data as {
-        readonly categoryId: string
-        readonly skillId: string
-      },
-  )
-  .handler(async (ctx): Promise<CompleteSkillWire> => {
+  .inputValidator((data) => data as { categoryId: string; code: number })
+  .handler(async (ctx) => {
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(
-      completeSkill({
+      submitVoucher({
         categoryId: ctx.data.categoryId,
-        skillId: ctx.data.skillId,
+        code: ctx.data.code,
       }),
     )
 
     // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)
-    let wire: CompleteSkillWire
+    let wire: SubmitVoucherWire
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
       const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
         // Fallback if you sometimes throw defects: map to a typed error variant in your union
-        // Make sure your completeSkillErrorsSchema includes an UnknownError or similar branch.
         return {
           code: "UnknownError" as const,
           message: "Unexpected error",
@@ -56,5 +47,6 @@ export const completeSkillFn = createServerFn({
       wire = { _tag: "Failure", error: failure }
     }
 
+    // 3) Return JSON-serializable value (Start will serialize it)
     return wire
   })

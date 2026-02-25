@@ -1,11 +1,11 @@
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
-import { getLoggedUser } from "../api/users/get-logged-user"
-import type { unknownErrorSchema } from "../utils/types"
 import type {
   getLoggedUserErrorsSchema,
   getLoggedUserSuccessSchema,
 } from "../api/users/get-logged-user"
+import { getLoggedUser } from "../api/users/get-logged-user"
+import type { unknownErrorSchema } from "../utils/types"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type IsAuthenticatedErrors =
@@ -20,28 +20,27 @@ export type IsAuthenticatedWire =
   | { _tag: "Success"; value: IsAuthenticatedSuccess }
 
 // --- SERVER FUNCTION ---------------------------------------------------------
-export const isAuthenticated = createServerFn({
-  method: "GET",
-  response: "data",
-}).handler(async (): Promise<IsAuthenticatedWire> => {
-  // 1) Run your Effect on the server
-  const exit = await Effect.runPromiseExit(getLoggedUser())
+export const isAuthenticated = createServerFn({ method: "GET" }).handler(
+  async (): Promise<IsAuthenticatedWire> => {
+    // 1) Run your Effect on the server
+    const exit = await Effect.runPromiseExit(getLoggedUser())
 
-  // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)
-  let wire: IsAuthenticatedWire
-  if (exit._tag === "Success") {
-    wire = { _tag: "Success", value: exit.value }
-  } else {
-    const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
-      // Fallback if you sometimes throw defects: map to a typed error variant in your union
-      return {
-        code: "UnknownError" as const,
-        message: "Unexpected error",
-      }
-    })
-    wire = { _tag: "Failure", error: failure }
-  }
+    // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)
+    let wire: IsAuthenticatedWire
+    if (exit._tag === "Success") {
+      wire = { _tag: "Success", value: exit.value }
+    } else {
+      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
+        // Fallback if you sometimes throw defects: map to a typed error variant in your union
+        return {
+          code: "UnknownError" as const,
+          message: "Unexpected error",
+        }
+      })
+      wire = { _tag: "Failure", error: failure }
+    }
 
-  // 3) Return JSON-serializable value (Start will serialize it)
-  return wire
-})
+    // 3) Return JSON-serializable value (Start will serialize it)
+    return wire
+  },
+)

@@ -1,11 +1,11 @@
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
 import type {
   requestConfirmErrorsSchema,
   requestConfirmSuccessSchema,
 } from "@/modules/shared/api/account/request-confirm"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { requestConfirm } from "@/modules/shared/api/account/request-confirm"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type RequestConfirmErrors =
@@ -22,7 +22,6 @@ export type RequestConfirmWire =
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const requestConfirmFn = createServerFn({
   method: "POST",
-  response: "data",
 }).handler(async () => {
   // 1) Run your Effect on the server
   const exit = await Effect.runPromiseExit(requestConfirm())

@@ -1,8 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
-import type { StartSequenceOrderWire } from "./start-sequence-order-fn.server"
-import { startSequenceOrderFn } from "./start-sequence-order-fn.server"
+import type { StartSequenceOrderWire } from "./start-sequence-order-fn"
+import { startSequenceOrderFn } from "./start-sequence-order-fn"
 
 export function useStartSequenceOrder() {
   const queryClient = useQueryClient()

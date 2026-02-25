@@ -1,11 +1,11 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
-import { exploreCategoriesFn } from "./explore-categories-fn.server"
+import { exploreCategoriesFn } from "./explore-categories-fn"
 
 export const exploreCategoriesQuery = queryOptions({
   queryFn: async () => {
     const response = await exploreCategoriesFn()
     if (response._tag === "Failure") {
-      const message = `Failed to fetch explore categories: ${response.error.message}`
+      const message = "Failed to fetch explore categories"
       throw new Error(message)
     }
 

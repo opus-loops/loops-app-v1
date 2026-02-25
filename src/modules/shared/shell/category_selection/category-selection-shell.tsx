@@ -1,4 +1,4 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn.server"
+import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { useExploreCategories } from "@/modules/content-management/features/category-selection/services/use-explore-categories"
 import { CategoriesListSkeleton } from "@/modules/shared/components/common/categories-list-skeleton"
 import { CategoryContentSkeleton } from "@/modules/shared/components/common/category-content-skeleton"
