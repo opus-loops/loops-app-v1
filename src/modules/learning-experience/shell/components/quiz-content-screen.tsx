@@ -22,9 +22,6 @@ export function QuizContentScreen({
     <div className="bg-loops-background flex h-full flex-col">
       <div className="relative flex items-center justify-center px-4 py-6">
         <BackButton onBack={onBack} />
-        <h1 className="font-outfit text-loops-light text-xl font-bold tracking-tight">
-          {quizItem.content.label[0].content}
-        </h1>
       </div>
 
       <div className="mb-10 flex-1 overflow-y-auto px-7 pb-20">
@@ -34,7 +31,7 @@ export function QuizContentScreen({
               quizItem={quizItem}
               welcome={<QuizWelcomeScreen quizItem={quizItem} />}
               subQuizzesNavigator={<SubQuizzesNavigator quizItem={quizItem} />}
-              statistics={<QuizStatisticsScreen />}
+              statistics={<QuizStatisticsScreen quizItem={quizItem} />}
             />
           </Suspense>
         </SelectedSubQuizProvider>

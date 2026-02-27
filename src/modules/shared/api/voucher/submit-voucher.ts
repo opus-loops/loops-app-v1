@@ -6,7 +6,7 @@ import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not
 import { voucherNotFoundErrorSchema } from "@/modules/shared/domain/errors/voucher-not-found"
 import { successMessageWithPayloadSchemaFactory } from "@/modules/shared/domain/types/success-message"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import { Effect, Schema } from "effect"
@@ -58,23 +58,27 @@ export const submitVoucherExitSchema = Schema.Exit({
   success: submitVoucherSuccessSchema,
 })
 
-export function submitVoucher(args: SubmitVoucherArgs): SubmitVoucherResult {
-  const parsedArgs = parseEffectSchema(submitVoucherArgsSchema, args)
-  const url = `/vouchers/submit`
-  const response = instance.post(url, {
-    categoryId: parsedArgs.categoryId,
-    code: parsedArgs.code,
-  })
+export const submitVoucherFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "SubmitVoucherErrors",
-      schema: submitVoucherErrorsSchema,
-    },
-    name: "SubmitVoucher",
-    success: {
-      name: "SubmitVoucherSuccess",
-      schema: submitVoucherSuccessSchema,
-    },
-  })(response)
+  return function submitVoucher(args: SubmitVoucherArgs): SubmitVoucherResult {
+    const parsedArgs = parseEffectSchema(submitVoucherArgsSchema, args)
+    const url = `/vouchers/submit`
+    const response = instance.post(url, {
+      categoryId: parsedArgs.categoryId,
+      code: parsedArgs.code,
+    })
+
+    return parseApiResponse({
+      error: {
+        name: "SubmitVoucherErrors",
+        schema: submitVoucherErrorsSchema,
+      },
+      name: "SubmitVoucher",
+      success: {
+        name: "SubmitVoucherSuccess",
+        schema: submitVoucherSuccessSchema,
+      },
+    })(response)
+  }
 }

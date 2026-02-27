@@ -18,36 +18,23 @@ export function SkillContentScreen({
 }: SkillContentScreenProps) {
   const skillContent = skillItem.skillContent as SkillContent
 
-  // Get content URL for markdown fetching
   const contentUrl = skillContent.contentURL[0].content
 
   return (
     <div className="bg-loops-background flex h-full flex-col">
-      {/* Header */}
       <div className="relative flex items-center justify-center px-4 py-6">
         <BackButton onBack={onBack} />
-        <h1 className="font-outfit text-loops-light text-xl font-bold tracking-tight">
-          {skillItem.content.label[0].content}
-        </h1>
       </div>
 
-      {/* Content Area */}
-      <div className="mb-10 flex-1 overflow-y-auto px-7 pb-20">
-        <div className="flex flex-col items-start pt-8">
-          <div className="w-full max-w-sm">
-            <Suspense fallback={<ContentSkeleton />}>
-              <SkillContentRenderer
-                contentUrl={skillContent.contentURL[0].content}
-              />
-            </Suspense>
+      <div className="mx-auto mb-28 w-full max-w-sm flex-1 overflow-y-auto px-7">
+        <Suspense fallback={<ContentSkeleton />}>
+          <div className="flex flex-col items-start pt-8">
+            <SkillContentRenderer contentUrl={contentUrl} />
+            <SkillActionButton skillItem={skillItem} />
           </div>
-
-          {/* Action Button */}
-          <SkillActionButton skillItem={skillItem} />
-        </div>
+        </Suspense>
       </div>
 
-      {/* Bottom Tab Navigation */}
       <div className="fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
         <BottomTabNavigator />
       </div>

@@ -1,5 +1,6 @@
 import { Schema } from "effect"
 
+// TODO: change isCompleted to status like in started-quiz
 export const completedSkillSchema = Schema.Struct({
   version: Schema.Number.pipe(Schema.int()),
   user: Schema.String,

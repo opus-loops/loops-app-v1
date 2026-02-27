@@ -2,7 +2,8 @@ import type {
   requestConfirmErrorsSchema,
   requestConfirmSuccessSchema,
 } from "@/modules/shared/api/account/request-confirm"
-import { requestConfirm } from "@/modules/shared/api/account/request-confirm"
+import { requestConfirmFactory } from "@/modules/shared/api/account/request-confirm"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -11,6 +12,7 @@ import { Cause, Effect, Option } from "effect"
 export type RequestConfirmErrors =
   | typeof requestConfirmErrorsSchema.Type
   | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
 
 export type RequestConfirmSuccess = typeof requestConfirmSuccessSchema.Type
 
@@ -23,7 +25,18 @@ export type RequestConfirmWire =
 export const requestConfirmFn = createServerFn({
   method: "POST",
 }).handler(async () => {
+  const getLoggedUser = await getLoggedUserFactory()
+  const userExit = await Effect.runPromiseExit(getLoggedUser())
+  const isAuthenticated = userExit._tag === "Success"
+
+  if (!isAuthenticated)
+    return {
+      _tag: "Failure",
+      error: { code: "Unauthorized" as const },
+    }
+
   // 1) Run your Effect on the server
+  const requestConfirm = await requestConfirmFactory()
   const exit = await Effect.runPromiseExit(requestConfirm())
 
   // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)

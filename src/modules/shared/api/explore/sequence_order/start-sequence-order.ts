@@ -12,7 +12,7 @@ import { subQuizStartedCompletedErrorSchema } from "@/modules/shared/domain/erro
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -50,11 +50,13 @@ export const startSequenceOrderErrorsSchema = Schema.Union(
   internalErrorSchema,
 )
 
-export type StartSequenceOrderErrors = typeof startSequenceOrderErrorsSchema.Type
+export type StartSequenceOrderErrors =
+  typeof startSequenceOrderErrorsSchema.Type
 
 export const startSequenceOrderSuccessSchema = successMessageSchema
 
-export type StartSequenceOrderSuccess = typeof startSequenceOrderSuccessSchema.Type
+export type StartSequenceOrderSuccess =
+  typeof startSequenceOrderSuccessSchema.Type
 
 type StartSequenceOrderResult = Effect.Effect<
   StartSequenceOrderSuccess,
@@ -69,22 +71,26 @@ export const startSequenceOrderExitSchema = Schema.Exit({
 
 export type StartSequenceOrderExit = typeof startSequenceOrderExitSchema.Type
 
-export const startSequenceOrder = (
-  args: StartSequenceOrderArgs,
-): StartSequenceOrderResult => {
-  const parsedArgs = parseEffectSchema(startSequenceOrderArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/sequence_orders/${parsedArgs.questionId}/start`
-  const response = instance.post(url)
+export const startSequenceOrderFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "StartSequenceOrderErrors",
-      schema: startSequenceOrderErrorsSchema,
-    },
-    name: "StartSequenceOrder",
-    success: {
-      name: "StartSequenceOrderSuccess",
-      schema: startSequenceOrderSuccessSchema,
-    },
-  })(response)
+  return function startSequenceOrder(
+    args: StartSequenceOrderArgs,
+  ): StartSequenceOrderResult {
+    const parsedArgs = parseEffectSchema(startSequenceOrderArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/sequence_orders/${parsedArgs.questionId}/completed`
+    const response = instance.post(url)
+
+    return parseApiResponse({
+      error: {
+        name: "StartSequenceOrderErrors",
+        schema: startSequenceOrderErrorsSchema,
+      },
+      name: "StartSequenceOrder",
+      success: {
+        name: "StartSequenceOrderSuccess",
+        schema: startSequenceOrderSuccessSchema,
+      },
+    })(response)
+  }
 }

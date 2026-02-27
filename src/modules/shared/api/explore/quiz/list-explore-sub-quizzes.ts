@@ -7,7 +7,7 @@ import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not
 import { quizNotStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-not-started"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -59,22 +59,26 @@ export const listExploreSubQuizzesExitSchema = Schema.Exit({
   success: listExploreSubQuizzesSuccessSchema,
 })
 
-export function listExploreSubQuizzes(
-  args: ListExploreSubQuizzesArgs,
-): ListExploreSubQuizzesResult {
-  const parsedArgs = parseEffectSchema(listExploreSubQuizzesArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/sub_quizzes`
-  const response = instance.get(url)
+export const listExploreSubQuizzesFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "ListExploreSubQuizzesErrors",
-      schema: listExploreSubQuizzesErrorsSchema,
-    },
-    name: "ListExploreSubQuizzes",
-    success: {
-      name: "ListExploreSubQuizzesSuccess",
-      schema: listExploreSubQuizzesSuccessSchema,
-    },
-  })(response)
+  return function listExploreSubQuizzes(
+    args: ListExploreSubQuizzesArgs,
+  ): ListExploreSubQuizzesResult {
+    const parsedArgs = parseEffectSchema(listExploreSubQuizzesArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/sub_quizzes`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "ListExploreSubQuizzesErrors",
+        schema: listExploreSubQuizzesErrorsSchema,
+      },
+      name: "ListExploreSubQuizzes",
+      success: {
+        name: "ListExploreSubQuizzesSuccess",
+        schema: listExploreSubQuizzesSuccessSchema,
+      },
+    })(response)
+  }
 }

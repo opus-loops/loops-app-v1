@@ -1,16 +1,16 @@
-import { jwtVerify, SignJWT } from "jose"
 import {
   deleteCookie,
   getCookie,
   setCookie,
 } from "@tanstack/react-start/server"
+import { SignJWT, jwtVerify } from "jose"
 
 export type Session = {
   accessToken: string
   refreshToken: string
 }
 
-const secretKey = process.env.VITE_SESSION_SECRET_KEY
+const secretKey = import.meta.env.VITE_SESSION_SECRET_KEY
 const encodedKey = new TextEncoder().encode(secretKey)
 
 export async function createSession(payload: Session) {

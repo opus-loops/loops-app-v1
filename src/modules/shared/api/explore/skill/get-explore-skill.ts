@@ -5,7 +5,7 @@ import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-c
 import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -53,22 +53,26 @@ export const getExploreSkillExitSchema = Schema.Exit({
   success: getExploreSkillSuccessSchema,
 })
 
-export function getExploreSkill(
-  args: GetExploreSkillArgs,
-): GetExploreSkillResult {
-  const parsedArgs = parseEffectSchema(getExploreSkillArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}`
-  const response = instance.get(url)
+export const getExploreSkillFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetExploreSkillErrors",
-      schema: getExploreSkillErrorsSchema,
-    },
-    name: "GetExploreSkill",
-    success: {
-      name: "GetExploreSkillSuccess",
-      schema: getExploreSkillSuccessSchema,
-    },
-  })(response)
+  return function getExploreSkill(
+    args: GetExploreSkillArgs,
+  ): GetExploreSkillResult {
+    const parsedArgs = parseEffectSchema(getExploreSkillArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "GetExploreSkillErrors",
+        schema: getExploreSkillErrorsSchema,
+      },
+      name: "GetExploreSkill",
+      success: {
+        name: "GetExploreSkillSuccess",
+        schema: getExploreSkillSuccessSchema,
+      },
+    })(response)
+  }
 }

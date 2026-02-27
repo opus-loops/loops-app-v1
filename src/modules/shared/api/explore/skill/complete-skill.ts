@@ -7,7 +7,7 @@ import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-n
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -44,7 +44,10 @@ export const completeSkillSuccessSchema = successMessageSchema
 
 export type CompleteSkillSuccess = typeof completeSkillSuccessSchema.Type
 
-type CompleteSkillResult = Effect.Effect<CompleteSkillSuccess, CompleteSkillErrors>
+type CompleteSkillResult = Effect.Effect<
+  CompleteSkillSuccess,
+  CompleteSkillErrors
+>
 
 export const completeSkillExitSchema = Schema.Exit({
   defect: Schema.String,
@@ -52,20 +55,24 @@ export const completeSkillExitSchema = Schema.Exit({
   success: completeSkillSuccessSchema,
 })
 
-export function completeSkill(args: CompleteSkillArgs): CompleteSkillResult {
-  const parsedArgs = parseEffectSchema(completeSkillArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}/completed`
-  const response = instance.post(url)
+export const completeSkillFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "CompleteSkillErrors",
-      schema: completeSkillErrorsSchema,
-    },
-    name: "CompleteSkill",
-    success: {
-      name: "CompleteSkillSuccess",
-      schema: completeSkillSuccessSchema,
-    },
-  })(response)
+  return function completeSkill(args: CompleteSkillArgs): CompleteSkillResult {
+    const parsedArgs = parseEffectSchema(completeSkillArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}/completed`
+    const response = instance.post(url)
+
+    return parseApiResponse({
+      error: {
+        name: "CompleteSkillErrors",
+        schema: completeSkillErrorsSchema,
+      },
+      name: "CompleteSkill",
+      success: {
+        name: "CompleteSkillSuccess",
+        schema: completeSkillSuccessSchema,
+      },
+    })(response)
+  }
 }

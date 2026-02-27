@@ -11,13 +11,13 @@ export type CategoryContentItem = CategoryItem &
         itemType: "skills"
         content: Skill
         contentType: "skills"
-        completedSkill?: CompletedSkill
+        itemProgress?: CompletedSkill
         skillContent?: SkillContent
       }
     | {
         itemType: "quizzes"
         content: Quiz
         contentType: "quizzes"
-        startedQuiz?: StartedQuiz
+        itemProgress?: StartedQuiz
       }
   )

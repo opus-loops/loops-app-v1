@@ -26,15 +26,14 @@ export class SubQuizNavigatorManager implements ISubQuizNavigationManager {
     this.managers = new Map([])
 
     this.managers.set(
-      "choice_question",
+      "choiceQuestions",
       new ChoiceQuestionNavigationManager(strategySelector),
     )
 
     this.managers.set(
-      "sequence_order",
+      "sequenceOrders",
       new SequenceOrderNavigationManager(strategySelector),
     )
-
   }
 
   private getManager(questionType: string): ISubQuizNavigationManager | null {

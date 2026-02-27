@@ -6,15 +6,15 @@ type DifficultyTagProps = {
 }
 
 const difficultyConfig = {
-  0: {
+  1: {
     label: "Beginner",
     colorClass: "bg-green-500",
   },
-  1: {
+  2: {
     label: "Intermediate",
     colorClass: "bg-yellow-500",
   },
-  2: {
+  3: {
     label: "Advanced",
     colorClass: "bg-red-500",
   },

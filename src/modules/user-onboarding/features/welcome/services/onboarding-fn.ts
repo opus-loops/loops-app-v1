@@ -2,7 +2,8 @@ import type {
   onboardingErrorsSchema,
   onboardingSuccessSchema,
 } from "@/modules/shared/api/profile/update-onboarding"
-import { onboarding } from "@/modules/shared/api/profile/update-onboarding"
+import { onboardingFactory } from "@/modules/shared/api/profile/update-onboarding"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -11,6 +12,7 @@ import { Cause, Effect, Option } from "effect"
 export type OnboardingErrors =
   | typeof unknownErrorSchema.Type
   | typeof onboardingErrorsSchema.Type
+  | { code: "Unauthorized" }
 
 export type OnboardingSuccess = typeof onboardingSuccessSchema.Type
 
@@ -51,10 +53,21 @@ export const onboardingFn = createServerFn({ method: "POST" })
       },
   )
   .handler(async (ctx) => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Convert form data to API format
     const apiData = convertFormToApiData(ctx.data)
 
     // 2) Run your Effect on the server
+    const onboarding = await onboardingFactory()
     const exit = await Effect.runPromiseExit(onboarding(apiData))
 
     // 3) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)

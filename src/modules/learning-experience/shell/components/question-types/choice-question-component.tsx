@@ -1,18 +1,63 @@
 import { cn } from "@/modules/shared/lib/utils"
+import { useValidateChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-validate-choice-question"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
-import { useState } from "react"
+import { forwardRef, useImperativeHandle, useState } from "react"
 
-type ChoiceQuestionComponentProps = {
-  subQuiz: EnhancedSubQuiz & { questionType: "choice_question" }
+export type SubQuizRef = {
+  skip: () => void
+  validate: (timeLeft: number) => Promise<void>
 }
 
-export function ChoiceQuestionComponent({
-  subQuiz,
-}: ChoiceQuestionComponentProps) {
+type ChoiceQuestionComponentProps = {
+  subQuiz: EnhancedSubQuiz & { questionType: "choiceQuestions" }
+  categoryId: string
+  onStopTimer: () => void
+}
+
+export const ChoiceQuestionComponent = forwardRef<
+  SubQuizRef,
+  ChoiceQuestionComponentProps
+>(({ subQuiz, categoryId, onStopTimer }, ref) => {
+  const { handleValidateChoiceQuestion } = useValidateChoiceQuestion()
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null)
 
   const question = subQuiz.content
-  const completedQuestion = subQuiz.completedChoiceQuestion
+  const completedQuestion = subQuiz.completedQuestion
+
+  const isValidated = completedQuestion?.status === "completed"
+
+  useImperativeHandle(ref, () => ({
+    skip: async () => {
+      if (isSubmitting || isValidated) return
+      setIsSubmitting(true)
+      await handleValidateChoiceQuestion({
+        categoryId,
+        quizId: subQuiz.quizId,
+        questionId: subQuiz.questionId,
+        userAnswer: undefined,
+        spentTime: question?.estimatedTime ?? 0,
+      })
+      setIsSubmitting(false)
+    },
+    validate: async (timeLeft: number) => {
+      if (isSubmitting || isValidated || selectedChoice === null) return
+
+      onStopTimer()
+      setIsSubmitting(true)
+      const estimatedTime = question?.estimatedTime ?? 0
+      const spentTime = Math.max(0, estimatedTime - timeLeft)
+
+      await handleValidateChoiceQuestion({
+        categoryId,
+        quizId: subQuiz.quizId,
+        questionId: subQuiz.questionId,
+        userAnswer: [selectedChoice],
+        spentTime,
+      })
+      setIsSubmitting(false)
+    },
+  }))
 
   if (!question) {
     return (
@@ -23,9 +68,7 @@ export function ChoiceQuestionComponent({
   }
 
   const handleChoiceSelect = (index: number) => {
-    if (!isValidated) {
-      setSelectedChoice(index)
-    }
+    if (!isValidated) setSelectedChoice(index)
   }
 
   const getChoiceStyle = (index: number) => {
@@ -38,7 +81,7 @@ export function ChoiceQuestionComponent({
       )
     } else {
       // Validated state - show correct/incorrect
-      const isCorrect = question.idealOptions.includes(index)
+      const isCorrect = question.idealOptions?.includes(index)
       const wasSelected =
         completedQuestion?.userAnswer?.includes(index) ?? false
 
@@ -78,7 +121,7 @@ export function ChoiceQuestionComponent({
         </div>
       )
     } else {
-      const isCorrect = question.idealOptions.includes(index)
+      const isCorrect = question.idealOptions?.includes(index)
       const wasSelected =
         completedQuestion?.userAnswer?.includes(index) ?? false
 
@@ -156,4 +199,4 @@ export function ChoiceQuestionComponent({
       </div>
     </div>
   )
-}
+})

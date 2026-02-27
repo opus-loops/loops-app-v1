@@ -4,10 +4,8 @@ import { exploreCategoriesFn } from "./explore-categories-fn"
 export const exploreCategoriesQuery = queryOptions({
   queryFn: async () => {
     const response = await exploreCategoriesFn()
-    if (response._tag === "Failure") {
-      const message = "Failed to fetch explore categories"
-      throw new Error(message)
-    }
+    if (response._tag === "Failure")
+      throw new Error("Failed to fetch explore categories")
 
     return response.value
   },

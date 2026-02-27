@@ -7,9 +7,7 @@ import {
   SubQuizNavigationError,
 } from "../../sub-quiz-navigation-types"
 
-export class ChoiceQuestionToSequenceOrderStrategy
-  implements ISubQuizNavigationStrategy
-{
+export class ChoiceQuestionToSequenceOrderStrategy implements ISubQuizNavigationStrategy {
   constructor(
     private startSequenceOrder: ReturnType<typeof useStartSequenceOrder>,
   ) {}
@@ -23,9 +21,9 @@ export class ChoiceQuestionToSequenceOrderStrategy
 
   validateCompletion(subQuiz: EnhancedSubQuiz): boolean {
     return (
-      subQuiz.questionType === "choice_question" &&
-      subQuiz.completedChoiceQuestion !== undefined &&
-      subQuiz.completedChoiceQuestion.status === "completed"
+      subQuiz.questionType === "choiceQuestions" &&
+      subQuiz.completedQuestion !== undefined &&
+      subQuiz.completedQuestion.status === "completed"
     )
   }
 
@@ -44,7 +42,7 @@ export class ChoiceQuestionToSequenceOrderStrategy
         await this.startSequenceOrder.handleStartSequenceOrder({
           categoryId: context.categoryId,
           quizId: context.adjacentSubQuiz!.quizId,
-          questionId: context.adjacentSubQuiz!.subQuizId,
+          questionId: context.adjacentSubQuiz!.questionId,
         })
         return context.adjacentSubQuiz!
       },

@@ -2,7 +2,8 @@ import type {
   startChoiceQuestionErrorsSchema,
   startChoiceQuestionSuccessSchema,
 } from "@/modules/shared/api/explore/choice_question/start-choice-question"
-import { startChoiceQuestion } from "@/modules/shared/api/explore/choice_question/start-choice-question"
+import { startChoiceQuestionFactory } from "@/modules/shared/api/explore/choice_question/start-choice-question"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -11,6 +12,7 @@ import { Cause, Effect, Option } from "effect"
 export type StartChoiceQuestionErrors =
   | typeof startChoiceQuestionErrorsSchema.Type
   | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
 
 export type StartChoiceQuestionSuccess =
   typeof startChoiceQuestionSuccessSchema.Type
@@ -33,7 +35,19 @@ export const startChoiceQuestionFn = createServerFn({
       },
   )
   .handler(async (ctx): Promise<StartChoiceQuestionWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
+    const startChoiceQuestion = await startChoiceQuestionFactory()
+
     const exit = await Effect.runPromiseExit(
       startChoiceQuestion({
         categoryId: ctx.data.categoryId,

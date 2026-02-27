@@ -1,4 +1,5 @@
 import { Schema } from "effect"
+import { imageSchema } from "../value_objects/image"
 import { textContentSchema } from "../value_objects/text-content"
 
 export type TextContent = typeof textContentSchema.Type
@@ -10,7 +11,7 @@ export const categorySchema = Schema.Struct({
   description: Schema.Array(textContentSchema),
   metaTags: Schema.Array(Schema.String),
   defaultLanguage: Schema.String,
-  cover: Schema.String,
+  cover: imageSchema,
   skillCount: Schema.Number.pipe(Schema.int()),
   quizCount: Schema.Number.pipe(Schema.int()),
   totalXP: Schema.Number.pipe(Schema.int()),

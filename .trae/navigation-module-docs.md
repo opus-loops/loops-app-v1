@@ -39,7 +39,7 @@ src/modules/shared/navigation/
 
 The main entry point for navigation functionality. Provides:
 
-- **Navigation Actions**: `navigateToNext()`, `navigateToPrevious()`, `handleBackNavigation()`, `exitContent()`
+- **Navigation Actions**: `navigateToNext()`, `navigateToPrevious()`, `handleBackNavigation()`
 - **State Checks**: `canNavigateNext()`, `canNavigatePrevious()`
 - **Completion Utilities**: `validateAndStartItem()`, `isItemCompleted()`
 - **Current State**: Access to `selectedItem`, `navigationState`

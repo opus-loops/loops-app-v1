@@ -1,5 +1,7 @@
 /// <reference types="vite/client" />
 import { Toaster } from "@/modules/shared/components/ui/sonner"
+import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
+import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
 import type { RouterContext } from "@/router"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
@@ -19,24 +21,35 @@ export const Route = createRootRouteWithContext<RouterContext>()({
           <HeadContent />
         </head>
         <body>
-          <div className="bg-loops-background w-full">
-            <div className="relative mx-auto w-full overflow-x-hidden sm:max-w-[425px]">
-              <Outlet />
-            </div>
-          </div>
-          <Toaster
-            position="bottom-right"
-            expand={false}
-            richColors={false}
-            closeButton={true}
-            toastOptions={{
-              style: {
-                borderRadius: "0.75rem",
-                fontSize: "0.875rem",
-                fontWeight: "500",
-              },
-            }}
-          />
+          <GlobalErrorProvider>
+            {({ showSessionExpiredDialog, handleCloseDialog }) => (
+              <>
+                <SessionExpiredDialog
+                  isOpen={showSessionExpiredDialog}
+                  onClose={handleCloseDialog}
+                />
+
+                <div className="bg-loops-background w-full">
+                  <div className="relative mx-auto w-full overflow-x-hidden sm:max-w-[425px]">
+                    <Outlet />
+                  </div>
+                </div>
+                <Toaster
+                  position="bottom-right"
+                  expand={false}
+                  richColors={false}
+                  closeButton={true}
+                  toastOptions={{
+                    style: {
+                      borderRadius: "0.75rem",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                    },
+                  }}
+                />
+              </>
+            )}
+          </GlobalErrorProvider>
           {/* Dev tools - only show in development */}
           {process.env.NODE_ENV === "development" && (
             <>

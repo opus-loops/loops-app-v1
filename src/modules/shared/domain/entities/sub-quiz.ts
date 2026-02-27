@@ -5,10 +5,8 @@ export const subQuizSchema = Schema.Struct({
   quizId: Schema.String,
   questionId: Schema.String,
   questionType: Schema.String,
-  isDeleted: Schema.Boolean,
   previousSubQuiz: Schema.optional(Schema.String),
   nextSubQuiz: Schema.optional(Schema.String),
-  deletedAt: Schema.optional(Schema.DateFromString),
 })
 
 export type SubQuiz = Schema.Schema.Type<typeof subQuizSchema>

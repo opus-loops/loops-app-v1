@@ -1,15 +1,16 @@
 import type { getExploreCategoryItemErrorsSchema } from "@/modules/shared/api/explore/category/get-explore-category-item"
-import { getExploreCategoryItem } from "@/modules/shared/api/explore/category/get-explore-category-item"
+import { getExploreCategoryItemFactory } from "@/modules/shared/api/explore/category/get-explore-category-item"
 import type { getExploreQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
-import { getExploreQuiz } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
+import { getExploreQuizFactory } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
 import type { getStartedQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-started-quiz"
-import { getStartedQuiz } from "@/modules/shared/api/explore/quiz/get-started-quiz"
+import { getStartedQuizFactory } from "@/modules/shared/api/explore/quiz/get-started-quiz"
 import type { getCompletedSkillErrorsSchema } from "@/modules/shared/api/explore/skill/get-completed-skill"
-import { getCompletedSkill } from "@/modules/shared/api/explore/skill/get-completed-skill"
+import { getCompletedSkillFactory } from "@/modules/shared/api/explore/skill/get-completed-skill"
 import type { getExploreSkillErrorsSchema } from "@/modules/shared/api/explore/skill/get-explore-skill"
-import { getExploreSkill } from "@/modules/shared/api/explore/skill/get-explore-skill"
+import { getExploreSkillFactory } from "@/modules/shared/api/explore/skill/get-explore-skill"
 import type { getExploreSkillContentErrorsSchema } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
-import { getExploreSkillContent } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
+import { getExploreSkillContentFactory } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
@@ -24,6 +25,7 @@ export type SingleCategoryItemErrors =
   | typeof getCompletedSkillErrorsSchema.Type
   | typeof getStartedQuizErrorsSchema.Type
   | typeof getExploreSkillContentErrorsSchema.Type
+  | { code: "Unauthorized" }
 
 export type SingleCategoryItemSuccess = {
   categoryItem: CategoryContentItem
@@ -40,12 +42,18 @@ export type SingleCategoryItemWire =
 
 // --- MAIN LOGIC AS EFFECT ----------------------------------------------------
 const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
-  Effect.gen(function* () {
+  Effect.gen(function* (_) {
     const { categoryId, itemId } = params
 
     // 1) First, fetch the category item
-    const categoryItemExit = yield* Effect.promise(() =>
-      Effect.runPromiseExit(getExploreCategoryItem({ categoryId, itemId })),
+    const getExploreCategoryItem = yield* _(
+      Effect.promise(() => getExploreCategoryItemFactory()),
+    )
+
+    const categoryItemExit = yield* _(
+      Effect.promise(() =>
+        Effect.runPromiseExit(getExploreCategoryItem({ categoryId, itemId })),
+      ),
     )
 
     if (categoryItemExit._tag === "Failure") {
@@ -63,23 +71,35 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
 
     // 2) Fetch the associated content (skill or quiz) and optional status
     if (categoryItem.itemType === "skills") {
-      const skillExit = yield* Effect.promise(() =>
-        Effect.runPromiseExit(
-          getExploreSkill({
-            categoryId,
-            skillId: categoryItem.itemId,
-          }),
+      const getExploreSkill = yield* _(
+        Effect.promise(() => getExploreSkillFactory()),
+      )
+
+      const skillExit = yield* _(
+        Effect.promise(() =>
+          Effect.runPromiseExit(
+            getExploreSkill({
+              categoryId,
+              skillId: categoryItem.itemId,
+            }),
+          ),
         ),
       )
 
       if (skillExit._tag === "Success") {
         // Try to fetch completed skill status (optional)
-        const completedSkillExit = yield* Effect.promise(() =>
-          Effect.runPromiseExit(
-            getCompletedSkill({
-              categoryId,
-              skillId: categoryItem.itemId,
-            }),
+        const getCompletedSkill = yield* _(
+          Effect.promise(() => getCompletedSkillFactory()),
+        )
+
+        const completedSkillExit = yield* _(
+          Effect.promise(() =>
+            Effect.runPromiseExit(
+              getCompletedSkill({
+                categoryId,
+                skillId: categoryItem.itemId,
+              }),
+            ),
           ),
         )
 
@@ -91,12 +111,18 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
         // Try to fetch skill content if skill is completed (optional)
         let skillContent = undefined
         if (completedSkill) {
-          const skillContentExit = yield* Effect.promise(() =>
-            Effect.runPromiseExit(
-              getExploreSkillContent({
-                categoryId,
-                skillId: categoryItem.itemId,
-              }),
+          const getExploreSkillContent = yield* _(
+            Effect.promise(() => getExploreSkillContentFactory()),
+          )
+
+          const skillContentExit = yield* _(
+            Effect.promise(() =>
+              Effect.runPromiseExit(
+                getExploreSkillContent({
+                  categoryId,
+                  skillId: categoryItem.itemId,
+                }),
+              ),
             ),
           )
 
@@ -117,29 +143,41 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
           contentType: "skills" as const,
         }
 
-        if (completedSkill) skillCategoryItem["completedSkill"] = completedSkill
+        if (completedSkill) skillCategoryItem["itemProgress"] = completedSkill
         if (skillContent) skillCategoryItem["skillContent"] = skillContent
 
         return { categoryItem: skillCategoryItem }
       }
     } else if (categoryItem.itemType === "quizzes") {
-      const quizExit = yield* Effect.promise(() =>
-        Effect.runPromiseExit(
-          getExploreQuiz({
-            categoryId,
-            quizId: categoryItem.itemId,
-          }),
+      const getExploreQuiz = yield* _(
+        Effect.promise(() => getExploreQuizFactory()),
+      )
+
+      const quizExit = yield* _(
+        Effect.promise(() =>
+          Effect.runPromiseExit(
+            getExploreQuiz({
+              categoryId,
+              quizId: categoryItem.itemId,
+            }),
+          ),
         ),
       )
 
       if (quizExit._tag === "Success") {
         // Try to fetch started quiz status (optional)
-        const startedQuizExit = yield* Effect.promise(() =>
-          Effect.runPromiseExit(
-            getStartedQuiz({
-              categoryId,
-              quizId: categoryItem.itemId,
-            }),
+        const getStartedQuiz = yield* _(
+          Effect.promise(() => getStartedQuizFactory()),
+        )
+
+        const startedQuizExit = yield* _(
+          Effect.promise(() =>
+            Effect.runPromiseExit(
+              getStartedQuiz({
+                categoryId,
+                quizId: categoryItem.itemId,
+              }),
+            ),
           ),
         )
 
@@ -159,7 +197,7 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
           contentType: "quizzes" as const,
         }
 
-        if (startedQuiz) quizCategoryItem["startedQuiz"] = startedQuiz
+        if (startedQuiz) quizCategoryItem["itemProgress"] = startedQuiz
 
         return { categoryItem: quizCategoryItem }
       }
@@ -184,6 +222,16 @@ export const singleCategoryItemFn = createServerFn({
       },
   )
   .handler(async (ctx): Promise<SingleCategoryItemWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(
       fetchSingleCategoryItemEffect(ctx.data),

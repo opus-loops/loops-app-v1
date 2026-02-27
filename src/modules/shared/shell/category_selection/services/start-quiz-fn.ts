@@ -2,7 +2,8 @@ import type {
   startQuizErrorsSchema,
   startQuizSuccessSchema,
 } from "@/modules/shared/api/explore/quiz/start-quiz"
-import { startQuiz } from "@/modules/shared/api/explore/quiz/start-quiz"
+import { startQuizFactory } from "@/modules/shared/api/explore/quiz/start-quiz"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -11,6 +12,7 @@ import { Cause, Effect, Option } from "effect"
 export type StartQuizErrors =
   | typeof startQuizErrorsSchema.Type
   | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
 
 export type StartQuizSuccess = typeof startQuizSuccessSchema.Type
 
@@ -29,7 +31,19 @@ export const startQuizFn = createServerFn({ method: "POST" })
       },
   )
   .handler(async (ctx): Promise<StartQuizWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
+    const startQuiz = await startQuizFactory()
+
     const exit = await Effect.runPromiseExit(
       startQuiz({
         categoryId: ctx.data.categoryId,

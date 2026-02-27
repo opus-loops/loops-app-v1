@@ -1,3 +1,4 @@
+import { skillContentSchema, SkillContent } from "../../domain/entities/skill-content"
 import { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option, Schema } from "effect"
@@ -13,9 +14,15 @@ const networkErrorSchema = Schema.Struct({
   message: Schema.String,
 })
 
+const validationErrorSchema = Schema.Struct({
+  code: Schema.Literal("ValidationError"),
+  message: Schema.String,
+})
+
 export const fetchContentErrorsSchema = Schema.Union(
   fetchErrorSchema,
   networkErrorSchema,
+  validationErrorSchema,
   unknownErrorSchema,
 )
 
@@ -23,7 +30,7 @@ export const fetchContentErrorsSchema = Schema.Union(
 export type FetchContentErrors = typeof fetchContentErrorsSchema.Type
 
 export type FetchContentSuccess = {
-  content: string
+  content: SkillContent
 }
 
 export type FetchContentWire =
@@ -32,25 +39,48 @@ export type FetchContentWire =
 
 // --- MAIN LOGIC AS EFFECT ----------------------------------------------------
 const fetchContentEffect = (url: string) =>
-  Effect.gen(function* () {
-    try {
-      const response = yield* Effect.promise(() => fetch(url))
+  Effect.gen(function* (_) {
+    const response = yield* _(
+      Effect.tryPromise({
+        try: () => fetch(url),
+        catch: (error) =>
+          ({
+            code: "NetworkError" as const,
+            message: `Network error while fetching content: ${error instanceof Error ? error.message : "Unknown error"}`,
+          }) satisfies typeof networkErrorSchema.Type,
+      }),
+    )
 
-      if (!response.ok) {
-        return yield* Effect.fail({
+    if (!response.ok) {
+      return yield* _(
+        Effect.fail({
           code: "FetchError" as const,
           message: `Failed to fetch content: ${response.status} ${response.statusText}`,
-        } satisfies typeof fetchErrorSchema.Type)
-      }
-
-      const content = yield* Effect.promise(() => response.text())
-      return { content }
-    } catch (error) {
-      return yield* Effect.fail({
-        code: "NetworkError" as const,
-        message: `Network error while fetching content: ${error instanceof Error ? error.message : "Unknown error"}`,
-      } satisfies typeof networkErrorSchema.Type)
+        } satisfies typeof fetchErrorSchema.Type),
+      )
     }
+
+    const json = yield* _(
+      Effect.tryPromise({
+        try: () => response.json(),
+        catch: (error) =>
+          ({
+            code: "NetworkError" as const,
+            message: `Failed to parse JSON: ${error instanceof Error ? error.message : "Unknown error"}`,
+          }) satisfies typeof networkErrorSchema.Type,
+      }),
+    )
+
+    const content = yield* _(
+      Schema.decodeUnknown(skillContentSchema)(json).pipe(
+        Effect.mapError((error) => ({
+          code: "ValidationError" as const,
+          message: `Failed to validate content schema: ${error}`,
+        })),
+      ),
+    )
+
+    return { content }
   })
 
 // --- SERVER FUNCTION ---------------------------------------------------------

@@ -10,7 +10,7 @@ import { subQuizNotFoundErrorSchema } from "@/modules/shared/domain/errors/sub-q
 import { subQuizNotStartedErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-not-started"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -67,22 +67,29 @@ export const getExploreSequenceOrderExitSchema = Schema.Exit({
   success: getExploreSequenceOrderSuccessSchema,
 })
 
-export function getExploreSequenceOrder(
-  args: GetExploreSequenceOrderArgs,
-): GetExploreSequenceOrderResult {
-  const parsedArgs = parseEffectSchema(getExploreSequenceOrderArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/sequence_orders/${parsedArgs.questionId}`
-  const response = instance.get(url)
+export const getExploreSequenceOrderFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetExploreSequenceOrderErrors",
-      schema: getExploreSequenceOrderErrorsSchema,
-    },
-    name: "GetExploreSequenceOrder",
-    success: {
-      name: "GetExploreSequenceOrderSuccess",
-      schema: getExploreSequenceOrderSuccessSchema,
-    },
-  })(response)
+  return function getExploreSequenceOrder(
+    args: GetExploreSequenceOrderArgs,
+  ): GetExploreSequenceOrderResult {
+    const parsedArgs = parseEffectSchema(
+      getExploreSequenceOrderArgsSchema,
+      args,
+    )
+    const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/sequence_orders/${parsedArgs.questionId}`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "GetExploreSequenceOrderErrors",
+        schema: getExploreSequenceOrderErrorsSchema,
+      },
+      name: "GetExploreSequenceOrder",
+      success: {
+        name: "GetExploreSequenceOrderSuccess",
+        schema: getExploreSequenceOrderSuccessSchema,
+      },
+    })(response)
+  }
 }

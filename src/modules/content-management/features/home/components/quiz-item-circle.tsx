@@ -35,16 +35,16 @@ export function QuizItemCircle({
   const { setSelectedContent } = useSelectedContent()
 
   const getProgressState = (): ProgressState => {
-    if (item.startedQuiz === undefined) return "locked"
-    if (item.startedQuiz.status === "completed") return "completed"
+    if (item.itemProgress === undefined) return "locked"
+    if (item.itemProgress.status === "completed") return "completed"
     return "started"
   }
 
   const getProgress = (): number => {
-    if (item.startedQuiz?.status === "completed") return 100
-    if (item.startedQuiz && item.content.questionsCount > 0)
+    if (item.itemProgress?.status === "completed") return 100
+    if (item.itemProgress && item.content.questionsCount > 0)
       return Math.round(
-        (item.startedQuiz.completedQuestions / item.content.questionsCount) *
+        (item.itemProgress.completedQuestions / item.content.questionsCount) *
           100,
       )
     return 0

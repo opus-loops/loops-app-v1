@@ -8,7 +8,7 @@ import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-n
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -54,20 +54,24 @@ export const startSkillExitSchema = Schema.Exit({
   success: startSkillSuccessSchema,
 })
 
-export function startSkill(args: StartSkillArgs): StartSkillResult {
-  const parsedArgs = parseEffectSchema(startSkillArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}/started`
-  const response = instance.post(url)
+export const startSkillFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "StartSkillErrors",
-      schema: startSkillErrorsSchema,
-    },
-    name: "StartSkill",
-    success: {
-      name: "StartSkillSuccess",
-      schema: startSkillSuccessSchema,
-    },
-  })(response)
+  return function startSkill(args: StartSkillArgs): StartSkillResult {
+    const parsedArgs = parseEffectSchema(startSkillArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}/started`
+    const response = instance.post(url)
+
+    return parseApiResponse({
+      error: {
+        name: "StartSkillErrors",
+        schema: startSkillErrorsSchema,
+      },
+      name: "StartSkill",
+      success: {
+        name: "StartSkillSuccess",
+        schema: startSkillSuccessSchema,
+      },
+    })(response)
+  }
 }

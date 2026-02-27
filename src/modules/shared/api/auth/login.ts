@@ -1,7 +1,7 @@
 import { invalidCredentialsErrorSchema } from "@/modules/shared/domain/errors/invalid-credentials"
 import { loginTokensSchema } from "@/modules/shared/domain/types/login-tokens"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -36,19 +36,23 @@ export const loginExitSchema = Schema.Exit({
   success: loginSuccessSchema,
 })
 
-export function login(args: LoginArgs): LoginResult {
-  const parsedArgs = parseEffectSchema(loginArgsSchema, args)
-  const response = instance.post("/auth/login", parsedArgs)
+export const loginFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "LoginErrors",
-      schema: loginErrorsSchema,
-    },
-    name: "Login",
-    success: {
-      name: "LoginSuccess",
-      schema: loginTokensSchema,
-    },
-  })(response)
+  return function login(args: LoginArgs): LoginResult {
+    const parsedArgs = parseEffectSchema(loginArgsSchema, args)
+    const response = instance.post("/auth/login", parsedArgs)
+
+    return parseApiResponse({
+      error: {
+        name: "LoginErrors",
+        schema: loginErrorsSchema,
+      },
+      name: "Login",
+      success: {
+        name: "LoginSuccess",
+        schema: loginTokensSchema,
+      },
+    })(response)
+  }
 }

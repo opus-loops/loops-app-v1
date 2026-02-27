@@ -1,4 +1,3 @@
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import {
   PropsWithChildren,
   createContext,
@@ -10,18 +9,18 @@ import {
 type SubQuizNavigationState = {
   isNavigating: boolean
   navigationDirection: "next" | "previous" | undefined
-  previousSubQuiz: EnhancedSubQuiz | undefined
+  previousSubQuizIndex: number | undefined
 }
 
 type SelectedSubQuizContextType = {
-  selectedSubQuiz: EnhancedSubQuiz | undefined
+  selectedSubQuizIndex: number | undefined
   navigationState: SubQuizNavigationState
-  setSelectedSubQuiz: (subQuiz: EnhancedSubQuiz) => void
-  clearSelectedSubQuiz: () => void
+  setSelectedSubQuizIndex: (index: number) => void
+  clearSelectedSubQuizIndex: () => void
   setNavigationState: (state: Partial<SubQuizNavigationState>) => void
   resetNavigationState: () => void
   navigateToSubQuiz: (params: {
-    subQuiz: EnhancedSubQuiz
+    index: number
     direction: "next" | "previous"
   }) => void
 }
@@ -31,21 +30,21 @@ const SelectedSubQuizContext = createContext({} as SelectedSubQuizContextType)
 const initialNavigationState: SubQuizNavigationState = {
   isNavigating: false,
   navigationDirection: undefined,
-  previousSubQuiz: undefined,
+  previousSubQuizIndex: undefined,
 }
 
 export function SelectedSubQuizProvider({ children }: PropsWithChildren) {
-  const [selectedSubQuiz, setSelectedSubQuizInternal] =
-    useState<EnhancedSubQuiz>()
+  const [selectedSubQuizIndex, setSelectedSubQuizIndexInternal] =
+    useState<number>()
   const [navigationState, setNavigationStateInternal] =
     useState<SubQuizNavigationState>(initialNavigationState)
 
-  const setSelectedSubQuiz = (subQuiz: EnhancedSubQuiz) =>
-    setSelectedSubQuizInternal(subQuiz)
+  const setSelectedSubQuizIndex = (index: number) =>
+    setSelectedSubQuizIndexInternal(index)
 
-  const clearSelectedSubQuiz = () => {
+  const clearSelectedSubQuizIndex = () => {
     setNavigationStateInternal(initialNavigationState)
-    setSelectedSubQuizInternal(undefined)
+    setSelectedSubQuizIndexInternal(undefined)
   }
 
   const setNavigationState = (state: Partial<SubQuizNavigationState>) =>
@@ -56,24 +55,24 @@ export function SelectedSubQuizProvider({ children }: PropsWithChildren) {
   }, [])
 
   const navigateToSubQuiz = (params: {
-    subQuiz: EnhancedSubQuiz
+    index: number
     direction: "next" | "previous"
   }) => {
     setNavigationStateInternal({
       isNavigating: true,
       navigationDirection: params.direction,
-      previousSubQuiz: selectedSubQuiz,
+      previousSubQuizIndex: selectedSubQuizIndex,
     })
-    setSelectedSubQuizInternal(params.subQuiz)
+    setSelectedSubQuizIndexInternal(params.index)
   }
 
   return (
     <SelectedSubQuizContext.Provider
       value={{
-        selectedSubQuiz,
+        selectedSubQuizIndex,
         navigationState,
-        setSelectedSubQuiz,
-        clearSelectedSubQuiz,
+        setSelectedSubQuizIndex,
+        clearSelectedSubQuizIndex,
         setNavigationState,
         resetNavigationState,
         navigateToSubQuiz,

@@ -1,9 +1,11 @@
-export function HalfStarIcon() {
+import { cn } from "@/modules/shared/lib/utils"
+
+export function HalfStarIcon({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 30 30"
       fill="currentColor"
-      className="size-full"
+      className={cn("size-full", className)}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

@@ -10,7 +10,7 @@ import { subQuizNotFoundErrorSchema } from "@/modules/shared/domain/errors/sub-q
 import { subQuizNotStartedErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-not-started"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -22,7 +22,8 @@ const getExploreChoiceQuestionArgsSchema = Schema.Struct({
   questionId: Schema.String,
 })
 
-type GetExploreChoiceQuestionArgs = typeof getExploreChoiceQuestionArgsSchema.Type
+type GetExploreChoiceQuestionArgs =
+  typeof getExploreChoiceQuestionArgsSchema.Type
 
 export const getExploreChoiceQuestionErrorsSchema = Schema.Union(
   invalidInputFactory(
@@ -67,22 +68,29 @@ export const getExploreChoiceQuestionExitSchema = Schema.Exit({
   success: getExploreChoiceQuestionSuccessSchema,
 })
 
-export function getExploreChoiceQuestion(
-  args: GetExploreChoiceQuestionArgs,
-): GetExploreChoiceQuestionResult {
-  const parsedArgs = parseEffectSchema(getExploreChoiceQuestionArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/choice/questions/${parsedArgs.questionId}`
-  const response = instance.get(url)
+export const getExploreChoiceQuestionFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetExploreChoiceQuestionErrors",
-      schema: getExploreChoiceQuestionErrorsSchema,
-    },
-    name: "GetExploreChoiceQuestion",
-    success: {
-      name: "GetExploreChoiceQuestionSuccess",
-      schema: getExploreChoiceQuestionSuccessSchema,
-    },
-  })(response)
+  return function getExploreChoiceQuestion(
+    args: GetExploreChoiceQuestionArgs,
+  ): GetExploreChoiceQuestionResult {
+    const parsedArgs = parseEffectSchema(
+      getExploreChoiceQuestionArgsSchema,
+      args,
+    )
+    const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/choice_questions/${parsedArgs.questionId}`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "GetExploreChoiceQuestionErrors",
+        schema: getExploreChoiceQuestionErrorsSchema,
+      },
+      name: "GetExploreChoiceQuestion",
+      success: {
+        name: "GetExploreChoiceQuestionSuccess",
+        schema: getExploreChoiceQuestionSuccessSchema,
+      },
+    })(response)
+  }
 }

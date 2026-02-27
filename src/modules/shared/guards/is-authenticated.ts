@@ -4,7 +4,7 @@ import type {
   getLoggedUserErrorsSchema,
   getLoggedUserSuccessSchema,
 } from "../api/users/get-logged-user"
-import { getLoggedUser } from "../api/users/get-logged-user"
+import { getLoggedUserFactory } from "../api/users/get-logged-user"
 import type { unknownErrorSchema } from "../utils/types"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
@@ -23,6 +23,7 @@ export type IsAuthenticatedWire =
 export const isAuthenticated = createServerFn({ method: "GET" }).handler(
   async (): Promise<IsAuthenticatedWire> => {
     // 1) Run your Effect on the server
+    const getLoggedUser = await getLoggedUserFactory()
     const exit = await Effect.runPromiseExit(getLoggedUser())
 
     // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)

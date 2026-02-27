@@ -4,7 +4,7 @@ import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/ca
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -49,22 +49,26 @@ export const getStartedCategoryExitSchema = Schema.Exit({
   success: getStartedCategorySuccessSchema,
 })
 
-export function getStartedCategory(
-  args: GetStartedCategoryArgs,
-): GetStartedCategoryResult {
-  const parsedArgs = parseEffectSchema(getStartedCategoryArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/started`
-  const response = instance.get(url)
+export const getStartedCategoryFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetStartedCategoryErrors",
-      schema: getStartedCategoryErrorsSchema,
-    },
-    name: "GetStartedCategory",
-    success: {
-      name: "GetStartedCategorySuccess",
-      schema: getStartedCategorySuccessSchema,
-    },
-  })(response)
+  return function getStartedCategory(
+    args: GetStartedCategoryArgs,
+  ): GetStartedCategoryResult {
+    const parsedArgs = parseEffectSchema(getStartedCategoryArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/started`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "GetStartedCategoryErrors",
+        schema: getStartedCategoryErrorsSchema,
+      },
+      name: "GetStartedCategory",
+      success: {
+        name: "GetStartedCategorySuccess",
+        schema: getStartedCategorySuccessSchema,
+      },
+    })(response)
+  }
 }

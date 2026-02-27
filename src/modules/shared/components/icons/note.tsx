@@ -1,7 +1,9 @@
-export function NoteIcon() {
+import { cn } from "@/modules/shared/lib/utils"
+
+export function NoteIcon({ className }: { className?: string }) {
   return (
     <svg
-      className="size-full"
+      className={cn("size-full", className)}
       fill="currentColor"
       viewBox="0 0 36 36"
       xmlns="http://www.w3.org/2000/svg"

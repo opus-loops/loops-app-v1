@@ -32,7 +32,8 @@ export function CategorySelectionShell({
   const isLoading = usePageLoading()
 
   const getSkeleton = useCallback(() => {
-    if (searchParams.category === "all") return <CategoriesListSkeleton />
+    if (!searchParams.category || searchParams.category === "all")
+      return <CategoriesListSkeleton />
     if (searchParams.category !== "all" && searchParams.type === "details")
       return <CategoryDetailsSkeleton />
     if (searchParams.category !== "all" && searchParams.type === "content")
@@ -45,7 +46,7 @@ export function CategorySelectionShell({
   const noCurrentCategory = !user.currentCategory
   const isCategoryPage = searchParams.category !== undefined
   const isCategoryItemPage =
-    searchParams.category &&
+    searchParams.category !== undefined &&
     searchParams.category !== "all" &&
     searchParams.type === "content" &&
     searchParams.contentId !== undefined
@@ -71,12 +72,15 @@ function CategorySelectionScreen({
 }: {
   searchParams: {
     category?: string | undefined
-    details?: boolean | undefined
+    type?: "details" | "content" | undefined
   }
   user: User
 }) {
   const router = useRouter()
   const { categories } = useExploreCategories()
+
+  const shouldRenderAllCategories =
+    !searchParams.category || searchParams.category === "all"
 
   const handleBackNavigation = () => {
     // Hide back button - no navigation should occur
@@ -87,17 +91,17 @@ function CategorySelectionScreen({
     if (searchParams.category === "all" && user.currentCategory !== undefined)
       router.navigate({ to: "/" })
     // Going back from content details to category details
-    else if (searchParams.category !== "all" && searchParams.details)
+    else if (searchParams.category !== "all" && searchParams.type === "content")
       router.navigate({
         to: "/",
-        search: (prev: any) => ({ ...prev, details: false }),
+        search: (prev: any) => ({ ...prev, type: "details" }),
       })
     // Going back from category details to categories list
-    else if (searchParams.category !== "all" && !searchParams.details)
+    else if (searchParams.category !== "all" && searchParams.type === "details")
       router.navigate({
         to: "/",
         search: (prev: any) => {
-          const { category, details, ...rest } = prev
+          const { category, type, ...rest } = prev
           return { ...rest, category: "all" }
         },
       })
@@ -119,7 +123,7 @@ function CategorySelectionScreen({
       search: (prev: any) => ({
         ...prev,
         category: category.categoryId,
-        details: false,
+        type: "details",
       }),
     })
 
@@ -129,13 +133,13 @@ function CategorySelectionScreen({
       search: (prev: any) => ({
         ...prev,
         category: category.categoryId,
-        details: true,
+        type: "content",
       }),
     })
 
   return (
     <div className="relative flex-1 overflow-hidden">
-      {searchParams.category === "all" && (
+      {shouldRenderAllCategories && (
         <CategoriesList
           categories={categories}
           onCategorySelect={handleCategorySelect}
@@ -146,7 +150,7 @@ function CategorySelectionScreen({
 
       {searchParams.category &&
         searchParams.category !== "all" &&
-        !searchParams.details &&
+        searchParams.type === "details" &&
         (() => {
           // Try to find the category in cached categories first
           const cachedCategory = categories.find(
@@ -178,7 +182,7 @@ function CategorySelectionScreen({
 
       {searchParams.category &&
         searchParams.category !== "all" &&
-        searchParams.details &&
+        searchParams.type === "content" &&
         (() => {
           // Try to find the category in cached categories first
           const cachedCategory = categories.find(

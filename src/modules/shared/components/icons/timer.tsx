@@ -1,7 +1,9 @@
-export function TimerIcon() {
+import { cn } from "@/modules/shared/lib/utils"
+
+export function TimerIcon({ className }: { className?: string }) {
   return (
     <svg
-      className="size-full"
+      className={cn("size-full", className)}
       viewBox="0 0 15 15"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

@@ -25,7 +25,7 @@ export function useStartChoiceQuestion() {
 
       if (response._tag === "Success") {
         await queryClient.invalidateQueries({
-          queryKey: ["sub-quiz-content", categoryId, quizId, questionId],
+          queryKey: ["quiz-content", categoryId, quizId],
         })
       }
 

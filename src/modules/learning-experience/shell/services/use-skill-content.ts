@@ -22,7 +22,7 @@ export function useSkillContent(url: string) {
   const { data, isLoading, isError } = useSuspenseQuery(skillContentQuery(url))
 
   return {
-    markdownContent: data.content,
+    content: data.content,
     isLoading,
     isError,
   }

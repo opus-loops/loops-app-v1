@@ -22,23 +22,23 @@ export class SubQuizStrategySelector {
     this.strategies = new Map([])
 
     this.strategies.set(
-      "choice_question-to-choice_question",
+      "choiceQuestions-to-choiceQuestions",
       new ChoiceQuestionToChoiceQuestionStrategy(startChoiceQuestion),
     )
 
     this.strategies.set(
-      "choice_question-to-sequence_order",
+      "choiceQuestions-to-sequenceOrders",
       new ChoiceQuestionToSequenceOrderStrategy(startSequenceOrder),
     )
 
 
     this.strategies.set(
-      "sequence_order-to-choice_question",
+      "sequenceOrders-to-choiceQuestions",
       new SequenceOrderToChoiceQuestionStrategy(startChoiceQuestion),
     )
 
     this.strategies.set(
-      "sequence_order-to-sequence_order",
+      "sequenceOrders-to-sequenceOrders",
       new SequenceOrderToSequenceOrderStrategy(startSequenceOrder),
     )
 

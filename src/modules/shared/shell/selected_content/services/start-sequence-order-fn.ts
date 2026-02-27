@@ -2,7 +2,8 @@ import type {
   startSequenceOrderErrorsSchema,
   startSequenceOrderSuccessSchema,
 } from "@/modules/shared/api/explore/sequence_order/start-sequence-order"
-import { startSequenceOrder } from "@/modules/shared/api/explore/sequence_order/start-sequence-order"
+import { startSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/start-sequence-order"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -11,6 +12,7 @@ import { Cause, Effect, Option } from "effect"
 export type StartSequenceOrderErrors =
   | typeof startSequenceOrderErrorsSchema.Type
   | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
 
 export type StartSequenceOrderSuccess =
   typeof startSequenceOrderSuccessSchema.Type
@@ -33,7 +35,18 @@ export const startSequenceOrderFn = createServerFn({
       },
   )
   .handler(async (ctx): Promise<StartSequenceOrderWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
+    const startSequenceOrder = await startSequenceOrderFactory()
     const exit = await Effect.runPromiseExit(
       startSequenceOrder({
         categoryId: ctx.data.categoryId,

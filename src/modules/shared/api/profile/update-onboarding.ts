@@ -2,7 +2,7 @@ import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/i
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -43,19 +43,23 @@ export const onboardingExitSchema = Schema.Exit({
   success: onboardingSuccessSchema,
 })
 
-export function onboarding(args: OnboardingArgs): OnboardingResult {
-  const parsedArgs = parseEffectSchema(onboardingArgsSchema, args)
-  const response = instance.patch("/profile/onboarding", parsedArgs)
+export const onboardingFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "OnboardingErrors",
-      schema: onboardingErrorsSchema,
-    },
-    name: "Onboarding",
-    success: {
-      name: "OnboardingSuccess",
-      schema: onboardingSuccessSchema,
-    },
-  })(response)
+  return function onboarding(args: OnboardingArgs): OnboardingResult {
+    const parsedArgs = parseEffectSchema(onboardingArgsSchema, args)
+    const response = instance.patch("/profile/onboarding", parsedArgs)
+
+    return parseApiResponse({
+      error: {
+        name: "OnboardingErrors",
+        schema: onboardingErrorsSchema,
+      },
+      name: "Onboarding",
+      success: {
+        name: "OnboardingSuccess",
+        schema: onboardingSuccessSchema,
+      },
+    })(response)
+  }
 }

@@ -1,15 +1,16 @@
 import type { listExploreCategoryItemsErrorsSchema } from "@/modules/shared/api/explore/category/list-explore-category-items"
-import { listExploreCategoryItems } from "@/modules/shared/api/explore/category/list-explore-category-items"
+import { listExploreCategoryItemsFactory } from "@/modules/shared/api/explore/category/list-explore-category-items"
 import type { getExploreQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
-import { getExploreQuiz } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
+import { getExploreQuizFactory } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
 import type { getStartedQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-started-quiz"
-import { getStartedQuiz } from "@/modules/shared/api/explore/quiz/get-started-quiz"
+import { getStartedQuizFactory } from "@/modules/shared/api/explore/quiz/get-started-quiz"
 import type { getCompletedSkillErrorsSchema } from "@/modules/shared/api/explore/skill/get-completed-skill"
-import { getCompletedSkill } from "@/modules/shared/api/explore/skill/get-completed-skill"
+import { getCompletedSkillFactory } from "@/modules/shared/api/explore/skill/get-completed-skill"
 import type { getExploreSkillErrorsSchema } from "@/modules/shared/api/explore/skill/get-explore-skill"
-import { getExploreSkill } from "@/modules/shared/api/explore/skill/get-explore-skill"
+import { getExploreSkillFactory } from "@/modules/shared/api/explore/skill/get-explore-skill"
 import type { getExploreSkillContentErrorsSchema } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
-import { getExploreSkillContent } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
+import { getExploreSkillContentFactory } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import type { SkillContent } from "@/modules/shared/domain/entities/skill-content"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
@@ -25,6 +26,7 @@ export type CategoryContentErrors =
   | typeof getCompletedSkillErrorsSchema.Type
   | typeof getStartedQuizErrorsSchema.Type
   | typeof getExploreSkillContentErrorsSchema.Type
+  | { code: "Unauthorized" }
 
 export type CategoryContentSuccess = {
   categoryItems: Array<CategoryContentItem>
@@ -43,16 +45,22 @@ export type CategoryContentWire =
 
 // --- MAIN LOGIC AS EFFECT ----------------------------------------------------
 const fetchCategoryContentEffect = (params: CategoryContentParams) =>
-  Effect.gen(function* () {
+  Effect.gen(function* (_) {
     const { categoryId, offset, size } = params
 
     // 1) First, fetch all category items
-    const categoryItemsExit = yield* Effect.promise(() =>
-      Effect.runPromiseExit(
-        listExploreCategoryItems({
-          args: { categoryId },
-          queryParams: { offset, size },
-        }),
+    const listExploreCategoryItems = yield* _(
+      Effect.promise(() => listExploreCategoryItemsFactory()),
+    )
+
+    const categoryItemsExit = yield* _(
+      Effect.promise(() =>
+        Effect.runPromiseExit(
+          listExploreCategoryItems({
+            args: { categoryId },
+            queryParams: { offset, size },
+          }),
+        ),
       ),
     )
 
@@ -74,23 +82,35 @@ const fetchCategoryContentEffect = (params: CategoryContentParams) =>
 
     for (const categoryItem of categoryItems) {
       if (categoryItem.itemType === "skills") {
-        const skillExit = yield* Effect.promise(() =>
-          Effect.runPromiseExit(
-            getExploreSkill({
-              categoryId,
-              skillId: categoryItem.itemId,
-            }),
+        const getExploreSkill = yield* _(
+          Effect.promise(() => getExploreSkillFactory()),
+        )
+
+        const skillExit = yield* _(
+          Effect.promise(() =>
+            Effect.runPromiseExit(
+              getExploreSkill({
+                categoryId,
+                skillId: categoryItem.itemId,
+              }),
+            ),
           ),
         )
 
         if (skillExit._tag === "Success") {
           // Try to fetch completed skill status (optional)
-          const completedSkillExit = yield* Effect.promise(() =>
-            Effect.runPromiseExit(
-              getCompletedSkill({
-                categoryId,
-                skillId: categoryItem.itemId,
-              }),
+          const getCompletedSkill = yield* _(
+            Effect.promise(() => getCompletedSkillFactory()),
+          )
+
+          const completedSkillExit = yield* _(
+            Effect.promise(() =>
+              Effect.runPromiseExit(
+                getCompletedSkill({
+                  categoryId,
+                  skillId: categoryItem.itemId,
+                }),
+              ),
             ),
           )
 
@@ -102,12 +122,18 @@ const fetchCategoryContentEffect = (params: CategoryContentParams) =>
           // Fetch skill content if completedSkill exists
           let skillContent: SkillContent | undefined = undefined
           if (completedSkill) {
-            const skillContentExit = yield* Effect.promise(() =>
-              Effect.runPromiseExit(
-                getExploreSkillContent({
-                  categoryId,
-                  skillId: categoryItem.itemId,
-                }),
+            const getExploreSkillContent = yield* _(
+              Effect.promise(() => getExploreSkillContentFactory()),
+            )
+
+            const skillContentExit = yield* _(
+              Effect.promise(() =>
+                Effect.runPromiseExit(
+                  getExploreSkillContent({
+                    categoryId,
+                    skillId: categoryItem.itemId,
+                  }),
+                ),
               ),
             )
 
@@ -120,28 +146,40 @@ const fetchCategoryContentEffect = (params: CategoryContentParams) =>
             ...categoryItem,
             content: skillExit.value.skill,
             contentType: "skills" as const,
-            completedSkill,
+            itemProgress: completedSkill,
             skillContent,
           } as CategoryContentItem)
         }
       } else if (categoryItem.itemType === "quizzes") {
-        const quizExit = yield* Effect.promise(() =>
-          Effect.runPromiseExit(
-            getExploreQuiz({
-              categoryId,
-              quizId: categoryItem.itemId,
-            }),
+        const getExploreQuiz = yield* _(
+          Effect.promise(() => getExploreQuizFactory()),
+        )
+
+        const quizExit = yield* _(
+          Effect.promise(() =>
+            Effect.runPromiseExit(
+              getExploreQuiz({
+                categoryId,
+                quizId: categoryItem.itemId,
+              }),
+            ),
           ),
         )
 
         if (quizExit._tag === "Success") {
           // Try to fetch started quiz status (optional)
-          const startedQuizExit = yield* Effect.promise(() =>
-            Effect.runPromiseExit(
-              getStartedQuiz({
-                categoryId,
-                quizId: categoryItem.itemId,
-              }),
+          const getStartedQuiz = yield* _(
+            Effect.promise(() => getStartedQuizFactory()),
+          )
+
+          const startedQuizExit = yield* _(
+            Effect.promise(() =>
+              Effect.runPromiseExit(
+                getStartedQuiz({
+                  categoryId,
+                  quizId: categoryItem.itemId,
+                }),
+              ),
             ),
           )
 
@@ -154,7 +192,7 @@ const fetchCategoryContentEffect = (params: CategoryContentParams) =>
             ...categoryItem,
             content: quizExit.value.quiz,
             contentType: "quizzes" as const,
-            startedQuiz,
+            itemProgress: startedQuiz,
           } as CategoryContentItem)
         }
       }
@@ -176,6 +214,16 @@ export const categoryContentFn = createServerFn({
       },
   )
   .handler(async (ctx): Promise<CategoryContentWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(
       fetchCategoryContentEffect(ctx.data),

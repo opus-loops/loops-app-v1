@@ -9,7 +9,6 @@ import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-sh
 import { SelectedContentShell } from "@/modules/shared/shell/selected_content/selected-content-shell"
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
-import { zodValidator } from "@tanstack/zod-adapter"
 import { Suspense } from "react"
 import { z } from "zod"
 
@@ -22,19 +21,17 @@ const authenticatedQuery = queryOptions({
   queryKey: ["authenticated"],
 })
 
-const searchParamsSchema = z.object({
-  category: z
-    .string()
-    .refine((value) => value === "all" || /^[0-9a-fA-F]{24}$/.test(value))
-    .optional(),
-  type: z.enum(["details", "content"]).optional(),
-  contentId: z.string().optional(),
-})
-
 export const Route = createFileRoute("/")({
   beforeLoad: async ({ context }) =>
     await context.queryClient.ensureQueryData(authenticatedQuery),
-  validateSearch: zodValidator(searchParamsSchema),
+  validateSearch: z.object({
+    category: z
+      .string()
+      .refine((value) => value === "all" || /^[0-9a-fA-F]{24}$/.test(value))
+      .optional(),
+    type: z.enum(["details", "content"]).optional(),
+    contentId: z.string().optional(),
+  }),
   component: function Home() {
     const {
       data: { user },

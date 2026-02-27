@@ -2,7 +2,8 @@ import type {
   completeSkillErrorsSchema,
   completeSkillSuccessSchema,
 } from "@/modules/shared/api/explore/skill/complete-skill"
-import { completeSkill } from "@/modules/shared/api/explore/skill/complete-skill"
+import { completeSkillFactory } from "@/modules/shared/api/explore/skill/complete-skill"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -11,6 +12,7 @@ import { Cause, Effect, Option } from "effect"
 export type CompleteSkillErrors =
   | typeof completeSkillErrorsSchema.Type
   | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
 
 export type CompleteSkillSuccess = typeof completeSkillSuccessSchema.Type
 
@@ -31,7 +33,18 @@ export const completeSkillFn = createServerFn({
       },
   )
   .handler(async (ctx): Promise<CompleteSkillWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
+    const completeSkill = await completeSkillFactory()
     const exit = await Effect.runPromiseExit(
       completeSkill({
         categoryId: ctx.data.categoryId,

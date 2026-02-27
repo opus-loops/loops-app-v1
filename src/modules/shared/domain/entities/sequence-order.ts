@@ -7,7 +7,7 @@ export const sequenceOrderSchema = Schema.Struct({
   headline: Schema.Array(textContentSchema),
   sequence: Schema.Array(Schema.Array(textContentSchema)),
   metaTags: Schema.Array(Schema.String),
-  idealOrder: Schema.Array(Schema.Number.pipe(Schema.int())),
+  idealOrder: Schema.optional(Schema.Array(Schema.Number.pipe(Schema.int()))),
   defaultLanguage: Schema.String,
   difficulty: Schema.Number.pipe(Schema.int()),
   score: Schema.Number.pipe(Schema.int()),

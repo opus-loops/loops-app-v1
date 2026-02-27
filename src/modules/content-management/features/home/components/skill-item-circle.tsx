@@ -35,14 +35,14 @@ export function SkillItemCircle({
   const { setSelectedContent } = useSelectedContent()
 
   const getProgressState = (): ProgressState => {
-    if (item.completedSkill === undefined) return "locked"
-    if (item.completedSkill.isCompleted) return "completed"
+    if (item.itemProgress === undefined) return "locked"
+    if (item.itemProgress.isCompleted) return "completed"
     return "started"
   }
 
   const getProgress = (): number => {
-    if (item.completedSkill?.isCompleted) return 100
-    if (item.completedSkill) return Math.min(item.completedSkill.score, 100)
+    if (item.itemProgress?.isCompleted) return 100
+    if (item.itemProgress) return Math.min(item.itemProgress.score, 100)
     return 0
   }
 
@@ -109,7 +109,7 @@ export function SkillItemCircle({
         </div>
       )}
 
-      {progressState !== "locked" && (
+      {(isFirstItem !== false || progressState !== "locked") && (
         <div className="flex flex-col items-center justify-center">
           <div className={cn("h-10 w-10 shrink-0 grow-0", colors.text)}>
             <BookIcon />

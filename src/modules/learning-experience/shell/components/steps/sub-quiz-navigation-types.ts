@@ -39,7 +39,7 @@ export interface ISubQuizNavigationManager {
 }
 
 export type SubQuizNavigationStrategy =
-  | "choice_question-to-sequence_order"
-  | "choice_question-to-choice_question"
-  | "sequence_order-to-sequence_order"
-  | "sequence_order-to-choice_question"
+  | "choiceQuestions-to-sequenceOrders"
+  | "choiceQuestions-to-choiceQuestions"
+  | "sequenceOrders-to-sequenceOrders"
+  | "sequenceOrders-to-choiceQuestions"

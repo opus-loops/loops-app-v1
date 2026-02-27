@@ -7,13 +7,15 @@ import type { SubQuiz } from "@/modules/shared/domain/entities/sub-quiz"
 export type EnhancedSubQuiz = SubQuiz &
   (
     | {
-        questionType: "choice_question"
-        completedChoiceQuestion?: CompletedChoiceQuestion | undefined
+        questionType: "choiceQuestions"
+        completedQuestion?: CompletedChoiceQuestion | undefined
         content?: ChoiceQuestion | undefined
+        index: number
       }
     | {
-        questionType: "sequence_order"
-        completedSequenceOrder?: CompletedSequenceOrder | undefined
+        questionType: "sequenceOrders"
+        completedQuestion?: CompletedSequenceOrder | undefined
         content?: SequenceOrder | undefined
+        index: number
       }
   )

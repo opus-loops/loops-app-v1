@@ -2,7 +2,8 @@ import type {
   confirmAccountErrorsSchema,
   confirmAccountSuccessSchema,
 } from "@/modules/shared/api/account/confirm-account"
-import { confirmAccount } from "@/modules/shared/api/account/confirm-account"
+import { confirmAccountFactory } from "@/modules/shared/api/account/confirm-account"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -11,6 +12,7 @@ import { Cause, Effect, Option } from "effect"
 export type ConfirmAccountErrors =
   | typeof confirmAccountErrorsSchema.Type
   | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
 
 export type ConfirmAccountSuccess = typeof confirmAccountSuccessSchema.Type
 
@@ -25,7 +27,19 @@ export const confirmAccountFn = createServerFn({
 })
   .inputValidator((data) => data as { confirmationCode: number })
   .handler(async (ctx) => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
+    const confirmAccount = await confirmAccountFactory()
+
     const exit = await Effect.runPromiseExit(
       confirmAccount({
         confirmationCode: ctx.data.confirmationCode,

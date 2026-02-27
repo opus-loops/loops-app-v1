@@ -5,7 +5,7 @@ import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-c
 import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -53,20 +53,26 @@ export const getExploreQuizExitSchema = Schema.Exit({
   success: getExploreQuizSuccessSchema,
 })
 
-export function getExploreQuiz(args: GetExploreQuizArgs): GetExploreQuizResult {
-  const parsedArgs = parseEffectSchema(getExploreQuizArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}`
-  const response = instance.get(url)
+export const getExploreQuizFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetExploreQuizErrors",
-      schema: getExploreQuizErrorsSchema,
-    },
-    name: "GetExploreQuiz",
-    success: {
-      name: "GetExploreQuizSuccess",
-      schema: getExploreQuizSuccessSchema,
-    },
-  })(response)
+  return function getExploreQuiz(
+    args: GetExploreQuizArgs,
+  ): GetExploreQuizResult {
+    const parsedArgs = parseEffectSchema(getExploreQuizArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "GetExploreQuizErrors",
+        schema: getExploreQuizErrorsSchema,
+      },
+      name: "GetExploreQuiz",
+      success: {
+        name: "GetExploreQuizSuccess",
+        schema: getExploreQuizSuccessSchema,
+      },
+    })(response)
+  }
 }

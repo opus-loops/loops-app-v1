@@ -1,58 +1,58 @@
 import { useSelectedSubQuiz } from "@/modules/learning-experience/contexts/selected-sub-quiz-context"
 import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
 import { useQuizContent } from "@/modules/shared/shell/selected_content/services/use-quiz-content"
 import { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
 import { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import { Effect } from "effect"
 import { useCallback, useMemo } from "react"
-import { QuizStep } from "../quiz-stepper"
+import { useQuizStepper } from "../quiz-stepper"
 import { SubQuizNavigatorManager } from "./navigation/managers/sub-quiz-navigator-manager"
 import { SubQuizNavigationError } from "./sub-quiz-navigation-types"
 
 type UseSubQuizNavigationProps = {
-  quizItem: CategoryContentItem
-  currentQuizStep: QuizStep
+  quizItem: CategoryContentItem & { contentType: "quizzes" }
 }
 
-export function useSubQuizNavigation({
-  quizItem,
-  currentQuizStep,
-}: UseSubQuizNavigationProps) {
+export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
+  const { currentStep, goToStep } = useQuizStepper()
   const { subQuizzes } = useQuizContent({
     quizId: quizItem.itemId,
     categoryId: quizItem.categoryId,
   })
 
   const {
-    selectedSubQuiz,
+    selectedSubQuizIndex,
     navigationState,
     navigateToSubQuiz,
     setNavigationState,
     resetNavigationState,
   } = useSelectedSubQuiz()
 
+  const selectedSubQuiz =
+    selectedSubQuizIndex !== undefined
+      ? subQuizzes[selectedSubQuizIndex]
+      : undefined
+
   const startChoiceQuestion = useStartChoiceQuestion()
   const startSequenceOrder = useStartSequenceOrder()
 
   // Create navigation manager
   const manager = useMemo(() => {
-    return new SubQuizNavigatorManager(
-      startChoiceQuestion,
-      startSequenceOrder,
-    )
+    return new SubQuizNavigatorManager(startChoiceQuestion, startSequenceOrder)
   }, [startChoiceQuestion, startSequenceOrder])
 
   // Navigation capabilities
   const canNavigateNext = useMemo(() => {
-    if (selectedSubQuiz === undefined) {
-      if (currentQuizStep === "welcome") return true
-      else return false
-    }
+    if (selectedSubQuiz === undefined) return currentStep === "welcome"
 
     const nextSubQuiz = subQuizzes.find(
       (subQuiz) => subQuiz.subQuizId === selectedSubQuiz.nextSubQuiz,
     )
+
+    // Allow navigation to statistics if no next sub-quiz
+    if (!nextSubQuiz) return true
 
     return manager.canNavigateNext({
       categoryId: quizItem.categoryId,
@@ -60,17 +60,11 @@ export function useSubQuizNavigation({
       adjacentSubQuiz: nextSubQuiz,
       subQuizzes,
     })
-  }, [
-    manager,
-    selectedSubQuiz,
-    currentQuizStep,
-    subQuizzes,
-    quizItem.categoryId,
-  ])
+  }, [manager, selectedSubQuiz, currentStep, subQuizzes, quizItem.categoryId])
 
   const canNavigatePrevious = useMemo(() => {
     if (selectedSubQuiz === undefined) {
-      if (currentQuizStep === "statistics") return true
+      if (currentStep === "statistics") return true
       else return false
     }
 
@@ -78,19 +72,16 @@ export function useSubQuizNavigation({
       (subQuiz) => subQuiz.subQuizId === selectedSubQuiz.previousSubQuiz,
     )
 
+    // Allow navigation to welcome if no previous sub-quiz
+    if (!previousSubQuiz) return true
+
     return manager.canNavigatePrevious({
       categoryId: quizItem.categoryId,
       currentSubQuiz: selectedSubQuiz,
       adjacentSubQuiz: previousSubQuiz,
       subQuizzes,
     })
-  }, [
-    manager,
-    selectedSubQuiz,
-    currentQuizStep,
-    subQuizzes,
-    quizItem.categoryId,
-  ])
+  }, [manager, selectedSubQuiz, currentStep, subQuizzes, quizItem.categoryId])
 
   // Handle navigation result
   const handleNavigationResult = useCallback(
@@ -106,7 +97,7 @@ export function useSubQuizNavigation({
           },
           onSuccess: (targetSubQuiz) => {
             // Update context with navigation result
-            navigateToSubQuiz({ subQuiz: targetSubQuiz, direction })
+            navigateToSubQuiz({ index: targetSubQuiz.index, direction })
 
             // Reset navigation state
             resetNavigationState()
@@ -117,34 +108,65 @@ export function useSubQuizNavigation({
   )
 
   // Navigation actions
-  const navigateNext = useCallback(async () => {
-    // Handle welcome step: navigate to first sub-quiz
-    if (!selectedSubQuiz) {
-      if (currentQuizStep === "welcome") {
-        const firstSubQuiz = subQuizzes.find(
-          (subQuiz) => subQuiz.previousSubQuiz === undefined,
-        )
+  const initializeQuiz = useCallback(async () => {
+    const itemProgress = quizItem.itemProgress as StartedQuiz
 
-        if (!firstSubQuiz) return
+    const firstSubQuiz = subQuizzes.find(
+      (subQuiz) => subQuiz.previousSubQuiz === undefined,
+    )
 
-        // Set navigation state
-        setNavigationState({
-          isNavigating: true,
-          navigationDirection: "next",
-          previousSubQuiz: undefined,
+    if (!firstSubQuiz) return
+
+    // TODO: REFACTOR THIS
+    const startFirstSubQuiz = async () => {
+      if (firstSubQuiz.questionType === "choiceQuestions") {
+        await startChoiceQuestion.handleStartChoiceQuestion({
+          categoryId: quizItem.categoryId,
+          quizId: quizItem.itemId,
+          questionId: firstSubQuiz.questionId,
         })
+      } else if (firstSubQuiz.questionType === "sequenceOrders") {
+        await startSequenceOrder.handleStartSequenceOrder({
+          categoryId: quizItem.categoryId,
+          quizId: quizItem.itemId,
+          questionId: firstSubQuiz.questionId,
+        })
+      }
+    }
 
-        // Navigate directly to first sub-quiz
+    // Case 2: Resume from last started sub-quiz (progressPointer)
+    if (itemProgress.progressPointer) {
+      const lastStartedSubQuiz = subQuizzes.find(
+        (sq) => sq.subQuizId === itemProgress.progressPointer,
+      )
+      if (lastStartedSubQuiz) {
         navigateToSubQuiz({
-          subQuiz: firstSubQuiz,
+          index: lastStartedSubQuiz.index,
           direction: "next",
         })
-
-        resetNavigationState()
+        goToStep("sub-quizzes")
         return
       }
     }
 
+    // Case 3: All started/completed -> Go to first sub-quiz
+    // If we have progress but no pointer, and we are not at start (implied by having progress),
+    // we default to first sub-quiz (user requirement: "if all ... set the first").
+    // Also covers "if there's no started sub quiz" (if that could happen with itemProgress present but no pointer? unlikely)
+    // But if completedQuestions == 0 and no pointer? That means started but no progress?
+    if (!itemProgress.progressPointer) await startFirstSubQuiz()
+    navigateToSubQuiz({ index: firstSubQuiz.index, direction: "next" })
+    goToStep("sub-quizzes")
+  }, [
+    quizItem,
+    subQuizzes,
+    startChoiceQuestion,
+    startSequenceOrder,
+    navigateToSubQuiz,
+    goToStep,
+  ])
+
+  const navigateNext = useCallback(async () => {
     // Regular navigation: requires selectedSubQuiz
     if (!selectedSubQuiz) return
 
@@ -152,13 +174,20 @@ export function useSubQuizNavigation({
     setNavigationState({
       isNavigating: true,
       navigationDirection: "next",
-      previousSubQuiz: selectedSubQuiz,
+      previousSubQuizIndex: selectedSubQuiz.index,
     })
 
     // Find next sub-quiz
     const nextSubQuiz = subQuizzes.find(
       (subQuiz) => subQuiz.subQuizId === selectedSubQuiz.nextSubQuiz,
     )
+
+    // If no next sub-quiz, go to statistics
+    if (!nextSubQuiz) {
+      goToStep("statistics")
+      resetNavigationState()
+      return
+    }
 
     // Perform navigation
     await handleNavigationResult(
@@ -172,21 +201,21 @@ export function useSubQuizNavigation({
     )
   }, [
     selectedSubQuiz,
-    currentQuizStep,
+    currentStep,
     subQuizzes,
     manager,
     setNavigationState,
     handleNavigationResult,
     navigateToSubQuiz,
     resetNavigationState,
+    goToStep,
   ])
 
   const navigatePrevious = useCallback(async () => {
     // Regular navigation: requires selectedSubQuiz
-    if (!selectedSubQuiz) return
-    // Handle statistics step: navigate to last sub-quiz
     if (!selectedSubQuiz) {
-      if (currentQuizStep === "statistics") {
+      // Handle statistics step: navigate to last sub-quiz
+      if (currentStep === "statistics") {
         const lastSubQuiz = subQuizzes.find(
           (subQuiz) => subQuiz.nextSubQuiz === undefined,
         )
@@ -197,30 +226,35 @@ export function useSubQuizNavigation({
         setNavigationState({
           isNavigating: true,
           navigationDirection: "previous",
-          previousSubQuiz: undefined,
+          previousSubQuizIndex: undefined,
         })
 
         // Navigate directly to last sub-quiz
-        navigateToSubQuiz({ subQuiz: lastSubQuiz, direction: "previous" })
+        navigateToSubQuiz({ index: lastSubQuiz.index, direction: "previous" })
         resetNavigationState()
         return
       }
+      return
     }
-
-    // Regular navigation: requires selectedSubQuiz
-    if (!selectedSubQuiz) return
 
     // Set navigation state
     setNavigationState({
       isNavigating: true,
       navigationDirection: "previous",
-      previousSubQuiz: selectedSubQuiz,
+      previousSubQuizIndex: selectedSubQuiz.index,
     })
 
     // Find previous sub-quiz
     const previousSubQuiz = subQuizzes.find(
       (subQuiz) => subQuiz.subQuizId === selectedSubQuiz.previousSubQuiz,
     )
+
+    // If no previous sub-quiz, go to welcome
+    if (!previousSubQuiz) {
+      goToStep("welcome")
+      resetNavigationState()
+      return
+    }
 
     // Perform navigation
     await handleNavigationResult(
@@ -234,13 +268,14 @@ export function useSubQuizNavigation({
     )
   }, [
     selectedSubQuiz,
-    currentQuizStep,
+    currentStep,
     subQuizzes,
     manager,
     setNavigationState,
     handleNavigationResult,
     navigateToSubQuiz,
     resetNavigationState,
+    goToStep,
   ])
 
   return {
@@ -252,6 +287,7 @@ export function useSubQuizNavigation({
     navigateNext,
     navigatePrevious,
 
+    initializeQuiz,
     // Current state
     selectedSubQuiz,
     navigationState,

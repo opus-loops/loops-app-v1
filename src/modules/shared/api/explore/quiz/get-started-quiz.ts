@@ -7,7 +7,7 @@ import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not
 import { quizNotStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-not-started"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -57,20 +57,26 @@ export const getStartedQuizExitSchema = Schema.Exit({
   success: getStartedQuizSuccessSchema,
 })
 
-export function getStartedQuiz(args: GetStartedQuizArgs): GetStartedQuizResult {
-  const parsedArgs = parseEffectSchema(getStartedQuizArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/started`
-  const response = instance.get(url)
+export const getStartedQuizFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetStartedQuizErrors",
-      schema: getStartedQuizErrorsSchema,
-    },
-    name: "GetStartedQuiz",
-    success: {
-      name: "GetStartedQuizSuccess",
-      schema: getStartedQuizSuccessSchema,
-    },
-  })(response)
+  return function getStartedQuiz(
+    args: GetStartedQuizArgs,
+  ): GetStartedQuizResult {
+    const parsedArgs = parseEffectSchema(getStartedQuizArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/started`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "GetStartedQuizErrors",
+        schema: getStartedQuizErrorsSchema,
+      },
+      name: "GetStartedQuiz",
+      success: {
+        name: "GetStartedQuizSuccess",
+        schema: getStartedQuizSuccessSchema,
+      },
+    })(response)
+  }
 }

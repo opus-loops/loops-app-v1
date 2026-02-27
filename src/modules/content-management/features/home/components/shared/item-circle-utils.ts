@@ -48,8 +48,8 @@ export const isItemStartable = (
   // Check if all previous items are completed
   return previousItems.every((prevItem) => {
     if (prevItem.contentType === "skills")
-      return prevItem.completedSkill?.isCompleted === true
-    return prevItem.startedQuiz?.status === "completed"
+      return prevItem.itemProgress?.isCompleted === true
+    return prevItem.itemProgress?.status === "completed"
   })
 }
 

@@ -1,9 +1,6 @@
 // Types
 export type * from "./types/navigation-types"
 
-// Strategies
-export * from "./strategies"
-
 // Managers
 export { NavigationManager } from "./managers/navigation-manager"
 

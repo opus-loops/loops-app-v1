@@ -1,7 +1,8 @@
 import type { getExploreCategoryErrorsSchema } from "@/modules/shared/api/explore/category/get-explore-category"
-import { getExploreCategory } from "@/modules/shared/api/explore/category/get-explore-category"
+import { getExploreCategoryFactory } from "@/modules/shared/api/explore/category/get-explore-category"
 import type { getStartedCategoryErrorsSchema } from "@/modules/shared/api/explore/started_category/get-started-category"
-import { getStartedCategory } from "@/modules/shared/api/explore/started_category/get-started-category"
+import { getStartedCategoryFactory } from "@/modules/shared/api/explore/started_category/get-started-category"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { Category } from "@/modules/shared/domain/entities/category"
 import type { StartedCategory } from "@/modules/shared/domain/entities/started-category"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
@@ -13,6 +14,7 @@ export type ExploreCategoryErrors =
   | typeof unknownErrorSchema.Type
   | typeof getExploreCategoryErrorsSchema.Type
   | typeof getStartedCategoryErrorsSchema.Type
+  | { code: "Unauthorized" }
 
 export type CategoryWithStartedCategory = Category & {
   startedCategory?: StartedCategory
@@ -33,12 +35,18 @@ export type ExploreCategoryWire =
 
 // --- MAIN LOGIC AS EFFECT ----------------------------------------------------
 const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
-  Effect.gen(function* () {
+  Effect.gen(function* (_) {
     const { categoryId } = params
 
     // 1) First, fetch the category
-    const categoryExit = yield* Effect.promise(() =>
-      Effect.runPromiseExit(getExploreCategory({ categoryId })),
+    const getExploreCategory = yield* _(
+      Effect.promise(() => getExploreCategoryFactory()),
+    )
+
+    const categoryExit = yield* _(
+      Effect.promise(() =>
+        Effect.runPromiseExit(getExploreCategory({ categoryId })),
+      ),
     )
 
     if (categoryExit._tag === "Failure") {
@@ -56,8 +64,14 @@ const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
     let categoryWithStartedData: CategoryWithStartedCategory = { ...category }
 
     // 2) Try to fetch the started category data
-    const startedCategoryExit = yield* Effect.promise(() =>
-      Effect.runPromiseExit(getStartedCategory({ categoryId })),
+    const getStartedCategory = yield* _(
+      Effect.promise(() => getStartedCategoryFactory()),
+    )
+
+    const startedCategoryExit = yield* _(
+      Effect.promise(() =>
+        Effect.runPromiseExit(getStartedCategory({ categoryId })),
+      ),
     )
 
     // If started category exists, add it to the category data
@@ -81,6 +95,16 @@ export const exploreCategoryFn = createServerFn({ method: "GET" })
       },
   )
   .handler(async (ctx): Promise<ExploreCategoryWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(
       fetchExploreCategoryEffect(ctx.data),

@@ -4,7 +4,7 @@ import { userSchema } from "../../domain/entities/user"
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import { invalidInputFactory } from "../../domain/utils/invalid-input"
-import { instance } from "../../utils/axios"
+import { instanceFactory } from "../../utils/axios"
 import { parseApiResponse } from "../../utils/parse-api-response"
 
 export const getLoggedUserErrorsSchema = Schema.Union(
@@ -28,22 +28,22 @@ type GetLoggedUserResult = Effect.Effect<
 export const getLoggedUserSuccessSchema = Schema.Struct({ user: userSchema })
 export type GetLoggedUserSuccess = typeof getLoggedUserSuccessSchema.Type
 
-export function getLoggedUser(
-  providedAuthHeader?: string,
-): GetLoggedUserResult {
-  const response = instance.get("/users/logged", {
-    headers: { Authorization: `Bearer ${providedAuthHeader}` },
-  })
+export const getLoggedUserFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetLoggedUserErrors",
-      schema: getLoggedUserErrorsSchema,
-    },
-    name: "GetLoggedUser",
-    success: {
-      name: "GetLoggedUserSuccess",
-      schema: getLoggedUserSuccessSchema,
-    },
-  })(response)
+  return function getLoggedUser(): GetLoggedUserResult {
+    const response = instance.get("/users/logged")
+
+    return parseApiResponse({
+      error: {
+        name: "GetLoggedUserErrors",
+        schema: getLoggedUserErrorsSchema,
+      },
+      name: "GetLoggedUser",
+      success: {
+        name: "GetLoggedUserSuccess",
+        schema: getLoggedUserSuccessSchema,
+      },
+    })(response)
+  }
 }

@@ -18,7 +18,7 @@ export function useStartQuiz() {
       // If successful, invalidate relevant queries to refresh data
       if (response._tag === "Success") {
         await queryClient.invalidateQueries({
-          queryKey: ["single-category-item", categoryId, quizId],
+          queryKey: ["category-content", categoryId],
         })
       }
 

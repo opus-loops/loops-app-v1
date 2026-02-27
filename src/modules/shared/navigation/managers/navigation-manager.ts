@@ -13,18 +13,30 @@ import {
   type ISkillNavigationManager,
 } from "./skill-navigation-manager"
 
+/**
+ * Main navigation manager that delegates to content-specific managers.
+ * Acts as a facade/router for navigation operations based on content type.
+ */
 export class NavigationManager implements INavigationManager {
   private skillNavigationManager: ISkillNavigationManager
   private quizNavigationManager: IQuizNavigationManager
 
+  /**
+   * Creates an instance of NavigationManager.
+   * Initializes specific managers for skills and quizzes.
+   */
   constructor() {
     this.skillNavigationManager = new SkillNavigationManager()
     this.quizNavigationManager = new QuizNavigationManager()
   }
 
+  /**
+   * Navigates to the next content item.
+   * Delegates to the appropriate manager based on current item's content type.
+   */
   navigateToNext(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    nextItem: CategoryContentItem
   }): Effect.Effect<CategoryContentItem, NavigationError> {
     if (params.currentItem.contentType === "skills")
       return this.skillNavigationManager.navigateToNext(params)
@@ -33,14 +45,18 @@ export class NavigationManager implements INavigationManager {
       return this.quizNavigationManager.navigateToNext(params)
 
     return Effect.fail({
-      _tag: "InvalidContentType",
+      _tag: "InvalidContentType" as const,
       message: "Invalid content type for navigation",
     })
   }
 
+  /**
+   * Navigates to the previous content item.
+   * Delegates to the appropriate manager based on current item's content type.
+   */
   navigateToPrevious(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    previousItem: CategoryContentItem
   }): Effect.Effect<CategoryContentItem, NavigationError> {
     if (params.currentItem.contentType === "skills")
       return this.skillNavigationManager.navigateToPrevious(params)
@@ -49,14 +65,18 @@ export class NavigationManager implements INavigationManager {
       return this.quizNavigationManager.navigateToPrevious(params)
 
     return Effect.fail({
-      _tag: "InvalidContentType",
+      _tag: "InvalidContentType" as const,
       message: "Invalid content type for navigation",
     })
   }
 
+  /**
+   * Checks if navigation to the next item is allowed.
+   * Delegates to the appropriate manager based on current item's content type.
+   */
   canNavigateNext(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    nextItem: CategoryContentItem
   }): Effect.Effect<boolean, NavigationError> {
     if (params.currentItem.contentType === "skills")
       return this.skillNavigationManager.canNavigateNext(params)
@@ -67,9 +87,13 @@ export class NavigationManager implements INavigationManager {
     return Effect.succeed(false)
   }
 
+  /**
+   * Checks if navigation to the previous item is allowed.
+   * Delegates to the appropriate manager based on current item's content type.
+   */
   canNavigatePrevious(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    previousItem: CategoryContentItem
   }): Effect.Effect<boolean, NavigationError> {
     if (params.currentItem.contentType === "skills")
       return this.skillNavigationManager.canNavigatePrevious(params)

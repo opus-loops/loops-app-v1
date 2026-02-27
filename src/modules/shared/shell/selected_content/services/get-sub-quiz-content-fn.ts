@@ -1,5 +1,6 @@
 import type { getExploreSubQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
-import { getExploreSubQuiz } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
+import { getExploreSubQuizFactory } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -8,6 +9,7 @@ import { Cause, Effect, Option } from "effect"
 export type GetSubQuizContentErrors =
   | typeof unknownErrorSchema.Type
   | typeof getExploreSubQuizErrorsSchema.Type
+  | { code: "Unauthorized" }
 
 export type GetSubQuizContentSuccess = {
   subQuiz: any // This will be the actual sub-quiz data from the API
@@ -25,17 +27,23 @@ export type GetSubQuizContentWire =
 
 // --- MAIN LOGIC AS EFFECT ----------------------------------------------------
 const fetchSubQuizContentEffect = (params: GetSubQuizContentParams) =>
-  Effect.gen(function* () {
+  Effect.gen(function* (_) {
     const { categoryId, quizId, questionId } = params
 
     // Fetch the sub-quiz content
-    const subQuizExit = yield* Effect.promise(() =>
-      Effect.runPromiseExit(
-        getExploreSubQuiz({
-          categoryId,
-          quizId,
-          questionId,
-        }),
+    const getExploreSubQuiz = yield* _(
+      Effect.promise(() => getExploreSubQuizFactory()),
+    )
+
+    const subQuizExit = yield* _(
+      Effect.promise(() =>
+        Effect.runPromiseExit(
+          getExploreSubQuiz({
+            categoryId,
+            quizId,
+            questionId,
+          }),
+        ),
       ),
     )
 
@@ -66,6 +74,16 @@ export const getSubQuizContentFn = createServerFn({
       },
   )
   .handler(async (ctx): Promise<GetSubQuizContentWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
     const exit = await Effect.runPromiseExit(
       fetchSubQuizContentEffect(ctx.data),

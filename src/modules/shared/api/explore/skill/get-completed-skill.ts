@@ -7,7 +7,7 @@ import { skillNotCompletedErrorSchema } from "@/modules/shared/domain/errors/ski
 import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -58,22 +58,26 @@ export const getCompletedSkillExitSchema = Schema.Exit({
   success: getCompletedSkillSuccessSchema,
 })
 
-export function getCompletedSkill(
-  args: GetCompletedSkillArgs,
-): GetCompletedSkillResult {
-  const parsedArgs = parseEffectSchema(getCompletedSkillArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}/completed`
-  const response = instance.get(url)
+export const getCompletedSkillFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetStartedSkillErrors",
-      schema: getCompletedSkillErrorsSchema,
-    },
-    name: "GetCompletedSkill",
-    success: {
-      name: "GetCompletedSkillSuccess",
-      schema: getCompletedSkillSuccessSchema,
-    },
-  })(response)
+  return function getCompletedSkill(
+    args: GetCompletedSkillArgs,
+  ): GetCompletedSkillResult {
+    const parsedArgs = parseEffectSchema(getCompletedSkillArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}/completed`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "GetStartedSkillErrors",
+        schema: getCompletedSkillErrorsSchema,
+      },
+      name: "GetCompletedSkill",
+      success: {
+        name: "GetCompletedSkillSuccess",
+        schema: getCompletedSkillSuccessSchema,
+      },
+    })(response)
+  }
 }

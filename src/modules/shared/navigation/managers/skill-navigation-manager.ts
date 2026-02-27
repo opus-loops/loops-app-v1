@@ -1,127 +1,163 @@
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { Effect } from "effect"
 import type { NavigationError } from "../types/navigation-types"
-import { OptimizedStrategySelector } from "../utils/optimized-strategy-selector"
 
+/**
+ * Interface for the skill navigation manager.
+ * Handles navigation logic specifically for skill content items.
+ */
 export interface ISkillNavigationManager {
+  /**
+   * Navigates to the next content item from a skill.
+   *
+   * @param params - Navigation parameters
+   * @param params.currentItem - The current skill item
+   * @param params.nextItem - The target next item
+   * @returns Effect resolving to the next item or failing with NavigationError
+   */
   navigateToNext(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    nextItem: CategoryContentItem
   }): Effect.Effect<CategoryContentItem, NavigationError>
+
+  /**
+   * Navigates to the previous content item from a skill.
+   *
+   * @param params - Navigation parameters
+   * @param params.currentItem - The current skill item
+   * @param params.previousItem - The target previous item
+   * @returns Effect resolving to the previous item or failing with NavigationError
+   */
   navigateToPrevious(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    previousItem: CategoryContentItem
   }): Effect.Effect<CategoryContentItem, NavigationError>
+
+  /**
+   * Checks if navigation to the next item is allowed from a skill.
+   *
+   * @param params - Navigation parameters
+   * @param params.currentItem - The current skill item
+   * @param params.nextItem - The target next item
+   * @returns Effect resolving to boolean indicating if navigation is possible
+   */
   canNavigateNext(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    nextItem: CategoryContentItem
   }): Effect.Effect<boolean, NavigationError>
+
+  /**
+   * Checks if navigation to the previous item is allowed from a skill.
+   *
+   * @param params - Navigation parameters
+   * @param params.currentItem - The current skill item
+   * @param params.previousItem - The target previous item
+   * @returns Effect resolving to boolean indicating if navigation is possible
+   */
   canNavigatePrevious(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    previousItem: CategoryContentItem
   }): Effect.Effect<boolean, NavigationError>
 }
 
+/**
+ * Implementation of the skill navigation manager.
+ * Enforces completion requirements for skills before allowing forward navigation.
+ */
 export class SkillNavigationManager implements ISkillNavigationManager {
-  private strategySelector: OptimizedStrategySelector
-
-  constructor() {
-    this.strategySelector = new OptimizedStrategySelector()
-  }
-
+  /**
+   * Navigates to the next content item.
+   * Requires the current skill to be completed.
+   */
   navigateToNext(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    nextItem: CategoryContentItem
   }): Effect.Effect<CategoryContentItem, NavigationError> {
-    const { currentItem, categoryItems } = params
-    const self = this
+    const { currentItem, nextItem } = params
 
     return Effect.gen(function* () {
-      const { strategy, adjacentItem } =
-        yield* self.strategySelector.selectStrategyEffect({
-          currentItem,
-          direction: "next",
-          categoryItems,
+      if (currentItem.contentType !== "skills") {
+        return yield* Effect.fail({
+          _tag: "InvalidContentType" as const,
+          message: "Current item must be a skill",
         })
+      }
 
-      return yield* strategy.navigate({
-        currentItem,
-        direction: "next",
-        categoryId: currentItem.categoryId,
-        adjacentItem,
-      })
+      if (!currentItem.itemProgress?.isCompleted) {
+        return yield* Effect.fail({
+          _tag: "CompletionRequired" as const,
+          message: "Current skill must be completed to navigate",
+        })
+      }
+
+      if (!nextItem) {
+        return yield* Effect.fail({
+          _tag: "FetchError" as const,
+          message: "Adjacent item not provided",
+        })
+      }
+
+      return nextItem
     })
   }
 
+  /**
+   * Navigates to the previous content item.
+   * Allows navigation without completion requirements.
+   */
   navigateToPrevious(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    previousItem: CategoryContentItem
   }): Effect.Effect<CategoryContentItem, NavigationError> {
-    const { currentItem, categoryItems } = params
-    const self = this
+    const { currentItem, previousItem } = params
 
     return Effect.gen(function* () {
-      const { strategy, adjacentItem } =
-        yield* self.strategySelector.selectStrategyEffect({
-          currentItem,
-          direction: "previous",
-          categoryItems,
+      if (currentItem.contentType !== "skills") {
+        return yield* Effect.fail({
+          _tag: "InvalidContentType" as const,
+          message: "Current item must be a skill",
         })
+      }
 
-      return yield* strategy.navigate({
-        currentItem,
-        direction: "previous",
-        categoryId: currentItem.categoryId,
-        adjacentItem,
-      })
+      if (!previousItem) {
+        return yield* Effect.fail({
+          _tag: "FetchError" as const,
+          message: "Adjacent item not provided",
+        })
+      }
+
+      return previousItem
     })
   }
 
+  /**
+   * Checks if navigation to the next item is possible.
+   * Returns true only if the current skill is completed and the next item exists.
+   */
   canNavigateNext(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    nextItem: CategoryContentItem
   }): Effect.Effect<boolean, NavigationError> {
-    const { currentItem, categoryItems } = params
-    const self = this
+    const { currentItem, nextItem } = params
 
-    return Effect.gen(function* () {
-      const { strategy, adjacentItem } =
-        yield* self.strategySelector.selectStrategyEffect({
-          currentItem,
-          direction: "next",
-          categoryItems,
-        })
+    if (currentItem.contentType !== "skills") return Effect.succeed(false)
+    const isCompleted = currentItem.itemProgress?.isCompleted === true
 
-      return strategy.canNavigate({
-        currentItem,
-        direction: "next",
-        categoryId: currentItem.categoryId,
-        adjacentItem,
-      })
-    })
+    const hasNextItem = !!nextItem
+
+    return Effect.succeed(isCompleted && hasNextItem)
   }
 
+  /**
+   * Checks if navigation to the previous item is possible.
+   * Always allows navigation if the previous item exists.
+   */
   canNavigatePrevious(params: {
     currentItem: CategoryContentItem
-    categoryItems: Array<CategoryContentItem>
+    previousItem: CategoryContentItem
   }): Effect.Effect<boolean, NavigationError> {
-    const { currentItem, categoryItems } = params
-    const self = this
+    const { previousItem } = params
 
-    return Effect.gen(function* () {
-      const { strategy, adjacentItem } =
-        yield* self.strategySelector.selectStrategyEffect({
-          currentItem,
-          direction: "previous",
-          categoryItems,
-        })
-
-      return strategy.canNavigate({
-        currentItem,
-        direction: "previous",
-        categoryId: currentItem.categoryId,
-        adjacentItem,
-      })
-    })
+    return Effect.succeed(!!previousItem)
   }
 }

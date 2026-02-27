@@ -3,7 +3,8 @@ import type {
   validateSequenceOrderErrorsSchema,
   validateSequenceOrderSuccessSchema,
 } from "@/modules/shared/api/explore/sequence_order/validate-sequence-order"
-import { validateSequenceOrder } from "@/modules/shared/api/explore/sequence_order/validate-sequence-order"
+import { validateSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/validate-sequence-order"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -12,6 +13,7 @@ import { Cause, Effect, Option } from "effect"
 export type ValidateSequenceOrderErrors =
   | typeof validateSequenceOrderErrorsSchema.Type
   | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
 
 export type ValidateSequenceOrderSuccess =
   typeof validateSequenceOrderSuccessSchema.Type
@@ -30,22 +32,36 @@ export const validateSequenceOrderFn = createServerFn({
 })
   .inputValidator((data) => data as ValidateSequenceOrderArgs)
   .handler(async (ctx): Promise<ValidateSequenceOrderWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
-    const exit = await Effect.runPromiseExit(validateSequenceOrder(ctx.data))
+    const validateChoiceQuestion = await validateSequenceOrderFactory()
+    const exit = await Effect.runPromiseExit(validateChoiceQuestion(ctx.data))
 
     // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)
     let wire: ValidateSequenceOrderWire
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
-        // Fallback if you sometimes throw defects: map to a typed error variant in your union
-        return {
-          code: "UnknownError" as const,
-          message:
-            "Unexpected error occurred while validating sequence order question",
-        }
-      })
+      const failure = Option.getOrElse(
+        Cause.failureOption(exit.cause), //
+        () => {
+          // Fallback if you sometimes throw defects: map to a typed error variant in your union
+          return {
+            code: "UnknownError" as const,
+            message:
+              "Unexpected error occurred while validating sequence order question",
+          }
+        },
+      )
       wire = { _tag: "Failure", error: failure }
     }
 

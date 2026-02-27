@@ -2,7 +2,7 @@ import { categorySchema } from "@/modules/shared/domain/entities/category"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import type { Effect } from "effect"
 import { Schema } from "effect"
@@ -48,7 +48,6 @@ export const listExploreCategoriesSuccessSchema = Schema.Struct({
     size: Schema.Number.pipe(Schema.int()),
     offset: Schema.Number.pipe(Schema.int()),
     page: Schema.Number.pipe(Schema.int()),
-    userId: Schema.String,
     total: Schema.Number.pipe(Schema.int()),
     totalPages: Schema.Number.pipe(Schema.int()),
   }),
@@ -68,38 +67,42 @@ export const listExploreCategoriesExitSchema = Schema.Exit({
   success: listExploreCategoriesSuccessSchema,
 })
 
-export function listExploreCategories(
-  queryParams?: ListExploreCategoriesQuery,
-): ListExploreCategoriesResult {
-  const params = new URLSearchParams()
+export const listExploreCategoriesFactory = async () => {
+  const instance = await instanceFactory()
 
-  if (queryParams?.query) params.append("query", queryParams.query)
-  if (queryParams?.sort !== undefined)
-    params.append("sort", queryParams.sort.toString())
-  if (queryParams?.sortBy) params.append("sortBy", queryParams.sortBy)
-  if (queryParams?.size !== undefined)
-    params.append("size", queryParams.size.toString())
-  if (queryParams?.offset !== undefined)
-    params.append("offset", queryParams.offset.toString())
-  if (queryParams?.page !== undefined)
-    params.append("page", queryParams.page.toString())
+  return function listExploreCategories(
+    queryParams?: ListExploreCategoriesQuery,
+  ): ListExploreCategoriesResult {
+    const params = new URLSearchParams()
 
-  const queryString = params.toString()
-  const url = queryString
-    ? `/explore/categories?${queryString}`
-    : "/explore/categories"
+    if (queryParams?.query) params.append("query", queryParams.query)
+    if (queryParams?.sort !== undefined)
+      params.append("sort", queryParams.sort.toString())
+    if (queryParams?.sortBy) params.append("sortBy", queryParams.sortBy)
+    if (queryParams?.size !== undefined)
+      params.append("size", queryParams.size.toString())
+    if (queryParams?.offset !== undefined)
+      params.append("offset", queryParams.offset.toString())
+    if (queryParams?.page !== undefined)
+      params.append("page", queryParams.page.toString())
 
-  const response = instance.get(url)
+    const queryString = params.toString()
+    const url = queryString
+      ? `/explore/categories?${queryString}`
+      : "/explore/categories"
 
-  return parseApiResponse({
-    error: {
-      name: "ListExploreCategoriesErrors",
-      schema: listExploreCategoriesErrorsSchema,
-    },
-    name: "ListExploreCategories",
-    success: {
-      name: "ListExploreCategoriesSuccess",
-      schema: listExploreCategoriesSuccessSchema,
-    },
-  })(response)
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "ListExploreCategoriesErrors",
+        schema: listExploreCategoriesErrorsSchema,
+      },
+      name: "ListExploreCategories",
+      success: {
+        name: "ListExploreCategoriesSuccess",
+        schema: listExploreCategoriesSuccessSchema,
+      },
+    })(response)
+  }
 }

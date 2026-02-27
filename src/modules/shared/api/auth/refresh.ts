@@ -1,10 +1,10 @@
+import axios from "axios"
 import type { Effect } from "effect"
 import { Schema } from "effect"
 import { invalidRefreshTokenErrorSchema } from "../../domain/errors/invalid-refresh-token"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import { loginTokensSchema } from "../../domain/types/login-tokens"
 import { invalidInputFactory } from "../../domain/utils/invalid-input"
-import { instance } from "../../utils/axios"
 import { parseApiResponse } from "../../utils/parse-api-response"
 import { parseEffectSchema } from "../../utils/parse-effect-schema"
 
@@ -29,7 +29,8 @@ export function refreshAccessToken(args?: RefreshArgs): RefreshResult {
     ? parseEffectSchema(Schema.Struct({ refresh: Schema.String }), args)
     : undefined
 
-  const response = instance.post("/auth/refresh", {
+  const url = import.meta.env.VITE_API_URL + "/auth/refresh"
+  const response = axios.post(url, {
     refreshToken: parsedArgs?.refresh,
   })
 

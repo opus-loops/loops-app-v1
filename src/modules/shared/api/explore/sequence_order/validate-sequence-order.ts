@@ -11,7 +11,7 @@ import { subQuizNotFoundErrorSchema } from "@/modules/shared/domain/errors/sub-q
 import { subQuizNotStartedErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-not-started"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -57,11 +57,13 @@ export type ValidateSequenceOrderErrors =
   typeof validateSequenceOrderErrorsSchema.Type
 
 export const validateSequenceOrderSuccessSchema = Schema.Struct({
-  isCorrect: Schema.Boolean,
-  userAnswer: Schema.optional(Schema.Array(Schema.Number)),
-  expectedResponse: Schema.Array(Schema.Number),
-  spentTime: Schema.Number,
-  estimatedTime: Schema.Number,
+  questionValidation: Schema.Struct({
+    isCorrect: Schema.Boolean,
+    userAnswer: Schema.optional(Schema.Array(Schema.Number)),
+    expectedResponse: Schema.Array(Schema.Number),
+    spentTime: Schema.Number,
+    estimatedTime: Schema.Number,
+  }),
 })
 
 export type ValidateSequenceOrderSuccess =
@@ -81,24 +83,28 @@ export const validateSequenceOrderExitSchema = Schema.Exit({
 export type ValidateSequenceOrderExit =
   typeof validateSequenceOrderExitSchema.Type
 
-export const validateSequenceOrder = (
-  args: ValidateSequenceOrderArgs,
-): ValidateSequenceOrderResult => {
-  const parsedArgs = parseEffectSchema(validateSequenceOrderArgsSchema, args)
-  const { categoryId, quizId, questionId, ...body } = parsedArgs
+export const validateSequenceOrderFactory = async () => {
+  const instance = await instanceFactory()
 
-  const url = `/explore/categories/${categoryId}/quizzes/${quizId}/sequence_orders/${questionId}/completed`
-  const response = instance.post(url, body)
+  return function validateSequenceOrder(
+    args: ValidateSequenceOrderArgs,
+  ): ValidateSequenceOrderResult {
+    const parsedArgs = parseEffectSchema(validateSequenceOrderArgsSchema, args)
+    const { categoryId, quizId, questionId, ...body } = parsedArgs
 
-  return parseApiResponse({
-    error: {
-      name: "ValidateSequenceOrderErrors",
-      schema: validateSequenceOrderErrorsSchema,
-    },
-    name: "ValidateSequenceOrder",
-    success: {
-      name: "ValidateSequenceOrderSuccess",
-      schema: validateSequenceOrderSuccessSchema,
-    },
-  })(response)
+    const url = `/explore/categories/${categoryId}/quizzes/${quizId}/sequence_orders/${questionId}/completed`
+    const response = instance.patch(url, body)
+
+    return parseApiResponse({
+      error: {
+        name: "ValidateSequenceOrderErrors",
+        schema: validateSequenceOrderErrorsSchema,
+      },
+      name: "ValidateSequenceOrder",
+      success: {
+        name: "ValidateSequenceOrderSuccess",
+        schema: validateSequenceOrderSuccessSchema,
+      },
+    })(response)
+  }
 }

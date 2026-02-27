@@ -127,7 +127,7 @@ export function WelcomeScreen({ skipHandler }: WelcomeScreenProps) {
                 >
                   <img
                     alt={slide.title}
-                    className="aspect-square w-10/12 max-w-md select-none"
+                    className="aspect-[3/2] w-10/12 max-w-md select-none"
                     draggable={false}
                     src={slide.image}
                   />

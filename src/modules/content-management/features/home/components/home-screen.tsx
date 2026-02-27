@@ -28,7 +28,7 @@ export function HomeScreen({ categoryId }: HomeScreenProps) {
       >
         <div className="fixed top-1/2 left-1/2 z-0 -translate-x-1/2 -translate-y-1/2">
           <motion.div
-            className="relative aspect-square h-[600px] max-h-[90vw] w-[600px] max-w-[90vw]"
+            className="relative aspect-[3/2] h-[600px] max-h-[90vw] w-[600px] max-w-[90vw]"
             style={{ rotate }}
           >
             <div className="bg-loops-cyan absolute inset-0 rounded-full opacity-10" />

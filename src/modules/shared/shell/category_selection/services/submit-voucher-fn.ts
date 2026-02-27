@@ -1,8 +1,9 @@
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type {
   submitVoucherErrorsSchema,
   submitVoucherSuccessSchema,
 } from "@/modules/shared/api/voucher/submit-voucher"
-import { submitVoucher } from "@/modules/shared/api/voucher/submit-voucher"
+import { submitVoucherFactory } from "@/modules/shared/api/voucher/submit-voucher"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
@@ -11,6 +12,7 @@ import { Cause, Effect, Option } from "effect"
 export type SubmitVoucherErrors =
   | typeof submitVoucherErrorsSchema.Type
   | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
 
 export type SubmitVoucherSuccess = typeof submitVoucherSuccessSchema.Type
 
@@ -24,7 +26,19 @@ export const submitVoucherFn = createServerFn({
 })
   .inputValidator((data) => data as { categoryId: string; code: number })
   .handler(async (ctx) => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
     // 1) Run your Effect on the server
+    const submitVoucher = await submitVoucherFactory()
+
     const exit = await Effect.runPromiseExit(
       submitVoucher({
         categoryId: ctx.data.categoryId,

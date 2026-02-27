@@ -18,6 +18,8 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
         )
       : 0
 
+  const imageUrl = category.cover.urls?.[100]
+
   return (
     <motion.button
       onClick={onClick}
@@ -34,13 +36,17 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
         <div className="flex-1">
           <div className="flex items-center gap-3">
             {/* Category Image/Icon */}
-            <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
-              <img
-                src={category.cover}
-                alt={category.name[0].content}
-                className="h-full w-full rounded-lg object-cover"
-              />
-            </div>
+            {imageUrl && (
+              <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
+                <img
+                  src={imageUrl}
+                  alt={category.cover.alt}
+                  title={category.cover.title}
+                  aria-description={category.cover.description}
+                  className="h-full w-full rounded-lg object-cover"
+                />
+              </div>
+            )}
 
             <div className="flex-1">
               <h3 className="font-outfit text-lg font-semibold text-white">

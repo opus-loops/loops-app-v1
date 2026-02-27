@@ -12,18 +12,22 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
   const { handleCompleteSkill } = useCompleteSkill()
   const { success, error } = useToast()
 
-  const { navigateToNext, canNavigateNext, exitContent, validateAndStartItem } =
-    useContentNavigation({ categoryId: skillItem.categoryId })
+  const {
+    navigateToNext,
+    canNavigateNext,
+    isNextItemCompleted,
+    validateAndStartItem,
+  } = useContentNavigation({ categoryId: skillItem.categoryId })
 
   const [isLoading, setIsLoading] = useState(false)
 
   // Check if current item is started (has completedSkill but not completed)
   const isStarted =
-    skillItem.completedSkill && !skillItem.completedSkill.isCompleted
+    skillItem.itemProgress && !skillItem.itemProgress.isCompleted
 
   // Check if current item is completed
   const isCompleted =
-    skillItem.completedSkill && skillItem.completedSkill.isCompleted
+    skillItem.itemProgress && skillItem.itemProgress.isCompleted
 
   const validateSkill = async () => {
     setIsLoading(true)
@@ -35,18 +39,15 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
 
     setIsLoading(false)
 
-    if (response._tag === "Success") {
-      success("Skill completed successfully!")
-    } else {
-      error("Failed to complete skill")
-    }
+    if (response._tag === "Success") success("Skill completed successfully!")
+    else error("Failed to complete skill")
   }
 
   const handleCompletedItemClick = async () => {
     setIsLoading(true)
 
     // Check if we can navigate to next item
-    const canNavigate = await canNavigateNext()
+    const canNavigate = canNavigateNext && isNextItemCompleted
 
     if (canNavigate) {
       // Normal navigation - next item is already started
@@ -61,8 +62,6 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
 
     // Successfully started next item, now navigate
     if (isSuccess) await navigateToNext()
-    // No next item available or failed to start, exit content
-    else exitContent()
   }
 
   const handleButtonClick = () => {

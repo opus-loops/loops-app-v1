@@ -8,7 +8,7 @@ import { skillNotCompletedErrorSchema } from "@/modules/shared/domain/errors/ski
 import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -61,22 +61,26 @@ export const getExploreSkillContentExitSchema = Schema.Exit({
   success: getExploreSkillContentSuccessSchema,
 })
 
-export function getExploreSkillContent(
-  args: GetExploreSkillContentArgs,
-): GetExploreSkillContentResult {
-  const parsedArgs = parseEffectSchema(getExploreSkillContentArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}/content`
-  const response = instance.get(url)
+export const getExploreSkillContentFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetExploreSkillContentErrors",
-      schema: getExploreSkillContentErrorsSchema,
-    },
-    name: "GetExploreSkillContent",
-    success: {
-      name: "GetExploreSkillContentSuccess",
-      schema: getExploreSkillContentSuccessSchema,
-    },
-  })(response)
+  return function getExploreSkillContent(
+    args: GetExploreSkillContentArgs,
+  ): GetExploreSkillContentResult {
+    const parsedArgs = parseEffectSchema(getExploreSkillContentArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/skills/${parsedArgs.skillId}/content`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "GetExploreSkillContentErrors",
+        schema: getExploreSkillContentErrorsSchema,
+      },
+      name: "GetExploreSkillContent",
+      success: {
+        name: "GetExploreSkillContentSuccess",
+        schema: getExploreSkillContentSuccessSchema,
+      },
+    })(response)
+  }
 }

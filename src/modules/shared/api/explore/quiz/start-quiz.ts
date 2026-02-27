@@ -7,7 +7,7 @@ import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -52,20 +52,24 @@ export const startQuizExitSchema = Schema.Exit({
   success: startQuizSuccessSchema,
 })
 
-export function startQuiz(args: StartQuizArgs): StartQuizResult {
-  const parsedArgs = parseEffectSchema(startQuizArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/started`
-  const response = instance.post(url)
+export const startQuizFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "StartQuizErrors",
-      schema: startQuizErrorsSchema,
-    },
-    name: "StartQuiz",
-    success: {
-      name: "StartQuizSuccess",
-      schema: startQuizSuccessSchema,
-    },
-  })(response)
+  return function startQuiz(args: StartQuizArgs): StartQuizResult {
+    const parsedArgs = parseEffectSchema(startQuizArgsSchema, args)
+    const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/started`
+    const response = instance.post(url)
+
+    return parseApiResponse({
+      error: {
+        name: "StartQuizErrors",
+        schema: startQuizErrorsSchema,
+      },
+      name: "StartQuiz",
+      success: {
+        name: "StartQuizSuccess",
+        schema: startQuizSuccessSchema,
+      },
+    })(response)
+  }
 }

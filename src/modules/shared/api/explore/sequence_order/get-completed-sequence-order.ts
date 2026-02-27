@@ -10,7 +10,7 @@ import { subQuizNotFoundErrorSchema } from "@/modules/shared/domain/errors/sub-q
 import { subQuizNotStartedErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-not-started"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -22,7 +22,8 @@ const getCompletedSequenceOrderArgsSchema = Schema.Struct({
   questionId: Schema.String,
 })
 
-type GetCompletedSequenceOrderArgs = typeof getCompletedSequenceOrderArgsSchema.Type
+type GetCompletedSequenceOrderArgs =
+  typeof getCompletedSequenceOrderArgsSchema.Type
 
 export const getCompletedSequenceOrderErrorsSchema = Schema.Union(
   invalidInputFactory(
@@ -46,7 +47,8 @@ export const getCompletedSequenceOrderErrorsSchema = Schema.Union(
   userNotFoundErrorSchema,
 )
 
-export type GetCompletedSequenceOrderErrors = typeof getCompletedSequenceOrderErrorsSchema.Type
+export type GetCompletedSequenceOrderErrors =
+  typeof getCompletedSequenceOrderErrorsSchema.Type
 
 export const getCompletedSequenceOrderSuccessSchema = Schema.Struct({
   completedSequenceOrder: completedSequenceOrderSchema,
@@ -66,24 +68,32 @@ export const getCompletedSequenceOrderExitSchema = Schema.Exit({
   success: getCompletedSequenceOrderSuccessSchema,
 })
 
-export type GetCompletedSequenceOrderExit = typeof getCompletedSequenceOrderExitSchema.Type
+export type GetCompletedSequenceOrderExit =
+  typeof getCompletedSequenceOrderExitSchema.Type
 
-export const getCompletedSequenceOrder = (
-  args: GetCompletedSequenceOrderArgs,
-): GetCompletedSequenceOrderResult => {
-  const parsedArgs = parseEffectSchema(getCompletedSequenceOrderArgsSchema, args)
-  const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/sequence_orders/${parsedArgs.questionId}/completed`
-  const response = instance.get(url)
+export const getCompletedSequenceOrderFactory = async () => {
+  const instance = await instanceFactory()
 
-  return parseApiResponse({
-    error: {
-      name: "GetCompletedSequenceOrderErrors",
-      schema: getCompletedSequenceOrderErrorsSchema,
-    },
-    name: "GetCompletedSequenceOrder",
-    success: {
-      name: "GetCompletedSequenceOrderSuccess",
-      schema: getCompletedSequenceOrderSuccessSchema,
-    },
-  })(response)
+  return function getCompletedSequenceOrder(
+    args: GetCompletedSequenceOrderArgs,
+  ): GetCompletedSequenceOrderResult {
+    const parsedArgs = parseEffectSchema(
+      getCompletedSequenceOrderArgsSchema,
+      args,
+    )
+    const url = `/explore/categories/${parsedArgs.categoryId}/quizzes/${parsedArgs.quizId}/sequence_orders/${parsedArgs.questionId}/completed`
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "GetCompletedSequenceOrderErrors",
+        schema: getCompletedSequenceOrderErrorsSchema,
+      },
+      name: "GetCompletedSequenceOrder",
+      success: {
+        name: "GetCompletedSequenceOrderSuccess",
+        schema: getCompletedSequenceOrderSuccessSchema,
+      },
+    })(response)
+  }
 }

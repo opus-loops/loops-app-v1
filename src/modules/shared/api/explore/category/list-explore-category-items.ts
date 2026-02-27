@@ -3,7 +3,7 @@ import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/cate
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
-import { instance } from "@/modules/shared/utils/axios"
+import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -58,38 +58,42 @@ export const listExploreCategoryItemsExitSchema = Schema.Exit({
   success: listExploreCategoryItemsSuccessSchema,
 })
 
-export function listExploreCategoryItems(params: {
-  args: ListExploreCategoryItemsArgs
-  queryParams?: ListExploreCategoryItemsQuery
-}): ListExploreCategoryItemsResult {
-  const parsedArgs = parseEffectSchema(
-    listExploreCategoryItemsArgsSchema,
-    params.args,
-  )
+export const listExploreCategoryItemsFactory = async () => {
+  const instance = await instanceFactory()
 
-  const urlParams = new URLSearchParams()
+  return function listExploreCategoryItems(params: {
+    args: ListExploreCategoryItemsArgs
+    queryParams?: ListExploreCategoryItemsQuery
+  }): ListExploreCategoryItemsResult {
+    const parsedArgs = parseEffectSchema(
+      listExploreCategoryItemsArgsSchema,
+      params.args,
+    )
 
-  if (params.queryParams?.offset !== undefined)
-    urlParams.append("offset", params.queryParams.offset.toString())
-  if (params.queryParams?.size !== undefined)
-    urlParams.append("size", params.queryParams.size.toString())
+    const urlParams = new URLSearchParams()
 
-  const queryString = urlParams.toString()
-  const url = queryString
-    ? `/explore/categories/${parsedArgs.categoryId}/items?${queryString}`
-    : `/explore/categories/${parsedArgs.categoryId}/items`
+    if (params.queryParams?.offset !== undefined)
+      urlParams.append("offset", params.queryParams.offset.toString())
+    if (params.queryParams?.size !== undefined)
+      urlParams.append("size", params.queryParams.size.toString())
 
-  const response = instance.get(url)
+    const queryString = urlParams.toString()
+    const url = queryString
+      ? `/explore/categories/${parsedArgs.categoryId}/items?${queryString}`
+      : `/explore/categories/${parsedArgs.categoryId}/items`
 
-  return parseApiResponse({
-    error: {
-      name: "ListExploreCategoryItemsErrors",
-      schema: listExploreCategoryItemsErrorsSchema,
-    },
-    name: "ListExploreCategoryItems",
-    success: {
-      name: "ListExploreCategoryItemsSuccess",
-      schema: listExploreCategoryItemsSuccessSchema,
-    },
-  })(response)
+    const response = instance.get(url)
+
+    return parseApiResponse({
+      error: {
+        name: "ListExploreCategoryItemsErrors",
+        schema: listExploreCategoryItemsErrorsSchema,
+      },
+      name: "ListExploreCategoryItems",
+      success: {
+        name: "ListExploreCategoryItemsSuccess",
+        schema: listExploreCategoryItemsSuccessSchema,
+      },
+    })(response)
+  }
 }

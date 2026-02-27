@@ -29,6 +29,8 @@ export function CategoryDetails({
     size: 3,
   })
 
+  const imageUrl = category.cover.urls?.[100]
+
   return (
     <div className="flex h-full flex-col">
       <div className="relative flex items-center justify-center px-4 py-6">
@@ -46,14 +48,18 @@ export function CategoryDetails({
           transition={{ duration: 0.3 }}
           className="space-y-6"
         >
-          <div className="relative h-48 w-full overflow-hidden rounded-xl">
-            <img
-              src={category.cover}
-              alt={category.name[0].content}
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/20" />
-          </div>
+          {imageUrl && (
+            <div className="relative aspect-[3/2] w-full overflow-hidden rounded-xl">
+              <img
+                src={imageUrl}
+                alt={category.cover.alt}
+                title={category.cover.title}
+                aria-description={category.cover.description}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/20" />
+            </div>
+          )}
 
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#de08a891]">

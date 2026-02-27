@@ -9,7 +9,8 @@
     "build": "vite build",
     "lint:format": "prettier --write .",
     "lint:fix": "eslint --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "react-doctor": "npx -y react-doctor@latest ."
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
