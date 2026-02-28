@@ -4,6 +4,7 @@ import { TimerIcon } from "@/modules/shared/components/icons/timer"
 import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useContentNavigation } from "@/modules/shared/navigation"
 import { useState } from "react"
+import { useQuizStepper } from "../quiz-stepper"
 
 type QuizStatisticsScreenProps = {
   quizItem: CategoryContentItem & { contentType: "quizzes" }
@@ -26,6 +27,8 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
     isNextItemCompleted,
     validateAndStartItem,
   } = useContentNavigation({ categoryId: quizItem.categoryId })
+
+  const { goToStep } = useQuizStepper()
 
   const completedQuestions = startedQuiz?.completedQuestions ?? 0
   const totalQuestions = quizItem.content.questionsCount
@@ -50,7 +53,10 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
     setIsLoading(false)
 
     // Successfully started next item, now navigate
-    if (isSuccess) await navigateToNext()
+    if (isSuccess) {
+      await navigateToNext()
+      goToStep("welcome")
+    }
   }
 
   const handleBackToHome = () => {

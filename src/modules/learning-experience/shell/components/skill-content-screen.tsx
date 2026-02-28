@@ -6,6 +6,8 @@ import { BackButton } from "@/modules/shared/shell/category_selection/components
 import { Suspense } from "react"
 import { SkillActionButton } from "./skill-action-button"
 import { SkillContentRenderer } from "./skill-content-renderer"
+import { SkillStepper } from "./skill-stepper"
+import { SkillWelcomeScreen } from "./steps/skill-welcome-screen"
 
 type SkillContentScreenProps = {
   skillItem: CategoryContentItem & { contentType: "skills" }
@@ -26,12 +28,18 @@ export function SkillContentScreen({
         <BackButton onBack={onBack} />
       </div>
 
-      <div className="mx-auto mb-28 w-full max-w-sm flex-1 overflow-y-auto px-7">
+      <div className="mx-auto mb-28 w-full max-w-sm flex-1 overflow-y-auto px-4">
         <Suspense fallback={<ContentSkeleton />}>
-          <div className="flex flex-col items-start pt-8">
-            <SkillContentRenderer contentUrl={contentUrl} />
-            <SkillActionButton skillItem={skillItem} />
-          </div>
+          <SkillStepper
+            skillItem={skillItem}
+            welcome={<SkillWelcomeScreen skillItem={skillItem} />}
+            content={
+              <div className="flex flex-col items-start">
+                <SkillContentRenderer contentUrl={contentUrl} />
+                <SkillActionButton skillItem={skillItem} />
+              </div>
+            }
+          />
         </Suspense>
       </div>
 

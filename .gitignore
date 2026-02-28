@@ -6,5 +6,4 @@ dev-dist/
 .nitro/
 .output/
 .env
-
-
+dist/

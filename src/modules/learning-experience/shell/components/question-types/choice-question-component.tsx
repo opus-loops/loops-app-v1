@@ -20,7 +20,7 @@ export const ChoiceQuestionComponent = forwardRef<
 >(({ subQuiz, categoryId, onStopTimer }, ref) => {
   const { handleValidateChoiceQuestion } = useValidateChoiceQuestion()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [selectedChoice, setSelectedChoice] = useState<number | null>(null)
+  const [selectedChoices, setSelectedChoices] = useState<number[]>([])
 
   const question = subQuiz.content
   const completedQuestion = subQuiz.completedQuestion
@@ -41,7 +41,7 @@ export const ChoiceQuestionComponent = forwardRef<
       setIsSubmitting(false)
     },
     validate: async (timeLeft: number) => {
-      if (isSubmitting || isValidated || selectedChoice === null) return
+      if (isSubmitting || isValidated || selectedChoices.length === 0) return
 
       onStopTimer()
       setIsSubmitting(true)
@@ -52,7 +52,7 @@ export const ChoiceQuestionComponent = forwardRef<
         categoryId,
         quizId: subQuiz.quizId,
         questionId: subQuiz.questionId,
-        userAnswer: [selectedChoice],
+        userAnswer: selectedChoices,
         spentTime,
       })
       setIsSubmitting(false)
@@ -68,16 +68,29 @@ export const ChoiceQuestionComponent = forwardRef<
   }
 
   const handleChoiceSelect = (index: number) => {
-    if (!isValidated) setSelectedChoice(index)
+    if (isValidated) return
+
+    if (question.isMultiple) {
+      setSelectedChoices((prev) => {
+        if (prev.includes(index)) {
+          return prev.filter((i) => i !== index)
+        } else {
+          return [...prev, index]
+        }
+      })
+    } else {
+      setSelectedChoices([index])
+    }
   }
 
   const getChoiceStyle = (index: number) => {
     if (!isValidated) {
       // Non-validated state
+      const isSelected = selectedChoices.includes(index)
       return cn(
         "flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all",
         "bg-slate-800 border-slate-600 text-white hover:border-slate-500",
-        selectedChoice === index && "border-cyan-400 bg-slate-700",
+        isSelected && "border-cyan-400 bg-slate-700",
       )
     } else {
       // Validated state - show correct/incorrect
@@ -106,17 +119,35 @@ export const ChoiceQuestionComponent = forwardRef<
 
   const getChoiceIcon = (index: number) => {
     if (!isValidated) {
+      const isSelected = selectedChoices.includes(index)
       return (
         <div
           className={cn(
-            "mr-3 flex h-6 w-6 items-center justify-center rounded-full border-2",
-            selectedChoice === index
+            "mr-3 flex h-6 w-6 items-center justify-center border-2",
+            question.isMultiple ? "rounded-md" : "rounded-full",
+            isSelected
               ? "border-cyan-400 bg-cyan-400"
               : "border-slate-400",
           )}
         >
-          {selectedChoice === index && (
-            <div className="h-2 w-2 rounded-full bg-white" />
+          {isSelected && (
+            question.isMultiple ? (
+               <svg
+                className="h-4 w-4 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={3}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            ) : (
+              <div className="h-2 w-2 rounded-full bg-white" />
+            )
           )}
         </div>
       )
@@ -127,7 +158,7 @@ export const ChoiceQuestionComponent = forwardRef<
 
       if (isCorrect) {
         return (
-          <div className="mr-3 flex h-6 w-6 items-center justify-center rounded-full bg-green-500">
+          <div className={cn("mr-3 flex h-6 w-6 items-center justify-center bg-green-500", question.isMultiple ? "rounded-md" : "rounded-full")}>
             <svg
               className="h-4 w-4 text-white"
               fill="currentColor"
@@ -143,7 +174,7 @@ export const ChoiceQuestionComponent = forwardRef<
         )
       } else if (wasSelected) {
         return (
-          <div className="mr-3 flex h-6 w-6 items-center justify-center rounded-full bg-red-500">
+          <div className={cn("mr-3 flex h-6 w-6 items-center justify-center bg-red-500", question.isMultiple ? "rounded-md" : "rounded-full")}>
             <svg
               className="h-4 w-4 text-white"
               fill="currentColor"
@@ -159,7 +190,7 @@ export const ChoiceQuestionComponent = forwardRef<
         )
       } else {
         return (
-          <div className="mr-3 h-6 w-6 rounded-full border-2 border-slate-400" />
+          <div className={cn("mr-3 h-6 w-6 border-2 border-slate-400", question.isMultiple ? "rounded-md" : "rounded-full")} />
         )
       }
     }

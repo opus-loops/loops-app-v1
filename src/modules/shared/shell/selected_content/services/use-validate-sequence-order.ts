@@ -19,6 +19,10 @@ export function useValidateSequenceOrder() {
 
       if (response._tag === "Success") {
         await queryClient.invalidateQueries({
+          queryKey: ["single-category-item", args.categoryId, args.quizId],
+        })
+
+        await queryClient.invalidateQueries({
           queryKey: ["quiz-content", args.categoryId, args.quizId],
         })
       }

@@ -117,6 +117,17 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
 
     if (!firstSubQuiz) return
 
+    // Case 1: Quiz is completed -> Start from beginning (review mode)
+    if (itemProgress.status === "completed") {
+      navigateToSubQuiz({
+        index: firstSubQuiz.index,
+        direction: "next",
+      })
+      goToStep("sub-quizzes")
+      resetNavigationState()
+      return
+    }
+
     // TODO: REFACTOR THIS
     const startFirstSubQuiz = async () => {
       if (firstSubQuiz.questionType === "choiceQuestions") {
@@ -145,6 +156,7 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
           direction: "next",
         })
         goToStep("sub-quizzes")
+        resetNavigationState()
         return
       }
     }
@@ -154,15 +166,19 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
     // we default to first sub-quiz (user requirement: "if all ... set the first").
     // Also covers "if there's no started sub quiz" (if that could happen with itemProgress present but no pointer? unlikely)
     // But if completedQuestions == 0 and no pointer? That means started but no progress?
-    if (!itemProgress.progressPointer) await startFirstSubQuiz()
-    navigateToSubQuiz({ index: firstSubQuiz.index, direction: "next" })
-    goToStep("sub-quizzes")
+    if (!itemProgress.progressPointer) {
+      await startFirstSubQuiz()
+      navigateToSubQuiz({ index: firstSubQuiz.index, direction: "next" })
+      goToStep("sub-quizzes")
+      resetNavigationState()
+    }
   }, [
     quizItem,
     subQuizzes,
     startChoiceQuestion,
     startSequenceOrder,
     navigateToSubQuiz,
+    resetNavigationState,
     goToStep,
   ])
 

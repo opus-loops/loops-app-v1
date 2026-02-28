@@ -16,11 +16,8 @@ export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
   const handleStartQuiz = async () => {
     if (isLoading) return
     setIsLoading(true)
-    try {
-      await initializeQuiz()
-    } finally {
-      setIsLoading(false)
-    }
+    await initializeQuiz()
+    setIsLoading(false)
   }
 
   return (

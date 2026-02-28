@@ -20,12 +20,11 @@ export function useValidateChoiceQuestion() {
 
       if (response._tag === "Success") {
         await queryClient.invalidateQueries({
-          queryKey: [
-            "sub-quiz-content",
-            args.categoryId,
-            args.quizId,
-            args.questionId,
-          ],
+          queryKey: ["single-category-item", args.categoryId, args.quizId],
+        })
+
+        await queryClient.invalidateQueries({
+          queryKey: ["quiz-content", args.categoryId, args.quizId],
         })
       }
 

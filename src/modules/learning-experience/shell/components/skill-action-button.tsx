@@ -3,6 +3,7 @@ import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useContentNavigation } from "@/modules/shared/navigation"
 import { useCompleteSkill } from "@/modules/shared/shell/category_selection/hooks/use-complete-skill"
 import { useState } from "react"
+import { useSkillStepper } from "./skill-stepper"
 
 type SkillActionButtonProps = {
   skillItem: CategoryContentItem & { contentType: "skills" }
@@ -18,6 +19,8 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
     isNextItemCompleted,
     validateAndStartItem,
   } = useContentNavigation({ categoryId: skillItem.categoryId })
+
+  const { goToStep } = useSkillStepper()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -61,7 +64,10 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
     setIsLoading(false)
 
     // Successfully started next item, now navigate
-    if (isSuccess) await navigateToNext()
+    if (isSuccess) {
+      await navigateToNext()
+      goToStep("welcome")
+    }
   }
 
   const handleButtonClick = () => {
