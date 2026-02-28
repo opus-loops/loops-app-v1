@@ -1,7 +1,8 @@
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
-import { previousQuizNotCompletedErrorSchema } from "@/modules/shared/domain/errors/previous-quiz-not-completed"
+import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
+import { previousItemNotCompletedErrorSchema } from "@/modules/shared/domain/errors/previous-item-not-completed"
 import { quizAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-already-started"
 import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
@@ -30,7 +31,8 @@ export const startQuizErrorsSchema = Schema.Union(
     }),
   ),
   quizAlreadyStartedErrorSchema,
-  previousQuizNotCompletedErrorSchema,
+  previousItemNotCompletedErrorSchema,
+  notCategoryItemErrorSchema,
   quizNotFoundErrorSchema,
   categoryNotFoundErrorSchema,
   categoryNotStartedErrorSchema,
