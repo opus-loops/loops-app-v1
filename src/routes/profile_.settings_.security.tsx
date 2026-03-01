@@ -1,13 +1,14 @@
-import { ProfileScreen } from "@/modules/profile/components/profile-screen"
+import { ChangePasswordForm } from "@/modules/profile/components/security/change-password-form"
 import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
 import { authenticatedQuery, useAuth } from "@/modules/shared/guards/use-auth"
 import { CategorySelectionShell } from "@/modules/shared/shell/category_selection/category-selection-shell"
 import { ConfirmationShell } from "@/modules/shared/shell/confirmation/confirmation-shell"
 import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-shell"
-import { createFileRoute } from "@tanstack/react-router"
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { ChevronLeft } from "lucide-react"
 import z from "zod"
 
-export const Route = createFileRoute("/profile")({
+export const Route = createFileRoute("/profile_/settings_/security")({
   beforeLoad: async ({ context }) =>
     await context.queryClient.ensureQueryData(authenticatedQuery),
   validateSearch: z.object({
@@ -29,9 +30,19 @@ export const Route = createFileRoute("/profile")({
               <CategorySelectionShell
                 searchParams={search}
                 target={
-                  <div className="relative min-h-screen">
+                  <div className="bg-loops-background relative min-h-screen">
                     <div className="relative z-0">
-                      <ProfileScreen user={user} />
+                      <div className="mx-auto flex min-h-screen w-full max-w-sm flex-col px-5 pt-10 pb-28">
+                        <div className="mb-2 flex items-center gap-4">
+                          <Link
+                            to="/profile/settings"
+                            className="-ml-2 rounded-full p-2 hover:bg-white/10"
+                          >
+                            <ChevronLeft className="text-loops-light h-6 w-6" />
+                          </Link>
+                        </div>
+                        <ChangePasswordForm user={user} />
+                      </div>
                     </div>
                     <div className="fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
                       <BottomTabNavigator />

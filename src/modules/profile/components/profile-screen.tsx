@@ -1,9 +1,11 @@
+import { GearIcon } from "@/modules/shared/components/icons/gear"
 import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
 import loopsBgUrl from "../../../../assets/images/loops-bg.png"
 
 import { UserIcon } from "@/modules/shared/components/icons/user"
 import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
 import type { User } from "@/modules/shared/domain/entities/user"
+import { Link } from "@tanstack/react-router"
 import { Trophy } from "lucide-react"
 import { useMemo } from "react"
 
@@ -11,7 +13,7 @@ type ProfileProgressSectionProps = {
   user: User
 }
 
-export function ProfileProgressSection({ user }: ProfileProgressSectionProps) {
+export function ProfileScreen({ user }: ProfileProgressSectionProps) {
   const { level, levelProgressPercent, globalXp } = useMemo(() => {
     const safeXp = Number.isFinite(user.globalXP) ? user.globalXP : 0
     const computedLevel = Math.max(1, Math.floor(safeXp / 100) + 1)
@@ -35,7 +37,7 @@ export function ProfileProgressSection({ user }: ProfileProgressSectionProps) {
           <div className="to-loops-background from-loops-black absolute inset-0 bg-gradient-to-b via-transparent" />
 
           <div className="relative z-10 px-5 pt-10">
-            <div className="grid grid-cols-3 items-center">
+            <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <OpenCategoriesButton
                   to="/profile"
@@ -44,19 +46,20 @@ export function ProfileProgressSection({ user }: ProfileProgressSectionProps) {
                 />
               </div>
 
-              <div className="text-center">
-                <h1 className="text-loops-light text-xl font-semibold">
-                  Profile
-                </h1>
+              <div className="bg-loops-background flex items-center gap-1 rounded-lg px-3 py-2">
+                <Trophy className="text-loops-label-xp h-4 w-4 shrink-0" />
+                <span className="text-loops-light shrink-0 text-xs font-medium">
+                  Level {level}
+                </span>
               </div>
 
               <div className="flex items-center justify-end gap-2">
-                <div className="bg-loops-background flex items-center gap-1 rounded-lg px-3 py-2">
-                  <Trophy className="text-loops-label-xp h-4 w-4 shrink-0" />
-                  <span className="text-loops-light shrink-0 text-xs font-medium">
-                    Level {level}
-                  </span>
-                </div>
+                <Link
+                  to="/profile/settings"
+                  className="h-11 w-11 rounded-xl bg-[#1f4b6682] p-2.5 text-[#31BCE6] shadow-lg backdrop-blur-sm transition-colors hover:bg-[#1f4b66aa]"
+                >
+                  <GearIcon />
+                </Link>
               </div>
             </div>
           </div>

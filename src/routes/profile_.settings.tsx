@@ -1,4 +1,4 @@
-import { ProfileScreen } from "@/modules/profile/components/profile-screen"
+import { SettingsScreen } from "@/modules/profile/components/settings-screen"
 import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
 import { authenticatedQuery, useAuth } from "@/modules/shared/guards/use-auth"
 import { CategorySelectionShell } from "@/modules/shared/shell/category_selection/category-selection-shell"
@@ -7,7 +7,7 @@ import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-sh
 import { createFileRoute } from "@tanstack/react-router"
 import z from "zod"
 
-export const Route = createFileRoute("/profile")({
+export const Route = createFileRoute("/profile_/settings")({
   beforeLoad: async ({ context }) =>
     await context.queryClient.ensureQueryData(authenticatedQuery),
   validateSearch: z.object({
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/profile")({
                 target={
                   <div className="relative min-h-screen">
                     <div className="relative z-0">
-                      <ProfileScreen user={user} />
+                      <SettingsScreen user={user} />
                     </div>
                     <div className="fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
                       <BottomTabNavigator />

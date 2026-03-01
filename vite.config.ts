@@ -2,6 +2,8 @@ import tailwindcss from "@tailwindcss/vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import viteReact from "@vitejs/plugin-react"
 import { nitro } from "nitro/vite"
+import fs from "node:fs/promises"
+import path from "node:path"
 import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 import tsConfigPaths from "vite-tsconfig-paths"
@@ -9,13 +11,106 @@ import tsConfigPaths from "vite-tsconfig-paths"
 // TODO: handle error propagation
 // TODO: handle all expected and unexpected errors
 
+const countryCodesVirtualId = "virtual:country-codes"
+const resolvedCountryCodesVirtualId = `\0${countryCodesVirtualId}`
+const countriesCitiesVirtualId = "virtual:countries-cities"
+const resolvedCountriesCitiesVirtualId = `\0${countriesCitiesVirtualId}`
+const nitroRawPrefix = "nitro:raw:"
+const nitroRawResolvedPrefix = "\0nitro:raw:"
+const nitroRawJsonProxyPrefix = "\0nitro-raw-json:"
+const nitroRawJsonProxySuffix = ".txt"
+
 export default defineConfig({
   plugins: [
-    nitro(),
+    {
+      name: "country-codes-virtual",
+      resolveId(id) {
+        if (id === countryCodesVirtualId) return resolvedCountryCodesVirtualId
+        return null
+      },
+      async load(id) {
+        if (id !== resolvedCountryCodesVirtualId) return null
+        const jsonPath = path.resolve(
+          process.cwd(),
+          "assets/country-codes.json",
+        )
+        const json = await fs.readFile(jsonPath, "utf8")
+        return `export default ${json}`
+      },
+    },
+    {
+      name: "countries-cities-virtual",
+      resolveId(id) {
+        if (id === countriesCitiesVirtualId)
+          return resolvedCountriesCitiesVirtualId
+        return null
+      },
+      async load(id) {
+        if (id !== resolvedCountriesCitiesVirtualId) return null
+        const jsonPath = path.resolve(
+          process.cwd(),
+          "assets/countries-cities.json",
+        )
+        const json = await fs.readFile(jsonPath, "utf8")
+        return `export default ${json}`
+      },
+    },
+    {
+      name: "nitro-raw-json-proxy",
+      enforce: "pre",
+      resolveId: {
+        order: "pre",
+        handler(id) {
+          if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
+            return `${nitroRawJsonProxyPrefix}${id.slice(
+              nitroRawPrefix.length,
+            )}${nitroRawJsonProxySuffix}`
+          }
+          if (id.startsWith(nitroRawResolvedPrefix) && id.endsWith(".json")) {
+            return `${nitroRawJsonProxyPrefix}${id.slice(
+              nitroRawResolvedPrefix.length,
+            )}${nitroRawJsonProxySuffix}`
+          }
+          return null
+        },
+      },
+      load: {
+        order: "pre",
+        async handler(id) {
+          if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
+            const filePath = id.slice(nitroRawPrefix.length)
+            const raw = await fs.readFile(filePath, "utf8")
+            return `export default ${JSON.stringify(raw)}`
+          }
+          if (id.startsWith(nitroRawResolvedPrefix) && id.endsWith(".json")) {
+            const filePath = id.slice(nitroRawResolvedPrefix.length)
+            const raw = await fs.readFile(filePath, "utf8")
+            return `export default ${JSON.stringify(raw)}`
+          }
+          if (!id.startsWith(nitroRawJsonProxyPrefix)) return null
+          const filePathWithSuffix = id.slice(nitroRawJsonProxyPrefix.length)
+          const filePath = filePathWithSuffix.endsWith(nitroRawJsonProxySuffix)
+            ? filePathWithSuffix.slice(0, -nitroRawJsonProxySuffix.length)
+            : filePathWithSuffix
+          const raw = await fs.readFile(filePath, "utf8")
+          return `export default ${JSON.stringify(raw)}`
+        },
+      },
+    },
+    nitro({
+      experimental: {
+        vite: {
+          assetsImport: false,
+        },
+      },
+    }),
     tsConfigPaths(),
     tanstackStart(),
     VitePWA({
       devOptions: { enabled: true },
+      workbox: {
+        globIgnores: ["**/country-codes.json"],
+      },
       manifest: {
         background_color: "#000016",
         categories: ["education"],

@@ -20,7 +20,7 @@ export const userSchema = Schema.Struct({
   isConfirmed: Schema.Boolean,
   isFirstTime: Schema.Boolean,
   isProfileCompleted: Schema.Boolean,
-  language: Schema.Literal("en", "fr"),
+  language: Schema.Literal("en", "fr", "ar"),
   phoneNumber: Schema.String,
   role: roleSchema,
   state: Schema.optional(Schema.String),

@@ -16,6 +16,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProfileSettingsRouteImport } from './routes/profile_.settings'
+import { Route as ProfileSettingsSecurityRouteImport } from './routes/profile_.settings_.security'
+import { Route as ProfileSettingsPreferencesRouteImport } from './routes/profile_.settings_.preferences'
+import { Route as ProfileSettingsEditProfileRouteImport } from './routes/profile_.settings_.edit-profile'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -52,6 +56,28 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileSettingsRoute = ProfileSettingsRouteImport.update({
+  id: '/profile_/settings',
+  path: '/profile/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileSettingsSecurityRoute = ProfileSettingsSecurityRouteImport.update({
+  id: '/profile_/settings_/security',
+  path: '/profile/settings/security',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileSettingsPreferencesRoute =
+  ProfileSettingsPreferencesRouteImport.update({
+    id: '/profile_/settings_/preferences',
+    path: '/profile/settings/preferences',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProfileSettingsEditProfileRoute =
+  ProfileSettingsEditProfileRouteImport.update({
+    id: '/profile_/settings_/edit-profile',
+    path: '/profile/settings/edit-profile',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +87,10 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/profile/settings': typeof ProfileSettingsRoute
+  '/profile/settings/edit-profile': typeof ProfileSettingsEditProfileRoute
+  '/profile/settings/preferences': typeof ProfileSettingsPreferencesRoute
+  '/profile/settings/security': typeof ProfileSettingsSecurityRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +100,10 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/profile/settings': typeof ProfileSettingsRoute
+  '/profile/settings/edit-profile': typeof ProfileSettingsEditProfileRoute
+  '/profile/settings/preferences': typeof ProfileSettingsPreferencesRoute
+  '/profile/settings/security': typeof ProfileSettingsSecurityRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +114,10 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/profile_/settings': typeof ProfileSettingsRoute
+  '/profile_/settings_/edit-profile': typeof ProfileSettingsEditProfileRoute
+  '/profile_/settings_/preferences': typeof ProfileSettingsPreferencesRoute
+  '/profile_/settings_/security': typeof ProfileSettingsSecurityRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +129,10 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/reset-password'
+    | '/profile/settings'
+    | '/profile/settings/edit-profile'
+    | '/profile/settings/preferences'
+    | '/profile/settings/security'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +142,10 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/reset-password'
+    | '/profile/settings'
+    | '/profile/settings/edit-profile'
+    | '/profile/settings/preferences'
+    | '/profile/settings/security'
   id:
     | '__root__'
     | '/'
@@ -109,6 +155,10 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/reset-password'
+    | '/profile_/settings'
+    | '/profile_/settings_/edit-profile'
+    | '/profile_/settings_/preferences'
+    | '/profile_/settings_/security'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +169,10 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ProfileSettingsRoute: typeof ProfileSettingsRoute
+  ProfileSettingsEditProfileRoute: typeof ProfileSettingsEditProfileRoute
+  ProfileSettingsPreferencesRoute: typeof ProfileSettingsPreferencesRoute
+  ProfileSettingsSecurityRoute: typeof ProfileSettingsSecurityRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +226,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile_/settings': {
+      id: '/profile_/settings'
+      path: '/profile/settings'
+      fullPath: '/profile/settings'
+      preLoaderRoute: typeof ProfileSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile_/settings_/security': {
+      id: '/profile_/settings_/security'
+      path: '/profile/settings/security'
+      fullPath: '/profile/settings/security'
+      preLoaderRoute: typeof ProfileSettingsSecurityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile_/settings_/preferences': {
+      id: '/profile_/settings_/preferences'
+      path: '/profile/settings/preferences'
+      fullPath: '/profile/settings/preferences'
+      preLoaderRoute: typeof ProfileSettingsPreferencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile_/settings_/edit-profile': {
+      id: '/profile_/settings_/edit-profile'
+      path: '/profile/settings/edit-profile'
+      fullPath: '/profile/settings/edit-profile'
+      preLoaderRoute: typeof ProfileSettingsEditProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +265,10 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ProfileSettingsRoute: ProfileSettingsRoute,
+  ProfileSettingsEditProfileRoute: ProfileSettingsEditProfileRoute,
+  ProfileSettingsPreferencesRoute: ProfileSettingsPreferencesRoute,
+  ProfileSettingsSecurityRoute: ProfileSettingsSecurityRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
