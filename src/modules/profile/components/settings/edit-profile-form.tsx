@@ -3,70 +3,14 @@ import { Input } from "@/modules/shared/components/ui/input"
 import type { User } from "@/modules/shared/domain/entities/user"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useForm } from "@tanstack/react-form"
-import { ChevronDown, Pencil, Phone, Trash2, User2 } from "lucide-react"
+import { ChevronDown, Phone, User2 } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
-import countryCodesRaw from "virtual:country-codes"
 import { useUpdatePreferences } from "../../hooks/use-update-preferences"
-
-type CountryCodeRaw = {
-  name: string
-  dial_code: string
-  code: string
-}
-
-function toFlagEmoji(countryCode: string) {
-  const normalized = countryCode.toUpperCase()
-  if (!/^[A-Z]{2}$/.test(normalized)) return ""
-  const [a, b] = normalized
-  return String.fromCodePoint(
-    a.charCodeAt(0) + 127397,
-    b.charCodeAt(0) + 127397,
-  )
-}
-
-function normalizeDialCode(dialCode: string) {
-  return dialCode.replace(/\s+/g, "")
-}
-
-const countryCodeOptions = (countryCodesRaw as CountryCodeRaw[])
-  .map((c) => {
-    const dialCode = normalizeDialCode(c.dial_code)
-    const flagEmoji = toFlagEmoji(c.code)
-    return {
-      code: c.code,
-      dialCode,
-      flagEmoji,
-      name: c.name,
-      value: dialCode,
-      label: `${flagEmoji} ${dialCode} ${c.name}`.trim(),
-    }
-  })
-  .filter((c) => c.dialCode.startsWith("+") && c.dialCode.length > 1)
-
-function splitPhoneNumber(rawPhoneNumber: string | undefined) {
-  const cleaned = (rawPhoneNumber ?? "").trim().replace(/[^\d+]/g, "")
-  const defaultResult = { countryCode: "+1", nationalNumber: "" }
-  if (!cleaned.startsWith("+")) return defaultResult
-
-  const withoutPlus = cleaned.slice(1)
-  const candidates = Array.from(
-    new Set(countryCodeOptions.map((o) => o.dialCode)),
-  ).sort((a, b) => b.length - a.length)
-
-  for (const code of candidates) {
-    const digits = code.slice(1)
-    if (withoutPlus.startsWith(digits)) {
-      const nationalNumber = withoutPlus.slice(digits.length)
-      return { countryCode: code, nationalNumber }
-    }
-  }
-
-  const fallbackDigits = withoutPlus.slice(0, 3)
-  return {
-    countryCode: `+${fallbackDigits}`,
-    nationalNumber: withoutPlus.slice(3),
-  }
-}
+import {
+  countryCodeOptions,
+  splitPhoneNumber,
+} from "../../utils/phone-utils"
+import { AvatarUpload } from "./avatar-upload"
 
 type EditProfileFormProps = {
   user: User
@@ -188,63 +132,26 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
       }}
     >
       <div className="flex flex-col items-center">
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          className="focus-visible:ring-loops-cyan relative h-24 w-24 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000016]"
-          aria-label="Change avatar"
-        >
-          {displayedAvatarUrl ? (
-            <img
-              src={displayedAvatarUrl}
-              alt={user.fullName}
-              className="h-24 w-24 rounded-full object-cover"
-            />
-          ) : (
-            <div className="bg-loops-pink flex h-24 w-24 items-center justify-center rounded-full">
-              <User2 className="text-loops-light h-10 w-10" />
-            </div>
-          )}
-
-          <span className="bg-loops-light absolute right-0 bottom-0 inline-flex h-8 w-8 items-center justify-center rounded-full shadow-md">
-            <Pencil className="h-4 w-4 text-[#000016]" />
-          </span>
-        </button>
-
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => {
-            const file = e.target.files?.[0]
-            if (!file) return
+        <AvatarUpload
+          displayedAvatarUrl={displayedAvatarUrl}
+          hasNewAvatar={!!(avatarFile || uploadedAvatarUrl)}
+          fullName={user.fullName}
+          fileInputRef={fileInputRef}
+          onFileSelect={(file) => {
             if (avatarPreviewUrl && avatarPreviewUrl.startsWith("blob:"))
               URL.revokeObjectURL(avatarPreviewUrl)
             setAvatarFile(file)
             setUploadedAvatarUrl(null)
             setAvatarPreviewUrl(URL.createObjectURL(file))
           }}
+          onRemove={() => {
+            if (avatarPreviewUrl && avatarPreviewUrl.startsWith("blob:"))
+              URL.revokeObjectURL(avatarPreviewUrl)
+            setAvatarFile(null)
+            setUploadedAvatarUrl(null)
+            setAvatarPreviewUrl(null)
+          }}
         />
-
-        {avatarFile || uploadedAvatarUrl ? (
-          <button
-            type="button"
-            onClick={() => {
-              if (avatarPreviewUrl && avatarPreviewUrl.startsWith("blob:"))
-                URL.revokeObjectURL(avatarPreviewUrl)
-              setAvatarFile(null)
-              setUploadedAvatarUrl(null)
-              setAvatarPreviewUrl(null)
-              if (fileInputRef.current) fileInputRef.current.value = ""
-            }}
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-[#ff3b3b]"
-            aria-label="Remove selected avatar"
-          >
-            <Trash2 className="h-4 w-4" />
-            Remove
-          </button>
-        ) : null}
 
         <form.Subscribe selector={(state) => state.values}>
           {(values) => (
