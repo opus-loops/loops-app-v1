@@ -18,6 +18,7 @@ export function LoginForm() {
   const form = useForm({
     defaultValues: { password: "", username: "" },
     onSubmit: async ({ value }) => {
+      // TODO: handle api response
       const response = await handleLogin(value.username, value.password)
       if (response._tag === "Failure") {
         console.log(response)

@@ -7,11 +7,26 @@ import {
 } from "../../sub-quiz-navigation-types"
 import { SubQuizStrategySelector } from "../sub-quiz-strategy-selector"
 
-export class SequenceOrderNavigationManager
-  implements ISubQuizNavigationManager
-{
+/**
+ * Navigation manager specifically for Sequence Order Questions.
+ * Handles validation and navigation logic when the current sub-quiz is a sequence order question.
+ * Uses the strategy selector to determine the appropriate navigation strategy.
+ */
+export class SequenceOrderNavigationManager implements ISubQuizNavigationManager {
+  /**
+   * Initializes the manager with the strategy selector.
+   *
+   * @param strategySelector - Selector to retrieve the navigation strategy
+   */
   constructor(private strategySelector: SubQuizStrategySelector) {}
 
+  /**
+   * Checks if navigation to the next sub-quiz is possible.
+   * Uses the selected strategy to determine if navigation is allowed.
+   *
+   * @param context - The current navigation context
+   * @returns boolean - True if navigation is possible, false otherwise
+   */
   canNavigateNext(context: SubQuizNavigationContext): boolean {
     const self = this
     return Effect.runSync(
@@ -22,10 +37,25 @@ export class SequenceOrderNavigationManager
     )
   }
 
+  /**
+   * Checks if navigation to the previous sub-quiz is possible.
+   * For sequence order questions, previous navigation is allowed if there is an adjacent sub-quiz.
+   *
+   * @param context - The current navigation context
+   * @returns boolean - True if navigation is possible, false otherwise
+   */
   canNavigatePrevious(context: SubQuizNavigationContext): boolean {
     return context.adjacentSubQuiz !== undefined
   }
 
+  /**
+   * Executes the navigation to the next sub-quiz.
+   * Retrieves the appropriate strategy and executes its navigation logic.
+   * Fails if navigation is not allowed by the strategy.
+   *
+   * @param context - The current navigation context
+   * @returns Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> - An Effect that resolves to the next sub-quiz or fails with an error
+   */
   navigateNext(
     context: SubQuizNavigationContext,
   ): Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> {
@@ -42,6 +72,13 @@ export class SequenceOrderNavigationManager
     })
   }
 
+  /**
+   * Executes the navigation to the previous sub-quiz.
+   * Simply returns the adjacent sub-quiz if it exists, as no specific validation is needed for previous navigation in this context.
+   *
+   * @param context - The current navigation context
+   * @returns Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> - An Effect that resolves to the previous sub-quiz or fails with an error
+   */
   navigatePrevious(
     context: SubQuizNavigationContext,
   ): Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> {

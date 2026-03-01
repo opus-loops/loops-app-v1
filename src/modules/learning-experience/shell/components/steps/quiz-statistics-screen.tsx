@@ -3,11 +3,23 @@ import { NoteIcon } from "@/modules/shared/components/icons/note"
 import { TimerIcon } from "@/modules/shared/components/icons/timer"
 import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useContentNavigation } from "@/modules/shared/navigation"
-import { useState } from "react"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+import { useEffect, useMemo, useState } from "react"
 import { useQuizStepper } from "../quiz-stepper"
 
 type QuizStatisticsScreenProps = {
   quizItem: CategoryContentItem & { contentType: "quizzes" }
+}
+
+type CelebrationParticle = {
+  id: string
+  color: string
+  size: number
+  x: number
+  y: number
+  rotate: number
+  duration: number
+  delay: number
 }
 
 const formatTime = (totalSeconds: number): string => {
@@ -16,9 +28,82 @@ const formatTime = (totalSeconds: number): string => {
   return `${minutes}:${remainingSeconds}`
 }
 
+function CelebrationParticles({ isActive }: { isActive: boolean }) {
+  const shouldReduceMotion = useReducedMotion()
+
+  const particles = useMemo<CelebrationParticle[]>(() => {
+    if (!isActive || shouldReduceMotion) return []
+
+    const colors = ["#31bce6", "#ffcc00", "#ff4900", "#ffffff"]
+
+    return Array.from({ length: 44 }, (_, index) => {
+      const angle = Math.random() * Math.PI * 2
+      const distance = 140 + Math.random() * 220
+      const x = Math.cos(angle) * distance
+      const y = Math.sin(angle) * distance - (60 + Math.random() * 80)
+      const size = 5 + Math.random() * 7
+
+      return {
+        id: `${index}-${Math.random().toString(16).slice(2)}`,
+        color: colors[Math.floor(Math.random() * colors.length)] ?? "#ffffff",
+        size,
+        x,
+        y,
+        rotate: (Math.random() * 220 - 110) * (Math.random() > 0.5 ? 1 : -1),
+        duration: 1.3 + Math.random() * 0.9,
+        delay: Math.random() * 0.2,
+      }
+    })
+  }, [isActive, shouldReduceMotion])
+
+  return (
+    <AnimatePresence>
+      {isActive && !shouldReduceMotion ? (
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {particles.map((particle) => (
+            <motion.span
+              key={particle.id}
+              className="absolute rounded-full"
+              style={{
+                left: "50%",
+                top: "38%",
+                width: particle.size,
+                height: particle.size,
+                backgroundColor: particle.color,
+                boxShadow: `0 0 16px ${particle.color}66`,
+              }}
+              initial={{ x: 0, y: 0, opacity: 0, scale: 0.9, rotate: 0 }}
+              animate={{
+                x: particle.x,
+                y: particle.y,
+                opacity: [0, 1, 0],
+                scale: [0.9, 1, 0.7],
+                rotate: particle.rotate,
+              }}
+              transition={{
+                duration: particle.duration,
+                delay: particle.delay,
+                ease: "easeOut",
+              }}
+            />
+          ))}
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
+  )
+}
+
 export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   const { itemProgress: startedQuiz } = quizItem
   const [isLoading, setIsLoading] = useState(false)
+  const [isCelebrationActive, setIsCelebrationActive] = useState(true)
 
   const {
     navigateToNext,
@@ -34,6 +119,20 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   const totalQuestions = quizItem.content.questionsCount
   const score = startedQuiz?.score ?? 0
   const spentTime = startedQuiz?.spentTime ?? 0
+  const shouldReduceMotion = useReducedMotion()
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setIsCelebrationActive(false)
+      return
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setIsCelebrationActive(false)
+    }, 2400)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [shouldReduceMotion])
 
   const handleNextClick = async () => {
     setIsLoading(true)
@@ -64,7 +163,8 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   }
 
   return (
-    <div className="font-outfit flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#000016] px-9">
+    <div className="font-outfit relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#000016] px-9">
+      <CelebrationParticles isActive={isCelebrationActive} />
       {/* Container matching Figma frame1000009848 */}
       <div className="flex w-full max-w-[390px] flex-col items-center gap-10">
         {/* Main Content Card */}

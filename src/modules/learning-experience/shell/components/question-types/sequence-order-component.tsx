@@ -1,9 +1,10 @@
+import { QuestionValidationPopup } from "@/modules/learning-experience/shell/components/question-types/question-validation-popup"
 import { cn } from "@/modules/shared/lib/utils"
 import { useValidateSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-validate-sequence-order"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import { Reorder } from "framer-motion"
 import { GripVertical } from "lucide-react"
-import { forwardRef, useImperativeHandle, useState } from "react"
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react"
 
 export type SubQuizRef = {
   skip: () => void
@@ -22,6 +23,7 @@ export const SequenceOrderComponent = forwardRef<
 >(({ subQuiz, categoryId, onStopTimer }, ref) => {
   const { handleValidateSequenceOrder } = useValidateSequenceOrder()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   const completedQuestion = subQuiz.completedQuestion
 
@@ -30,6 +32,16 @@ export const SequenceOrderComponent = forwardRef<
   const [userOrder, setUserOrder] = useState(
     subQuiz.content?.sequence.map((item, index) => index) || [],
   )
+
+  useEffect(() => {
+    setIsPopupOpen(false)
+    setUserOrder(subQuiz.content?.sequence.map((_, index) => index) || [])
+  }, [subQuiz.questionId])
+
+  useEffect(() => {
+    if (!isValidated) return
+    setIsPopupOpen(true)
+  }, [isValidated])
 
   useImperativeHandle(ref, () => ({
     skip: async () => {
@@ -93,8 +105,31 @@ export const SequenceOrderComponent = forwardRef<
     }
   }
 
+  const popupVariant = (() => {
+    const idealOrder = subQuiz.content?.idealOrder
+    const userAnswer = completedQuestion?.userAnswer
+    if (!idealOrder || !userAnswer) return "incorrect"
+    if (idealOrder.length !== userAnswer.length) return "incorrect"
+    for (let i = 0; i < idealOrder.length; i++) {
+      if (idealOrder[i] !== userAnswer[i]) return "incorrect"
+    }
+    return "correct"
+  })()
+
   return (
     <div className="mx-auto max-w-2xl">
+      {subQuiz.content && (
+        <QuestionValidationPopup
+          isOpen={isPopupOpen}
+          onOpenChange={setIsPopupOpen}
+          variant={popupVariant}
+          subtitle={
+            popupVariant === "correct"
+              ? subQuiz.content.congratulatoryMessage[0].content
+              : subQuiz.content.consolidationMessage[0].content
+          }
+        />
+      )}
       {subQuiz.content && (
         <div className="mb-8">
           <h2 className="text-xl leading-relaxed font-medium text-white">

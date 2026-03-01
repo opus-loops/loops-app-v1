@@ -24,7 +24,7 @@ export function SkillWelcomeScreen({ skillItem }: SkillWelcomeScreenProps) {
         <div className="w-full">
           <div className="overflow-hidden rounded-2xl shadow-[0px_4px_0px_0px_#31BCE6]">
             <img
-              src={skillItem.content.cover.urls?.[100]}
+              src={skillItem.content.cover.urls?.[20]}
               alt={skillItem.content.cover.alt}
               title={skillItem.content.cover.title}
               aria-description={skillItem.content.cover.description}

@@ -1,7 +1,14 @@
+import { QuestionValidationPopup } from "@/modules/learning-experience/shell/components/question-types/question-validation-popup"
 import { cn } from "@/modules/shared/lib/utils"
 import { useValidateChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-validate-choice-question"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
-import { forwardRef, useImperativeHandle, useState } from "react"
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react"
 
 export type SubQuizRef = {
   skip: () => void
@@ -21,11 +28,26 @@ export const ChoiceQuestionComponent = forwardRef<
   const { handleValidateChoiceQuestion } = useValidateChoiceQuestion()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedChoices, setSelectedChoices] = useState<number[]>([])
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const pendingValidationQuestionIdRef = useRef<string | null>(null)
 
   const question = subQuiz.content
   const completedQuestion = subQuiz.completedQuestion
 
   const isValidated = completedQuestion?.status === "completed"
+
+  useEffect(() => {
+    setIsPopupOpen(false)
+    setSelectedChoices([])
+    pendingValidationQuestionIdRef.current = null
+  }, [subQuiz.questionId])
+
+  useEffect(() => {
+    if (!isValidated) return
+    if (pendingValidationQuestionIdRef.current !== subQuiz.questionId) return
+    setIsPopupOpen(true)
+    pendingValidationQuestionIdRef.current = null
+  }, [isValidated])
 
   useImperativeHandle(ref, () => ({
     skip: async () => {
@@ -45,6 +67,7 @@ export const ChoiceQuestionComponent = forwardRef<
 
       onStopTimer()
       setIsSubmitting(true)
+      pendingValidationQuestionIdRef.current = subQuiz.questionId
       const estimatedTime = question?.estimatedTime ?? 0
       const spentTime = Math.max(0, estimatedTime - timeLeft)
 
@@ -67,20 +90,38 @@ export const ChoiceQuestionComponent = forwardRef<
     )
   }
 
+  // TODO: REFACTOR NEEDED: Get it from api response
+  const idealOptions = question.idealOptions
+  const userAnswer = completedQuestion?.userAnswer
+  const isCorrectAnswer = (() => {
+    if (!isValidated) return false
+    if (!idealOptions || !userAnswer) return false
+    if (idealOptions.length !== userAnswer.length) return false
+    const toCounts = (values: readonly number[]) => {
+      const map = new Map<number, number>()
+      for (const v of values) map.set(v, (map.get(v) ?? 0) + 1)
+      return map
+    }
+    const idealCounts = toCounts(idealOptions)
+    const userCounts = toCounts(userAnswer)
+    if (idealCounts.size !== userCounts.size) return false
+    for (const [value, count] of idealCounts)
+      if (userCounts.get(value) !== count) return false
+    return true
+  })()
+
+  const popupVariant = isCorrectAnswer ? "correct" : "incorrect"
+
   const handleChoiceSelect = (index: number) => {
     if (isValidated) return
 
     if (question.isMultiple) {
       setSelectedChoices((prev) => {
-        if (prev.includes(index)) {
-          return prev.filter((i) => i !== index)
-        } else {
-          return [...prev, index]
-        }
+        return prev.includes(index)
+          ? prev.filter((i) => i !== index)
+          : [...prev, index]
       })
-    } else {
-      setSelectedChoices([index])
-    }
+    } else setSelectedChoices([index])
   }
 
   const getChoiceStyle = (index: number) => {
@@ -125,14 +166,12 @@ export const ChoiceQuestionComponent = forwardRef<
           className={cn(
             "mr-3 flex h-6 w-6 items-center justify-center border-2",
             question.isMultiple ? "rounded-md" : "rounded-full",
-            isSelected
-              ? "border-cyan-400 bg-cyan-400"
-              : "border-slate-400",
+            isSelected ? "border-cyan-400 bg-cyan-400" : "border-slate-400",
           )}
         >
-          {isSelected && (
-            question.isMultiple ? (
-               <svg
+          {isSelected &&
+            (question.isMultiple ? (
+              <svg
                 className="h-4 w-4 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -147,8 +186,7 @@ export const ChoiceQuestionComponent = forwardRef<
               </svg>
             ) : (
               <div className="h-2 w-2 rounded-full bg-white" />
-            )
-          )}
+            ))}
         </div>
       )
     } else {
@@ -158,7 +196,12 @@ export const ChoiceQuestionComponent = forwardRef<
 
       if (isCorrect) {
         return (
-          <div className={cn("mr-3 flex h-6 w-6 items-center justify-center bg-green-500", question.isMultiple ? "rounded-md" : "rounded-full")}>
+          <div
+            className={cn(
+              "mr-3 flex h-6 w-6 items-center justify-center bg-green-500",
+              question.isMultiple ? "rounded-md" : "rounded-full",
+            )}
+          >
             <svg
               className="h-4 w-4 text-white"
               fill="currentColor"
@@ -174,7 +217,12 @@ export const ChoiceQuestionComponent = forwardRef<
         )
       } else if (wasSelected) {
         return (
-          <div className={cn("mr-3 flex h-6 w-6 items-center justify-center bg-red-500", question.isMultiple ? "rounded-md" : "rounded-full")}>
+          <div
+            className={cn(
+              "mr-3 flex h-6 w-6 items-center justify-center bg-red-500",
+              question.isMultiple ? "rounded-md" : "rounded-full",
+            )}
+          >
             <svg
               className="h-4 w-4 text-white"
               fill="currentColor"
@@ -190,7 +238,12 @@ export const ChoiceQuestionComponent = forwardRef<
         )
       } else {
         return (
-          <div className={cn("mr-3 h-6 w-6 border-2 border-slate-400", question.isMultiple ? "rounded-md" : "rounded-full")} />
+          <div
+            className={cn(
+              "mr-3 h-6 w-6 border-2 border-slate-400",
+              question.isMultiple ? "rounded-md" : "rounded-full",
+            )}
+          />
         )
       }
     }
@@ -198,6 +251,18 @@ export const ChoiceQuestionComponent = forwardRef<
 
   return (
     <div className="mx-auto max-w-2xl">
+      {subQuiz.content && (
+        <QuestionValidationPopup
+          isOpen={isPopupOpen}
+          onOpenChange={setIsPopupOpen}
+          variant={popupVariant}
+          subtitle={
+            popupVariant === "correct"
+              ? subQuiz.content.congratulatoryMessage[0].content
+              : subQuiz.content.consolidationMessage[0].content
+          }
+        />
+      )}
       {/* Question Text */}
       <div className="mb-8">
         <h2 className="text-xl leading-relaxed font-medium text-white">

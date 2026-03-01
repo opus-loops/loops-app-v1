@@ -1,0 +1,25 @@
+export const mascotLinks = {
+  sadLoo: [
+    "/assets/mascots/ANGRY_LOOPS.png",
+    "/assets/mascots/ANGRY_LOOPS_ON_THE_FLOOR.png",
+    "/assets/mascots/ATTACKING_LOOPS.png",
+    "/assets/mascots/DEPRESSES_LOOPS.png",
+    "/assets/mascots/FALLING_LOOPS.png",
+    "/assets/mascots/SAD_LOOPS.png",
+    "/assets/mascots/SAD_SETTING_LOOPS.png",
+  ],
+  happyLoo: [
+    "/assets/mascots/CALM_LOOPS_BALL.png",
+    "/assets/mascots/CALM_STANDING.png",
+    "/assets/mascots/CLAM_LOOPS.png",
+    "/assets/mascots/CUTE_LOOPS.png",
+    "/assets/mascots/DIVING_LOOPS.png",
+    "/assets/mascots/EXITED_LOOPS.png",
+    "/assets/mascots/HAPPY_JUMPING_LOOPS.png",
+    "/assets/mascots/HAPPY_LOOPS_ON_THE_FLOOR.png",
+    "/assets/mascots/ROLLING_LOOPS.png",
+    "/assets/mascots/RUNNING_LOOPS.png",
+    "/assets/mascots/SITTING_LOOPS.png",
+    "/assets/mascots/WALKING_LOOPS.png",
+  ],
+}

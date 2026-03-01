@@ -5,6 +5,8 @@ export const choiceQuestionSchema = Schema.Struct({
   version: Schema.Number.pipe(Schema.int()),
   choiceQuestionId: Schema.String,
   headline: Schema.Array(textContentSchema),
+  congratulatoryMessage: Schema.Array(textContentSchema),
+  consolidationMessage: Schema.Array(textContentSchema),
   choices: Schema.Array(Schema.Array(textContentSchema)),
   metaTags: Schema.Array(Schema.String),
   idealOptions: Schema.optional(Schema.Array(Schema.Number.pipe(Schema.int()))),

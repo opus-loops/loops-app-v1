@@ -1,10 +1,183 @@
 import { Button } from "@/modules/shared/components/ui/button"
+import { useEffect, useRef, useState } from "react"
+import { toast } from "sonner"
+import { useGoogleLogin } from "../services/use-google-login"
+
+declare global {
+  interface Window {
+    google: {
+      accounts: {
+        id: {
+          initialize: (config: IdConfiguration) => void
+          renderButton: (
+            element: HTMLElement,
+            config: GsiButtonConfiguration,
+          ) => void
+          prompt: (
+            momentListener?: (notification: PromptMomentNotification) => void,
+          ) => void
+          disableAutoSelect: () => void
+          storeCredential: (
+            credential: { id: string; password: string },
+            callback?: () => void,
+          ) => void
+          cancel: () => void
+          onGoogleLibraryLoad: () => void
+          revoke: (
+            hint: string,
+            callback: (done: RevocationResponse) => void,
+          ) => void
+        }
+      }
+    }
+  }
+}
+
+// Types based on official Google Identity Services documentation
+interface IdConfiguration {
+  client_id: string
+  auto_select?: boolean
+  callback?: (credentialResponse: CredentialResponse) => void
+  login_uri?: string
+  native_callback?: (response: { id: string; password: string }) => void
+  cancel_on_tap_outside?: boolean
+  prompt_parent_id?: string
+  nonce?: string
+  context?: "signin" | "signup" | "use"
+  state_cookie_domain?: string
+  ux_mode?: "popup" | "redirect"
+  allowed_parent_origin?: string | string[]
+  intermediate_iframe_close_callback?: () => void
+  itp_support?: boolean
+  login_hint?: string
+  hd?: string
+  use_fedcm_for_prompt?: boolean
+}
+
+interface CredentialResponse {
+  credential: string
+  select_by:
+    | "auto"
+    | "user"
+    | "user_1tap"
+    | "user_2tap"
+    | "btn"
+    | "btn_confirm"
+    | "btn_add_session"
+    | "btn_confirm_add_session"
+  clientId?: string
+}
+
+interface GsiButtonConfiguration {
+  type?: "standard" | "icon"
+  theme?: "outline" | "filled_blue" | "filled_black"
+  size?: "large" | "medium" | "small"
+  text?: "signin_with" | "signup_with" | "continue_with" | "signin"
+  shape?: "rectangular" | "pill" | "circle" | "square"
+  logo_alignment?: "left" | "center"
+  width?: string | number
+  locale?: string
+  click_listener?: () => void
+}
+
+interface PromptMomentNotification {
+  isNotDisplayed: () => boolean
+  isSkippedMoment: () => boolean
+  isDismissedMoment: () => boolean
+  getNotDisplayedReason: () =>
+    | "browser_not_supported"
+    | "invalid_client"
+    | "missing_client_id"
+    | "opt_out_or_no_session"
+    | "secure_http_required"
+    | "suppressed_by_user"
+    | "unregistered_origin"
+    | "unknown_reason"
+  isDisplayed: () => boolean
+  isDisplayMoment: () => boolean
+  getSkippedReason: () =>
+    | "auto_cancel"
+    | "user_cancel"
+    | "tap_outside"
+    | "issuing_failed"
+  getDismissedReason: () =>
+    | "credential_returned"
+    | "cancel_called"
+    | "flow_restarted"
+  getMomentType: () => "display" | "skipped" | "dismissed"
+}
+
+interface RevocationResponse {
+  successful: boolean
+  error?: string
+}
 
 export function LoginGoogle() {
+  const [isGoogleLoaded, setIsGoogleLoaded] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const { handleGoogleLogin } = useGoogleLogin()
+
+  useEffect(() => {
+    const checkGoogleLoaded = () => {
+      if (window.google?.accounts?.id) {
+        setIsGoogleLoaded(true)
+        initializeGoogle()
+      } else setTimeout(checkGoogleLoaded, 100)
+    }
+
+    checkGoogleLoaded()
+  }, [])
+
+  const initializeGoogle = () => {
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+
+    window.google.accounts.id.initialize({
+      client_id: clientId,
+      callback: handleCredentialResponse,
+      auto_select: false,
+      cancel_on_tap_outside: true,
+      context: "signin",
+      ux_mode: "popup",
+      use_fedcm_for_prompt: false,
+    })
+  }
+
+  // TODO: handle api response
+  const handleCredentialResponse = async (response: CredentialResponse) => {
+    const googleToken = response.credential
+    await handleGoogleLogin(googleToken)
+  }
+
+  const handleGoogleSignIn = () => {
+    window.google.accounts.id.prompt((notification) => {
+      if (notification.isNotDisplayed()) {
+        const reason = notification.getNotDisplayedReason()
+
+        if (reason === "browser_not_supported")
+          toast.error("Your browser doesn't support Google Sign-In.")
+        else if (reason === "invalid_client" || reason === "missing_client_id")
+          toast.error("Google Sign-In is not properly configured.")
+        else if (reason === "opt_out_or_no_session")
+          toast.info("Please sign in to your Google account first.")
+        else if (reason === "secure_http_required")
+          toast.error("Google Sign-In requires a secure connection (HTTPS).")
+        else if (reason === "suppressed_by_user")
+          toast.info("Google Sign-In was disabled by user preference.")
+        else if (reason === "unregistered_origin")
+          toast.error("This domain is not authorized for Google Sign-In.")
+        else toast.error("Google Sign-In is not available right now.")
+      }
+    })
+  }
+
   return (
     <Button
       className="font-outfit text-loops-text hover:bg-loops-google/80 bg-loops-google w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none"
       type="button"
+      ref={buttonRef}
+      disabled={!isGoogleLoaded}
+      onClick={handleGoogleSignIn}
     >
       <svg
         fill="none"

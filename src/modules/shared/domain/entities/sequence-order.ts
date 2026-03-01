@@ -5,6 +5,8 @@ export const sequenceOrderSchema = Schema.Struct({
   version: Schema.Number.pipe(Schema.int()),
   sequenceOrder: Schema.String,
   headline: Schema.Array(textContentSchema),
+  congratulatoryMessage: Schema.Array(textContentSchema),
+  consolidationMessage: Schema.Array(textContentSchema),
   sequence: Schema.Array(Schema.Array(textContentSchema)),
   metaTags: Schema.Array(Schema.String),
   idealOrder: Schema.optional(Schema.Array(Schema.Number.pipe(Schema.int()))),

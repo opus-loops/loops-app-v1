@@ -11,9 +11,20 @@ import { SubQuizStrategySelector } from "../sub-quiz-strategy-selector"
 import { ChoiceQuestionNavigationManager } from "./choice-question-navigation-manager"
 import { SequenceOrderNavigationManager } from "./sequence-order-navigation-manager"
 
+/**
+ * Manager class responsible for handling sub-quiz navigation logic.
+ * It acts as a facade, delegating the actual navigation to specific managers based on the current question type.
+ * This ensures that the navigation logic is decoupled from the specific implementation details of each question type.
+ */
 export class SubQuizNavigatorManager implements ISubQuizNavigationManager {
   private managers: Map<string, ISubQuizNavigationManager>
 
+  /**
+   * Initializes the manager with necessary services and sets up specific managers for each question type.
+   *
+   * @param startChoiceQuestion - Service hook for starting choice questions
+   * @param startSequenceOrder - Service hook for starting sequence order questions
+   */
   constructor(
     startChoiceQuestion: ReturnType<typeof useStartChoiceQuestion>,
     startSequenceOrder: ReturnType<typeof useStartSequenceOrder>,
@@ -40,16 +51,37 @@ export class SubQuizNavigatorManager implements ISubQuizNavigationManager {
     return this.managers.get(questionType) || null
   }
 
+  /**
+   * Checks if navigation to the next sub-quiz is possible.
+   * Delegates the check to the specific manager for the current question type.
+   *
+   * @param context - The current navigation context containing sub-quiz information
+   * @returns boolean - True if navigation is possible, false otherwise
+   */
   canNavigateNext(context: SubQuizNavigationContext): boolean {
     const manager = this.getManager(context.currentSubQuiz.questionType)
     return manager ? manager.canNavigateNext(context) : false
   }
 
+  /**
+   * Checks if navigation to the previous sub-quiz is possible.
+   * Delegates the check to the specific manager for the current question type.
+   *
+   * @param context - The current navigation context containing sub-quiz information
+   * @returns boolean - True if navigation is possible, false otherwise
+   */
   canNavigatePrevious(context: SubQuizNavigationContext): boolean {
     const manager = this.getManager(context.currentSubQuiz.questionType)
     return manager ? manager.canNavigatePrevious(context) : false
   }
 
+  /**
+   * Executes the navigation to the next sub-quiz.
+   * Delegates the execution to the specific manager for the current question type.
+   *
+   * @param context - The current navigation context containing sub-quiz information
+   * @returns Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> - An Effect that resolves to the next sub-quiz or fails with an error
+   */
   navigateNext(
     context: SubQuizNavigationContext,
   ): Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> {
@@ -65,6 +97,13 @@ export class SubQuizNavigatorManager implements ISubQuizNavigationManager {
     return manager.navigateNext(context)
   }
 
+  /**
+   * Executes the navigation to the previous sub-quiz.
+   * Delegates the execution to the specific manager for the current question type.
+   *
+   * @param context - The current navigation context containing sub-quiz information
+   * @returns Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> - An Effect that resolves to the previous sub-quiz or fails with an error
+   */
   navigatePrevious(
     context: SubQuizNavigationContext,
   ): Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> {

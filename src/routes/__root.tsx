@@ -79,5 +79,12 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         title: "Loops",
       },
     ],
+    scripts: [
+      {
+        src: "https://accounts.google.com/gsi/client",
+        async: true,
+        defer: true,
+      },
+    ],
   }),
 })

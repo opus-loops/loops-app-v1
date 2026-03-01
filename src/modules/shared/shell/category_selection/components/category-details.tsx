@@ -29,7 +29,7 @@ export function CategoryDetails({
     size: 3,
   })
 
-  const imageUrl = category.cover.urls?.[100]
+  const imageUrl = category.cover.urls?.[20]
 
   return (
     <div className="flex h-full flex-col">

@@ -18,7 +18,7 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
         {coverUrlJson && (
           <div className="w-full overflow-hidden rounded-2xl">
             <img
-              src={coverUrlJson["100"]}
+              src={coverUrlJson["20"]}
               alt={metadata.cover_image.alt}
               aria-description={metadata.cover_image.description}
               title={metadata.cover_image.title}
@@ -104,7 +104,7 @@ function ImageElement({ data }: ImageElementProps) {
     <div className="w-full overflow-hidden rounded-lg border border-[#31bce6]/20 bg-[#15153a]/50">
       {imageUrlJson ? (
         <img
-          src={imageUrlJson["100"]}
+          src={imageUrlJson["20"]}
           alt={data.alt}
           aria-description={data.description}
           title={data.title}
@@ -180,7 +180,7 @@ function CTAElement({ data }: CTAElementProps) {
       {mascotUrlJson && (
         <div className="w-1/3 shrink-0">
           <img
-            src={mascotUrlJson["100"] || Object.values(mascotUrlJson)[0]}
+            src={mascotUrlJson["20"] || Object.values(mascotUrlJson)[0]}
             alt="Mascot"
             className="h-auto w-full object-contain"
           />

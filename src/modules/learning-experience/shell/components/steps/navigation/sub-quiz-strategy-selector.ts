@@ -12,9 +12,21 @@ import { ChoiceQuestionToSequenceOrderStrategy } from "./strategies/choice-quest
 import { SequenceOrderToChoiceQuestionStrategy } from "./strategies/sequence-order-to-choice-question-strategy"
 import { SequenceOrderToSequenceOrderStrategy } from "./strategies/sequence-order-to-sequence-order-strategy"
 
+/**
+ * Selector class that determines the appropriate navigation strategy based on the current and target sub-quiz types.
+ * It maps the transition from one question type to another to a specific strategy implementation.
+ * This ensures that the correct validation and execution logic is used for each unique transition.
+ */
 export class SubQuizStrategySelector {
   private strategies: Map<SubQuizNavigationStrategy, ISubQuizNavigationStrategy>
 
+  /**
+   * Initializes the selector with all available navigation strategies.
+   * Maps each strategy key (e.g., "choiceQuestions-to-sequenceOrders") to its corresponding strategy instance.
+   *
+   * @param startChoiceQuestion - Service hook for starting choice questions
+   * @param startSequenceOrder - Service hook for starting sequence order questions
+   */
   constructor(
     startChoiceQuestion: ReturnType<typeof useStartChoiceQuestion>,
     startSequenceOrder: ReturnType<typeof useStartSequenceOrder>,
@@ -44,6 +56,12 @@ export class SubQuizStrategySelector {
 
   }
 
+  /**
+   * Retrieves the appropriate navigation strategy based on the current and adjacent sub-quiz types.
+   *
+   * @param context - The current navigation context containing sub-quiz information
+   * @returns Effect.Effect<ISubQuizNavigationStrategy, SubQuizNavigationError> - An Effect that resolves to the selected strategy or fails if no strategy is found
+   */
   getStrategy(
     context: SubQuizNavigationContext,
   ): Effect.Effect<ISubQuizNavigationStrategy, SubQuizNavigationError> {
