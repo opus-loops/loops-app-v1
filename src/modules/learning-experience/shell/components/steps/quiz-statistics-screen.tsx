@@ -237,7 +237,7 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
           <button
             onClick={handleNextClick}
             disabled={isLoading}
-            className="font-outfit w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium text-white transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="font-outfit text-loops-light w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? "Loading..." : "Next"}
           </button>

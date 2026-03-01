@@ -52,7 +52,7 @@ export function BaseItemCircle({
           fill="none"
           stroke="currentColor"
           strokeWidth="5"
-          className="text-white/50"
+          className="text-loops-light/50"
         />
         {progress > 0 && (
           <circle

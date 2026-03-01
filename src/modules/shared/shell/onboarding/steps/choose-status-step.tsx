@@ -62,7 +62,7 @@ export function ChooseStatusStep() {
     <div className="flex h-full flex-col px-8 py-6">
       <div className="flex flex-1 flex-col justify-center">
         <div className="mb-8 text-center">
-          <h2 className="font-outfit mb-2 text-2xl font-semibold text-white">
+          <h2 className="font-outfit text-loops-light mb-2 text-2xl font-semibold">
             Choose your status
           </h2>
           <p className="font-outfit mx-auto max-w-sm text-lg leading-8 text-gray-300">

@@ -48,7 +48,7 @@ export function CountdownTimer({
 
   return (
     <div className="flex items-center gap-1">
-      <span className="font-outfit text-sm font-medium text-white">
+      <span className="font-outfit text-loops-light text-sm font-medium">
         Expires in
       </span>
       <span

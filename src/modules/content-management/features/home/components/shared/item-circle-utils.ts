@@ -11,7 +11,7 @@ export const getCircleColors = (
       outer: "bg-green-500",
       inner: "bg-green-600",
       progress: "stroke-green-400",
-      text: "text-white",
+      text: "text-loops-light",
     }
 
   if (isFirstItem && progressState === "locked")
@@ -19,7 +19,7 @@ export const getCircleColors = (
       outer: "bg-pink-500",
       inner: "bg-pink-600",
       progress: "stroke-pink-400",
-      text: "text-white",
+      text: "text-loops-light",
     }
 
   if (progressState === "started")
@@ -27,14 +27,14 @@ export const getCircleColors = (
       outer: "bg-blue-500",
       inner: "bg-blue-600",
       progress: "stroke-cyan-400",
-      text: "text-white",
+      text: "text-loops-light",
     }
 
   return {
-    outer: "bg-white/20",
-    inner: "bg-white/10",
+    outer: "bg-loops-light/20",
+    inner: "bg-loops-light/10",
     progress: "stroke-white/30",
-    text: "text-white/70",
+    text: "text-loops-light/70",
   }
 }
 

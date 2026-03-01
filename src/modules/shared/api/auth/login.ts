@@ -6,6 +6,7 @@ import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
 import { Schema } from "effect"
+import { userPasswordNotSetOrInvalidProviderErrorSchema } from "../../domain/errors/user-password-not-set-or-invalid-provider"
 
 const loginArgsSchema = Schema.Struct({
   password: Schema.String,
@@ -22,6 +23,7 @@ export const loginErrorsSchema = Schema.Union(
     }),
   ),
   invalidCredentialsErrorSchema,
+  userPasswordNotSetOrInvalidProviderErrorSchema,
 )
 
 export type LoginErrors = typeof loginErrorsSchema.Type

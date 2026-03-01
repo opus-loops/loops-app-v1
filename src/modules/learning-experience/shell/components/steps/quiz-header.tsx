@@ -78,7 +78,7 @@ export function QuizHeader({
     <div className="mx-auto w-full max-w-2xl px-2">
       <p className="text-center text-[16px] leading-[23px] tracking-[-0.7px]">
         <span className="text-loops-orange font-semibold">Quiz:</span>{" "}
-        <span className="font-semibold text-white">
+        <span className="text-loops-light font-semibold">
           {quizItem.content.label[0].content}
         </span>
       </p>
@@ -97,7 +97,7 @@ export function QuizHeader({
               {`Question ${Math.max(1, selectedSubQuiz.index + 1)}`}
             </span>
           )}
-          <span className="text-[18px] leading-[23px] text-white">
+          <span className="text-loops-light text-[18px] leading-[23px]">
             {`/${totalQuestions}`}
           </span>
         </div>

@@ -36,7 +36,7 @@ export function Card ({
   onActionClick
 }: CardProps) {
   return (
-    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+    <div className="overflow-hidden rounded-lg border border-gray-200 bg-loops-light shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
       <div className="aspect-video w-full overflow-hidden">
         <img
           src={imageUrl}
@@ -46,7 +46,7 @@ export function Card ({
       </div>
 
       <div className="p-4">
-        <h3 className="mb-2 text-xl font-semibold text-gray-800 dark:text-white">
+        <h3 className="mb-2 text-xl font-semibold text-gray-800 dark:text-loops-light">
           {title}
         </h3>
 
@@ -56,7 +56,7 @@ export function Card ({
 
         <button
           onClick={onActionClick}
-          className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
+          className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-loops-light transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
           aria-label={`Action for ${title}`}
         >
           View Details

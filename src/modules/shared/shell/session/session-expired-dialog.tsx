@@ -62,7 +62,7 @@ export function SessionExpiredDialog({
       <DialogContent className="bg-card border-0 sm:max-w-md">
         <DialogHeader className="flex flex-col items-center space-y-4 pb-4 text-center">
           <div className="from-loops-gradient-danger-start to-loops-gradient-danger-end flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r shadow-lg">
-            <AlertTriangle className="h-8 w-8 text-white" />
+            <AlertTriangle className="text-loops-light h-8 w-8" />
           </div>
           <DialogTitle className="font-outfit text-loops-text text-2xl font-semibold">
             Session Expired
@@ -104,7 +104,7 @@ export function SessionExpiredDialog({
                 search: { redirect: redirectTo },
               })
             }}
-            className="font-outfit from-loops-purple to-loops-blue hover:from-loops-purple/90 hover:to-loops-blue/90 w-full bg-gradient-to-r font-medium text-white"
+            className="font-outfit from-loops-purple to-loops-blue hover:from-loops-purple/90 hover:to-loops-blue/90 text-loops-light w-full bg-gradient-to-r font-medium"
             size="lg"
           >
             Go to Login

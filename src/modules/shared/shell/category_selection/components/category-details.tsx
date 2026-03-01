@@ -63,13 +63,13 @@ export function CategoryDetails({
 
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#de08a891]">
-              <div className="h-8 w-8 shrink-0 grow-0 text-white">
+              <div className="text-loops-light h-8 w-8 shrink-0 grow-0">
                 <CodeCircleIcon />
               </div>
             </div>
 
             <div className="flex-1">
-              <h3 className="font-outfit mb-1 text-xl font-bold text-white">
+              <h3 className="font-outfit text-loops-light mb-1 text-xl font-bold">
                 {category.name[0].content}
               </h3>
             </div>
@@ -78,40 +78,40 @@ export function CategoryDetails({
           {/* Tags */}
           <div className="flex flex-wrap items-center gap-2">
             <div className="bg-loops-label-skill rounded px-2 py-1">
-              <span className="font-outfit text-xs font-medium text-white">
+              <span className="font-outfit text-loops-light text-xs font-medium">
                 {category.skillCount} Skills
               </span>
             </div>
             <div className="rounded bg-[#0717de] px-2 py-1">
-              <span className="font-outfit text-xs font-medium text-white">
+              <span className="font-outfit text-loops-light text-xs font-medium">
                 {category.quizCount} Quizzes
               </span>
             </div>
             <DifficultyTag difficulty={category.difficulty} />
             <div className="rounded bg-[#ffc120] px-2 py-1">
-              <span className="font-outfit text-xs font-medium text-white">
+              <span className="font-outfit text-loops-light text-xs font-medium">
                 {category.totalXP}XP
               </span>
             </div>
           </div>
 
           {/* Description */}
-          <p className="font-outfit text-base leading-relaxed text-white">
+          <p className="font-outfit text-loops-light text-base leading-relaxed">
             {category.description[0].content}
           </p>
 
           {/* Content Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="h-6 w-6 shrink-0 grow-0 text-white">
+              <div className="text-loops-light h-6 w-6 shrink-0 grow-0">
                 <DocumentCopyIcon />
               </div>
-              <h4 className="font-outfit flex-1 text-xl font-bold text-white">
+              <h4 className="font-outfit text-loops-light flex-1 text-xl font-bold">
                 Content
               </h4>
               <button
                 onClick={onViewAll}
-                className="font-outfit text-sm font-medium text-[#eff1f5] transition-colors hover:text-white"
+                className="font-outfit hover:text-loops-light text-sm font-medium text-[#eff1f5] transition-colors"
               >
                 View all
               </button>

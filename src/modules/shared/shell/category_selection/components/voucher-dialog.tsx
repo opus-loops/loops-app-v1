@@ -10,12 +10,16 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useRef, useState } from "react"
 import { VoucherSubmissionForm } from "./voucher-submission-form"
 
-type VoucherDialogProps = { 
+type VoucherDialogProps = {
   categoryId: string
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }
-export function VoucherDialog({ categoryId, open: externalOpen, onOpenChange }: VoucherDialogProps) {
+export function VoucherDialog({
+  categoryId,
+  open: externalOpen,
+  onOpenChange,
+}: VoucherDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
@@ -79,7 +83,7 @@ export function VoucherDialog({ categoryId, open: externalOpen, onOpenChange }: 
                 }}
               >
                 <motion.svg
-                  className="h-10 w-10 text-white"
+                  className="text-loops-light h-10 w-10"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

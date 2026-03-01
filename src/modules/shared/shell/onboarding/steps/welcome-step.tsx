@@ -16,7 +16,7 @@ export function WelcomeStep() {
         </div>
 
         <div className="mb-8">
-          <h2 className="font-outfit mb-4 text-2xl font-semibold text-white">
+          <h2 className="font-outfit text-loops-light mb-4 text-2xl font-semibold">
             Welcome to Loop&apos;s
           </h2>
           <p className="font-outfit text-lg text-gray-300">

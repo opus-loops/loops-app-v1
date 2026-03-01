@@ -37,7 +37,7 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
           <div className="flex items-center gap-3">
             {/* Category Image/Icon */}
             {imageUrl && (
-              <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
+              <div className="bg-loops-light/20 flex h-20 w-20 items-center justify-center rounded-lg backdrop-blur-sm">
                 <img
                   src={imageUrl}
                   alt={category.cover.alt}
@@ -49,10 +49,10 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
             )}
 
             <div className="flex-1">
-              <h3 className="font-outfit text-lg font-semibold text-white">
+              <h3 className="font-outfit text-loops-light text-lg font-semibold">
                 {category.name[0].content}
               </h3>
-              <p className="font-outfit text-sm text-white/80">
+              <p className="font-outfit text-loops-light/80 text-sm">
                 {totalItemsCount} lessons
               </p>
             </div>
@@ -62,16 +62,16 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
         {/* Enrollment Status */}
         <div className="flex items-center gap-2">
           {category.startedCategory !== undefined && (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 px-3 py-1">
-              <span className="font-outfit text-xs font-medium text-white">
+            <div className="bg-loops-light/20 flex h-10 w-10 items-center justify-center rounded-full px-3 py-1">
+              <span className="font-outfit text-loops-light text-xs font-medium">
                 {progress}%
               </span>
             </div>
           )}
 
           {category.startedCategory === undefined && (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
+            <div className="bg-loops-light/20 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm">
+              <div className="bg-loops-light/10 flex h-7 w-7 items-center justify-center rounded-full">
                 <div className="text-loops-light/50 size-4 shrink-0 grow-0">
                   <LockIcon />
                 </div>

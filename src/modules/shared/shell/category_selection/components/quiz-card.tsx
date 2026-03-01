@@ -1,6 +1,6 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { DifficultyTag } from "@/modules/shared/components/common/difficulty-tag"
 import { ClockIcon } from "@/modules/shared/components/icons/clock"
+import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { cn } from "@/modules/shared/lib/utils"
 import { formatTimeDuration } from "@/modules/shared/utils/format-duration"
 import { ProgressState } from "@/modules/shared/utils/types"
@@ -38,14 +38,14 @@ export function QuizCard({
             <span className="font-outfit text-xl font-semibold text-purple-400">
               Quiz
             </span>
-            <span className="font-outfit text-sm font-normal text-white">
+            <span className="font-outfit text-loops-light text-sm font-normal">
               {item.content.label[0].content}
             </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <div className="rounded bg-[#0717de] px-2 py-1">
-              <span className="font-outfit text-xs font-medium text-white">
+              <span className="font-outfit text-loops-light text-xs font-medium">
                 {item.contentType === "quizzes" && item.content.questionsCount}{" "}
                 Questions
               </span>
@@ -56,16 +56,16 @@ export function QuizCard({
             )}
 
             <div className="bg-loops-label-xp rounded px-2 py-1">
-              <span className="font-outfit text-xs font-medium text-white">
+              <span className="font-outfit text-loops-light text-xs font-medium">
                 {item.contentType === "quizzes" && item.content.score}XP
               </span>
             </div>
 
             <div className="bg-loops-orange flex items-center gap-1 rounded p-2">
-              <div className="size-5 shrink-0 grow-0 text-white">
+              <div className="text-loops-light size-5 shrink-0 grow-0">
                 <ClockIcon />
               </div>
-              <span className="font-outfit text-xs font-medium text-white">
+              <span className="font-outfit text-loops-light text-xs font-medium">
                 {item.contentType === "quizzes" &&
                   formatTimeDuration(item.content.totalTime)}
               </span>

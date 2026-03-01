@@ -24,7 +24,7 @@ export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
     <button
       onClick={handleStartQuiz}
       disabled={isLoading}
-      className="font-outfit flex w-full max-w-sm items-center justify-center rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium text-white transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
+      className="font-outfit text-loops-light flex w-full max-w-sm items-center justify-center rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
     >
       <span className="font-outfit text-[18px] font-medium text-[#15153a]">
         {isLoading ? "Starting..." : "Start"}

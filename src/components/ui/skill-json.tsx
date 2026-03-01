@@ -8,7 +8,7 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
   const coverUrlJson = metadata.cover_image?.url_json
 
   return (
-    <div className="font-outfit flex min-h-screen flex-col items-center bg-[#000016] p-4 text-white">
+    <div className="font-outfit text-loops-light flex min-h-screen flex-col items-center bg-[#000016] p-4">
       <div className="flex w-full max-w-md flex-col items-center space-y-4 text-center">
         <h1 className="text-lg font-semibold">
           <span className="text-[#ff4900]">{metadata.category_name}: </span>
@@ -115,7 +115,7 @@ function ImageElement({ data }: ImageElementProps) {
           <div className="aspect-video w-full bg-slate-900 opacity-80" />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[#31bce6] shadow-lg">
-              <ImageIcon className="text-white" size={32} />
+              <ImageIcon className="text-loops-light" size={32} />
             </div>
           </div>
         </div>
@@ -155,7 +155,7 @@ function VideoElement({ data }: VideoElementProps) {
             <div className="aspect-[9/16] w-full bg-slate-900 opacity-80"></div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[#ff0000] shadow-lg transition-transform group-hover:scale-110">
-                <Play className="fill-white text-white" size={32} />
+                <Play className="text-loops-light fill-white" size={32} />
               </div>
             </div>
           </>

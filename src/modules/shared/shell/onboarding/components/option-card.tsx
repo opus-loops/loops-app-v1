@@ -60,10 +60,10 @@ export function OptionCard({
     >
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="flex h-9 w-9 items-center justify-center text-white">
+          <div className="text-loops-light flex h-9 w-9 items-center justify-center">
             {icon}
           </div>
-          <span className="font-outfit text-xl font-medium text-white">
+          <span className="font-outfit text-loops-light text-xl font-medium">
             {title}
           </span>
         </div>

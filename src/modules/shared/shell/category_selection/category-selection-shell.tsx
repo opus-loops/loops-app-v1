@@ -6,7 +6,7 @@ import { CategoryDetailsSkeleton } from "@/modules/shared/components/common/cate
 import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
 import type { User } from "@/modules/shared/domain/entities/user"
 import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
-import { useRouter } from "@tanstack/react-router"
+import { useLocation, useRouter } from "@tanstack/react-router"
 import { Suspense, useCallback, type ReactNode } from "react"
 import { CategoriesList } from "./components/categories-list"
 import { CategoryDetails } from "./components/category-details"
@@ -77,6 +77,7 @@ function CategorySelectionScreen({
   user: User
 }) {
   const router = useRouter()
+  const location = useLocation()
   const { categories } = useExploreCategories()
 
   const shouldRenderAllCategories =
@@ -89,22 +90,22 @@ function CategorySelectionScreen({
 
     // Navigate to root path
     if (searchParams.category === "all" && user.currentCategory !== undefined)
-      router.navigate({ to: "/" })
+      router.navigate({ to: location.pathname as any })
     // Going back from content details to category details
     else if (searchParams.category !== "all" && searchParams.type === "content")
       router.navigate({
-        to: "/",
+        to: location.pathname,
         search: (prev: any) => ({ ...prev, type: "details" }),
-      })
+      } as any)
     // Going back from category details to categories list
     else if (searchParams.category !== "all" && searchParams.type === "details")
       router.navigate({
-        to: "/",
+        to: location.pathname,
         search: (prev: any) => {
           const { category, type, ...rest } = prev
           return { ...rest, category: "all" }
         },
-      })
+      } as any)
   }
 
   const shouldShowBackButton = () => {
@@ -119,23 +120,23 @@ function CategorySelectionScreen({
 
   const handleCategorySelect = (category: CategoryWithStartedCategory) =>
     router.navigate({
-      to: "/",
+      to: location.pathname,
       search: (prev: any) => ({
         ...prev,
         category: category.categoryId,
         type: "details",
       }),
-    })
+    } as any)
 
   const handleViewAllContent = (category: CategoryWithStartedCategory) =>
     router.navigate({
-      to: "/",
+      to: location.pathname,
       search: (prev: any) => ({
         ...prev,
         category: category.categoryId,
         type: "content",
       }),
-    })
+    } as any)
 
   return (
     <div className="relative flex-1 overflow-hidden">

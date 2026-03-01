@@ -28,7 +28,7 @@ function ConfirmationScreen({ user }: ConfirmationScreenProps) {
           </h1>
 
           {/* Description */}
-          <p className="font-outfit text-center text-base leading-5 font-medium text-white">
+          <p className="font-outfit text-loops-light text-center text-base leading-5 font-medium">
             We&apos;ve sent an SMS with an activation code to your Email{" "}
             <span className="break-all">{user.email}</span>
           </p>

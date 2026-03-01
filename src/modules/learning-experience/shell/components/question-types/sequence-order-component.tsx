@@ -83,7 +83,7 @@ export const SequenceOrderComponent = forwardRef<
   const getItemStyle = (itemIndex: number) => {
     if (!isValidated) {
       return cn(
-        "flex items-center gap-3 p-4 rounded-lg border-2 bg-slate-800 border-slate-600 text-white cursor-grab active:cursor-grabbing",
+        "flex items-center gap-3 p-4 rounded-lg border-2 bg-slate-800 border-slate-600 text-loops-light cursor-grab active:cursor-grabbing",
         "hover:border-slate-500 transition-colors",
       )
     } else {
@@ -94,12 +94,12 @@ export const SequenceOrderComponent = forwardRef<
       if (isCorrectPosition) {
         return cn(
           "flex items-center gap-3 p-4 rounded-lg border-2",
-          "bg-green-900/30 border-green-500 text-white",
+          "bg-green-900/30 border-green-500 text-loops-light",
         )
       } else {
         return cn(
           "flex items-center gap-3 p-4 rounded-lg border-2",
-          "bg-red-900/30 border-red-500 text-white",
+          "bg-red-900/30 border-red-500 text-loops-light",
         )
       }
     }
@@ -132,7 +132,7 @@ export const SequenceOrderComponent = forwardRef<
       )}
       {subQuiz.content && (
         <div className="mb-8">
-          <h2 className="text-xl leading-relaxed font-medium text-white">
+          <h2 className="text-loops-light text-xl leading-relaxed font-medium">
             {subQuiz.content.headline[0].content}
           </h2>
         </div>

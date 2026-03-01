@@ -130,7 +130,7 @@ export const ChoiceQuestionComponent = forwardRef<
       const isSelected = selectedChoices.includes(index)
       return cn(
         "flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all",
-        "bg-slate-800 border-slate-600 text-white hover:border-slate-500",
+        "bg-slate-800 border-slate-600 text-loops-light hover:border-slate-500",
         isSelected && "border-cyan-400 bg-slate-700",
       )
     } else {
@@ -142,17 +142,17 @@ export const ChoiceQuestionComponent = forwardRef<
       if (isCorrect) {
         return cn(
           "flex items-center p-4 rounded-lg border-2",
-          "bg-green-900/30 border-green-500 text-white",
+          "bg-green-900/30 border-green-500 text-loops-light",
         )
       } else if (wasSelected) {
         return cn(
           "flex items-center p-4 rounded-lg border-2",
-          "bg-red-900/30 border-red-500 text-white",
+          "bg-red-900/30 border-red-500 text-loops-light",
         )
       } else {
         return cn(
           "flex items-center p-4 rounded-lg border-2",
-          "bg-slate-800 border-slate-600 text-white opacity-60",
+          "bg-slate-800 border-slate-600 text-loops-light opacity-60",
         )
       }
     }
@@ -172,7 +172,7 @@ export const ChoiceQuestionComponent = forwardRef<
           {isSelected &&
             (question.isMultiple ? (
               <svg
-                className="h-4 w-4 text-white"
+                className="text-loops-light h-4 w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -185,7 +185,7 @@ export const ChoiceQuestionComponent = forwardRef<
                 />
               </svg>
             ) : (
-              <div className="h-2 w-2 rounded-full bg-white" />
+              <div className="bg-loops-light h-2 w-2 rounded-full" />
             ))}
         </div>
       )
@@ -203,7 +203,7 @@ export const ChoiceQuestionComponent = forwardRef<
             )}
           >
             <svg
-              className="h-4 w-4 text-white"
+              className="text-loops-light h-4 w-4"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -224,7 +224,7 @@ export const ChoiceQuestionComponent = forwardRef<
             )}
           >
             <svg
-              className="h-4 w-4 text-white"
+              className="text-loops-light h-4 w-4"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -265,7 +265,7 @@ export const ChoiceQuestionComponent = forwardRef<
       )}
       {/* Question Text */}
       <div className="mb-8">
-        <h2 className="text-xl leading-relaxed font-medium text-white">
+        <h2 className="text-loops-light text-xl leading-relaxed font-medium">
           {question.headline[0].content}
         </h2>
       </div>

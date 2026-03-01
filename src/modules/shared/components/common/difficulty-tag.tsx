@@ -25,7 +25,7 @@ export function DifficultyTag({ difficulty, className }: DifficultyTagProps) {
 
   return (
     <div className={cn("rounded px-2 py-1", config.colorClass, className)}>
-      <span className="font-outfit text-xs font-medium text-white">
+      <span className="font-outfit text-loops-light text-xs font-medium">
         {config.label}
       </span>
     </div>

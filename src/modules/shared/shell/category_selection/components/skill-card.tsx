@@ -34,7 +34,7 @@ export function SkillCard({
           <span className="text-loops-cyan font-outfit text-xl font-semibold">
             Skill
           </span>
-          <span className="font-outfit text-sm font-normal text-white">
+          <span className="font-outfit text-loops-light text-sm font-normal">
             {item.content.label[0].content}
           </span>
         </div>

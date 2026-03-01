@@ -11,8 +11,8 @@ export function ProgressCircle({
 }) {
   if (progressState === "locked")
     return (
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
+      <div className="bg-loops-light/10 flex h-16 w-16 items-center justify-center rounded-full backdrop-blur-sm">
+        <div className="bg-loops-light/10 flex h-10 w-10 items-center justify-center rounded-full">
           <div className="text-loops-light/50 size-5 shrink-0 grow-0">
             <LockIcon />
           </div>
@@ -52,7 +52,7 @@ export function ProgressCircle({
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="font-outfit text-sm font-bold text-white">
+        <span className="font-outfit text-loops-light text-sm font-bold">
           {progress}%
         </span>
       </div>

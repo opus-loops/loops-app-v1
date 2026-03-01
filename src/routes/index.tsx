@@ -2,24 +2,14 @@ import { HomeScreen } from "@/modules/content-management/features/home/component
 import { HomeSkeleton } from "@/modules/shared/components/common/home-skeleton"
 import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
 import { SelectedContentProvider } from "@/modules/shared/contexts/selected-content-context"
-import { isAuthenticated } from "@/modules/shared/guards/is-authenticated"
+import { authenticatedQuery, useAuth } from "@/modules/shared/guards/use-auth"
 import { CategorySelectionShell } from "@/modules/shared/shell/category_selection/category-selection-shell"
 import { ConfirmationShell } from "@/modules/shared/shell/confirmation/confirmation-shell"
 import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-shell"
 import { SelectedContentShell } from "@/modules/shared/shell/selected_content/selected-content-shell"
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute, redirect } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { z } from "zod"
-
-const authenticatedQuery = queryOptions({
-  queryFn: async () => {
-    const response = await isAuthenticated()
-    if (response._tag === "Failure") throw redirect({ to: "/login" })
-    return { user: response.value.user }
-  },
-  queryKey: ["authenticated"],
-})
 
 export const Route = createFileRoute("/")({
   beforeLoad: async ({ context }) =>
@@ -33,10 +23,7 @@ export const Route = createFileRoute("/")({
     contentId: z.string().optional(),
   }),
   component: function Home() {
-    const {
-      data: { user },
-    } = useSuspenseQuery(authenticatedQuery)
-
+    const { user } = useAuth()
     const search = Route.useSearch()
 
     // Behavior logic based on new parameter structure:

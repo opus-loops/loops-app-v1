@@ -81,7 +81,7 @@ export function SubQuizzesNavigator({ quizItem }: SubQuizzesNavigatorProps) {
         <div className="mx-auto mt-8 flex w-full max-w-2xl justify-end px-2">
           <Button
             onClick={handleButtonClicked}
-            className="bg-cyan-500 px-8 text-white hover:bg-cyan-600"
+            className="text-loops-light bg-cyan-500 px-8 hover:bg-cyan-600"
           >
             {isCompleted
               ? navigationState?.isNavigating

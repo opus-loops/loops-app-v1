@@ -28,7 +28,7 @@ export function CategoryContentSkeleton() {
                 duration: 0.5,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
-              className="rounded-xl border border-white/10 bg-white/20 p-4 backdrop-blur-sm"
+              className="bg-loops-light/20 rounded-xl border border-white/10 p-4 backdrop-blur-sm"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
