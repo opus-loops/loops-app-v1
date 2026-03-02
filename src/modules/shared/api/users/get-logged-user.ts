@@ -3,15 +3,18 @@ import { Schema } from "effect"
 import { userSchema } from "../../domain/entities/user"
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
-import { invalidInputFactory } from "../../domain/utils/invalid-input"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "../../domain/utils/invalid-input"
 import { instanceFactory } from "../../utils/axios"
 import { parseApiResponse } from "../../utils/parse-api-response"
 
 export const getLoggedUserErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   invalidExpiredTokenErrorSchema,

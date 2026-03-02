@@ -67,7 +67,6 @@ export const updatePreferencesFn = createServerFn({ method: "POST" })
           Cause.failureOption(uploadExit.cause),
           () => ({
             code: "UnknownError" as const,
-            message: "Failed to upload avatar",
           }),
         )
         // Map upload errors to UpdatePreferencesErrors or generic error
@@ -94,7 +93,6 @@ export const updatePreferencesFn = createServerFn({ method: "POST" })
           // Fallback if you sometimes throw defects: map to a typed error variant in your union
           return {
             code: "UnknownError" as const,
-            message: "Unexpected error",
           }
         },
       )

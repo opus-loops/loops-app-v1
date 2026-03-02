@@ -10,8 +10,11 @@ import { quizNotStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-n
 import { subQuizNotFoundErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-not-found"
 import { subQuizStartedCompletedErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-started-completed"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -29,11 +32,11 @@ type StartChoiceQuestionArgs = typeof startChoiceQuestionArgsSchema.Type
 export const startChoiceQuestionErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
-      categoryId: Schema.optional(Schema.String),
-      quizId: Schema.optional(Schema.String),
-      questionId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
+      categoryId: Schema.optional(UseCaseErrorSchema),
+      quizId: Schema.optional(UseCaseErrorSchema),
+      questionId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   categoryNotFoundErrorSchema,
@@ -53,7 +56,7 @@ export const startChoiceQuestionErrorsSchema = Schema.Union(
 export type StartChoiceQuestionErrors =
   typeof startChoiceQuestionErrorsSchema.Type
 
-export const startChoiceQuestionSuccessSchema = successMessageSchema
+export const startChoiceQuestionSuccessSchema = successResponseSchema
 
 export type StartChoiceQuestionSuccess =
   typeof startChoiceQuestionSuccessSchema.Type

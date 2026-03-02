@@ -6,8 +6,11 @@ import { previousItemNotCompletedErrorSchema } from "@/modules/shared/domain/err
 import { skillAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/skill-already-started"
 import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -24,10 +27,10 @@ type StartSkillArgs = typeof startSkillArgsSchema.Type
 export const startSkillErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
-      categoryId: Schema.optional(Schema.String),
-      skillId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
+      categoryId: Schema.optional(UseCaseErrorSchema),
+      skillId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   skillAlreadyStartedErrorSchema,
@@ -42,7 +45,7 @@ export const startSkillErrorsSchema = Schema.Union(
 
 export type StartSkillErrors = typeof startSkillErrorsSchema.Type
 
-export const startSkillSuccessSchema = successMessageSchema
+export const startSkillSuccessSchema = successResponseSchema
 
 export type StartSkillSuccess = typeof startSkillSuccessSchema.Type
 

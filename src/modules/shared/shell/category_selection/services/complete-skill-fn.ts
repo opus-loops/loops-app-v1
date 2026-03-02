@@ -62,7 +62,6 @@ export const completeSkillFn = createServerFn({
         // Make sure your completeSkillErrorsSchema includes an UnknownError or similar branch.
         return {
           code: "UnknownError" as const,
-          message: "Unexpected error",
         }
       })
       wire = { _tag: "Failure", error: failure }

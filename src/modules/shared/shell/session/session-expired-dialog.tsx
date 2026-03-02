@@ -9,6 +9,7 @@ import {
 import { useRouter } from "@tanstack/react-router"
 import { AlertTriangle, Clock } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 interface SessionExpiredDialogProps {
   isOpen: boolean
@@ -21,6 +22,7 @@ export function SessionExpiredDialog({
 }: SessionExpiredDialogProps) {
   const router = useRouter()
   const [countdown, setCountdown] = useState(3)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (!isOpen) return
@@ -65,13 +67,12 @@ export function SessionExpiredDialog({
             <AlertTriangle className="text-loops-light h-8 w-8" />
           </div>
           <DialogTitle className="font-outfit text-loops-text text-2xl font-semibold">
-            Session Expired
+            {t("session.expired.title")}
           </DialogTitle>
           <DialogDescription className="font-outfit text-muted-foreground text-base leading-relaxed">
-            Your session has expired due to inactivity or an authentication
-            error.
+            {t("session.expired.description_line_1")}
             <br />
-            You will be redirected to the login page shortly.
+            {t("session.expired.description_line_2")}
           </DialogDescription>
         </DialogHeader>
 
@@ -80,8 +81,7 @@ export function SessionExpiredDialog({
             <div className="text-loops-text flex items-center justify-center gap-2">
               <Clock className="text-loops-orange h-5 w-5 animate-pulse" />
               <span className="font-outfit text-lg font-semibold">
-                Redirecting in {countdown} second{countdown !== 1 ? "s" : ""}
-                ...
+                {t("session.expired.redirecting_in", { count: countdown })}
               </span>
             </div>
 
@@ -107,7 +107,7 @@ export function SessionExpiredDialog({
             className="font-outfit from-loops-purple to-loops-blue hover:from-loops-purple/90 hover:to-loops-blue/90 text-loops-light w-full bg-gradient-to-r font-medium"
             size="lg"
           >
-            Go to Login
+            {t("session.expired.go_to_login")}
           </Button>
         </div>
       </DialogContent>

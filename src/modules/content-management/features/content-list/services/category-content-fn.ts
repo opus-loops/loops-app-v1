@@ -69,7 +69,6 @@ const fetchCategoryContentEffect = (params: CategoryContentParams) =>
         Cause.failureOption(categoryItemsExit.cause),
         () => ({
           code: "UnknownError" as const,
-          message: "Failed to fetch category items",
         }),
       )
       return yield* Effect.fail(failure)
@@ -240,8 +239,6 @@ export const categoryContentFn = createServerFn({
           // Fallback if you sometimes throw defects: map to a typed error variant in your union
           return {
             code: "UnknownError" as const,
-            message:
-              "Unexpected error occurred while fetching category content",
           }
         },
       )

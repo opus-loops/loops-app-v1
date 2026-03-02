@@ -11,13 +11,13 @@ export type NavigationDirection = "next" | "previous"
  * Uses discriminated unions for type-safe error handling.
  */
 export type NavigationError =
-  | { readonly _tag: "NoNextItem"; readonly message: string }
-  | { readonly _tag: "NoPreviousItem"; readonly message: string }
-  | { readonly _tag: "CompletionRequired"; readonly message: string }
-  | { readonly _tag: "ValidationFailed"; readonly message: string }
-  | { readonly _tag: "InvalidContentType"; readonly message: string }
-  | { readonly _tag: "FetchError"; readonly message: string }
-  | { readonly _tag: "RouterError"; readonly message: string }
+  | { readonly _tag: "NoNextItem" }
+  | { readonly _tag: "NoPreviousItem" }
+  | { readonly _tag: "CompletionRequired" }
+  | { readonly _tag: "ValidationFailed" }
+  | { readonly _tag: "InvalidContentType" }
+  | { readonly _tag: "FetchError" }
+  | { readonly _tag: "RouterError" }
 
 /**
  * Contextual information required for navigation operations.

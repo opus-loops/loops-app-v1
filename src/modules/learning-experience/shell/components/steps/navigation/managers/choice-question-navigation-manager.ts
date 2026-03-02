@@ -12,9 +12,7 @@ import { SubQuizStrategySelector } from "../sub-quiz-strategy-selector"
  * Handles validation and navigation logic when the current sub-quiz is a choice question.
  * Uses the strategy selector to determine the appropriate navigation strategy.
  */
-export class ChoiceQuestionNavigationManager
-  implements ISubQuizNavigationManager
-{
+export class ChoiceQuestionNavigationManager implements ISubQuizNavigationManager {
   /**
    * Initializes the manager with the strategy selector.
    *
@@ -67,7 +65,6 @@ export class ChoiceQuestionNavigationManager
       if (!strategy.canNavigate(context)) {
         return yield* Effect.fail({
           code: "NavigationNotAllowed" as const,
-          message: "Navigation not allowed",
         })
       }
       return yield* strategy.navigate(context)
@@ -87,7 +84,6 @@ export class ChoiceQuestionNavigationManager
     if (!context.adjacentSubQuiz) {
       return Effect.fail({
         code: "NoPreviousSubQuiz",
-        message: "No previous sub quiz found",
       })
     }
     return Effect.succeed(context.adjacentSubQuiz)

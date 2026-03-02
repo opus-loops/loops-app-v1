@@ -7,7 +7,6 @@ import { Schema } from "effect"
 
 export const unknownErrorSchema = Schema.Struct({
   code: Schema.Literal("UnknownError"),
-  message: Schema.String,
 })
 
 export type FormApi<TFormData> = TFormApi<

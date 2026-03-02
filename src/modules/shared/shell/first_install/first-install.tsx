@@ -2,6 +2,10 @@ import { useCallback, useEffect, useState } from "react"
 import { WelcomeScreen } from "./welcome-screen"
 import type { ReactNode } from "react"
 import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
+import {
+  LanguageSelectionScreen,
+  PENDING_LANGUAGE_KEY,
+} from "./language-selection-screen"
 
 const FIRST_INSTALL_KEY = "isFirstInstall"
 
@@ -9,6 +13,9 @@ type FirstInstallShellProps = { target: ReactNode }
 
 export function FirstInstallShell({ target }: FirstInstallShellProps) {
   const [isFirstInstall, setIsFirstInstall] = useState<boolean | null>(null)
+  const [hasSelectedLanguage, setHasSelectedLanguage] = useState<boolean | null>(
+    null,
+  )
 
   useEffect(() => {
     if (
@@ -19,6 +26,9 @@ export function FirstInstallShell({ target }: FirstInstallShellProps) {
 
     const stored = localStorage.getItem(FIRST_INSTALL_KEY)
     setIsFirstInstall(stored !== "false")
+
+    const storedLanguage = localStorage.getItem(PENDING_LANGUAGE_KEY)
+    setHasSelectedLanguage(Boolean(storedLanguage))
   }, [])
 
   const markAsNotFirstInstall = useCallback(() => {
@@ -32,7 +42,20 @@ export function FirstInstallShell({ target }: FirstInstallShellProps) {
     setIsFirstInstall(false)
   }, [])
 
-  if (isFirstInstall === null) return <LoadingScreen />
+  const handleLanguageSelection = useCallback(() => {
+    if (
+      typeof window === "undefined" ||
+      typeof window.localStorage === "undefined"
+    )
+      return
+
+    setHasSelectedLanguage(true)
+  }, [])
+
+  if (isFirstInstall === null || hasSelectedLanguage === null)
+    return <LoadingScreen />
+  if (isFirstInstall && !hasSelectedLanguage)
+    return <LanguageSelectionScreen onComplete={handleLanguageSelection} />
   if (isFirstInstall)
     return <WelcomeScreen skipHandler={markAsNotFirstInstall} />
   return target

@@ -4,6 +4,7 @@ import type { User } from "@/modules/shared/domain/entities/user"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useForm } from "@tanstack/react-form"
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { useUpdatePreferences } from "../../hooks/use-update-preferences"
 import { PreferencesFields } from "./preferences/preferences-fields"
 
@@ -20,6 +21,7 @@ function dateToInputValue(date: Date | undefined) {
 export function PreferencesForm({ user }: PreferencesFormProps) {
   const { handleUpdatePreferences } = useUpdatePreferences()
   const { error: toastError, success: toastSuccess } = useToast()
+  const { t, i18n } = useTranslation()
 
   const initial = useMemo(() => {
     const normalizeCodingExperience = (raw: string | undefined) => {
@@ -108,93 +110,151 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
       background: initial.background,
     },
 
-    validators: {
-      onSubmitAsync: async ({ value }) => {
-        const payload: any = {}
+    onSubmit: async ({ value }) => {
+      const payload: any = {}
 
-        if ((value.birthDate ?? "") !== (initial.birthDate ?? "")) {
-          payload.birthDate = (value.birthDate ?? "").trim() || undefined
-        }
+      if ((value.birthDate ?? "") !== (initial.birthDate ?? "")) {
+        payload.birthDate = (value.birthDate ?? "").trim() || undefined
+      }
 
-        if ((value.gender ?? "") !== (initial.gender ?? "")) {
-          payload.gender = (value.gender ?? "").trim() || undefined
-        }
+      if ((value.gender ?? "") !== (initial.gender ?? "")) {
+        payload.gender = (value.gender ?? "").trim() || undefined
+      }
 
-        if ((value.duration ?? "") !== (initial.duration ?? "")) {
-          payload.duration =
-            value.duration && value.duration.trim()
-              ? Number(value.duration)
-              : undefined
-        }
+      if ((value.duration ?? "") !== (initial.duration ?? "")) {
+        payload.duration =
+          value.duration && value.duration.trim()
+            ? Number(value.duration)
+            : undefined
+      }
 
-        if ((value.country ?? "") !== (initial.country ?? "")) {
-          payload.country = (value.country ?? "").trim() || undefined
-        }
+      if ((value.country ?? "") !== (initial.country ?? "")) {
+        payload.country = (value.country ?? "").trim() || undefined
+      }
 
-        if ((value.state ?? "") !== (initial.state ?? "")) {
-          payload.state = (value.state ?? "").trim() || undefined
-        }
+      if ((value.state ?? "") !== (initial.state ?? "")) {
+        payload.state = (value.state ?? "").trim() || undefined
+      }
 
-        if ((value.city ?? "") !== (initial.city ?? "")) {
-          payload.city = (value.city ?? "").trim() || undefined
-        }
+      if ((value.city ?? "") !== (initial.city ?? "")) {
+        payload.city = (value.city ?? "").trim() || undefined
+      }
 
-        if ((value.language ?? "") !== (initial.language ?? "")) {
-          payload.language = value.language
-        }
+      if ((value.language ?? "") !== (initial.language ?? "")) {
+        payload.language = value.language
+      }
 
-        if (
-          (value.codingExperience ?? "") !== (initial.codingExperience ?? "")
-        ) {
-          payload.codingExperience =
-            (value.codingExperience ?? "").trim() || undefined
-        }
+      if (
+        (value.codingExperience ?? "") !== (initial.codingExperience ?? "")
+      ) {
+        payload.codingExperience =
+          (value.codingExperience ?? "").trim() || undefined
+      }
 
-        if ((value.goals ?? "") !== (initial.goals ?? "")) {
-          payload.goals = (value.goals ?? "").trim() || undefined
-        }
+      if ((value.goals ?? "") !== (initial.goals ?? "")) {
+        payload.goals = (value.goals ?? "").trim() || undefined
+      }
 
-        if ((value.background ?? "") !== (initial.background ?? "")) {
-          payload.background = (value.background ?? "").trim() || undefined
-        }
+      if ((value.background ?? "") !== (initial.background ?? "")) {
+        payload.background = (value.background ?? "").trim() || undefined
+      }
 
-        if (Object.keys(payload).length === 0) {
-          toastSuccess("Preferences updated successfully.")
-          return null
-        }
+      if (Object.keys(payload).length === 0) {
+        toastSuccess(t("profile.preferences_updated_success"))
+        return
+      }
 
-        const result = await handleUpdatePreferences(payload)
+      const result = await handleUpdatePreferences(payload)
 
-        if (result._tag === "Failure") {
-          if (result.error.code === "invalid_input") {
-            return {
-              birthDate: result.error.payload.birthDate,
-              gender: result.error.payload.gender,
-              duration: result.error.payload.duration,
-              country: result.error.payload.country,
-              state: result.error.payload.state,
-              city: result.error.payload.city,
-              language: result.error.payload.language,
-              codingExperience: result.error.payload.codingExperience,
-              goals: result.error.payload.goals,
-              background: result.error.payload.background,
-            }
+      if (result._tag === "Failure") {
+        if (result.error.code === "invalid_input") {
+          const errorPayload = result.error.payload.payload
+
+          if (errorPayload.birthDate) {
+            form.setFieldMeta("birthDate", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_birthdate") },
+              errors: [t("profile.errors.invalid_birthdate")],
+            }))
           }
-
-          const message =
-            "message" in result.error
-              ? result.error.message
-              : "An unexpected error occurred."
-          toastError(message)
-          return null
+          if (errorPayload.gender) {
+            form.setFieldMeta("gender", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_gender") },
+              errors: [t("profile.errors.invalid_gender")],
+            }))
+          }
+          if (errorPayload.duration) {
+            form.setFieldMeta("duration", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_duration") },
+              errors: [t("profile.errors.invalid_duration")],
+            }))
+          }
+          if (errorPayload.country) {
+            form.setFieldMeta("country", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_country") },
+              errors: [t("profile.errors.invalid_country")],
+            }))
+          }
+          if (errorPayload.state) {
+            form.setFieldMeta("state", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_state") },
+              errors: [t("profile.errors.invalid_state")],
+            }))
+          }
+          if (errorPayload.city) {
+            form.setFieldMeta("city", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_city") },
+              errors: [t("profile.errors.invalid_city")],
+            }))
+          }
+          if (errorPayload.language) {
+            form.setFieldMeta("language", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_language") },
+              errors: [t("profile.errors.invalid_language")],
+            }))
+          }
+          if (errorPayload.codingExperience) {
+            form.setFieldMeta("codingExperience", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_experience") },
+              errors: [t("profile.errors.invalid_experience")],
+            }))
+          }
+          if (errorPayload.goals) {
+            form.setFieldMeta("goals", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_goals") },
+              errors: [t("profile.errors.invalid_goals")],
+            }))
+          }
+          if (errorPayload.background) {
+            form.setFieldMeta("background", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_background") },
+              errors: [t("profile.errors.invalid_background")],
+            }))
+          }
+          return
         }
 
-        toastSuccess("Preferences updated successfully.")
-        if ((payload.language ?? "") && payload.language !== initial.language) {
-          setTimeout(() => window.location.reload(), 250)
-        }
-        return null
-      },
+        toastError(t("auth.login.unexpected_error"))
+        return
+      }
+
+      toastSuccess(t("profile.preferences_updated_success"))
+      if (
+        payload.language &&
+        payload.language !== initial.language
+      ) {
+        await i18n.changeLanguage(payload.language)
+        setTimeout(() => window.location.reload(), 250)
+      }
     },
   })
 
@@ -240,7 +300,7 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
             disabled={!canSubmit}
             className="bg-loops-cyan hover:bg-loops-cyan/90 text-loops-light mt-10 h-14 w-full rounded-xl text-lg font-semibold shadow-none disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isSubmitting ? "Saving..." : "Save Preferences"}
+            {isSubmitting ? t("common.saving") : t("profile.save_preferences")}
           </Button>
         )}
       </form.Subscribe>

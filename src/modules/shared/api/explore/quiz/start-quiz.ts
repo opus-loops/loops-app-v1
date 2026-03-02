@@ -6,8 +6,11 @@ import { previousItemNotCompletedErrorSchema } from "@/modules/shared/domain/err
 import { quizAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-already-started"
 import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -24,10 +27,10 @@ type StartQuizArgs = typeof startQuizArgsSchema.Type
 export const startQuizErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
-      categoryId: Schema.optional(Schema.String),
-      quizId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
+      categoryId: Schema.optional(UseCaseErrorSchema),
+      quizId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   quizAlreadyStartedErrorSchema,
@@ -42,7 +45,7 @@ export const startQuizErrorsSchema = Schema.Union(
 
 export type StartQuizErrors = typeof startQuizErrorsSchema.Type
 
-export const startQuizSuccessSchema = successMessageSchema
+export const startQuizSuccessSchema = successResponseSchema
 
 export type StartQuizSuccess = typeof startQuizSuccessSchema.Type
 

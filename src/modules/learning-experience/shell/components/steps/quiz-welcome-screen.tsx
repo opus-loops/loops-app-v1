@@ -2,6 +2,7 @@ import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
 import { NoteIcon } from "@/modules/shared/components/icons/note"
 import { TimerIcon } from "@/modules/shared/components/icons/timer"
 import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import { useTranslation } from "react-i18next"
 import { QuizActionButton } from "../quiz-action-button"
 
 type QuizWelcomeScreenProps = {
@@ -9,12 +10,14 @@ type QuizWelcomeScreenProps = {
 }
 
 export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
+  const { t } = useTranslation()
+
   return (
     <div className="font-outfit bg-loops-background relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
       <div className="pointer-events-none absolute top-1/2 -left-px z-0 h-[592px] w-[459px] -translate-y-1/2 opacity-50">
         <img
           src="/assets/svg/doodle.svg"
-          alt="Background Doodle"
+          alt={t("quiz.doodle_alt")}
           className="h-full w-full"
         />
       </div>
@@ -27,7 +30,7 @@ export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
         <div className="relative h-55 w-82">
           <img
             src="/assets/images/racing-loops.png"
-            alt="Racing Loops Mascot"
+            alt={t("quiz.mascot_alt")}
             className="h-full w-full object-contain"
           />
         </div>
@@ -41,7 +44,9 @@ export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
               <p className="text-loops-cyan text-[20px] font-semibold">
                 {quizItem.content.questionsCount}
               </p>
-              <p className="text-loops-cyan text-[16px]">Quizzes</p>
+              <p className="text-loops-cyan text-[16px]">
+                {t("quiz.stats.quizzes")}
+              </p>
             </div>
           </div>
 
@@ -53,7 +58,9 @@ export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
               <p className="text-loops-label-xp text-[20px] font-semibold">
                 {quizItem.content.score}
               </p>
-              <p className="text-loops-label-xp text-[16px]">XP</p>
+              <p className="text-loops-label-xp text-[16px]">
+                {t("quiz.stats.xp")}
+              </p>
             </div>
           </div>
 
@@ -65,7 +72,9 @@ export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
               <p className="text-loops-orange text-[20px] font-semibold">
                 {quizItem.content.totalTime}
               </p>
-              <p className="text-loops-orange text-[16px]">Time</p>
+              <p className="text-loops-orange text-[16px]">
+                {t("quiz.stats.time")}
+              </p>
             </div>
           </div>
         </div>

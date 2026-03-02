@@ -4,8 +4,11 @@ import { Schema } from "effect"
 import { internalErrorSchema } from "../../domain/errors/internal-error"
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
-import { successMessageSchema } from "../../domain/types/success-message"
-import { invalidInputFactory } from "../../domain/utils/invalid-input"
+import { successResponseSchema } from "../../domain/types/success-response"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "../../domain/utils/invalid-input"
 import { instanceFactory } from "../../utils/axios"
 import { parseApiResponse } from "../../utils/parse-api-response"
 import { parseEffectSchema } from "../../utils/parse-effect-schema"
@@ -16,9 +19,9 @@ type LogoutArgs = Schema.Schema.Type<typeof logoutArgsSchema>
 export const logoutErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      refreshToken: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      refreshToken: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   invalidExpiredTokenErrorSchema,
@@ -29,7 +32,7 @@ export const logoutErrorsSchema = Schema.Union(
 export type LogoutErrors = typeof logoutErrorsSchema.Type
 
 // Success schema
-export const logoutSuccessSchema = successMessageSchema
+export const logoutSuccessSchema = successResponseSchema
 export type LogoutSuccess = typeof logoutSuccessSchema.Type
 
 type LogoutResult = Effect.Effect<LogoutSuccess, LogoutErrors>

@@ -16,6 +16,7 @@ import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 export type LogoutErrors =
   | typeof logoutErrorsSchema.Type
   | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
 
 export type LogoutSuccess = typeof logoutSuccessSchema.Type
 
@@ -35,8 +36,7 @@ export const logoutFn = createServerFn({ method: "POST" })
       const wire: LogoutWire = {
         _tag: "Failure",
         error: {
-          code: "UnknownError",
-          message: "No active session found",
+          code: "Unauthorized",
         },
       }
       return wire
@@ -58,7 +58,6 @@ export const logoutFn = createServerFn({ method: "POST" })
         () => {
           return {
             code: "UnknownError" as const,
-            message: "Unexpected error",
           }
         },
       )

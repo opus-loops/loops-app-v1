@@ -1,33 +1,51 @@
-import { useState } from "react"
-import { useForm } from "@tanstack/react-form"
-import { useConfirmAccount } from "./use-confirm-account"
-import { Button } from "@/modules/shared/components/ui/button"
-import { Label } from "@/modules/shared/components/ui/label"
+import { RequestConfirmCode } from "@/modules/account-management/features/verification/services/request-confirm-code"
 import { CodeInputGroup } from "@/modules/shared/components/common/code-input-group"
 import { CountdownTimer } from "@/modules/shared/components/common/countdown-timer"
-import { RequestConfirmCode } from "@/modules/account-management/features/verification/services/request-confirm-code"
 import { DangerIcon } from "@/modules/shared/components/icons/danger"
+import { Button } from "@/modules/shared/components/ui/button"
+import { Label } from "@/modules/shared/components/ui/label"
+import { useToast } from "@/modules/shared/hooks/use-toast"
+import { useForm } from "@tanstack/react-form"
+import { useState } from "react"
+import { useTranslation } from "react-i18next"
+import { useConfirmAccount } from "./use-confirm-account"
 
 export function ConfirmAccountForm() {
   const { handleConfirmAccount } = useConfirmAccount()
+  const { error: toastError } = useToast()
   const [timeLeft, setTimeLeft] = useState<null | number>(null)
+  const { t } = useTranslation()
 
   const form = useForm({
     defaultValues: {
       confirmationCode: "",
     },
-    validators: {
-      onSubmitAsync: async ({ value }) => {
-        const confirmationCode = parseInt(value.confirmationCode, 10)
-        const response = await handleConfirmAccount(confirmationCode)
+    onSubmit: async ({ value }) => {
+      const confirmationCode = parseInt(value.confirmationCode, 10)
+      const response = await handleConfirmAccount(confirmationCode)
 
-        if (response._tag === "Failure") {
-          if (response.error.code === "invalid_input")
-            return { confirmationCode: response.error.payload.confirmationCode }
-          if (response.error.code === "invalid_expired_code")
-            return { confirmationCode: response.error.message }
+      if (response._tag === "Failure") {
+        if (response.error.code === "invalid_input") {
+          form.setFieldMeta("confirmationCode", (prev) => ({
+            ...prev,
+            errorMap: { onSubmit: t("auth.verify.invalid_code") },
+            errors: [t("auth.verify.invalid_code")],
+          }))
+          return
         }
-      },
+        if (response.error.code === "invalid_expired_code") {
+          form.setFieldMeta("confirmationCode", (prev) => ({
+            ...prev,
+            errorMap: { onSubmit: t("auth.verify.expired_code") },
+            errors: [t("auth.verify.expired_code")],
+          }))
+          return
+        }
+        
+        toastError(t("auth.verify.failed"), {
+            description: t("auth.verify.unexpected_error"),
+        })
+      }
     },
   })
 
@@ -44,7 +62,7 @@ export function ConfirmAccountForm() {
         <form.Field name="confirmationCode">
           {(field) => (
             <div className="space-y-2">
-              <Label htmlFor={field.name}>Confirmation Code</Label>
+              <Label htmlFor={field.name}>{t("auth.verify.label_code")}</Label>
               <CodeInputGroup
                 length={5}
                 onChange={(value) => field.handleChange(value)}
@@ -72,7 +90,9 @@ export function ConfirmAccountForm() {
               disabled={!canSubmit}
               type="submit"
             >
-              {isSubmitting ? "Confirming..." : "Confirm Account"}
+              {isSubmitting
+                ? t("auth.verify.submitting")
+                : t("auth.verify.submit")}
             </Button>
           )}
         </form.Subscribe>

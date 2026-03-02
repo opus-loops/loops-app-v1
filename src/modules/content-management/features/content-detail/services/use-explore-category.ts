@@ -14,8 +14,7 @@ export const exploreCategoryQuery = (params: ExploreCategoryParams) =>
       })
 
       if (response._tag === "Failure") {
-        const message = "Failed to fetch explore category"
-        throw new Error(message)
+        throw new Error("Failed to fetch explore category")
       }
       return response.value
     },

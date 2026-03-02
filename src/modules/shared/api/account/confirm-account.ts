@@ -1,8 +1,11 @@
 import { expiredInvalidCodeErrorSchema } from "@/modules/shared/domain/errors/expired-invalid-code"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import type { Effect } from "effect"
@@ -18,9 +21,9 @@ type ConfirmAccountArgs = typeof confirmAccountArgsSchema.Type
 export const confirmAccountErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      confirmationCode: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      confirmationCode: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   invalidExpiredTokenErrorSchema,
@@ -30,7 +33,7 @@ export const confirmAccountErrorsSchema = Schema.Union(
 
 export type ConfirmAccountErrors = typeof confirmAccountErrorsSchema.Type
 
-export const confirmAccountSuccessSchema = successMessageSchema
+export const confirmAccountSuccessSchema = successResponseSchema
 type ConfirmAccountResult = Effect.Effect<
   ConfirmAccountSuccess,
   ConfirmAccountErrors

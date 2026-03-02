@@ -10,8 +10,7 @@ export const skillContentQuery = (url: string) =>
       })
 
       if (response._tag === "Failure") {
-        const message = `Failed to fetch skill content: ${response.error.message}`
-        throw new Error(message)
+        throw new Error("Failed to fetch skill content")
       }
 
       return response.value

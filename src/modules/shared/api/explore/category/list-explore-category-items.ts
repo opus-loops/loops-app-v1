@@ -2,7 +2,10 @@ import { categoryItemSchema } from "@/modules/shared/domain/entities/category-it
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -26,10 +29,10 @@ export type ListExploreCategoryItemsQuery =
 export const listExploreCategoryItemsErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
-      size: Schema.optional(Schema.String),
-      offset: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
+      size: Schema.optional(UseCaseErrorSchema),
+      offset: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   categoryNotFoundErrorSchema,

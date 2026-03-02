@@ -3,6 +3,7 @@ import { CategoryContentItem } from "@/modules/shared/domain/entities/category-c
 import { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
 import { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import { useEffect, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { SubQuizRef } from "../question-types/sequence-order-component"
 
 type QuizHeaderProps = {
@@ -24,6 +25,7 @@ export function QuizHeader({
   timeLeft,
   setTimeLeft,
 }: QuizHeaderProps) {
+  const { t } = useTranslation()
   const estimatedTime = selectedSubQuiz?.content?.estimatedTime ?? 0
   const isCompleted = selectedSubQuiz?.completedQuestion?.status === "completed"
 
@@ -70,14 +72,16 @@ export function QuizHeader({
   const subtitle =
     selectedSubQuiz?.questionType === "choiceQuestions"
       ? selectedSubQuiz?.content?.isMultiple
-        ? "Multiple correct answers"
-        : "One correct answer"
-      : "Arrange the items in order"
+        ? t("quiz.multiple_answers")
+        : t("quiz.single_answer")
+      : t("quiz.arrange_items")
 
   return (
     <div className="mx-auto w-full max-w-2xl px-2">
       <p className="text-center text-[16px] leading-[23px] tracking-[-0.7px]">
-        <span className="text-loops-orange font-semibold">Quiz:</span>{" "}
+        <span className="text-loops-orange font-semibold">
+          {t("quiz.header_prefix")}
+        </span>{" "}
         <span className="text-loops-light font-semibold">
           {quizItem.content.label[0].content}
         </span>
@@ -94,7 +98,7 @@ export function QuizHeader({
         <div className="flex items-end gap-2">
           {selectedSubQuiz && (
             <span className="text-[32px] leading-[38px] font-semibold text-[#ff4900]">
-              {`Question ${Math.max(1, selectedSubQuiz.index + 1)}`}
+              {`${t("quiz.question")} ${Math.max(1, selectedSubQuiz.index + 1)}`}
             </span>
           )}
           <span className="text-loops-light text-[18px] leading-[23px]">
@@ -107,7 +111,7 @@ export function QuizHeader({
             <TimerIcon />
           </div>
           <span className="text-[13px] leading-[16px] text-[#ff4900]">
-            {timeLeft ? `${timeLeft}sec` : "--"}
+            {timeLeft ? `${timeLeft}${t("common.sec")}` : "--"}
           </span>
         </div>
       </div>

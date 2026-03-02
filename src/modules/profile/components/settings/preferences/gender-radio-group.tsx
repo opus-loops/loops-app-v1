@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { genderOptions } from "./constants"
 
 type Gender = (typeof genderOptions)[number]["value"]
@@ -8,10 +9,21 @@ type GenderRadioGroupProps = {
 }
 
 export function GenderRadioGroup({ value, onChange }: GenderRadioGroupProps) {
+  const { t } = useTranslation()
+
   return (
-    <div role="radiogroup" aria-label="Gender" className="grid grid-cols-2 gap-2">
+    <div
+      role="radiogroup"
+      aria-label={t("profile.fields.gender")}
+      className="grid grid-cols-2 gap-2"
+    >
       {genderOptions.map((option) => {
         const isSelected = option.value === value
+        const label =
+          option.value === "male"
+            ? `👦 ${t("profile.options.gender.male")}`
+            : `👧 ${t("profile.options.gender.female")}`
+
         return (
           <button
             key={option.value}
@@ -27,7 +39,7 @@ export function GenderRadioGroup({ value, onChange }: GenderRadioGroupProps) {
                 : "bg-loops-light text-loops-dark hover:bg-loops-light/90 focus-visible:ring-loops-dark/20",
             ].join(" ")}
           >
-            {option.label}
+            {label}
           </button>
         )
       })}

@@ -65,7 +65,6 @@ export class SequenceOrderNavigationManager implements ISubQuizNavigationManager
       if (!strategy.canNavigate(context)) {
         return yield* Effect.fail({
           code: "NavigationNotAllowed" as const,
-          message: "Navigation not allowed",
         })
       }
       return yield* strategy.navigate(context)
@@ -85,7 +84,6 @@ export class SequenceOrderNavigationManager implements ISubQuizNavigationManager
     if (!context.adjacentSubQuiz) {
       return Effect.fail({
         code: "NoPreviousSubQuiz",
-        message: "No previous sub quiz found",
       })
     }
     return Effect.succeed(context.adjacentSubQuiz)

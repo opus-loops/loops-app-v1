@@ -1,22 +1,22 @@
-import { skillContentSchema, SkillContent } from "../../domain/entities/skill-content"
 import { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option, Schema } from "effect"
+import {
+  SkillContent,
+  skillContentSchema,
+} from "../../domain/entities/skill-content"
 
 // --- ERROR SCHEMAS -----------------------------------------------------------
 const fetchErrorSchema = Schema.Struct({
   code: Schema.Literal("FetchError"),
-  message: Schema.String,
 })
 
 const networkErrorSchema = Schema.Struct({
   code: Schema.Literal("NetworkError"),
-  message: Schema.String,
 })
 
 const validationErrorSchema = Schema.Struct({
   code: Schema.Literal("ValidationError"),
-  message: Schema.String,
 })
 
 export const fetchContentErrorsSchema = Schema.Union(
@@ -46,7 +46,6 @@ const fetchContentEffect = (url: string) =>
         catch: (error) =>
           ({
             code: "NetworkError" as const,
-            message: `Network error while fetching content: ${error instanceof Error ? error.message : "Unknown error"}`,
           }) satisfies typeof networkErrorSchema.Type,
       }),
     )
@@ -55,7 +54,6 @@ const fetchContentEffect = (url: string) =>
       return yield* _(
         Effect.fail({
           code: "FetchError" as const,
-          message: `Failed to fetch content: ${response.status} ${response.statusText}`,
         } satisfies typeof fetchErrorSchema.Type),
       )
     }
@@ -66,7 +64,6 @@ const fetchContentEffect = (url: string) =>
         catch: (error) =>
           ({
             code: "NetworkError" as const,
-            message: `Failed to parse JSON: ${error instanceof Error ? error.message : "Unknown error"}`,
           }) satisfies typeof networkErrorSchema.Type,
       }),
     )
@@ -75,7 +72,6 @@ const fetchContentEffect = (url: string) =>
       Schema.decodeUnknown(skillContentSchema)(json).pipe(
         Effect.mapError((error) => ({
           code: "ValidationError" as const,
-          message: `Failed to validate content schema: ${error}`,
         })),
       ),
     )
@@ -101,7 +97,6 @@ export const fetchContentFn = createServerFn({
         // Fallback if you sometimes throw defects: map to a typed error variant in your union
         return {
           code: "UnknownError" as const,
-          message: "Unexpected error occurred while fetching content",
         } satisfies typeof unknownErrorSchema.Type
       })
       wire = { _tag: "Failure", error: failure }

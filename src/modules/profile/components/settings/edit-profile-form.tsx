@@ -5,11 +5,9 @@ import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useForm } from "@tanstack/react-form"
 import { ChevronDown, Phone, User2 } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useUpdatePreferences } from "../../hooks/use-update-preferences"
-import {
-  countryCodeOptions,
-  splitPhoneNumber,
-} from "../../utils/phone-utils"
+import { countryCodeOptions, splitPhoneNumber } from "../../utils/phone-utils"
 import { AvatarUpload } from "./avatar-upload"
 
 type EditProfileFormProps = {
@@ -19,6 +17,7 @@ type EditProfileFormProps = {
 export function EditProfileForm({ user }: EditProfileFormProps) {
   const { handleUpdatePreferences } = useUpdatePreferences()
   const { error: toastError, success: toastSuccess } = useToast()
+  const { t } = useTranslation()
 
   const initialPhone = useMemo(
     () => splitPhoneNumber(user.phoneNumber),
@@ -46,77 +45,93 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
       phoneCountryCode: initialPhone.countryCode,
       phoneNationalNumber: initialPhone.nationalNumber,
     },
-    validators: {
-      onSubmitAsync: async ({ value }) => {
-        const phoneNationalNumber = (value.phoneNationalNumber ?? "")
-          .trim()
-          .replace(/[^\d]/g, "")
+    onSubmit: async ({ value }) => {
+      const phoneNationalNumber = (value.phoneNationalNumber ?? "")
+        .trim()
+        .replace(/[^\d]/g, "")
 
-        const phoneNumber = `${value.phoneCountryCode ?? ""}${phoneNationalNumber}`
+      const phoneNumber = `${value.phoneCountryCode ?? ""}${phoneNationalNumber}`
 
-        const payload: any = {}
+      const payload: any = {}
 
-        if ((value.fullName ?? "") !== (user.fullName ?? "")) {
-          payload.fullName = (value.fullName ?? "").trim() || undefined
+      if ((value.fullName ?? "") !== (user.fullName ?? "")) {
+        payload.fullName = (value.fullName ?? "").trim() || undefined
+      }
+
+      if ((value.username ?? "") !== (user.username ?? "")) {
+        payload.username = (value.username ?? "").trim() || undefined
+      }
+
+      const initialPhoneNumberConstructed = `${initialPhone.countryCode}${initialPhone.nationalNumber}`
+      if (phoneNumber !== initialPhoneNumberConstructed) {
+        payload.phoneNumber = phoneNumber
+      }
+
+      if (avatarFile) {
+        payload.avatarFile = avatarFile
+      } else if (uploadedAvatarUrl) {
+        payload.avatarURL = uploadedAvatarUrl
+      }
+
+      if (Object.keys(payload).length === 0) {
+        toastSuccess(t("profile.updated_success"))
+        return
+      }
+
+      const result = await handleUpdatePreferences(payload)
+
+      if (result._tag === "Failure") {
+        if ("uploadedAvatarURL" in result && result.uploadedAvatarURL) {
+          setUploadedAvatarUrl(result.uploadedAvatarURL)
+          setAvatarFile(null)
+          setAvatarPreviewUrl(result.uploadedAvatarURL)
         }
 
-        if ((value.username ?? "") !== (user.username ?? "")) {
-          payload.username = (value.username ?? "").trim() || undefined
+        if (result.error.code === "taken_username") {
+          form.setFieldMeta("username", (prev) => ({
+            ...prev,
+            errorMap: { onSubmit: t("profile.errors.username_taken") },
+            errors: [t("profile.errors.username_taken")],
+          }))
+          return
         }
 
-        const initialPhoneNumberConstructed = `${initialPhone.countryCode}${initialPhone.nationalNumber}`
-        if (phoneNumber !== initialPhoneNumberConstructed) {
-          payload.phoneNumber = phoneNumber
-        }
+        if (result.error.code === "invalid_input") {
+          const payload = result.error.payload.payload
 
-        if (avatarFile) {
-          payload.avatarFile = avatarFile
-        } else if (uploadedAvatarUrl) {
-          payload.avatarURL = uploadedAvatarUrl
-        }
-
-        if (Object.keys(payload).length === 0) {
-          toastSuccess("Profile updated successfully.")
-          return null
-        }
-
-        const result = await handleUpdatePreferences(payload)
-
-        if (result._tag === "Failure") {
-          if ("uploadedAvatarURL" in result && result.uploadedAvatarURL) {
-            setUploadedAvatarUrl(result.uploadedAvatarURL)
-            setAvatarFile(null)
-            setAvatarPreviewUrl(result.uploadedAvatarURL)
+          if (payload.fullName) {
+            form.setFieldMeta("fullName", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_fullname") },
+              errors: [t("profile.errors.invalid_fullname")],
+            }))
           }
-
-          if (result.error.code === "taken_username") {
-            return { username: result.error.message }
+          if (payload.username) {
+            form.setFieldMeta("username", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_username") },
+              errors: [t("profile.errors.invalid_username")],
+            }))
           }
-
-          if (result.error.code === "invalid_input") {
-            return {
-              fullName: result.error.payload.fullName,
-              username: result.error.payload.username,
-              phoneNationalNumber: result.error.payload.phoneNumber,
-            }
+          if (payload.phoneNumber) {
+            form.setFieldMeta("phoneNationalNumber", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("profile.errors.invalid_phone") },
+              errors: [t("profile.errors.invalid_phone")],
+            }))
           }
-
-          const message =
-            "message" in result.error
-              ? result.error.message
-              : "An unexpected error occurred."
-
-          toastError(message)
-          return null
+          return
         }
 
-        toastSuccess("Profile updated successfully.")
-        setAvatarFile(null)
-        setUploadedAvatarUrl(null)
-        setAvatarPreviewUrl(null)
-        if (fileInputRef.current) fileInputRef.current.value = ""
-        return null
-      },
+        toastError(t("auth.login.unexpected_error"))
+        return
+      }
+
+      toastSuccess(t("profile.updated_success"))
+      setAvatarFile(null)
+      setUploadedAvatarUrl(null)
+      setAvatarPreviewUrl(null)
+      if (fileInputRef.current) fileInputRef.current.value = ""
     },
   })
 
@@ -170,7 +185,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                 htmlFor={field.name}
                 className="text-loops-light text-sm font-medium"
               >
-                Full Name
+                {t("profile.labels.full_name")}
               </label>
               <div className="flex h-14 w-full items-center gap-3 rounded-xl bg-white px-4">
                 <User2 className="text-loops-cyan h-5 w-5" />
@@ -180,7 +195,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
-                  placeholder="Your full name"
+                  placeholder={t("profile.fields.full_name")}
                   className="border-none bg-transparent p-0 text-black shadow-none focus-visible:ring-0"
                 />
               </div>
@@ -201,7 +216,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                 htmlFor={field.name}
                 className="text-loops-light text-sm font-medium"
               >
-                Username
+                {t("profile.labels.username")}
               </label>
               <div className="flex h-14 w-full items-center gap-3 rounded-xl bg-white px-4">
                 <User2 className="text-loops-cyan h-5 w-5" />
@@ -211,7 +226,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
-                  placeholder="Your username"
+                  placeholder={t("profile.fields.username")}
                   className="border-none bg-transparent p-0 text-black shadow-none focus-visible:ring-0"
                 />
               </div>
@@ -227,7 +242,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 
         <div className="flex flex-col gap-2">
           <label className="text-loops-light text-sm font-medium">
-            Phone Number
+            {t("profile.labels.phone")}
           </label>
           <div className="focus-within:ring-loops-cyan/30 flex h-14 w-full items-center gap-3 rounded-xl bg-white px-4 ring-offset-white focus-within:ring-2 focus-within:ring-offset-2">
             <Phone className="text-loops-cyan h-5 w-5 shrink-0" />
@@ -263,7 +278,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
-                    placeholder="Your phone number"
+                    placeholder={t("profile.fields.phone")}
                     inputMode="tel"
                     className="h-auto border-none bg-transparent p-0 text-sm text-black shadow-none placeholder:text-gray-400 focus-visible:ring-0"
                   />
@@ -294,7 +309,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             disabled={!canSubmit}
             className="bg-loops-cyan hover:bg-loops-cyan/90 text-loops-light mt-10 h-14 w-full rounded-xl text-lg font-semibold shadow-none disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isSubmitting ? "Saving..." : "Save"}
+            {isSubmitting ? t("common.saving") : t("common.save")}
           </Button>
         )}
       </form.Subscribe>

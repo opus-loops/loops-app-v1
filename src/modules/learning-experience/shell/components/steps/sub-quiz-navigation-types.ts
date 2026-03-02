@@ -6,15 +6,15 @@ import { Effect } from "effect"
  * Using a discriminated union allows for type-safe error handling.
  */
 export type SubQuizNavigationError =
-  | { readonly code: "NoNextSubQuiz"; readonly message: string }
-  | { readonly code: "NoPreviousSubQuiz"; readonly message: string }
-  | { readonly code: "CompletionRequired"; readonly message: string }
-  | { readonly code: "ValidationFailed"; readonly message: string }
-  | { readonly code: "InvalidQuestionType"; readonly message: string }
-  | { readonly code: "FetchError"; readonly message: string }
-  | { readonly code: "NoStrategyFound"; readonly message: string }
-  | { readonly code: "NoAdjacentSubQuiz"; readonly message: string }
-  | { readonly code: "NavigationNotAllowed"; readonly message: string }
+  | { readonly code: "NoNextSubQuiz" }
+  | { readonly code: "NoPreviousSubQuiz" }
+  | { readonly code: "CompletionRequired" }
+  | { readonly code: "ValidationFailed" }
+  | { readonly code: "InvalidQuestionType" }
+  | { readonly code: "FetchError" }
+  | { readonly code: "NoStrategyFound" }
+  | { readonly code: "NoAdjacentSubQuiz" }
+  | { readonly code: "NavigationNotAllowed" }
 
 /**
  * Context required to perform navigation decisions and operations.

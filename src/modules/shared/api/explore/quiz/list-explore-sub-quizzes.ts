@@ -6,7 +6,10 @@ import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-c
 import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not-found"
 import { quizNotStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-not-started"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -23,10 +26,10 @@ type ListExploreSubQuizzesArgs = typeof listExploreSubQuizzesArgsSchema.Type
 export const listExploreSubQuizzesErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
-      categoryId: Schema.optional(Schema.String),
-      quizId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
+      categoryId: Schema.optional(UseCaseErrorSchema),
+      quizId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   categoryNotFoundErrorSchema,

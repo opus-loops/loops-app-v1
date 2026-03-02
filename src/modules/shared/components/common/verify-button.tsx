@@ -1,5 +1,6 @@
 import { cn } from "@/modules/shared/lib/utils"
 import React from "react"
+import { useTranslation } from "react-i18next"
 
 interface VerifyButtonProps {
   onClick?: () => void
@@ -14,8 +15,11 @@ export const VerifyButton: React.FC<VerifyButtonProps> = ({
   disabled = false,
   loading = false,
   className,
-  children = "Verify",
+  children,
 }) => {
+  const { t } = useTranslation()
+  const content = children || t("common.verify")
+
   return (
     <button
       type="button"
@@ -36,10 +40,10 @@ export const VerifyButton: React.FC<VerifyButtonProps> = ({
       {loading ? (
         <div className="flex items-center justify-center gap-2">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-          <span>Verifying...</span>
+          <span>{t("common.verifying")}</span>
         </div>
       ) : (
-        children
+        content
       )}
     </button>
   )

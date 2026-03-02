@@ -1,8 +1,11 @@
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { invalidOperationErrorSchema } from "@/modules/shared/domain/errors/invalid-operation"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { successMessageWithPayloadSchemaFactory } from "@/modules/shared/domain/types/success-message"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import { successResponseWithPayloadSchemaFactory } from "@/modules/shared/domain/types/success-response"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import type { Effect } from "effect"
 import { Schema } from "effect"
@@ -11,8 +14,8 @@ import { instanceFactory } from "../../utils/axios"
 export const requestConfirmErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   invalidExpiredTokenErrorSchema,
@@ -23,7 +26,7 @@ export const requestConfirmErrorsSchema = Schema.Union(
 export type RequestConfirmErrors = typeof requestConfirmErrorsSchema.Type
 
 export const requestConfirmSuccessSchema =
-  successMessageWithPayloadSchemaFactory(
+  successResponseWithPayloadSchemaFactory(
     Schema.Struct({ expiresAt: Schema.DateFromString }),
   )
 

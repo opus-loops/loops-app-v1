@@ -43,7 +43,6 @@ export class SubQuizStrategySelector {
       new ChoiceQuestionToSequenceOrderStrategy(startSequenceOrder),
     )
 
-
     this.strategies.set(
       "sequenceOrders-to-choiceQuestions",
       new SequenceOrderToChoiceQuestionStrategy(startChoiceQuestion),
@@ -53,7 +52,6 @@ export class SubQuizStrategySelector {
       "sequenceOrders-to-sequenceOrders",
       new SequenceOrderToSequenceOrderStrategy(startSequenceOrder),
     )
-
   }
 
   /**
@@ -68,7 +66,6 @@ export class SubQuizStrategySelector {
     if (!context.adjacentSubQuiz)
       return Effect.fail({
         code: "NoAdjacentSubQuiz",
-        message: "No adjacent sub quiz found",
       })
 
     const currentKey = context.currentSubQuiz.questionType
@@ -80,7 +77,6 @@ export class SubQuizStrategySelector {
     if (!strategy)
       return Effect.fail({
         code: "NoStrategyFound",
-        message: `No strategy found for ${key}`,
       })
 
     return Effect.succeed(strategy)

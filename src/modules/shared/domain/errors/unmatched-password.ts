@@ -2,5 +2,6 @@ import { Schema } from "effect"
 
 export const unmatchedPasswordErrorSchema = Schema.Struct({
   code: Schema.Literal("UnmatchedPassword"),
-  message: Schema.String,
 })
+
+export type UnmatchedPasswordError = typeof unmatchedPasswordErrorSchema.Type

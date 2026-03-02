@@ -63,7 +63,6 @@ export class ChoiceQuestionToChoiceQuestionStrategy implements ISubQuizNavigatio
     if (!context.adjacentSubQuiz) {
       return Effect.fail({
         code: "NoNextSubQuiz",
-        message: "No adjacent sub quiz found",
       })
     }
 
@@ -78,7 +77,6 @@ export class ChoiceQuestionToChoiceQuestionStrategy implements ISubQuizNavigatio
       },
       catch: () => ({
         code: "FetchError" as const,
-        message: "Failed to start choice question",
       }),
     })
   }

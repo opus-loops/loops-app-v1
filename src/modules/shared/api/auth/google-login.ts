@@ -1,6 +1,9 @@
 import { invalidTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-token"
 import { loginTokensSchema } from "@/modules/shared/domain/types/login-tokens"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -16,7 +19,7 @@ type GoogleLoginArgs = typeof googleLoginArgsSchema.Type
 export const googleLoginErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      accessToken: Schema.optional(Schema.String),
+      accessToken: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   invalidTokenErrorSchema,

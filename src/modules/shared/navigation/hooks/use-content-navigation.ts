@@ -8,6 +8,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useCanGoBack, useRouter } from "@tanstack/react-router"
 import { Effect } from "effect"
 import { useCallback, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { NavigationManager } from "../managers/navigation-manager"
 import { NavigationCompletionService } from "../services/navigation-completion-service"
 import type { NavigationError } from "../types/navigation-types"
@@ -30,6 +31,7 @@ export function useContentNavigation({
   const canGoBack = useCanGoBack()
   const queryClient = useQueryClient()
   const { success, error } = useToast()
+  const { t } = useTranslation()
 
   const {
     selectedItem,
@@ -66,20 +68,18 @@ export function useContentNavigation({
         Effect.match(navigationEffect, {
           onFailure: (navigationError) => {
             const errorMessages: Record<NavigationError["_tag"], string> = {
-              NoNextItem: "No next item available",
-              NoPreviousItem: "No previous item available",
-              CompletionRequired:
-                "Please complete the current item before proceeding",
-              ValidationFailed: "Navigation failed due to validation error",
-              InvalidContentType: "Invalid content type for navigation",
-              FetchError: "Failed to fetch navigation target",
-              RouterError: "Navigation routing error occurred",
+              NoNextItem: t("navigation.errors.no_next_item"),
+              NoPreviousItem: t("navigation.errors.no_previous_item"),
+              CompletionRequired: t("navigation.errors.completion_required"),
+              ValidationFailed: t("navigation.errors.validation_failed"),
+              InvalidContentType: t("navigation.errors.invalid_content_type"),
+              FetchError: t("navigation.errors.fetch_error"),
+              RouterError: t("navigation.errors.router_error"),
             }
 
             error(
               errorMessages[navigationError._tag] ||
-                navigationError.message ||
-                "Navigation failed",
+                t("navigation.errors.generic_failed"),
             )
           },
           onSuccess: async (targetItem) => {

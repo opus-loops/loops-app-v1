@@ -8,50 +8,58 @@ import { PasswordInput } from "@/modules/shared/components/ui/password-input"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useForm } from "@tanstack/react-form"
 import { Link } from "@tanstack/react-router"
+import { useTranslation } from "react-i18next"
 
 export function LoginForm() {
   const { handleLogin } = useLogin()
   const { error: toastError } = useToast()
+  const { t } = useTranslation()
 
   const form = useForm({
     defaultValues: { password: "", username: "" },
-    validators: {
-      onSubmitAsync: async ({ value }) => {
-        const response = await handleLogin(value.username, value.password)
+    onSubmit: async ({ value }) => {
+      const response = await handleLogin(value.username, value.password)
 
-        if (response._tag === "Failure") {
-          if (response.error.code === "invalid_credentials") {
-            return {
-              password: "Invalid username or password",
-              username: "Invalid username or password",
-            }
+      if (response._tag === "Failure") {
+        // Handle invalid_input errors by setting field-specific errors
+        if (response.error.code === "invalid_input") {
+          const { payload } = response.error
+
+          // Set username error if present
+          if (payload.payload.username) {
+            form.setFieldMeta("username", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("auth.login.invalid_username") },
+              errors: [t("auth.login.invalid_username")],
+            }))
           }
 
-          if (
-            response.error.code === "user_password_not_set_or_invalid_provider"
-          ) {
-            toastError("Login Failed", {
-              description:
-                "You cannot login with password for this account type.",
-            })
-            return null
+          // Set password error if present
+          if (payload.payload.password) {
+            form.setFieldMeta("password", (prev) => ({
+              ...prev,
+              errorMap: { onSubmit: t("auth.login.invalid_password") },
+              errors: [t("auth.login.invalid_password")],
+            }))
           }
 
-          if (response.error.code === "invalid_input") {
-            return response.error.payload
-          }
-
-          const message =
-            "message" in response.error
-              ? response.error.message
-              : "An unexpected error occurred."
-
-          toastError("Login Failed", { description: message })
-          return null
+          return
         }
 
-        return null
-      },
+        if (response.error.code === "invalid_credentials") {
+          toastError(t("auth.login.invalid_credentials"))
+        } else if (
+          response.error.code === "user_password_not_set_or_invalid_provider"
+        ) {
+          toastError(t("auth.login.failed"), {
+            description: t("auth.login.invalid_provider"),
+          })
+        } else {
+          toastError(t("auth.login.failed"), {
+            description: t("auth.login.unexpected_error"),
+          })
+        }
+      }
     },
   })
 
@@ -73,7 +81,7 @@ export function LoginForm() {
                   className="font-outfit text-loops-white text-sm leading-5 font-normal"
                   htmlFor={field.name}
                 >
-                  Username
+                  {t("auth.login.username_label")}
                 </label>
                 <div className="bg-loops-card flex w-full items-center gap-x-2 rounded-sm px-5 py-4">
                   <div className="text-loops-cyan size-6 shrink-0 grow-0">
@@ -85,11 +93,12 @@ export function LoginForm() {
                     name={field.name}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Enter your username"
+                    placeholder={t("auth.login.username_placeholder")}
                     value={field.state.value}
                   />
                 </div>
-                {field.state.meta.isTouched && !field.state.meta.isValid ? (
+                {field.state.meta.isTouched &&
+                field.state.meta.errors.length > 0 ? (
                   <div className="flex w-full items-center gap-x-1">
                     <div className="text-loops-wrong size-4 shrink-0 grow-0">
                       <DangerIcon />
@@ -112,7 +121,7 @@ export function LoginForm() {
                   className="font-outfit text-loops-white text-sm leading-5 font-normal"
                   htmlFor={field.name}
                 >
-                  Password
+                  {t("auth.login.password_label")}
                 </label>
                 <PasswordInput
                   className="bg-loops-card"
@@ -121,11 +130,12 @@ export function LoginForm() {
                   name={field.name}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder={t("auth.login.password_placeholder")}
                   value={field.state.value}
                 />
                 <div className="flex w-full flex-col items-center gap-y-1">
-                  {field.state.meta.isTouched && !field.state.meta.isValid ? (
+                  {field.state.meta.isTouched &&
+                  field.state.meta.errors.length > 0 ? (
                     <div className="flex w-full items-center gap-x-1">
                       <div className="text-loops-wrong size-4 shrink-0 grow-0">
                         <DangerIcon />
@@ -140,7 +150,7 @@ export function LoginForm() {
                       className="text-loops-cyan font-outfit text-sm leading-6 font-medium tracking-tight"
                       to="/reset-password"
                     >
-                      Forget Password?
+                      {t("auth.login.forgot_password")}
                     </Link>
                   </div>
                 </div>
@@ -181,7 +191,7 @@ export function LoginForm() {
                 ></path>
               </svg>
             ) : (
-              "Log In"
+              t("auth.login.submit")
             )}
           </Button>
         )}

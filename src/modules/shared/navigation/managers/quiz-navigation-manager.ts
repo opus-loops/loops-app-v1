@@ -79,21 +79,18 @@ export class QuizNavigationManager implements IQuizNavigationManager {
       if (currentItem.contentType !== "quizzes") {
         return yield* Effect.fail({
           _tag: "InvalidContentType" as const,
-          message: "Current item must be a quiz",
         })
       }
 
       if (currentItem.itemProgress?.status !== "completed") {
         return yield* Effect.fail({
           _tag: "CompletionRequired" as const,
-          message: "Current quiz must be completed to navigate",
         })
       }
 
       if (!nextItem) {
         return yield* Effect.fail({
           _tag: "FetchError" as const,
-          message: "Adjacent item not provided",
         })
       }
 
@@ -115,14 +112,12 @@ export class QuizNavigationManager implements IQuizNavigationManager {
       if (currentItem.contentType !== "quizzes") {
         return yield* Effect.fail({
           _tag: "InvalidContentType" as const,
-          message: "Current item must be a quiz",
         })
       }
 
       if (!previousItem) {
         return yield* Effect.fail({
           _tag: "FetchError" as const,
-          message: "Adjacent item not provided",
         })
       }
 

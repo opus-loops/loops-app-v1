@@ -1,6 +1,7 @@
 import { ConfirmAccountForm } from "@/modules/account-management/features/account-confirmation/services"
 import type { User } from "@/modules/shared/domain/entities/user"
 import type { ReactNode } from "react"
+import { useTranslation } from "react-i18next"
 import { LoadingScreen } from "../../components/common/loading-screen"
 import { usePageLoading } from "../../hooks/use-page-loading"
 
@@ -17,6 +18,7 @@ export function ConfirmationShell({ target, user }: ConfirmationShellProps) {
 }
 
 function ConfirmationScreen({ user }: ConfirmationScreenProps) {
+  const { t } = useTranslation()
   return (
     <div className="bg-loops-background relative h-screen w-full overflow-hidden">
       {/* Main Content */}
@@ -24,13 +26,12 @@ function ConfirmationScreen({ user }: ConfirmationScreenProps) {
         <div className="w-full max-w-sm space-y-8">
           {/* Title */}
           <h1 className="font-outfit text-loops-cyan text-center text-3xl font-bold tracking-tight">
-            Email Verification
+            {t("auth.verify.title")}
           </h1>
 
           {/* Description */}
           <p className="font-outfit text-loops-light text-center text-base leading-5 font-medium">
-            We&apos;ve sent an SMS with an activation code to your Email{" "}
-            <span className="break-all">{user.email}</span>
+            {t("auth.verify.description", { email: user.email })}
           </p>
 
           {/* Confirm Account Form */}

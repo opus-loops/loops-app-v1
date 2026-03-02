@@ -4,8 +4,11 @@ import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/i
 import { invalidExpiredVoucherErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-voucher"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { voucherNotFoundErrorSchema } from "@/modules/shared/domain/errors/voucher-not-found"
-import { successMessageWithPayloadSchemaFactory } from "@/modules/shared/domain/types/success-message"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import { successResponseWithPayloadSchemaFactory } from "@/modules/shared/domain/types/success-response"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -21,10 +24,10 @@ type SubmitVoucherArgs = typeof submitVoucherArgsSchema.Type
 export const submitVoucherErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
-      categoryId: Schema.optional(Schema.String),
-      code: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
+      categoryId: Schema.optional(UseCaseErrorSchema),
+      code: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   voucherNotFoundErrorSchema,
@@ -38,7 +41,7 @@ export const submitVoucherErrorsSchema = Schema.Union(
 export type SubmitVoucherErrors = typeof submitVoucherErrorsSchema.Type
 
 export const submitVoucherSuccessSchema =
-  successMessageWithPayloadSchemaFactory(
+  successResponseWithPayloadSchemaFactory(
     Schema.Struct({
       categoryId: Schema.String,
       userId: Schema.String,

@@ -54,7 +54,6 @@ const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
         Cause.failureOption(categoryExit.cause),
         () => ({
           code: "UnknownError" as const,
-          message: "Failed to fetch category",
         }),
       )
       return yield* Effect.fail(failure)
@@ -119,7 +118,6 @@ export const exploreCategoryFn = createServerFn({ method: "GET" })
         // Fallback if you sometimes throw defects: map to a typed error variant in your union
         return {
           code: "UnknownError" as const,
-          message: "Unexpected error occurred while fetching explore category",
         }
       })
       wire = { _tag: "Failure", error: failure }

@@ -15,7 +15,6 @@ export function parseEffectSchema<T, I, R = never>(
       JSON.stringify({
         code: "validation_error",
         details: parseError.message,
-        message: "Validation failed",
       }),
     )
   }

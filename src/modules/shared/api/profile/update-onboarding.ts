@@ -1,7 +1,10 @@
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { successMessageSchema } from "@/modules/shared/domain/types/success-message"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -19,11 +22,11 @@ type OnboardingArgs = typeof onboardingArgsSchema.Type
 export const onboardingErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      background: Schema.optional(Schema.String),
-      codingExperience: Schema.optional(Schema.String),
-      duration: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      background: Schema.optional(UseCaseErrorSchema),
+      codingExperience: Schema.optional(UseCaseErrorSchema),
+      duration: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   invalidExpiredTokenErrorSchema,
@@ -32,7 +35,7 @@ export const onboardingErrorsSchema = Schema.Union(
 
 export type OnboardingErrors = typeof onboardingErrorsSchema.Type
 
-export const onboardingSuccessSchema = successMessageSchema
+export const onboardingSuccessSchema = successResponseSchema
 
 type OnboardingResult = Effect.Effect<OnboardingSuccess, OnboardingErrors>
 type OnboardingSuccess = typeof onboardingSuccessSchema.Type

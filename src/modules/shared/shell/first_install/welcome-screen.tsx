@@ -9,40 +9,32 @@ import {
   useRef,
   useState,
 } from "react"
+import { useTranslation } from "react-i18next"
 
 type Slide = {
-  description: string
   id: number
   image: string
-  title: string
 }
 
 const slides: Array<Slide> = [
   {
-    description:
-      "Dive into Loop’s, where learning to code becomes an epic adventure",
     id: 1,
     image: "../../../../assets/onboarding/1.svg",
-    title: "Welcome to Loop’s",
   },
   {
-    description:
-      "Learn and progress in programming through exciting quests and stimulating challenges",
     id: 2,
     image: "../../../../assets/onboarding/2.svg",
-    title: "Explore our coding universe",
   },
   {
-    description: "Join our vibrant community of passionate coders",
     id: 3,
     image: "../../../../assets/onboarding/3.svg",
-    title: "Join our community",
   },
 ]
 
 type WelcomeScreenProps = { skipHandler: () => void }
 
 export function WelcomeScreen({ skipHandler }: WelcomeScreenProps) {
+  const { t } = useTranslation()
   const [index, setIndex] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
@@ -94,13 +86,13 @@ export function WelcomeScreen({ skipHandler }: WelcomeScreenProps) {
 
   return (
     <SpaceBackground>
-      <div className="flex h-full w-full flex-col items-center">
+      <div className="flex min-h-screen w-full flex-col items-center px-8 py-6">
         <div className="flex w-full justify-end">
           <button
             className="font-outfit text-loops-white text-base font-bold"
             onClick={skipHandler}
           >
-            Skip
+            {t("first_install.welcome.skip")}
           </button>
         </div>
 
@@ -126,17 +118,19 @@ export function WelcomeScreen({ skipHandler }: WelcomeScreenProps) {
                   key={slide.id}
                 >
                   <img
-                    alt={slide.title}
+                    alt={t(`first_install.welcome.slides.${slide.id}.title`)}
                     className="aspect-[3/2] w-10/12 max-w-md select-none"
                     draggable={false}
                     src={slide.image}
                   />
                   <div className="mt-6 flex w-10/12 max-w-md flex-col items-center gap-y-3">
                     <h2 className="font-outfit text-loops-cyan text-center text-3xl leading-tight font-bold break-words">
-                      {slide.title}
+                      {t(`first_install.welcome.slides.${slide.id}.title`)}
                     </h2>
                     <p className="font-outfit text-loops-gray text-center text-base leading-7 tracking-tight break-words">
-                      {slide.description}
+                      {t(
+                        `first_install.welcome.slides.${slide.id}.description`,
+                      )}
                     </p>
                   </div>
                 </div>
@@ -164,7 +158,9 @@ export function WelcomeScreen({ skipHandler }: WelcomeScreenProps) {
               }}
               type="button"
             >
-              {index === slides.length - 1 ? "Start now" : "Next"}
+              {index === slides.length - 1
+                ? t("first_install.welcome.start_now")
+                : t("first_install.welcome.next")}
             </Button>
           </div>
         </div>

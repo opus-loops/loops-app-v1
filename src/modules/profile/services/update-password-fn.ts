@@ -1,7 +1,7 @@
 import {
   updatePasswordErrorsSchema,
-  updatePasswordSuccessSchema,
   updatePasswordFactory,
+  updatePasswordSuccessSchema,
 } from "@/modules/shared/api/profile/update-password"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import { deleteSession } from "@/modules/shared/shell/session/session"
@@ -56,7 +56,6 @@ export const updatePasswordFn = createServerFn({ method: "POST" })
         // Fallback if you sometimes throw defects: map to a typed error variant in your union
         return {
           code: "UnknownError" as const,
-          message: "Unexpected error",
         }
       })
       wire = { _tag: "Failure", error: failure }

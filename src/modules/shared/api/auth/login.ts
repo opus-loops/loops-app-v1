@@ -1,6 +1,9 @@
 import { invalidCredentialsErrorSchema } from "@/modules/shared/domain/errors/invalid-credentials"
 import { loginTokensSchema } from "@/modules/shared/domain/types/login-tokens"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -18,8 +21,8 @@ type LoginArgs = typeof loginArgsSchema.Type
 export const loginErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      password: Schema.optional(Schema.String),
-      username: Schema.optional(Schema.String),
+      password: Schema.optional(UseCaseErrorSchema),
+      username: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   invalidCredentialsErrorSchema,

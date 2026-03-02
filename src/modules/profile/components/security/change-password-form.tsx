@@ -6,6 +6,7 @@ import { PasswordInput } from "@/modules/shared/components/ui/password-input"
 import type { User } from "@/modules/shared/domain/entities/user"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useForm } from "@tanstack/react-form"
+import { useTranslation } from "react-i18next"
 import { useUpdatePassword } from "../../hooks/use-update-password"
 
 type ChangePasswordFormProps = {
@@ -15,49 +16,39 @@ type ChangePasswordFormProps = {
 export function ChangePasswordForm({ user }: ChangePasswordFormProps) {
   const { handleUpdatePassword } = useUpdatePassword()
   const { error: toastError, success: toastSuccess } = useToast()
+  const { t } = useTranslation()
 
   const form = useForm({
     defaultValues: {
       currentPassword: "",
       newPassword: "",
     },
-    validators: {
-      onSubmitAsync: async ({ value }) => {
-        console.log(value)
+    onSubmit: async ({ value }) => {
+      const result = await handleUpdatePassword(
+        value.currentPassword,
+        value.newPassword,
+      )
 
-        const result = await handleUpdatePassword(
-          value.currentPassword,
-          value.newPassword,
-        )
-
-        if (result._tag === "Failure") {
-          if (result.error.code === "UnmatchedPassword") {
-            return {
-              currentPassword: "Current password is incorrect",
-            }
-          }
-
-          if (
-            result.error.code === "user_password_not_set_or_invalid_provider"
-          ) {
-            toastError("You cannot change password for this account type.")
-            return null
-          }
-
-          const message =
-            "message" in result.error
-              ? result.error.message
-              : "An unexpected error occurred."
-
-          toastError(message)
-          return null
+      if (result._tag === "Failure") {
+        if (result.error.code === "UnmatchedPassword") {
+          form.setFieldMeta("currentPassword", (prev) => ({
+            ...prev,
+            errorMap: { onSubmit: t("profile.errors.password_incorrect") },
+            errors: [t("profile.errors.password_incorrect")],
+          }))
+          return
         }
 
-        toastSuccess(
-          "Your password has been changed successfully. Please login again.",
-        )
-        return null
-      },
+        if (result.error.code === "user_password_not_set_or_invalid_provider") {
+          toastError(t("profile.errors.password_account_type_error"))
+          return
+        }
+
+        toastError(t("common.unexpected_error"))
+        return
+      }
+
+      toastSuccess(t("profile.errors.password_changed_success"))
     },
   })
 

@@ -90,7 +90,6 @@ export class SubQuizNavigatorManager implements ISubQuizNavigationManager {
     if (!manager) {
       return Effect.fail({
         code: "InvalidQuestionType",
-        message: `No navigation manager found for question type: ${context.currentSubQuiz.questionType}`,
       })
     }
 
@@ -112,7 +111,6 @@ export class SubQuizNavigatorManager implements ISubQuizNavigationManager {
     if (!manager) {
       return Effect.fail({
         code: "InvalidQuestionType",
-        message: `No navigation manager found for question type: ${context.currentSubQuiz.questionType}`,
       })
     }
 

@@ -5,6 +5,7 @@ import { CategoryContentItem } from "@/modules/shared/domain/entities/category-c
 import { useContentNavigation } from "@/modules/shared/navigation"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useQuizStepper } from "../quiz-stepper"
 
 type QuizStatisticsScreenProps = {
@@ -104,6 +105,7 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   const { itemProgress: startedQuiz } = quizItem
   const [isLoading, setIsLoading] = useState(false)
   const [isCelebrationActive, setIsCelebrationActive] = useState(true)
+  const { t } = useTranslation()
 
   const {
     navigateToNext,
@@ -173,7 +175,7 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
           <div className="h-[282px] w-[316px]">
             <img
               src="/assets/images/winning-loops.png"
-              alt="Winning Loops Mascot"
+              alt={t("quiz.winning_mascot_alt")}
               className="h-full w-full object-contain"
             />
           </div>
@@ -181,10 +183,10 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
           {/* Celebration Text */}
           <div className="flex flex-col items-start gap-1 px-[7px]">
             <h1 className="w-[303px] text-center text-2xl font-semibold tracking-normal text-[#ff4900]">
-              Congrats !
+              {t("quiz.congrats")}
             </h1>
             <p className="w-[303px] text-center text-base tracking-[0.2px] text-[#dee2e6] opacity-80">
-              You passed the first Quiz
+              {t("quiz.passed_message")}
             </p>
           </div>
 
@@ -199,7 +201,9 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
                 <p className="text-[20px] font-semibold text-[#31bce6]">
                   {completedQuestions}/{totalQuestions}
                 </p>
-                <p className="text-[16px] text-[#31bce6]">Quizzes</p>
+                <p className="text-[16px] text-[#31bce6]">
+                  {t("quiz.stats.quizzes")}
+                </p>
               </div>
             </div>
 
@@ -212,7 +216,9 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
                 <p className="text-[20px] font-semibold text-[#ffcc00]">
                   {score}
                 </p>
-                <p className="text-[16px] text-[#ffcc00]">XP</p>
+                <p className="text-[16px] text-[#ffcc00]">
+                  {t("quiz.stats.xp")}
+                </p>
               </div>
             </div>
 
@@ -225,7 +231,9 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
                 <p className="text-[20px] font-semibold text-[#ff4900]">
                   {formatTime(spentTime)}
                 </p>
-                <p className="text-[16px] text-[#ff4900]">Time</p>
+                <p className="text-[16px] text-[#ff4900]">
+                  {t("quiz.stats.time")}
+                </p>
               </div>
             </div>
           </div>
@@ -239,7 +247,7 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
             disabled={isLoading}
             className="font-outfit text-loops-light w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isLoading ? "Loading..." : "Next"}
+            {isLoading ? t("common.loading") : t("quiz.next")}
           </button>
 
           {/* Secondary Button */}
@@ -247,7 +255,7 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
             className="border-loops-cyan flex h-[54px] w-full items-center justify-center rounded-lg border bg-transparent text-lg font-medium text-[#31bce6] transition-colors hover:bg-[#31bce6]/10 hover:text-[#31bce6]"
             onClick={handleBackToHome}
           >
-            Back to home
+            {t("quiz.back_home")}
           </button>
         </div>
       </div>

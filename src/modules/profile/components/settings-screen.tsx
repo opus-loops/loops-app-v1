@@ -5,6 +5,7 @@ import type { User } from "@/modules/shared/domain/entities/user"
 import { Link } from "@tanstack/react-router"
 import { ChevronRight } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useLogout } from "@/modules/authentication/features/login/services/use-logout"
 import { LogoutConfirmDialog } from "./logout-confirm-dialog"
@@ -52,6 +53,7 @@ function SettingsRow({ label, to }: SettingsRowProps) {
 export function SettingsScreen({ user }: SettingsScreenProps) {
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
   const { handleLogout } = useLogout()
+  const { t } = useTranslation()
 
   return (
     <div className="bg-loops-background w-full">
@@ -66,7 +68,7 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
           </div>
 
           <h1 className="text-loops-light text-center text-xl font-semibold">
-            Settings
+            {t("profile.settings_title")}
           </h1>
 
           <div />
@@ -92,25 +94,25 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
               {user.fullName}
             </p>
             <p className="text-loops-light mt-1 text-sm font-medium opacity-80">
-              Edit Profile
+              {t("profile.edit_profile")}
             </p>
           </div>
         </div>
 
         <h2 className="text-loops-light mt-8 px-1 text-2xl font-bold">
-          Settings
+          {t("profile.settings_title")}
         </h2>
 
         <div className="mt-8 flex flex-col gap-4">
           <SettingsRow
-            label="Edit Profile"
+            label={t("profile.edit_profile")}
             to="/profile/settings/edit-profile"
           />
           <SettingsRow
-            label="Security&Password"
+            label={t("profile.security")}
             to="/profile/settings/security"
           />
-          <SettingsRow label="Preferences" to="/profile/settings/preferences" />
+          <SettingsRow label={t("profile.preferences")} to="/profile/settings/preferences" />
         </div>
 
         <div className="mt-auto pt-10">
@@ -118,12 +120,12 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
             type="button"
             onClick={() => setIsLogoutDialogOpen(true)}
             className="flex items-center gap-3 px-1 text-[#ff3b3b]"
-            aria-label="Log out"
+            aria-label={t("profile.logout")}
           >
             <div className="h-6 w-6">
               <ExitIcon />
             </div>
-            <span className="text-base font-medium">Log Out</span>
+            <span className="text-base font-medium">{t("profile.logout")}</span>
           </button>
 
           <LogoutConfirmDialog

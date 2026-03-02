@@ -61,7 +61,6 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
         Cause.failureOption(categoryItemExit.cause),
         () => ({
           code: "UnknownError" as const,
-          message: "Failed to fetch category item",
         }),
       )
       return yield* Effect.fail(failure)
@@ -206,7 +205,6 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
     // If we reach here, something went wrong with fetching content
     return yield* Effect.fail({
       code: "UnknownError" as const,
-      message: "Failed to fetch category item content",
     })
   })
 
@@ -246,8 +244,6 @@ export const singleCategoryItemFn = createServerFn({
         // Fallback if you sometimes throw defects: map to a typed error variant in your union
         return {
           code: "UnknownError" as const,
-          message:
-            "Unexpected error occurred while fetching single category item",
         }
       })
       wire = { _tag: "Failure", error: failure }

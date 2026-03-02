@@ -1,7 +1,10 @@
 import { categorySchema } from "@/modules/shared/domain/entities/category"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import type { Effect } from "effect"
@@ -22,14 +25,14 @@ export type ListExploreCategoriesQuery =
 export const listExploreCategoriesErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
-      query: Schema.optional(Schema.String),
-      sort: Schema.optional(Schema.String),
-      sortBy: Schema.optional(Schema.String),
-      size: Schema.optional(Schema.String),
-      offset: Schema.optional(Schema.String),
-      page: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
+      query: Schema.optional(UseCaseErrorSchema),
+      sort: Schema.optional(UseCaseErrorSchema),
+      sortBy: Schema.optional(UseCaseErrorSchema),
+      size: Schema.optional(UseCaseErrorSchema),
+      offset: Schema.optional(UseCaseErrorSchema),
+      page: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   invalidExpiredTokenErrorSchema,

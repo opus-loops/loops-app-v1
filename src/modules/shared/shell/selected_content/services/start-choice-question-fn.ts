@@ -65,7 +65,6 @@ export const startChoiceQuestionFn = createServerFn({
         // Fallback if you sometimes throw defects: map to a typed error variant in your union
         return {
           code: "UnknownError" as const,
-          message: "Unexpected error occurred while starting choice question",
         }
       })
       wire = { _tag: "Failure", error: failure }

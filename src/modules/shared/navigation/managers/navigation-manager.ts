@@ -46,7 +46,6 @@ export class NavigationManager implements INavigationManager {
 
     return Effect.fail({
       _tag: "InvalidContentType" as const,
-      message: "Invalid content type for navigation",
     })
   }
 
@@ -66,7 +65,6 @@ export class NavigationManager implements INavigationManager {
 
     return Effect.fail({
       _tag: "InvalidContentType" as const,
-      message: "Invalid content type for navigation",
     })
   }
 

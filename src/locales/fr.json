@@ -1,0 +1,232 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "verifying": "Vérification...",
+    "saving": "Enregistrement...",
+    "unexpected_error": "Une erreur inattendue est survenue.",
+    "error": "Une erreur est survenue",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "next": "Suivant",
+    "submit": "Soumettre",
+    "verify": "Vérifier",
+    "minutes": "minutes",
+    "min": "min",
+    "sec": "s"
+  },
+  "first_install": {
+    "language": {
+      "title": "Choisissez votre langue",
+      "description": "Sélectionnez la langue que vous souhaitez utiliser dans l’application."
+    },
+    "welcome": {
+      "skip": "Passer",
+      "next": "Suivant",
+      "start_now": "Commencer",
+      "slides": {
+        "1": {
+          "title": "Bienvenue sur Loop’s",
+          "description": "Plongez dans Loop’s, où apprendre à coder devient une aventure épique"
+        },
+        "2": {
+          "title": "Explorez notre univers",
+          "description": "Apprenez et progressez en programmation à travers des quêtes passionnantes et des défis stimulants"
+        },
+        "3": {
+          "title": "Rejoignez notre communauté",
+          "description": "Rejoignez notre communauté dynamique de codeurs passionnés"
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "username_label": "Nom d'utilisateur",
+      "password_label": "Mot de passe",
+      "username_placeholder": "Entrez votre nom d'utilisateur",
+      "password_placeholder": "Entrez votre mot de passe",
+      "submit": "Se connecter",
+      "google_login": "Se connecter avec Google",
+      "signup_link": "S'inscrire",
+      "forgot_password": "Mot de passe oublié ?",
+      "failed": "Échec de la connexion",
+      "invalid_credentials": "Nom d'utilisateur ou mot de passe incorrect",
+      "invalid_password": "Mot de passe invalide.",
+      "invalid_username": "Nom d'utilisateur invalide.",
+      "invalid_provider": "Vous ne pouvez pas vous connecter avec un mot de passe pour ce type de compte.",
+      "unexpected_error": "Une erreur inattendue est survenue."
+    },
+    "register": {
+      "title": "S'inscrire"
+    },
+    "verify": {
+      "title": "Vérification de l'e-mail",
+      "description": "Nous avons envoyé un code d'activation à votre e-mail {{email}}",
+      "label_code": "Code de confirmation",
+      "submit": "Confirmer le compte",
+      "submitting": "Confirmation...",
+      "resend_title": "Je n'ai pas reçu de code",
+      "resend_button": "Renvoyer",
+      "resend_loading": "Envoi...",
+      "resend_success": "Code de confirmation envoyé avec succès !",
+      "resend_success_desc": "Veuillez vérifier votre e-mail pour le nouveau code de confirmation.",
+      "resend_error": "Échec de l'envoi du code de confirmation",
+      "resend_error_desc": "Veuillez réessayer ou contacter le support si le problème persiste.",
+      "invalid_code": "Code de confirmation invalide.",
+      "expired_code": "Code invalide ou expiré.",
+      "failed": "Échec de la vérification",
+      "unexpected_error": "Une erreur inattendue est survenue"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "settings_title": "Paramètres",
+    "edit_profile": "Modifier le profil",
+    "security": "Sécurité et mot de passe",
+    "preferences": "Préférences",
+    "logout": "Se déconnecter",
+    "change_avatar": "Changer d'avatar",
+    "updated_success": "Profil mis à jour avec succès.",
+    "preferences_updated_success": "Préférences mises à jour avec succès.",
+    "save_preferences": "Enregistrer les préférences",
+    "sections": {
+      "personal": "Personnel",
+      "personal_subtitle": "Quelques détails pour personnaliser votre expérience.",
+      "location": "Localisation",
+      "location_subtitle": "Utilisé pour le contenu local, les statistiques et le matching.",
+      "learning": "Apprentissage",
+      "learning_subtitle": "Ajustez votre rythme et votre niveau d'expérience."
+    },
+    "labels": {
+      "full_name": "Nom complet",
+      "username": "Nom d'utilisateur",
+      "phone": "Numéro de téléphone"
+    },
+    "fields": {
+      "full_name": "Votre nom complet",
+      "username": "Votre nom d'utilisateur",
+      "phone": "Votre numéro de téléphone",
+      "birth_date": "Date de naissance",
+      "gender": "Genre",
+      "language": "Langue",
+      "country": "Pays",
+      "state": "État/Région",
+      "city": "Ville",
+      "duration": "Durée d'apprentissage",
+      "experience": "Expérience en codage",
+      "goals": "Objectifs",
+      "background": "Arrière-plan"
+    },
+    "placeholders": {
+      "select_country": "Sélectionnez un pays",
+      "select_state": "Sélectionnez un état",
+      "select_country_first": "Sélectionnez d'abord le pays",
+      "select_city": "Sélectionnez une ville",
+      "select_state_first": "Sélectionnez d'abord l'état",
+      "daily_goal": "Choisissez un objectif quotidien",
+      "select_level": "Sélectionnez votre niveau",
+      "select_goal": "Sélectionnez votre objectif",
+      "select_background": "Sélectionnez votre arrière-plan"
+    },
+    "options": {
+      "gender": {
+        "male": "Homme",
+        "female": "Femme"
+      },
+      "experience": {
+        "beginner": "Débutant",
+        "average": "Moyen",
+        "skilled": "Qualifié",
+        "expert": "Expert"
+      },
+      "background": {
+        "student": "Étudiant",
+        "professional": "Professionnel",
+        "developer": "Développeur",
+        "passionate": "Passionné"
+      },
+      "goals": {
+        "casual": "Occasionnel",
+        "medium": "Moyen",
+        "serious": "Sérieux",
+        "hard": "Difficile"
+      }
+    },
+    "errors": {
+      "username_taken": "Ce nom d'utilisateur est déjà pris.",
+      "password_incorrect": "Le mot de passe actuel est incorrect.",
+      "password_account_type_error": "Vous ne pouvez pas changer le mot de passe pour ce type de compte.",
+      "password_changed_success": "Votre mot de passe a été modifié avec succès. Veuillez vous reconnecter.",
+      "invalid_fullname": "Nom complet invalide.",
+      "invalid_username": "Nom d'utilisateur invalide.",
+      "invalid_phone": "Numéro de téléphone invalide.",
+      "invalid_birthdate": "Date de naissance invalide.",
+      "invalid_gender": "Genre invalide.",
+      "invalid_duration": "Durée invalide.",
+      "invalid_country": "Pays invalide.",
+      "invalid_state": "État/Région invalide.",
+      "invalid_city": "Ville invalide.",
+      "invalid_language": "Langue invalide.",
+      "invalid_experience": "Niveau d'expérience invalide.",
+      "invalid_goals": "Objectif invalide.",
+      "invalid_background": "Contexte invalide."
+    }
+  },
+  "voucher": {
+    "errors": {
+      "invalid_code": "Code de bon invalide.",
+      "invalid_format": "Veuillez entrer un code à 5 chiffres valide."
+    }
+  },
+  "navigation": {
+    "home": "Accueil",
+    "explore": "Explorer",
+    "leaderboard": "Classement",
+    "profile": "Profil",
+    "errors": {
+      "no_next_item": "Aucun élément suivant disponible",
+      "no_previous_item": "Aucun élément précédent disponible",
+      "completion_required": "Veuillez terminer l'élément actuel avant de continuer",
+      "validation_failed": "La navigation a échoué en raison d'une erreur de validation",
+      "invalid_content_type": "Type de contenu invalide pour la navigation",
+      "fetch_error": "Échec de la récupération de la cible de navigation",
+      "router_error": "Erreur de routage de navigation",
+      "generic_failed": "Échec de la navigation"
+    }
+  },
+  "quiz": {
+    "stats": {
+      "quizzes": "Quiz",
+      "xp": "XP",
+      "time": "Temps"
+    },
+    "mascot_alt": "Mascotte Racing Loops",
+    "winning_mascot_alt": "Mascotte Winning Loops",
+    "doodle_alt": "Griffonnage d'arrière-plan",
+    "header_prefix": "Quiz :",
+    "skill_prefix": "Compétence :",
+    "start_quiz": "Commencer le quiz",
+    "start_skill": "Commencer la compétence",
+    "multiple_answers": "Plusieurs bonnes réponses",
+    "single_answer": "Une seule bonne réponse",
+    "arrange_items": "Organisez les éléments dans l'ordre",
+    "question": "Question",
+    "congrats": "Félicitations !",
+    "passed_message": "Vous avez réussi le premier quiz",
+    "next": "Suivant",
+    "back_home": "Retour à l'accueil"
+  },
+  "session": {
+    "expired": {
+      "title": "Session expirée",
+      "description_line_1": "Votre session a expiré en raison d'une inactivité ou d'une erreur d'authentification.",
+      "description_line_2": "Vous allez être redirigé vers la page de connexion sous peu.",
+      "redirecting_in_one": "Redirection dans {{count}} seconde...",
+      "redirecting_in_other": "Redirection dans {{count}} secondes...",
+      "go_to_login": "Aller à la connexion"
+    }
+  }
+}

@@ -6,7 +6,10 @@ import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-c
 import { skillNotCompletedErrorSchema } from "@/modules/shared/domain/errors/skill-not-completed"
 import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
-import { invalidInputFactory } from "@/modules/shared/domain/utils/invalid-input"
+import {
+  UseCaseErrorSchema,
+  invalidInputFactory,
+} from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
@@ -23,10 +26,10 @@ type GetCompletedSkillArgs = typeof getCompletedSkillArgsSchema.Type
 export const getCompletedSkillErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(Schema.String),
-      categoryId: Schema.optional(Schema.String),
-      skillId: Schema.optional(Schema.String),
+      authorization: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
+      categoryId: Schema.optional(UseCaseErrorSchema),
+      skillId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   skillNotCompletedErrorSchema,

@@ -79,21 +79,18 @@ export class SkillNavigationManager implements ISkillNavigationManager {
       if (currentItem.contentType !== "skills") {
         return yield* Effect.fail({
           _tag: "InvalidContentType" as const,
-          message: "Current item must be a skill",
         })
       }
 
       if (!currentItem.itemProgress?.isCompleted) {
         return yield* Effect.fail({
           _tag: "CompletionRequired" as const,
-          message: "Current skill must be completed to navigate",
         })
       }
 
       if (!nextItem) {
         return yield* Effect.fail({
           _tag: "FetchError" as const,
-          message: "Adjacent item not provided",
         })
       }
 
@@ -115,14 +112,12 @@ export class SkillNavigationManager implements ISkillNavigationManager {
       if (currentItem.contentType !== "skills") {
         return yield* Effect.fail({
           _tag: "InvalidContentType" as const,
-          message: "Current item must be a skill",
         })
       }
 
       if (!previousItem) {
         return yield* Effect.fail({
           _tag: "FetchError" as const,
-          message: "Adjacent item not provided",
         })
       }
 

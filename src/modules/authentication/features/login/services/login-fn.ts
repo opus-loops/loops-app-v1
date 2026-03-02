@@ -57,7 +57,6 @@ export const loginFn = createServerFn({ method: "POST" })
           // Make sure your loginErrorsSchema includes an UnknownError or similar branch.
           return {
             code: "UnknownError" as const,
-            message: "Unexpected error",
           }
         },
       )

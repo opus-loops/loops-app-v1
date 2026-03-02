@@ -1,17 +1,15 @@
 import { Schema } from "effect"
 
-export const successMessageSchema = Schema.Struct({
+export const successResponseSchema = Schema.Struct({
   isSuccess: Schema.Boolean,
-  message: Schema.String,
 })
 
-export const successMessageWithPayloadSchemaFactory = <
+export const successResponseWithPayloadSchemaFactory = <
   T extends Schema.Struct<any>,
 >(
   payload: T,
 ) =>
   Schema.Struct({
     isSuccess: Schema.Boolean,
-    message: Schema.String,
     payload,
   })

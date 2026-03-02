@@ -1,0 +1,234 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "verifying": "Verifying...",
+    "saving": "Saving...",
+    "unexpected_error": "An unexpected error occurred.",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "verify": "Verify",
+    "start": "Start",
+    "continue": "Continue",
+    "minutes": "minutes",
+    "min": "min",
+    "sec": "sec"
+  },
+  "first_install": {
+    "language": {
+      "title": "Choose your language",
+      "description": "Select the language you want to use in the app."
+    },
+    "welcome": {
+      "skip": "Skip",
+      "next": "Next",
+      "start_now": "Start now",
+      "slides": {
+        "1": {
+          "title": "Welcome to Loop’s",
+          "description": "Dive into Loop’s, where learning to code becomes an epic adventure"
+        },
+        "2": {
+          "title": "Explore our coding universe",
+          "description": "Learn and progress in programming through exciting quests and stimulating challenges"
+        },
+        "3": {
+          "title": "Join our community",
+          "description": "Join our vibrant community of passionate coders"
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "username_label": "Username",
+      "password_label": "Password",
+      "username_placeholder": "Enter your username",
+      "password_placeholder": "Enter your password",
+      "submit": "Log In",
+      "google_login": "Login with Google",
+      "signup_link": "Sign up",
+      "forgot_password": "Forget Password?",
+      "failed": "Login Failed",
+      "invalid_credentials": "Invalid username or password",
+      "invalid_password": "Invalid password.",
+      "invalid_username": "Invalid username.",
+      "invalid_provider": "You cannot login with password for this account type.",
+      "unexpected_error": "An unexpected error occurred."
+    },
+    "register": {
+      "title": "Register"
+    },
+    "verify": {
+      "title": "Email Verification",
+      "description": "We've sent an SMS with an activation code to your Email {{email}}",
+      "label_code": "Confirmation Code",
+      "submit": "Confirm Account",
+      "submitting": "Confirming...",
+      "resend_title": "I didn't receive a code",
+      "resend_button": "Resend",
+      "resend_loading": "Sending...",
+      "resend_success": "Confirmation code sent successfully!",
+      "resend_success_desc": "Please check your email for the new confirmation code.",
+      "resend_error": "Failed to send confirmation code",
+      "resend_error_desc": "Please try again or contact support if the problem persists.",
+      "invalid_code": "Invalid confirmation code.",
+      "expired_code": "Invalid or expired code.",
+      "failed": "Verification failed",
+      "unexpected_error": "An unexpected error occurred"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "settings_title": "Settings",
+    "edit_profile": "Edit Profile",
+    "security": "Security & Password",
+    "preferences": "Preferences",
+    "logout": "Logout",
+    "change_avatar": "Change avatar",
+    "updated_success": "Profile updated successfully.",
+    "preferences_updated_success": "Preferences updated successfully.",
+    "save_preferences": "Save Preferences",
+    "sections": {
+      "personal": "Personal",
+      "personal_subtitle": "A few details to personalize your experience.",
+      "location": "Location",
+      "location_subtitle": "Used for local content, stats, and matching.",
+      "learning": "Learning",
+      "learning_subtitle": "Tune your pace and experience level."
+    },
+    "labels": {
+      "full_name": "Full Name",
+      "username": "Username",
+      "phone": "Phone Number"
+    },
+    "fields": {
+      "full_name": "Your full name",
+      "username": "Your username",
+      "phone": "Your phone number",
+      "birth_date": "Birth date",
+      "gender": "Gender",
+      "language": "Language",
+      "country": "Country",
+      "state": "State",
+      "city": "City",
+      "duration": "Learning duration",
+      "experience": "Coding experience",
+      "goals": "Goals",
+      "background": "Background"
+    },
+    "placeholders": {
+      "select_country": "Select a country",
+      "select_state": "Select a state",
+      "select_country_first": "Select country first",
+      "select_city": "Select a city",
+      "select_state_first": "Select state first",
+      "daily_goal": "Pick a daily goal",
+      "select_level": "Select your level",
+      "select_goal": "Select your goal",
+      "select_background": "Select your background"
+    },
+    "options": {
+      "gender": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "experience": {
+        "beginner": "Beginner",
+        "average": "Average",
+        "skilled": "Skilled",
+        "expert": "Expert"
+      },
+      "background": {
+        "student": "Student",
+        "professional": "Professional",
+        "developer": "Developer",
+        "passionate": "Passionate"
+      },
+      "goals": {
+        "casual": "Casual",
+        "medium": "Medium",
+        "serious": "Serious",
+        "hard": "Hard"
+      }
+    },
+    "errors": {
+      "username_taken": "This username is already taken.",
+      "password_incorrect": "Current password is incorrect.",
+      "password_account_type_error": "You cannot change password for this account type.",
+      "password_changed_success": "Your password has been changed successfully. Please login again.",
+      "invalid_fullname": "Invalid full name.",
+      "invalid_username": "Invalid username.",
+      "invalid_phone": "Invalid phone number.",
+      "invalid_birthdate": "Invalid birth date.",
+      "invalid_gender": "Invalid gender.",
+      "invalid_duration": "Invalid duration.",
+      "invalid_country": "Invalid country.",
+      "invalid_state": "Invalid state.",
+      "invalid_city": "Invalid city.",
+      "invalid_language": "Invalid language.",
+      "invalid_experience": "Invalid experience level.",
+      "invalid_goals": "Invalid goal.",
+      "invalid_background": "Invalid background."
+    }
+  },
+  "voucher": {
+    "errors": {
+      "invalid_code": "Invalid voucher code.",
+      "invalid_format": "Please enter a valid 5-digit voucher code."
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "explore": "Explore",
+    "leaderboard": "Leaderboard",
+    "profile": "Profile",
+    "errors": {
+      "no_next_item": "No next item available",
+      "no_previous_item": "No previous item available",
+      "completion_required": "Please complete the current item before proceeding",
+      "validation_failed": "Navigation failed due to validation error",
+      "invalid_content_type": "Invalid content type for navigation",
+      "fetch_error": "Failed to fetch navigation target",
+      "router_error": "Navigation routing error occurred",
+      "generic_failed": "Navigation failed"
+    }
+  },
+  "quiz": {
+    "stats": {
+      "quizzes": "Quizzes",
+      "xp": "XP",
+      "time": "Time"
+    },
+    "mascot_alt": "Racing Loops Mascot",
+    "winning_mascot_alt": "Winning Loops Mascot",
+    "doodle_alt": "Background Doodle",
+    "header_prefix": "Quiz:",
+    "skill_prefix": "Skill:",
+    "start_quiz": "Start Quiz",
+    "start_skill": "Start Skill",
+    "multiple_answers": "Multiple correct answers",
+    "single_answer": "One correct answer",
+    "arrange_items": "Arrange the items in order",
+    "question": "Question",
+    "congrats": "Congrats !",
+    "passed_message": "You passed the first Quiz",
+    "next": "Next",
+    "back_home": "Back to home"
+  },
+  "session": {
+    "expired": {
+      "title": "Session Expired",
+      "description_line_1": "Your session has expired due to inactivity or an authentication error.",
+      "description_line_2": "You will be redirected to the login page shortly.",
+      "redirecting_in_one": "Redirecting in {{count}} second...",
+      "redirecting_in_other": "Redirecting in {{count}} seconds...",
+      "go_to_login": "Go to Login"
+    }
+  }
+}

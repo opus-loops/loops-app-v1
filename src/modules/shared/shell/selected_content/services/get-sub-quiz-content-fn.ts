@@ -52,7 +52,6 @@ const fetchSubQuizContentEffect = (params: GetSubQuizContentParams) =>
         Cause.failureOption(subQuizExit.cause),
         () => ({
           code: "UnknownError" as const,
-          message: "Failed to fetch sub-quiz content",
         }),
       )
       return yield* Effect.fail(failure)
@@ -98,7 +97,6 @@ export const getSubQuizContentFn = createServerFn({
         // Fallback if you sometimes throw defects: map to a typed error variant in your union
         return {
           code: "UnknownError" as const,
-          message: "Unexpected error occurred while fetching sub-quiz content",
         }
       })
       wire = { _tag: "Failure", error: failure }

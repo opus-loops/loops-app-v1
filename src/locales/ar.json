@@ -1,0 +1,231 @@
+{
+  "common": {
+    "loading": "جار التحميل...",
+    "verifying": "جار التحقق...",
+    "saving": "جار الحفظ...",
+    "unexpected_error": "حدث خطأ غير متوقع.",
+    "error": "حدث خطأ",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "submit": "إرسال",
+    "verify": "تحقق",
+    "minutes": "دقائق",
+    "min": "دقيقة",
+    "sec": "ث"
+  },
+  "first_install": {
+    "language": {
+      "title": "اختر لغتك",
+      "description": "اختر اللغة التي تريد استخدامها في التطبيق."
+    },
+    "welcome": {
+      "skip": "تخطي",
+      "next": "التالي",
+      "start_now": "ابدأ الآن",
+      "slides": {
+        "1": {
+          "title": "مرحباً بكم في Loop’s",
+          "description": "انغمس في Loop’s، حيث يصبح تعلم البرمجة مغامرة ملحمية"
+        },
+        "2": {
+          "title": "استكشف عالم البرمجة لدينا",
+          "description": "تعلم وتقدم في البرمجة من خلال مهام مثيرة وتحديات محفزة"
+        },
+        "3": {
+          "title": "انضم إلى مجتمعنا",
+          "description": "انضم إلى مجتمعنا النابض بالحياة من المبرمجين الشغوفين"
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "username_label": "اسم المستخدم",
+      "password_label": "كلمة المرور",
+      "username_placeholder": "أدخل اسم المستخدم",
+      "password_placeholder": "أدخل كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "google_login": "تسجيل الدخول باستخدام Google",
+      "signup_link": "إنشاء حساب",
+      "forgot_password": "نسيت كلمة المرور؟",
+      "failed": "فشل تسجيل الدخول",
+      "invalid_credentials": "اسم المستخدم أو كلمة المرور غير صالحة",
+      "invalid_password": "كلمة المرور غير صالحة.",
+      "invalid_username": "اسم المستخدم غير صالح.",
+      "invalid_provider": "لا يمكنك تسجيل الدخول بكلمة مرور لهذا النوع من الحسابات.",
+      "unexpected_error": "حدث خطأ غير متوقع."
+    },
+    "register": {
+      "title": "إنشاء حساب"
+    },
+    "verify": {
+      "title": "تأكيد البريد الإلكتروني",
+      "description": "لقد أرسلنا رمز التفعيل إلى بريدك الإلكتروني {{email}}",
+      "label_code": "رمز التأكيد",
+      "submit": "تأكيد الحساب",
+      "submitting": "جاري التأكيد...",
+      "resend_title": "لم أستلم الرمز",
+      "resend_button": "إعادة إرسال",
+      "resend_loading": "جاري الإرسال...",
+      "resend_success": "تم إرسال رمز التأكيد بنجاح!",
+      "resend_success_desc": "يرجى التحقق من بريدك الإلكتروني للحصول على الرمز الجديد.",
+      "resend_error": "فشل في إرسال رمز التأكيد",
+      "resend_error_desc": "يرجى المحاولة مرة أخرى أو الاتصال بالدعم إذا استمرت المشكلة.",
+      "invalid_code": "رمز التأكيد غير صالح.",
+      "expired_code": "الرمز غير صالح أو منتهي الصلاحية.",
+      "failed": "فشل التأكيد",
+      "unexpected_error": "حدث خطأ غير متوقع"
+    }
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "settings_title": "الإعدادات",
+    "edit_profile": "تعديل الملف الشخصي",
+    "security": "الأمان وكلمة المرور",
+    "preferences": "تفضيلات",
+    "logout": "تسجيل الخروج",
+    "change_avatar": "تغيير الصورة الرمزية",
+    "updated_success": "تم تحديث الملف الشخصي بنجاح.",
+    "preferences_updated_success": "تم تحديث التفضيلات بنجاح.",
+    "save_preferences": "حفظ التفضيلات",
+    "sections": {
+      "personal": "شخصي",
+      "personal_subtitle": "بعض التفاصيل لتخصيص تجربتك.",
+      "location": "الموقع",
+      "location_subtitle": "يستخدم للمحتوى المحلي والإحصائيات والمطابقة.",
+      "learning": "التعلم",
+      "learning_subtitle": "اضبط وتيرتك ومستوى خبرتك."
+    },
+    "labels": {
+      "full_name": "الاسم الكامل",
+      "username": "اسم المستخدم",
+      "phone": "رقم الهاتف"
+    },
+    "fields": {
+      "full_name": "اسمك الكامل",
+      "username": "اسم المستخدم",
+      "phone": "رقم هاتفك",
+      "birth_date": "تاريخ الميلاد",
+      "gender": "الجنس",
+      "language": "اللغة",
+      "country": "البلد",
+      "state": "المنطقة/المحافظة",
+      "city": "المدينة",
+      "duration": "مدة التعلم",
+      "experience": "خبرة البرمجة",
+      "goals": "الأهداف",
+      "background": "الخلفية"
+    },
+    "placeholders": {
+      "select_country": "اختر البلد",
+      "select_state": "اختر المنطقة",
+      "select_country_first": "اختر البلد أولاً",
+      "select_city": "اختر المدينة",
+      "select_state_first": "اختر المنطقة أولاً",
+      "daily_goal": "اختر هدفاً يومياً",
+      "select_level": "اختر مستواك",
+      "select_goal": "اختر هدفك",
+      "select_background": "اختر خلفيتك"
+    },
+    "options": {
+      "gender": {
+        "male": "ذكر",
+        "female": "أنثى"
+      },
+      "experience": {
+        "beginner": "مبتدئ",
+        "average": "متوسط",
+        "skilled": "ماهر",
+        "expert": "خبير"
+      },
+      "background": {
+        "student": "طالب",
+        "professional": "محترف",
+        "developer": "مطور",
+        "passionate": "شغوف"
+      },
+      "goals": {
+        "casual": "عادي",
+        "medium": "متوسط",
+        "serious": "جدي",
+        "hard": "صعب"
+      }
+    },
+    "errors": {
+      "username_taken": "اسم المستخدم هذا مأخوذ بالفعل.",
+      "password_incorrect": "كلمة المرور الحالية غير صحيحة.",
+      "password_account_type_error": "لا يمكنك تغيير كلمة المرور لهذا النوع من الحساب.",
+      "password_changed_success": "تم تغيير كلمة المرور بنجاح. يرجى تسجيل الدخول مرة أخرى.",
+      "invalid_fullname": "الاسم الكامل غير صالح.",
+      "invalid_username": "اسم المستخدم غير صالح.",
+      "invalid_phone": "رقم الهاتف غير صالح.",
+      "invalid_birthdate": "تاريخ الميلاد غير صالح.",
+      "invalid_gender": "الجنس غير صالح.",
+      "invalid_duration": "المدة غير صالحة.",
+      "invalid_country": "البلد غير صالح.",
+      "invalid_state": "الولاية/المنطقة غير صالحة.",
+      "invalid_city": "المدينة غير صالحة.",
+      "invalid_language": "اللغة غير صالحة.",
+      "invalid_experience": "مستوى الخبرة غير صالح.",
+      "invalid_goals": "الهدف غير صالح.",
+      "invalid_background": "الخلفية غير صالحة."
+    }
+  },
+  "voucher": {
+    "errors": {
+      "invalid_code": "رمز القسيمة غير صالح.",
+      "invalid_format": "الرجاء إدخال رمز قسيمة مكون من 5 أرقام."
+    }
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "explore": "استكشف",
+    "leaderboard": "لوحة الصدارة",
+    "profile": "الملف الشخصي",
+    "errors": {
+      "no_next_item": "لا يوجد عنصر تالٍ",
+      "no_previous_item": "لا يوجد عنصر سابق",
+      "completion_required": "يرجى إكمال العنصر الحالي قبل المتابعة",
+      "validation_failed": "فشل التنقل بسبب خطأ في التحقق",
+      "invalid_content_type": "نوع محتوى غير صالح للتنقل",
+      "fetch_error": "فشل في جلب وجهة التنقل",
+      "router_error": "حدث خطأ في توجيه التنقل",
+      "generic_failed": "فشل التنقل"
+    }
+  },
+  "quiz": {
+    "stats": {
+      "quizzes": "الاختبارات",
+      "xp": "نقطة خبرة",
+      "time": "الوقت"
+    },
+    "mascot_alt": "تميمة حلقات السباق",
+    "doodle_alt": "خربشات الخلفية",
+    "header_prefix": "الاختبار:",
+    "skill_prefix": "المهارة:",
+    "start_quiz": "ابدأ الاختبار",
+    "start_skill": "ابدأ المهارة",
+    "multiple_answers": "إجابات صحيحة متعددة",
+    "single_answer": "إجابة صحيحة واحدة",
+    "arrange_items": "رتب العناصر بالترتيب",
+    "question": "سؤال"
+  },
+  "session": {
+    "expired": {
+      "title": "انتهت الجلسة",
+      "description_line_1": "انتهت جلستك بسبب عدم النشاط أو خطأ في تسجيل الدخول.",
+      "description_line_2": "سيتم تحويلك إلى صفحة تسجيل الدخول بعد قليل.",
+      "redirecting_in_zero": "سيتم تحويلك الآن...",
+      "redirecting_in_one": "سيتم تحويلك خلال ثانية واحدة...",
+      "redirecting_in_two": "سيتم تحويلك خلال ثانيتين...",
+      "redirecting_in_few": "سيتم تحويلك خلال {{count}} ثوانٍ...",
+      "redirecting_in_many": "سيتم تحويلك خلال {{count}} ثانية...",
+      "redirecting_in_other": "سيتم تحويلك خلال {{count}} ثانية...",
+      "go_to_login": "الانتقال إلى تسجيل الدخول"
+    }
+  }
+}

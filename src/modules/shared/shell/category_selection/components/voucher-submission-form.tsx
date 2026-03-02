@@ -3,6 +3,7 @@ import { DangerIcon } from "@/modules/shared/components/icons/danger"
 import { Button } from "@/modules/shared/components/ui/button"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useForm } from "@tanstack/react-form"
+import { useTranslation } from "react-i18next"
 import { useSubmitVoucher } from "../services/use-submit-voucher"
 
 type VoucherSubmissionFormProps = {
@@ -16,25 +17,37 @@ export function VoucherSubmissionForm({
 }: VoucherSubmissionFormProps) {
   const { error } = useToast()
   const { handleSubmitVoucher } = useSubmitVoucher()
+  const { t } = useTranslation()
 
   const form = useForm({
     defaultValues: { code: "" },
-    validators: {
-      onSubmitAsync: async ({ value }) => {
-        const code = parseInt(value.code, 10)
-        if (isNaN(code) || value.code.length !== 5)
-          return { voucherCode: "Please enter a valid 5-digit voucher code" }
+    onSubmit: async ({ value }) => {
+      const code = parseInt(value.code, 10)
+      if (isNaN(code) || value.code.length !== 5) {
+        form.setFieldMeta("code", (prev) => ({
+          ...prev,
+          errorMap: { onSubmit: t("voucher.errors.invalid_format") },
+          errors: [t("voucher.errors.invalid_format")],
+        }))
+        return
+      }
 
-        const response = await handleSubmitVoucher(categoryId, code)
+      const response = await handleSubmitVoucher(categoryId, code)
 
-        if (response._tag === "Failure") {
-          if (response.error.code === "invalid_input")
-            return { voucherCode: response.error.payload.code }
-          error("Invalid voucher code. Please check and try again.")
+      if (response._tag === "Failure") {
+        if (response.error.code === "invalid_input") {
+          form.setFieldMeta("code", (prev) => ({
+            ...prev,
+            errorMap: { onSubmit: t("voucher.errors.invalid_code") },
+            errors: [t("voucher.errors.invalid_code")],
+          }))
+          return
         }
+        error(t("voucher.errors.invalid_code"))
+        return
+      }
 
-        onSuccess()
-      },
+      onSuccess()
     },
   })
 
