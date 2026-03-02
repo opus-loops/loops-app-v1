@@ -1,3 +1,4 @@
+import { ComingSoonScreen } from "@/modules/shared/components/common/coming-soon-screen"
 import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
 import { authenticatedQuery, useAuth } from "@/modules/shared/guards/use-auth"
 import { CategorySelectionShell } from "@/modules/shared/shell/category_selection/category-selection-shell"
@@ -28,11 +29,11 @@ export const Route = createFileRoute("/leaderboard")({
               <CategorySelectionShell
                 searchParams={search}
                 target={
-                  <div className="relative min-h-screen">
-                    <div className="fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
+                  <ComingSoonScreen>
+                    <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-sm -translate-x-1/2">
                       <BottomTabNavigator />
                     </div>
-                  </div>
+                  </ComingSoonScreen>
                 }
                 user={user}
               />
