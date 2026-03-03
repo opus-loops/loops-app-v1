@@ -23,7 +23,7 @@ export function LoginForm() {
       if (response._tag === "Failure") {
         // Handle invalid_input errors by setting field-specific errors
         if (response.error.code === "invalid_input") {
-          const { payload } = response.error
+          const payload = response.error
 
           // Set username error if present
           if (payload.payload.username) {

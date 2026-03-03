@@ -14,7 +14,7 @@ import { instanceFactory } from "../../utils/axios"
 export const requestConfirmErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),

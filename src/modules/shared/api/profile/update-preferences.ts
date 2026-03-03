@@ -25,7 +25,7 @@ export const updatePreferencesErrorsSchema = Schema.Union(
       state: Schema.optional(UseCaseErrorSchema),
       city: Schema.optional(UseCaseErrorSchema),
       phoneNumber: Schema.optional(UseCaseErrorSchema),
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       language: Schema.optional(UseCaseErrorSchema),
       interests: Schema.optional(UseCaseErrorSchema),

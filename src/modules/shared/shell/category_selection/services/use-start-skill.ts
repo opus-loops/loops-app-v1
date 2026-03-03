@@ -1,11 +1,13 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
+import { useGlobalError } from "../../session/global-error-provider"
 import type { StartSkillWire } from "./start-skill-fn"
 import { startSkillFn } from "./start-skill-fn"
 
 export function useStartSkill() {
   const startSkillServer = useServerFn(startSkillFn)
+  const { handleSessionExpired } = useGlobalError()
   const queryClient = useQueryClient()
 
   const handleStartSkill = useCallback(
@@ -14,6 +16,12 @@ export function useStartSkill() {
       const response = (await startSkillServer({
         data: { categoryId: params.categoryId, skillId: params.skillId },
       })) as StartSkillWire
+
+      if (response._tag === "Failure") {
+        if (response.error.code === "Unauthorized") {
+          await handleSessionExpired()
+        }
+      }
 
       // If successful, invalidate relevant queries to refresh data
       if (response._tag === "Success") {
@@ -24,7 +32,7 @@ export function useStartSkill() {
 
       return response
     },
-    [startSkillServer, queryClient],
+    [startSkillServer, queryClient, handleSessionExpired],
   )
 
   return { handleStartSkill }

@@ -1,7 +1,7 @@
 import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
+import { useUpdateCurrentCategory } from "@/modules/profile/hooks/use-update-current-category"
 import { Button } from "@/modules/shared/components/ui/button"
 import type { User } from "@/modules/shared/domain/entities/user"
-import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
 import { VoucherDialog } from "./voucher-dialog"
 
@@ -14,8 +14,8 @@ export function CategoryActionButton({
   category,
   user,
 }: CategoryActionButtonProps) {
-  const queryClient = useQueryClient()
   const router = useRouter()
+  const { handleUpdateCurrentCategory } = useUpdateCurrentCategory()
 
   const handleContinueLearning = async () => {
     // If user.currentCategory matches current category ID, only navigate
@@ -24,11 +24,7 @@ export function CategoryActionButton({
       return
     }
 
-    // TODO: Make API call to update current category
-    // For now, just invalidate queries and navigate
-    await queryClient.invalidateQueries({
-      queryKey: ["authenticated"],
-    })
+    await handleUpdateCurrentCategory(category.categoryId)
 
     await router.navigate({ to: "/", search: {} })
   }

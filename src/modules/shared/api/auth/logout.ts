@@ -19,8 +19,8 @@ type LogoutArgs = Schema.Schema.Type<typeof logoutArgsSchema>
 export const logoutErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
-      refreshToken: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
+      refreshToken: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),

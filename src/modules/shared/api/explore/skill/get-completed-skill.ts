@@ -26,7 +26,7 @@ type GetCompletedSkillArgs = typeof getCompletedSkillArgsSchema.Type
 export const getCompletedSkillErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
       skillId: Schema.optional(UseCaseErrorSchema),

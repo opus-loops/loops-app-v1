@@ -2,20 +2,17 @@ import { useGlobalError } from "@/modules/shared/shell/session/global-error-prov
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
-import {
-  updatePreferencesFn,
-  type UpdatePreferencesFnArgs,
-} from "../services/update-preferences-fn"
+import { updateCurrentCategoryFn } from "../services/update-current-category-fn"
 
-export function useUpdatePreferences() {
-  const runUpdatePreferences = useServerFn(updatePreferencesFn)
-  const { handleSessionExpired } = useGlobalError()
+export function useUpdateCurrentCategory() {
+  const runUpdateCurrentCategory = useServerFn(updateCurrentCategoryFn)
   const queryClient = useQueryClient()
+  const { handleSessionExpired } = useGlobalError()
 
-  const handleUpdatePreferences = useCallback(
-    async (args: UpdatePreferencesFnArgs) => {
-      const response = await runUpdatePreferences({
-        data: args,
+  const handleUpdateCurrentCategory = useCallback(
+    async (categoryId: string) => {
+      const response = await runUpdateCurrentCategory({
+        data: { categoryId },
       })
 
       if (response._tag === "Failure") {
@@ -32,8 +29,8 @@ export function useUpdatePreferences() {
 
       return response
     },
-    [runUpdatePreferences, queryClient, handleSessionExpired],
+    [runUpdateCurrentCategory, queryClient],
   )
 
-  return { handleUpdatePreferences }
+  return { handleUpdateCurrentCategory }
 }

@@ -1,4 +1,4 @@
-import countryCodesRaw from "virtual:country-codes"
+import countryCodesRaw from "../../../../assets/country-codes.json"
 
 export type CountryCodeRaw = {
   name: string

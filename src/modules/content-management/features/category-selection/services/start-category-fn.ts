@@ -1,0 +1,63 @@
+import {
+  startCategoryErrorsSchema,
+  startCategoryFactory,
+  startCategorySuccessSchema,
+} from "@/modules/shared/api/explore/started_category/start-category"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { unknownErrorSchema } from "@/modules/shared/utils/types"
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
+// --- TYPES (pure TS) ---------------------------------------------------------
+export type StartCategoryErrors =
+  | typeof startCategoryErrorsSchema.Type
+  | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
+
+export type StartCategorySuccess = typeof startCategorySuccessSchema.Type
+
+// JSON-safe wire union
+export type StartCategoryWire =
+  | { _tag: "Failure"; error: StartCategoryErrors }
+  | { _tag: "Success"; value: StartCategorySuccess }
+
+// --- SERVER FUNCTION ---------------------------------------------------------
+export const startCategoryFn = createServerFn({ method: "POST" })
+  .inputValidator(
+    (data) =>
+      data as {
+        readonly categoryId: string
+      },
+  )
+  .handler(async (ctx): Promise<StartCategoryWire> => {
+    const getLoggedUser = await getLoggedUserFactory()
+    const userExit = await Effect.runPromiseExit(getLoggedUser())
+    const isAuthenticated = userExit._tag === "Success"
+
+    if (!isAuthenticated)
+      return {
+        _tag: "Failure",
+        error: { code: "Unauthorized" as const },
+      }
+
+    // 1) Run your Effect on the server
+    const startCategory = await startCategoryFactory()
+    const exit = await Effect.runPromiseExit(startCategory(ctx.data))
+
+    // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)
+    let wire: StartCategoryWire
+    if (exit._tag === "Success") {
+      wire = { _tag: "Success", value: exit.value }
+    } else {
+      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
+        // Fallback if you sometimes throw defects: map to a typed error variant in your union
+        return {
+          code: "UnknownError" as const,
+        }
+      })
+      wire = { _tag: "Failure", error: failure }
+    }
+
+    // 3) Return JSON-serializable value (Start will serialize it)
+    return wire
+  })

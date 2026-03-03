@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
+import { useGlobalError } from "../../session/global-error-provider"
 import type {
   ValidateChoiceQuestionArgs,
   ValidateChoiceQuestionWire,
@@ -9,6 +10,7 @@ import { validateChoiceQuestionFn } from "./validate-choice-question-fn"
 
 export function useValidateChoiceQuestion() {
   const queryClient = useQueryClient()
+  const { handleSessionExpired } = useGlobalError()
   const validateChoiceQuestion = useServerFn(validateChoiceQuestionFn)
 
   const handleValidateChoiceQuestion = useCallback(
@@ -17,6 +19,12 @@ export function useValidateChoiceQuestion() {
       const response = (await validateChoiceQuestion({
         data: args,
       })) as ValidateChoiceQuestionWire
+
+      if (response._tag === "Failure") {
+        if (response.error.code === "Unauthorized") {
+          await handleSessionExpired()
+        }
+      }
 
       if (response._tag === "Success") {
         await queryClient.invalidateQueries({
@@ -30,7 +38,7 @@ export function useValidateChoiceQuestion() {
 
       return response
     },
-    [validateChoiceQuestion, queryClient],
+    [validateChoiceQuestion, queryClient, handleSessionExpired],
   )
 
   return { handleValidateChoiceQuestion }

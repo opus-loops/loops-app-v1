@@ -1,8 +1,9 @@
 import { Schema } from "effect"
 
 export const startedCategorySchema = Schema.Struct({
-  categoryId: Schema.String,
-  userId: Schema.String,
+  category: Schema.String,
+  user: Schema.String,
+  hasSubscription: Schema.Boolean,
   completedItemsCount: Schema.Number.pipe(Schema.int()),
   score: Schema.Number.pipe(Schema.int()),
   totalTime: Schema.Number.pipe(Schema.int()),

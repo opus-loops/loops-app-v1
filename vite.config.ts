@@ -11,10 +11,7 @@ import tsConfigPaths from "vite-tsconfig-paths"
 // TODO: handle error propagation
 // TODO: handle all expected and unexpected errors
 
-const countryCodesVirtualId = "virtual:country-codes"
-const resolvedCountryCodesVirtualId = `\0${countryCodesVirtualId}`
-const countriesCitiesVirtualId = "virtual:countries-cities"
-const resolvedCountriesCitiesVirtualId = `\0${countriesCitiesVirtualId}`
+
 const nitroRawPrefix = "nitro:raw:"
 const nitroRawResolvedPrefix = "\0nitro:raw:"
 const nitroRawJsonProxyPrefix = "\0nitro-raw-json:"
@@ -22,39 +19,7 @@ const nitroRawJsonProxySuffix = ".txt"
 
 export default defineConfig({
   plugins: [
-    {
-      name: "country-codes-virtual",
-      resolveId(id) {
-        if (id === countryCodesVirtualId) return resolvedCountryCodesVirtualId
-        return null
-      },
-      async load(id) {
-        if (id !== resolvedCountryCodesVirtualId) return null
-        const jsonPath = path.resolve(
-          process.cwd(),
-          "assets/country-codes.json",
-        )
-        const json = await fs.readFile(jsonPath, "utf8")
-        return `export default ${json}`
-      },
-    },
-    {
-      name: "countries-cities-virtual",
-      resolveId(id) {
-        if (id === countriesCitiesVirtualId)
-          return resolvedCountriesCitiesVirtualId
-        return null
-      },
-      async load(id) {
-        if (id !== resolvedCountriesCitiesVirtualId) return null
-        const jsonPath = path.resolve(
-          process.cwd(),
-          "assets/countries-cities.json",
-        )
-        const json = await fs.readFile(jsonPath, "utf8")
-        return `export default ${json}`
-      },
-    },
+
     {
       name: "nitro-raw-json-proxy",
       enforce: "pre",

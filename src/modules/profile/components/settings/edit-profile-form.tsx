@@ -97,7 +97,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
         }
 
         if (result.error.code === "invalid_input") {
-          const payload = result.error.payload.payload
+          const payload = result.error.payload
 
           if (payload.fullName) {
             form.setFieldMeta("fullName", (prev) => ({

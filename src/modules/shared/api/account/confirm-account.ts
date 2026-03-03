@@ -21,7 +21,7 @@ type ConfirmAccountArgs = typeof confirmAccountArgsSchema.Type
 export const confirmAccountErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       confirmationCode: Schema.optional(UseCaseErrorSchema),
       userId: Schema.optional(UseCaseErrorSchema),
     }),

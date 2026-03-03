@@ -1,4 +1,5 @@
 import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import {
   queryOptions,
   useQueryClient,
@@ -12,7 +13,10 @@ interface SingleCategoryItemParams {
   itemId: string
 }
 
-export const singleCategoryItemQuery = (params: SingleCategoryItemParams) =>
+export const singleCategoryItemQuery = (
+  params: SingleCategoryItemParams,
+  handleSessionExpired: () => Promise<void>,
+) =>
   queryOptions({
     queryKey: ["single-category-item", params.categoryId, params.itemId],
     queryFn: async () => {
@@ -22,16 +26,21 @@ export const singleCategoryItemQuery = (params: SingleCategoryItemParams) =>
           itemId: params.itemId,
         },
       })
-      if (response._tag === "Failure")
+      if (response._tag === "Failure") {
+        if (response.error.code === "Unauthorized") await handleSessionExpired()
         throw new Error("Failed to fetch category item")
+      }
       return response.value
     },
   })
 
 export function useSingleCategoryItem(params: SingleCategoryItemParams) {
   const queryClient = useQueryClient()
+  const { handleSessionExpired } = useGlobalError()
 
-  const { data } = useSuspenseQuery(singleCategoryItemQuery(params))
+  const { data } = useSuspenseQuery(
+    singleCategoryItemQuery(params, handleSessionExpired),
+  )
 
   useEffect(() => {
     if (!data?.categoryItem) return

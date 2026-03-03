@@ -29,7 +29,7 @@ export type ListExploreCategoryItemsQuery =
 export const listExploreCategoryItemsErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       size: Schema.optional(UseCaseErrorSchema),
       offset: Schema.optional(UseCaseErrorSchema),

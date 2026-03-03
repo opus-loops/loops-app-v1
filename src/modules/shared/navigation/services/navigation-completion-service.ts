@@ -9,6 +9,7 @@ import {
   SkillCompletionService,
   type ISkillCompletionService,
 } from "./skill-completion-service"
+import type { NavigationStartWire } from "../types/navigation-types"
 
 /**
  * Interface for service handling navigation completion logic for different content types.
@@ -20,9 +21,9 @@ export interface INavigationCompletionService {
    * Delegates to specific service based on content type.
    *
    * @param item - The category content item to start
-   * @returns Promise resolving to true if item was successfully started, false otherwise
+   * @returns Promise resolving to a start response (or a skipped reason)
    */
-  validateAndStartItem(item: CategoryContentItem): Promise<boolean>
+  validateAndStartItem(item: CategoryContentItem): Promise<NavigationStartWire>
 
   /**
    * Checks if a content item has been completed.
@@ -78,16 +79,16 @@ export class NavigationCompletionService implements INavigationCompletionService
    * Delegates to specific service based on content type.
    *
    * @param item - The category content item to start
-   * @returns Promise resolving to true if item was successfully started, false otherwise
+   * @returns Promise resolving to a start response (or a skipped reason)
    */
-  async validateAndStartItem(item: CategoryContentItem): Promise<boolean> {
+  async validateAndStartItem(item: CategoryContentItem): Promise<NavigationStartWire> {
     if (item.contentType === "skills")
       return this.skillCompletionService.validateAndStartItem(item)
 
     if (item.contentType === "quizzes")
       return this.quizCompletionService.validateAndStartItem(item)
 
-    return false
+    return { _tag: "Skipped", reason: "InvalidContentType" }
   }
 
   /**

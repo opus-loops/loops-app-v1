@@ -3,9 +3,11 @@ import { completeSkillFn } from "@/modules/shared/shell/category_selection/servi
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
+import { useGlobalError } from "../../session/global-error-provider"
 
 export function useCompleteSkill() {
   const queryClient = useQueryClient()
+  const { handleSessionExpired } = useGlobalError()
   const completeSkillServer = useServerFn(completeSkillFn)
 
   const handleCompleteSkill = useCallback(
@@ -21,6 +23,12 @@ export function useCompleteSkill() {
         data: { categoryId, skillId },
       })) as CompleteSkillWire
 
+      if (response._tag === "Failure") {
+        if (response.error.code === "Unauthorized") {
+          await handleSessionExpired()
+        }
+      }
+
       if (response._tag === "Success") {
         await queryClient.invalidateQueries({
           queryKey: ["single-category-item", categoryId, skillId],
@@ -29,7 +37,7 @@ export function useCompleteSkill() {
 
       return response
     },
-    [completeSkillServer],
+    [completeSkillServer, handleSessionExpired],
   )
 
   return { handleCompleteSkill }

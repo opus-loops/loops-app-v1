@@ -1,6 +1,16 @@
 import { SpaceBackground } from "@/modules/shared/components/common/space-background"
+import { AwardIcon } from "@/modules/shared/components/icons/award"
 import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
 import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
+import { Button } from "@/modules/shared/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/modules/shared/components/ui/card"
 import { Link } from "@tanstack/react-router"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
@@ -11,7 +21,7 @@ import { CategoryMapping } from "./category-mapping"
 type HomeScreenProps = { categoryId: string }
 export function HomeScreen({ categoryId }: HomeScreenProps) {
   const { categoryItems } = useCategoryContent({ categoryId })
-  const { category } = useExploreCategory({ categoryId })
+  const { category, certificate } = useExploreCategory({ categoryId })
 
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
@@ -76,6 +86,86 @@ export function HomeScreen({ categoryId }: HomeScreenProps) {
             categoryItems={categoryItems}
             categoryId={categoryId}
           />
+
+          {category.startedCategory && certificate && (
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="mx-auto w-full max-w-sm"
+            >
+              <Card className="relative overflow-hidden border-white/10 bg-white/5 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.65)] backdrop-blur-md">
+                <div className="pointer-events-none absolute inset-0">
+                  <div className="bg-loops-cyan/25 absolute -top-24 -left-24 h-56 w-56 rounded-full blur-3xl" />
+                  <div className="absolute -right-24 -bottom-24 h-56 w-56 rounded-full bg-purple-500/25 blur-3xl" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] to-transparent" />
+                </div>
+
+                <CardHeader className="relative">
+                  <div className="mx-auto flex w-fit items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1">
+                    <span className="text-[#FFCE51]">
+                      <span className="block size-4">
+                        <AwardIcon />
+                      </span>
+                    </span>
+                    <span className="font-outfit text-loops-light text-xs font-semibold tracking-wide">
+                      Certificate Unlocked
+                    </span>
+                  </div>
+
+                  <CardTitle className="font-outfit text-loops-light mt-3 text-lg">
+                    Congratulations, you did it!
+                  </CardTitle>
+                  <CardDescription className="font-outfit text-loops-light/70">
+                    Your certificate for{" "}
+                    <span className="text-loops-light font-semibold">
+                      {category.name?.[0]?.content ?? "this category"}
+                    </span>{" "}
+                    is ready.
+                  </CardDescription>
+                </CardHeader>
+
+                <CardContent className="relative">
+                  <div className="rounded-xl border border-white/10 bg-black/20 p-2">
+                    <img
+                      src={certificate.imageURL}
+                      alt="Certificate preview"
+                      loading="lazy"
+                      className="aspect-[4/3] w-full rounded-lg object-cover shadow-sm"
+                    />
+                  </div>
+                </CardContent>
+
+                <CardFooter className="relative flex flex-col gap-3">
+                  <div className="grid w-full grid-cols-2 gap-2">
+                    <Button asChild variant="secondary" className="w-full">
+                      <a
+                        href={certificate.pdfURL}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      >
+                        View PDF
+                      </a>
+                    </Button>
+
+                    <Button asChild variant="outline" className="w-full">
+                      <a
+                        href={certificate.imageURL}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      >
+                        Open Image
+                      </a>
+                    </Button>
+                  </div>
+
+                  <div className="font-outfit text-loops-light/60 text-xs">
+                    Keep going — more wins are waiting.
+                  </div>
+                </CardFooter>
+              </Card>
+            </motion.div>
+          )}
         </div>
       </div>
     </SpaceBackground>

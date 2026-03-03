@@ -1,6 +1,7 @@
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
+import { maxFreeItemsReachedErrorSchema } from "@/modules/shared/domain/errors/max-free-items-reached"
 import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
 import { previousItemNotCompletedErrorSchema } from "@/modules/shared/domain/errors/previous-item-not-completed"
 import { quizAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-already-started"
@@ -27,12 +28,13 @@ type StartQuizArgs = typeof startQuizArgsSchema.Type
 export const startQuizErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
       quizId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
+  maxFreeItemsReachedErrorSchema,
   quizAlreadyStartedErrorSchema,
   previousItemNotCompletedErrorSchema,
   notCategoryItemErrorSchema,

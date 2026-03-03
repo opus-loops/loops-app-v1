@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next"
 import { NavigationManager } from "../managers/navigation-manager"
 import { NavigationCompletionService } from "../services/navigation-completion-service"
 import type { NavigationError } from "../types/navigation-types"
+import type { NavigationStartWire } from "../types/navigation-types"
 
 type UseContentNavigationProps = { categoryId: string }
 
@@ -280,17 +281,17 @@ export function useContentNavigation({
    * Validates prerequisites for the next item and starts it.
    * Used for "Continue" actions where the next item needs to be initialized.
    */
-  const validateAndStartItem = useCallback(async (): Promise<boolean> => {
-    if (!selectedItem) return false
+  const validateAndStartItem = useCallback(async (): Promise<NavigationStartWire> => {
+    if (!selectedItem) return { _tag: "Skipped", reason: "NoSelectedItem" }
 
     const nextItemId = selectedItem.nextCategoryItem
-    if (!nextItemId) return false
+    if (!nextItemId) return { _tag: "Skipped", reason: "NoNextItem" }
 
     const nextItem = categoryItems.find(
       (item) => item.categoryItemId === nextItemId,
     )
 
-    if (!nextItem) return false
+    if (!nextItem) return { _tag: "Skipped", reason: "NextItemNotFound" }
 
     return await completionService.validateAndStartItem(nextItem)
   }, [completionService, selectedItem, categoryItems])

@@ -22,7 +22,7 @@ type OnboardingArgs = typeof onboardingArgsSchema.Type
 export const onboardingErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       background: Schema.optional(UseCaseErrorSchema),
       codingExperience: Schema.optional(UseCaseErrorSchema),
       duration: Schema.optional(UseCaseErrorSchema),

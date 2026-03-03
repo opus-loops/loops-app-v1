@@ -1,6 +1,7 @@
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
+import { maxFreeItemsReachedErrorSchema } from "@/modules/shared/domain/errors/max-free-items-reached"
 import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
 import { previousItemNotCompletedErrorSchema } from "@/modules/shared/domain/errors/previous-item-not-completed"
 import { skillAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/skill-already-started"
@@ -27,12 +28,13 @@ type StartSkillArgs = typeof startSkillArgsSchema.Type
 export const startSkillErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
       skillId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
+  maxFreeItemsReachedErrorSchema,
   skillAlreadyStartedErrorSchema,
   previousItemNotCompletedErrorSchema,
   categoryNotFoundErrorSchema,

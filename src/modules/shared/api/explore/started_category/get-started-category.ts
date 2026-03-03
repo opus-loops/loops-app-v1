@@ -22,7 +22,7 @@ type GetStartedCategoryArgs = typeof getStartedCategoryArgsSchema.Type
 export const getStartedCategoryErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
     }),

@@ -1,4 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+import { useGlobalError } from "../../session/global-error-provider"
 import { getQuizContentFn } from "./get-quiz-content-fn"
 
 interface QuizContentParams {
@@ -6,7 +7,10 @@ interface QuizContentParams {
   quizId: string
 }
 
-export const quizContentQuery = (params: QuizContentParams) =>
+export const quizContentQuery = (
+  params: QuizContentParams,
+  handleSessionExpired: () => Promise<void>,
+) =>
   queryOptions({
     queryKey: ["quiz-content", params.categoryId, params.quizId],
     queryFn: async () => {
@@ -17,14 +21,18 @@ export const quizContentQuery = (params: QuizContentParams) =>
         },
       })
 
-      if (response._tag === "Failure")
+      if (response._tag === "Failure") {
+        if (response.error.code === "Unauthorized") await handleSessionExpired()
         throw new Error("Failed to fetch quiz content")
-
+      }
       return response.value
     },
   })
 
 export function useQuizContent(params: QuizContentParams) {
-  const { data } = useSuspenseQuery(quizContentQuery(params))
+  const { handleSessionExpired } = useGlobalError()
+  const { data } = useSuspenseQuery(
+    quizContentQuery(params, handleSessionExpired),
+  )
   return { subQuizzes: data.subQuizzes }
 }

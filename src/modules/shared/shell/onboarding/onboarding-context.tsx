@@ -1,5 +1,5 @@
-import { useOnboarding } from "@/modules/user-onboarding/features/welcome/services/use-onboarding"
 import { useToast } from "@/modules/shared/hooks/use-toast"
+import { useOnboarding } from "@/modules/user-onboarding/features/welcome/services/use-onboarding"
 import { useForm } from "@tanstack/react-form"
 import type { PropsWithChildren } from "react"
 import { createContext, useContext } from "react"
@@ -30,7 +30,7 @@ const createOnboardingForm = () => {
 
       if (response._tag === "Failure") {
         if (response.error.code === "invalid_input") {
-          const { payload } = response.error.payload
+          const payload = response.error.payload
           // Map backend fields to form fields
           // duration -> dailyGoal
           // codingExperience -> level

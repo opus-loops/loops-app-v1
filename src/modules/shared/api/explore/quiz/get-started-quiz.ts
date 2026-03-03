@@ -26,7 +26,7 @@ type GetStartedQuizArgs = typeof getStartedQuizArgsSchema.Type
 export const getStartedQuizErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
       quizId: Schema.optional(UseCaseErrorSchema),

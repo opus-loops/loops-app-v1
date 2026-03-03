@@ -1,6 +1,7 @@
 import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useContentNavigation } from "@/modules/shared/navigation"
+import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
 import { useCompleteSkill } from "@/modules/shared/shell/category_selection/hooks/use-complete-skill"
 import { useState } from "react"
 import { useSkillStepper } from "./skill-stepper"
@@ -23,6 +24,7 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
   const { goToStep } = useSkillStepper()
 
   const [isLoading, setIsLoading] = useState(false)
+  const [isVoucherDialogOpen, setIsVoucherDialogOpen] = useState(false)
 
   // Check if current item is started (has completedSkill but not completed)
   const isStarted =
@@ -59,12 +61,20 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
     }
 
     // Try to start the next item and navigate to it
-    const isSuccess = await validateAndStartItem()
+    const response = await validateAndStartItem()
 
     setIsLoading(false)
 
     // Successfully started next item, now navigate
-    if (isSuccess) {
+    if (
+      response._tag === "Failure" &&
+      response.error.code === "max_free_items_reached"
+    ) {
+      setIsVoucherDialogOpen(true)
+      return
+    }
+
+    if (response._tag === "Success") {
       await navigateToNext()
       goToStep("welcome")
     }
@@ -76,12 +86,24 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
   }
 
   return (
-    <button
-      onClick={handleButtonClick}
-      disabled={isLoading}
-      className="font-outfit text-loops-light w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
-    >
-      {isLoading ? "Loading..." : isCompleted ? "Next" : "Validate"}
-    </button>
+    <>
+      <button
+        onClick={handleButtonClick}
+        disabled={isLoading}
+        className="font-outfit text-loops-light w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {isLoading ? "Loading..." : isCompleted ? "Next" : "Validate"}
+      </button>
+
+      <VoucherDialog
+        categoryId={skillItem.categoryId}
+        description="Your 3 free trials are over. Submit a voucher code to continue learning. Contact the admin for a code."
+        open={isVoucherDialogOpen}
+        showFreeTrial={false}
+        showTrigger={false}
+        title="Free trial limit reached"
+        onOpenChange={setIsVoucherDialogOpen}
+      />
+    </>
   )
 }

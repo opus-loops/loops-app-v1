@@ -1,3 +1,4 @@
+import { useStartCategory } from "@/modules/content-management/features/category-selection/hooks/use-start-category"
 import { Button } from "@/modules/shared/components/ui/button"
 import {
   Dialog,
@@ -14,11 +15,19 @@ type VoucherDialogProps = {
   categoryId: string
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  showFreeTrial?: boolean
+  showTrigger?: boolean
+  title?: string
+  description?: string
 }
 export function VoucherDialog({
   categoryId,
   open: externalOpen,
   onOpenChange,
+  showFreeTrial = true,
+  showTrigger = true,
+  title = "Unlock Category",
+  description = "Enter your voucher code to unlock this category and start your learning journey!",
 }: VoucherDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -27,13 +36,25 @@ export function VoucherDialog({
   const open = externalOpen !== undefined ? externalOpen : internalOpen
   const setOpen = onOpenChange || setInternalOpen
 
+  const { handleStartCategory } = useStartCategory()
+  const [isStartingFreeTrial, setIsStartingFreeTrial] = useState(false)
+
+  const onStartFreeTrial = async () => {
+    setIsStartingFreeTrial(true)
+    const response = await handleStartCategory(categoryId)
+    setIsStartingFreeTrial(false)
+    if (response._tag === "Success") setOpen(false)
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild ref={triggerRef}>
-        <Button className="font-outfit text-loops-light hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none transition-all duration-200">
-          Start now
-        </Button>
-      </DialogTrigger>
+      {showTrigger ? (
+        <DialogTrigger asChild ref={triggerRef}>
+          <Button className="font-outfit text-loops-light hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none transition-all duration-200">
+            Start now
+          </Button>
+        </DialogTrigger>
+      ) : null}
       <DialogContent className="bg-loops-background border-loops-gray/20 max-w-sm rounded-3xl border p-0 shadow-2xl">
         <AnimatePresence>
           <motion.div
@@ -111,7 +132,7 @@ export function VoucherDialog({
                   transition={{ delay: 0.3, duration: 0.3 }}
                 >
                   <DialogTitle className="text-loops-light text-lg font-bold">
-                    Unlock Category
+                    {title}
                   </DialogTitle>
                 </motion.div>
               </DialogHeader>
@@ -124,8 +145,7 @@ export function VoucherDialog({
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: 0.4, duration: 0.3 }}
               >
-                Enter your voucher code to unlock this category and start your
-                learning journey!
+                {description}
               </motion.p>
 
               {/* Form */}
@@ -140,6 +160,30 @@ export function VoucherDialog({
                   categoryId={categoryId}
                   onSuccess={() => setOpen(false)}
                 />
+
+                {showFreeTrial ? (
+                  <>
+                    <div className="relative my-4">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-white/10" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-loops-background text-loops-light/50 px-2 font-medium">
+                          Or
+                        </span>
+                      </div>
+                    </div>
+
+                    <Button
+                      className="font-outfit text-loops-light border-loops-light/20 w-full rounded-xl border-2 bg-transparent py-6 text-base leading-5 font-semibold capitalize transition-all duration-200 hover:bg-white/5"
+                      disabled={isStartingFreeTrial}
+                      type="button"
+                      onClick={onStartFreeTrial}
+                    >
+                      {isStartingFreeTrial ? "Starting..." : "Start Free Trial"}
+                    </Button>
+                  </>
+                ) : null}
               </motion.div>
             </motion.div>
           </motion.div>

@@ -23,7 +23,7 @@ type GetExploreCategoryItemArgs = typeof getExploreCategoryItemArgsSchema.Type
 export const getExploreCategoryItemErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
       itemId: Schema.optional(UseCaseErrorSchema),

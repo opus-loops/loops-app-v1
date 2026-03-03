@@ -21,7 +21,7 @@ export type UploadFileArgs = typeof uploadFileArgsSchema.Type
 export const uploadFileErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),

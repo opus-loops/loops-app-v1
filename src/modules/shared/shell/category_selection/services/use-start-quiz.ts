@@ -1,11 +1,13 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
+import { useGlobalError } from "../../session/global-error-provider"
 import type { StartQuizWire } from "./start-quiz-fn"
 import { startQuizFn } from "./start-quiz-fn"
 
 export function useStartQuiz() {
   const startQuizServer = useServerFn(startQuizFn)
+  const { handleSessionExpired } = useGlobalError()
   const queryClient = useQueryClient()
 
   const handleStartQuiz = useCallback(
@@ -14,6 +16,12 @@ export function useStartQuiz() {
       const response = (await startQuizServer({
         data: { categoryId, quizId },
       })) as StartQuizWire
+
+      if (response._tag === "Failure") {
+        if (response.error.code === "Unauthorized") {
+          await handleSessionExpired()
+        }
+      }
 
       // If successful, invalidate relevant queries to refresh data
       if (response._tag === "Success") {
@@ -24,7 +32,7 @@ export function useStartQuiz() {
 
       return response
     },
-    [startQuizServer, queryClient],
+    [startQuizServer, queryClient, handleSessionExpired],
   )
 
   return { handleStartQuiz }

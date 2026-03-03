@@ -4,10 +4,7 @@ import { Schema } from "effect"
 import { invalidRefreshTokenErrorSchema } from "../../domain/errors/invalid-refresh-token"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import { loginTokensSchema } from "../../domain/types/login-tokens"
-import {
-  UseCaseErrorSchema,
-  invalidInputFactory,
-} from "../../domain/utils/invalid-input"
+import { invalidInputFactory } from "../../domain/utils/invalid-input"
 import { parseApiResponse } from "../../utils/parse-api-response"
 import { parseEffectSchema } from "../../utils/parse-effect-schema"
 
@@ -16,7 +13,7 @@ type RefreshArgs = Schema.Schema.Type<typeof refreshArgsSchema>
 
 const refreshErrorsSchema = Schema.Union(
   invalidInputFactory(
-    Schema.Struct({ refreshToken: Schema.optional(UseCaseErrorSchema) }),
+    Schema.Struct({ refreshToken: Schema.optional(Schema.String) }),
   ),
   invalidRefreshTokenErrorSchema,
   userNotFoundErrorSchema,

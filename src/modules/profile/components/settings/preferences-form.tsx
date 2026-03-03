@@ -144,9 +144,7 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
         payload.language = value.language
       }
 
-      if (
-        (value.codingExperience ?? "") !== (initial.codingExperience ?? "")
-      ) {
+      if ((value.codingExperience ?? "") !== (initial.codingExperience ?? "")) {
         payload.codingExperience =
           (value.codingExperience ?? "").trim() || undefined
       }
@@ -168,7 +166,7 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
 
       if (result._tag === "Failure") {
         if (result.error.code === "invalid_input") {
-          const errorPayload = result.error.payload.payload
+          const errorPayload = result.error.payload
 
           if (errorPayload.birthDate) {
             form.setFieldMeta("birthDate", (prev) => ({
@@ -248,10 +246,7 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
       }
 
       toastSuccess(t("profile.preferences_updated_success"))
-      if (
-        payload.language &&
-        payload.language !== initial.language
-      ) {
+      if (payload.language && payload.language !== initial.language) {
         await i18n.changeLanguage(payload.language)
         setTimeout(() => window.location.reload(), 250)
       }

@@ -13,7 +13,7 @@ import { parseApiResponse } from "../../utils/parse-api-response"
 export const getLoggedUserErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),

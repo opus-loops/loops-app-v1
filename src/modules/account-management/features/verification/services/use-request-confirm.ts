@@ -1,4 +1,5 @@
 // src/features/request_confirm/use-request-confirm.ts
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 import type { RequestConfirmWire } from "./request-confirm-fn"
@@ -6,10 +7,17 @@ import { requestConfirmFn } from "./request-confirm-fn"
 
 export function useRequestConfirm() {
   const requestConfirmServer = useServerFn(requestConfirmFn)
+  const { handleSessionExpired } = useGlobalError()
 
   const handleRequestConfirm = useCallback(async () => {
     // Call server function → returns JSON-safe union
     const response = (await requestConfirmServer()) as RequestConfirmWire
+
+    if (response._tag === "Failure") {
+      if (response.error.code === "Unauthorized") {
+        await handleSessionExpired()
+      }
+    }
 
     // No runtime decode on client. If you still want runtime checks,
     // you can add a tiny inline type guard here.

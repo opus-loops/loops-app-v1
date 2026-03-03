@@ -1,4 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+import { useGlobalError } from "../../session/global-error-provider"
 import { getSubQuizContentFn } from "./get-sub-quiz-content-fn"
 
 interface SubQuizContentParams {
@@ -7,7 +8,10 @@ interface SubQuizContentParams {
   questionId: string
 }
 
-export const subQuizContentQuery = (params: SubQuizContentParams) =>
+export const subQuizContentQuery = (
+  params: SubQuizContentParams,
+  handleSessionExpired: () => Promise<void>,
+) =>
   queryOptions({
     queryKey: [
       "sub-quiz-content",
@@ -24,14 +28,19 @@ export const subQuizContentQuery = (params: SubQuizContentParams) =>
         },
       })
 
-      if (response._tag === "Failure")
+      if (response._tag === "Failure") {
+        if (response.error.code === "Unauthorized") await handleSessionExpired()
         throw new Error("Failed to fetch sub-quiz content")
+      }
 
       return response.value
     },
   })
 
 export function useSubQuizContent(params: SubQuizContentParams) {
-  const { data } = useSuspenseQuery(subQuizContentQuery(params))
+  const { handleSessionExpired } = useGlobalError()
+  const { data } = useSuspenseQuery(
+    subQuizContentQuery(params, handleSessionExpired),
+  )
   return { subQuiz: data.subQuiz }
 }

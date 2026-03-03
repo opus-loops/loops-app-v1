@@ -1,5 +1,6 @@
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
+import type { NavigationStartWire } from "../types/navigation-types"
 
 /**
  * Interface for service handling skill completion logic.
@@ -10,9 +11,9 @@ export interface ISkillCompletionService {
    * Validates if a skill item can be started and initiates the start process if valid.
    *
    * @param item - The category content item to start (must be a skill)
-   * @returns Promise resolving to true if skill was successfully started or already active, false otherwise
+   * @returns Promise resolving to a start response (or a skipped reason)
    */
-  validateAndStartItem(item: CategoryContentItem): Promise<boolean>
+  validateAndStartItem(item: CategoryContentItem): Promise<NavigationStartWire>
 
   /**
    * Checks if a skill item has been completed.
@@ -56,19 +57,21 @@ export class SkillCompletionService implements ISkillCompletionService {
    * Checks if the item is a skill, if it's already started/completed, or if it can be started.
    *
    * @param item - The category content item to start
-   * @returns Promise resolving to true if skill was successfully started or already active, false otherwise
+   * @returns Promise resolving to a start response (or a skipped reason)
    */
-  async validateAndStartItem(item: CategoryContentItem): Promise<boolean> {
-    if (item.contentType !== "skills") return false
-    if (this.isItemCompleted(item) || this.isItemStarted(item)) return true
-    if (!this.canStartItem(item)) return false
+  async validateAndStartItem(item: CategoryContentItem): Promise<NavigationStartWire> {
+    if (item.contentType !== "skills")
+      return { _tag: "Skipped", reason: "InvalidContentType" }
+    if (this.isItemCompleted(item) || this.isItemStarted(item))
+      return { _tag: "Skipped", reason: "AlreadyStartedOrCompleted" }
+    if (!this.canStartItem(item)) return { _tag: "Skipped", reason: "CannotStart" }
 
     const response = await this.startSkillHook.handleStartSkill({
       categoryId: item.categoryId,
       skillId: item.itemId,
     })
 
-    return response._tag === "Success"
+    return response
   }
 
   /**

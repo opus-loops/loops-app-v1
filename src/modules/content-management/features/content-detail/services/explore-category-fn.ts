@@ -1,9 +1,11 @@
 import type { getExploreCategoryErrorsSchema } from "@/modules/shared/api/explore/category/get-explore-category"
 import { getExploreCategoryFactory } from "@/modules/shared/api/explore/category/get-explore-category"
+import { getCertificateFactory } from "@/modules/shared/api/explore/certificate/get-certificate"
 import type { getStartedCategoryErrorsSchema } from "@/modules/shared/api/explore/started_category/get-started-category"
 import { getStartedCategoryFactory } from "@/modules/shared/api/explore/started_category/get-started-category"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { Category } from "@/modules/shared/domain/entities/category"
+import type { Certificate } from "@/modules/shared/domain/entities/certificate"
 import type { StartedCategory } from "@/modules/shared/domain/entities/started-category"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
@@ -18,6 +20,7 @@ export type ExploreCategoryErrors =
 
 export type CategoryWithStartedCategory = Category & {
   startedCategory?: StartedCategory
+  certificate?: Certificate
 }
 
 export type ExploreCategorySuccess = {
@@ -77,6 +80,20 @@ const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
     if (startedCategoryExit._tag === "Success") {
       categoryWithStartedData.startedCategory =
         startedCategoryExit.value.startedCategory
+
+      const getCertificate = yield* _(
+        Effect.promise(() => getCertificateFactory()),
+      )
+
+      const certificateExit = yield* _(
+        Effect.promise(() =>
+          Effect.runPromiseExit(getCertificate({ categoryId })),
+        ),
+      )
+
+      if (certificateExit._tag === "Success") {
+        categoryWithStartedData.certificate = certificateExit.value.certificate
+      }
     }
 
     // If it fails with category_not_started, that's expected - category not started yet

@@ -1,13 +1,13 @@
-import countriesCitiesData from "virtual:countries-cities"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
+import countriesCitiesData from "../../../../../../assets/countries-cities.json"
+import { BirthDateCalendar } from "./birth-date-calendar"
 import {
   backgroundOptions,
   codingExperienceOptions,
   durationOptions,
   goalsOptions,
 } from "./constants"
-import { BirthDateCalendar } from "./birth-date-calendar"
 import { GenderRadioGroup } from "./gender-radio-group"
 import { InlineSelect } from "./inline-select"
 import { LanguageSelectGroup } from "./language-select-group"
@@ -111,18 +111,24 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
         </form.Field>
       </PreferencesGroup>
 
-      <form.Subscribe selector={(state: any) => [state.values.country, state.values.state]}>
+      <form.Subscribe
+        selector={(state: any) => [state.values.country, state.values.state]}
+      >
         {([country, stateName]: [string, string]) => {
           const selectedCountry = (dataset?.Countries ?? []).find(
             (c) => c.CountryName === country,
           )
           const stateOptions = toOptions(
-            sortStrings((selectedCountry?.States ?? []).map((s) => s.StateName)),
+            sortStrings(
+              (selectedCountry?.States ?? []).map((s) => s.StateName),
+            ),
           )
           const selectedState = (selectedCountry?.States ?? []).find(
             (s) => s.StateName === stateName,
           )
-          const cityOptions = toOptions(sortStrings(selectedState?.Cities ?? []))
+          const cityOptions = toOptions(
+            sortStrings(selectedState?.Cities ?? []),
+          )
 
           return (
             <PreferencesGroup
@@ -276,7 +282,8 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
                 placeholder={t("profile.placeholders.select_goal")}
                 options={goalsOptions.map((o) => {
                   const minutes = o.value.replace(/\D/g, "")
-                  const levelKey = o.value.replace(/\d+min/, "").toLowerCase() || "casual"
+                  const levelKey =
+                    o.value.replace(/\d+min/, "").toLowerCase() || "casual"
                   return {
                     value: o.value,
                     label: `${minutes} ${t("common.min")} (${t(`profile.options.goals.${levelKey}`)})`,

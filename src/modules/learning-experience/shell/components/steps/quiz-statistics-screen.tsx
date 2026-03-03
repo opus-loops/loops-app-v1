@@ -3,6 +3,7 @@ import { NoteIcon } from "@/modules/shared/components/icons/note"
 import { TimerIcon } from "@/modules/shared/components/icons/timer"
 import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useContentNavigation } from "@/modules/shared/navigation"
+import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -105,6 +106,7 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   const { itemProgress: startedQuiz } = quizItem
   const [isLoading, setIsLoading] = useState(false)
   const [isCelebrationActive, setIsCelebrationActive] = useState(true)
+  const [isVoucherDialogOpen, setIsVoucherDialogOpen] = useState(false)
   const { t } = useTranslation()
 
   const {
@@ -149,12 +151,20 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
     }
 
     // Try to start the next item and navigate to it
-    const isSuccess = await validateAndStartItem()
+    const response = await validateAndStartItem()
 
     setIsLoading(false)
 
     // Successfully started next item, now navigate
-    if (isSuccess) {
+    if (
+      response._tag === "Failure" &&
+      response.error.code === "max_free_items_reached"
+    ) {
+      setIsVoucherDialogOpen(true)
+      return
+    }
+
+    if (response._tag === "Success") {
       await navigateToNext()
       goToStep("welcome")
     }
@@ -167,6 +177,15 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   return (
     <div className="font-outfit relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#000016] px-9">
       <CelebrationParticles isActive={isCelebrationActive} />
+      <VoucherDialog
+        categoryId={quizItem.categoryId}
+        description="Your 3 free trials are over. Submit a voucher code to continue learning. Contact the admin for a code."
+        open={isVoucherDialogOpen}
+        showFreeTrial={false}
+        showTrigger={false}
+        title="Free trial limit reached"
+        onOpenChange={setIsVoucherDialogOpen}
+      />
       {/* Container matching Figma frame1000009848 */}
       <div className="flex w-full max-w-[390px] flex-col items-center gap-10">
         {/* Main Content Card */}

@@ -16,7 +16,7 @@ import { Schema } from "effect"
 export const updatePasswordErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       password: Schema.optional(UseCaseErrorSchema),
       newPassword: Schema.optional(UseCaseErrorSchema),

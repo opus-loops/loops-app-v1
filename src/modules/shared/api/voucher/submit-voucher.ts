@@ -1,4 +1,3 @@
-import { categoryAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/category-already-started"
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { invalidExpiredVoucherErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-voucher"
@@ -13,6 +12,7 @@ import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import { Effect, Schema } from "effect"
+import { categoryAlreadyStartedWithSubscriptionErrorSchema } from "../../domain/errors/category-already-started-with-subscription"
 
 const submitVoucherArgsSchema = Schema.Struct({
   categoryId: Schema.String,
@@ -24,7 +24,7 @@ type SubmitVoucherArgs = typeof submitVoucherArgsSchema.Type
 export const submitVoucherErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
-      authorization: Schema.optional(UseCaseErrorSchema),
+      authorization: Schema.optional(Schema.String),
       userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
       code: Schema.optional(UseCaseErrorSchema),
@@ -32,7 +32,7 @@ export const submitVoucherErrorsSchema = Schema.Union(
   ),
   voucherNotFoundErrorSchema,
   invalidExpiredVoucherErrorSchema,
-  categoryAlreadyStartedErrorSchema,
+  categoryAlreadyStartedWithSubscriptionErrorSchema,
   categoryNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
   userNotFoundErrorSchema,

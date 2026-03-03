@@ -1,3 +1,4 @@
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
@@ -6,6 +7,8 @@ import { onboardingFn } from "./onboarding-fn"
 
 export function useOnboarding() {
   const onboardingServer = useServerFn(onboardingFn)
+  const { handleSessionExpired } = useGlobalError()
+
   const queryClient = useQueryClient()
 
   const handleOnboarding = useCallback(
@@ -13,6 +16,12 @@ export function useOnboarding() {
       const response = (await onboardingServer({
         data: formData,
       })) as OnboardingWire
+
+      if (response._tag === "Failure") {
+        if (response.error.code === "Unauthorized") {
+          await handleSessionExpired()
+        }
+      }
 
       if (response._tag === "Success")
         await queryClient.invalidateQueries({
@@ -22,7 +31,7 @@ export function useOnboarding() {
 
       return response
     },
-    [onboardingServer, queryClient],
+    [onboardingServer, queryClient, handleSessionExpired],
   )
 
   return { handleOnboarding }
