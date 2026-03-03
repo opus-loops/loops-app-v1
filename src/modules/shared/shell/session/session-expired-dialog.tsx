@@ -1,16 +1,10 @@
+import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { useRouter } from "@tanstack/react-router"
-import { AlertTriangle, Clock } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { Button } from "@/modules/shared/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/modules/shared/components/ui/dialog"
+import { cn } from "@/modules/shared/lib/utils"
+import cryingLoopsUrl from "../../../../../assets/images/crying-loops.png"
 
 interface SessionExpiredDialogProps {
   isOpen: boolean
@@ -60,58 +54,57 @@ export function SessionExpiredDialog({
     }
   }, [isOpen])
 
+  const handleLoginRedirect = () => {
+    onClose()
+    const redirectTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
+    router.navigate({
+      search: { redirect: redirectTo },
+      to: "/login",
+    })
+  }
+
   return (
-    <Dialog onOpenChange={onClose} open={isOpen}>
-      <DialogContent className="bg-card border-0 sm:max-w-md">
-        <DialogHeader className="flex flex-col items-center space-y-4 pb-4 text-center">
-          <div className="from-loops-gradient-danger-start to-loops-gradient-danger-end flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r shadow-lg">
-            <AlertTriangle className="text-loops-light h-8 w-8" />
-          </div>
-          <DialogTitle className="font-outfit text-loops-text text-2xl font-semibold">
-            {t("session.expired.title")}
-          </DialogTitle>
-          <DialogDescription className="font-outfit text-muted-foreground text-base leading-relaxed">
-            {t("session.expired.description_line_1")}
-            <br />
-            {t("session.expired.description_line_2")}
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-6 pt-0">
-          <div className="border-border bg-muted/30 space-y-3 rounded-lg border p-4">
-            <div className="text-loops-text flex items-center justify-center gap-2">
-              <Clock className="text-loops-orange h-5 w-5 animate-pulse" />
-              <span className="font-outfit text-lg font-semibold">
-                {t("session.expired.redirecting_in", { count: countdown })}
-              </span>
-            </div>
-
-            <div className="bg-muted h-2 w-full overflow-hidden rounded-full">
-              <div
-                className="from-loops-gradient-danger-start to-loops-gradient-danger-end h-full bg-gradient-to-r transition-all duration-1000 ease-linear"
-                style={{
-                  width: `${((3 - countdown) / 3) * 100}%`,
-                }}
-              />
-            </div>
+    <DialogPrimitive.Root onOpenChange={onClose} open={isOpen}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/80" />
+        <DialogPrimitive.Content
+          className={cn(
+            "fixed top-1/2 left-1/2 z-50 w-[344px] max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2",
+            "bg-loops-background flex h-[591px] flex-col items-center justify-center gap-8 rounded-3xl px-6 py-8 shadow-lg outline-none",
+          )}
+        >
+          <div className="flex flex-col items-center gap-4">
+            <DialogPrimitive.Title className="text-loops-orange text-center text-2xl leading-[34px] font-semibold">
+              {t("session.expired.title")}
+            </DialogPrimitive.Title>
+            <DialogPrimitive.Description className="text-loops-orange text-center text-base leading-[22px]">
+              {t("session.expired.description_line_1")}
+              <br /> {t("session.expired.description_line_2")}&nbsp;
+            </DialogPrimitive.Description>
           </div>
 
-          <Button
-            className="font-outfit from-loops-purple to-loops-blue hover:from-loops-purple/90 hover:to-loops-blue/90 text-loops-light w-full bg-gradient-to-r font-medium"
-            onClick={() => {
-              onClose()
-              const redirectTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
-              router.navigate({
-                search: { redirect: redirectTo },
-                to: "/login",
-              })
-            }}
-            size="lg"
-          >
-            {t("session.expired.go_to_login")}
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+          <img
+            alt="Crying Loops mascot"
+            className="h-[227px] w-[224px] object-contain select-none"
+            draggable={false}
+            src={cryingLoopsUrl}
+          />
+
+          <div className="flex w-full flex-col gap-4 px-5">
+            <p className="text-loops-cyan text-center text-2xl leading-[34px] font-semibold">
+              {t("session.expired.redirecting_in", { count: countdown })}
+            </p>
+
+            <button
+              className="bg-loops-cyan inline-flex w-full items-center justify-center rounded-lg px-4 py-2 text-[18px] leading-[30px] font-medium text-[#15153a] focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20 disabled:cursor-not-allowed disabled:opacity-50"
+              onClick={handleLoginRedirect}
+              type="button"
+            >
+              {t("session.expired.go_to_login")}
+            </button>
+          </div>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   )
 }
