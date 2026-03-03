@@ -2,16 +2,44 @@ import { useForm } from "@tanstack/react-form"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
-import { useUpdatePreferences } from "../../hooks/use-update-preferences"
-import { PreferencesFields } from "./preferences/preferences-fields"
 import type { User } from "@/modules/shared/domain/entities/user"
+import countriesCitiesData from "../../../../../assets/countries-cities.json"
+import { useUpdatePreferences } from "../../hooks/use-update-preferences"
 
 import { UserIcon } from "@/modules/shared/components/icons/user"
 import { Button } from "@/modules/shared/components/ui/button"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 
+import { BirthDateCalendar } from "./preferences/birth-date-calendar"
+import {
+  backgroundOptions,
+  codingExperienceOptions,
+  durationOptions,
+  goalsOptions,
+} from "./preferences/constants"
+import { GenderRadioGroup } from "./preferences/gender-radio-group"
+import { InlineSelect } from "./preferences/inline-select"
+import { LanguageSelectGroup } from "./preferences/language-select-group"
+import { PreferenceField } from "./preferences/preference-field"
+import { PreferencesGroup } from "./preferences/preferences-group"
+
 type PreferencesFormProps = {
   user: User
+}
+
+type CountriesCities = {
+  Countries: Array<{
+    CountryName: string
+    States: Array<{
+      Cities: Array<string>
+      StateName: string
+    }>
+  }>
+}
+
+type FieldErrorProps = {
+  errors: Array<unknown>
+  isTouched?: boolean
 }
 
 export function PreferencesForm({ user }: PreferencesFormProps) {
@@ -19,52 +47,59 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
   const { error: toastError, success: toastSuccess } = useToast()
   const { i18n, t } = useTranslation()
 
+  const dataset = countriesCitiesData as CountriesCities
+
+  const countryOptions = useMemo(() => {
+    const countries = dataset?.Countries ?? []
+    return toOptions(sortStrings(countries.map((c) => c.CountryName)))
+  }, [dataset])
+
   const initial = useMemo(() => {
     const normalizeCodingExperience = (raw: string | undefined) => {
-      const v = (raw ?? "").trim()
-      if (!v) return ""
+      const value = raw?.trim()
+      if (!value) return ""
       const direct = ["beginner", "average", "skilled", "expert"] as const
-      if (direct.includes(v as any)) return v
+      if (direct.includes(value as (typeof direct)[number])) return value
       const map: Record<string, string> = {
         Average: "average",
         Beginner: "beginner",
         Expert: "expert",
         Skilled: "skilled",
       }
-      return map[v] ?? ""
+      return map[value] ?? ""
     }
 
     const normalizeBackground = (raw: string | undefined) => {
-      const v = (raw ?? "").trim()
-      if (!v) return ""
+      const value = raw?.trim()
+      if (!value) return ""
       const direct = [
         "student",
         "professional",
         "developer",
         "passionate",
       ] as const
-      if (direct.includes(v as any)) return v
+      if (direct.includes(value as (typeof direct)[number])) return value
       const map: Record<string, string> = {
         Developer: "developer",
         Passionate: "passionate",
         Professional: "professional",
         Student: "student",
       }
-      return map[v] ?? ""
+      return map[value] ?? ""
     }
 
     const normalizeGoals = (raw: string | undefined) => {
-      const v = (raw ?? "").trim()
-      if (!v) return ""
+      const value = raw?.trim()
+      if (!value) return ""
       const direct = ["5min", "10min", "15min", "20min"] as const
-      if (direct.includes(v as any)) return v
+      if (direct.includes(value as (typeof direct)[number])) return value
       const map: Record<string, string> = {
         "10 min": "10min",
         "15 min": "15min",
         "20 min": "20min",
         "5 min": "5min",
       }
-      return map[v] ?? ""
+      return map[value] ?? ""
     }
 
     return {
@@ -107,50 +142,49 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
     },
 
     onSubmit: async ({ value }) => {
-      const payload: any = {}
+      const payload: Record<string, any> = {}
 
-      if ((value.birthDate ?? "") !== (initial.birthDate ?? "")) {
-        payload.birthDate = (value.birthDate ?? "").trim() || undefined
+      if (value.birthDate !== initial.birthDate) {
+        payload.birthDate = value.birthDate || undefined
       }
 
-      if ((value.gender ?? "") !== (initial.gender ?? "")) {
-        payload.gender = (value.gender ?? "").trim() || undefined
+      if (value.gender !== initial.gender) {
+        payload.gender = value.gender || undefined
       }
 
-      if ((value.duration ?? "") !== (initial.duration ?? "")) {
+      if (value.duration !== initial.duration) {
         payload.duration =
           value.duration && value.duration.trim()
             ? Number(value.duration)
             : undefined
       }
 
-      if ((value.country ?? "") !== (initial.country ?? "")) {
-        payload.country = (value.country ?? "").trim() || undefined
+      if (value.country !== initial.country) {
+        payload.country = value.country || undefined
       }
 
-      if ((value.state ?? "") !== (initial.state ?? "")) {
-        payload.state = (value.state ?? "").trim() || undefined
+      if (value.state !== initial.state) {
+        payload.state = value.state || undefined
       }
 
-      if ((value.city ?? "") !== (initial.city ?? "")) {
-        payload.city = (value.city ?? "").trim() || undefined
+      if (value.city !== initial.city) {
+        payload.city = value.city || undefined
       }
 
-      if ((value.language ?? "") !== (initial.language ?? "")) {
+      if (value.language !== initial.language) {
         payload.language = value.language
       }
 
-      if ((value.codingExperience ?? "") !== (initial.codingExperience ?? "")) {
-        payload.codingExperience =
-          (value.codingExperience ?? "").trim() || undefined
+      if (value.codingExperience !== initial.codingExperience) {
+        payload.codingExperience = value.codingExperience || undefined
       }
 
-      if ((value.goals ?? "") !== (initial.goals ?? "")) {
-        payload.goals = (value.goals ?? "").trim() || undefined
+      if (value.goals !== initial.goals) {
+        payload.goals = value.goals || undefined
       }
 
-      if ((value.background ?? "") !== (initial.background ?? "")) {
-        payload.background = (value.background ?? "").trim() || undefined
+      if (value.background !== initial.background) {
+        payload.background = value.background || undefined
       }
 
       if (Object.keys(payload).length === 0) {
@@ -280,7 +314,269 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
         </h2>
       </div>
 
-      <PreferencesFields form={form} />
+      <div className="flex flex-col gap-6">
+        <PreferencesGroup
+          subtitle={t("profile.sections.personal_subtitle")}
+          title={t("profile.sections.personal")}
+        >
+          <form.Field name="birthDate">
+            {(field) => (
+              <PreferenceField
+                error={getFieldError(field.state.meta)}
+                htmlFor={field.name}
+                label={t("profile.fields.birth_date")}
+                variant="plain"
+              >
+                <BirthDateCalendar
+                  onBlur={field.handleBlur}
+                  onChange={field.handleChange}
+                  value={field.state.value}
+                />
+              </PreferenceField>
+            )}
+          </form.Field>
+
+          <form.Field name="gender">
+            {(field) => (
+              <PreferenceField
+                error={getFieldError(field.state.meta)}
+                htmlFor={field.name}
+                label={t("profile.fields.gender")}
+                variant="plain"
+              >
+                <GenderRadioGroup
+                  onChange={field.handleChange}
+                  value={field.state.value}
+                />
+              </PreferenceField>
+            )}
+          </form.Field>
+
+          <form.Field name="language">
+            {(field) => (
+              <PreferenceField
+                error={getFieldError(field.state.meta)}
+                htmlFor={field.name}
+                label={t("profile.fields.language")}
+                variant="plain"
+              >
+                <LanguageSelectGroup
+                  onChange={field.handleChange}
+                  value={field.state.value}
+                />
+              </PreferenceField>
+            )}
+          </form.Field>
+        </PreferencesGroup>
+
+        <form.Subscribe
+          selector={(state) => [state.values.country, state.values.state]}
+        >
+          {(values) => {
+            const [country, stateName] = values as [string, string]
+            const selectedCountry = (dataset.Countries ?? []).find(
+              (c) => c.CountryName === country,
+            )
+            const stateOptions = toOptions(
+              sortStrings(
+                (selectedCountry?.States ?? []).map((s) => s.StateName),
+              ),
+            )
+            const selectedState = (selectedCountry?.States ?? []).find(
+              (s) => s.StateName === stateName,
+            )
+            const cityOptions = toOptions(
+              sortStrings(selectedState?.Cities ?? []),
+            )
+
+            return (
+              <PreferencesGroup
+                subtitle={t("profile.sections.location_subtitle")}
+                title={t("profile.sections.location")}
+              >
+                <form.Field name="country">
+                  {(field) => (
+                    <PreferenceField
+                      error={getFieldError(field.state.meta)}
+                      htmlFor={field.name}
+                      label={t("profile.fields.country")}
+                    >
+                      <InlineSelect
+                        id={field.name}
+                        name={field.name}
+                        onBlur={field.handleBlur}
+                        onChange={(next) => {
+                          field.handleChange(next)
+                          form.setFieldValue("state", "")
+                          form.setFieldValue("city", "")
+                        }}
+                        options={countryOptions}
+                        placeholder={t("profile.placeholders.select_country")}
+                        value={field.state.value}
+                      />
+                    </PreferenceField>
+                  )}
+                </form.Field>
+
+                <form.Field name="state">
+                  {(field) => (
+                    <PreferenceField
+                      error={getFieldError(field.state.meta)}
+                      htmlFor={field.name}
+                      label={t("profile.fields.state")}
+                    >
+                      <InlineSelect
+                        disabled={!country}
+                        id={field.name}
+                        name={field.name}
+                        onBlur={field.handleBlur}
+                        onChange={(next) => {
+                          field.handleChange(next)
+                          form.setFieldValue("city", "")
+                        }}
+                        options={stateOptions}
+                        placeholder={
+                          country
+                            ? t("profile.placeholders.select_state")
+                            : t("profile.placeholders.select_country_first")
+                        }
+                        value={field.state.value}
+                      />
+                    </PreferenceField>
+                  )}
+                </form.Field>
+
+                <form.Field name="city">
+                  {(field) => (
+                    <PreferenceField
+                      error={getFieldError(field.state.meta)}
+                      htmlFor={field.name}
+                      label={t("profile.fields.city")}
+                    >
+                      <InlineSelect
+                        disabled={!stateName}
+                        id={field.name}
+                        name={field.name}
+                        onBlur={field.handleBlur}
+                        onChange={field.handleChange}
+                        options={cityOptions}
+                        placeholder={
+                          stateName
+                            ? t("profile.placeholders.select_city")
+                            : t("profile.placeholders.select_state_first")
+                        }
+                        value={field.state.value}
+                      />
+                    </PreferenceField>
+                  )}
+                </form.Field>
+              </PreferencesGroup>
+            )
+          }}
+        </form.Subscribe>
+
+        <PreferencesGroup
+          subtitle={t("profile.sections.learning_subtitle")}
+          title={t("profile.sections.learning")}
+        >
+          <form.Field name="duration">
+            {(field) => (
+              <PreferenceField
+                error={getFieldError(field.state.meta)}
+                htmlFor={field.name}
+                label={t("profile.fields.duration")}
+              >
+                <InlineSelect
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={field.handleChange}
+                  options={durationOptions.map((o) => ({
+                    label: `${o.value} ${t("common.minutes")}`,
+                    value: String(o.value),
+                  }))}
+                  placeholder={t("profile.placeholders.daily_goal")}
+                  value={field.state.value}
+                />
+              </PreferenceField>
+            )}
+          </form.Field>
+
+          <form.Field name="codingExperience">
+            {(field) => (
+              <PreferenceField
+                error={getFieldError(field.state.meta)}
+                htmlFor={field.name}
+                label={t("profile.fields.experience")}
+              >
+                <InlineSelect
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={field.handleChange}
+                  options={codingExperienceOptions.map((o) => ({
+                    label: t(`profile.options.experience.${o.value}`),
+                    value: o.value,
+                  }))}
+                  placeholder={t("profile.placeholders.select_level")}
+                  value={field.state.value}
+                />
+              </PreferenceField>
+            )}
+          </form.Field>
+
+          <form.Field name="goals">
+            {(field) => (
+              <PreferenceField
+                error={getFieldError(field.state.meta)}
+                htmlFor={field.name}
+                label={t("profile.fields.goals")}
+              >
+                <InlineSelect
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={field.handleChange}
+                  options={goalsOptions.map((o) => {
+                    const minutes = o.value.replace(/\D/g, "")
+                    const levelKey =
+                      o.value.replace(/\d+min/, "").toLowerCase() || "casual"
+                    return {
+                      label: `${minutes} ${t("common.min")} (${t(`profile.options.goals.${levelKey}`)})`,
+                      value: o.value,
+                    }
+                  })}
+                  placeholder={t("profile.placeholders.select_goal")}
+                  value={field.state.value}
+                />
+              </PreferenceField>
+            )}
+          </form.Field>
+
+          <form.Field name="background">
+            {(field) => (
+              <PreferenceField
+                error={getFieldError(field.state.meta)}
+                htmlFor={field.name}
+                label={t("profile.fields.background")}
+              >
+                <InlineSelect
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={field.handleChange}
+                  options={backgroundOptions.map((o) => ({
+                    label: t(`profile.options.background.${o.value}`),
+                    value: o.value,
+                  }))}
+                  placeholder={t("profile.placeholders.select_background")}
+                  value={field.state.value}
+                />
+              </PreferenceField>
+            )}
+          </form.Field>
+        </PreferencesGroup>
+      </div>
 
       <form.Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}
@@ -297,6 +593,19 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
       </form.Subscribe>
     </form>
   )
+}
+
+function getFieldError({ errors, isTouched }: FieldErrorProps) {
+  if (!isTouched || !errors || errors.length === 0) return null
+  return errors.filter((e): e is string => typeof e === "string").join(", ")
+}
+
+function sortStrings(values: Array<string>) {
+  return [...values].sort((a, b) => a.localeCompare(b))
+}
+
+function toOptions(values: Array<string>) {
+  return values.map((v) => ({ label: v, value: v }))
 }
 
 function dateToInputValue(date: Date | undefined) {

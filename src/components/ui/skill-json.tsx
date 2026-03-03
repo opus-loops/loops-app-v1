@@ -1,4 +1,5 @@
 import { ImageIcon, Play } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 import type { SkillContent } from "@/modules/learning-experience/domain/entities/skill-content"
 
@@ -23,6 +24,7 @@ type VideoElementProps = {
 }
 
 export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
+  const { t } = useTranslation()
   const { content, metadata } = data
   const coverUrlJson = metadata.cover_image?.url_json
 
@@ -48,7 +50,7 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
 
         {/* Lesson Heading */}
         <div className="text-2xl leading-tight font-semibold">
-          <span className="text-[#31bce6]">Lesson:</span>
+          <span className="text-[#31bce6]">{t("skill.lesson")}</span>
           <br />
           <span className="text-[#dee2e6]">{content.heading}</span>
         </div>

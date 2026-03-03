@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useSubQuizNavigation } from "./steps/use-sub-quiz-navigation"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
@@ -10,6 +11,7 @@ type QuizActionButtonProps = {
 
 export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const { t } = useTranslation()
   const { initializeQuiz } = useSubQuizNavigation({
     quizItem,
   })
@@ -28,7 +30,7 @@ export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
       onClick={handleStartQuiz}
     >
       <span className="font-outfit text-[18px] font-medium text-[#15153a]">
-        {isLoading ? "Starting..." : "Start"}
+        {isLoading ? t("common.starting") : t("common.start")}
       </span>
       {!isLoading && <ChevronRight className="h-5 w-5 text-[#15153a]" />}
     </button>

@@ -12,10 +12,19 @@
     "next": "Suivant",
     "submit": "Soumettre",
     "verify": "Vérifier",
+    "continue": "Continuer",
+    "continue_learning": "Continuer à apprendre",
+    "starting": "Démarrage...",
+    "validate": "Valider",
     "minutes": "minutes",
     "min": "min",
     "sec": "s",
-    "coming_soon": "Bientôt disponible !"
+    "coming_soon": "Bientôt disponible !",
+    "difficulty": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé"
+    }
   },
   "first_install": {
     "language": {
@@ -61,7 +70,30 @@
       "unexpected_error": "Une erreur inattendue est survenue."
     },
     "register": {
-      "title": "S'inscrire"
+      "title": "Créer un compte",
+      "have_account": "Vous avez déjà un compte ?",
+      "sign_in": "Se connecter",
+      "fullname_label": "Nom complet",
+      "fullname_placeholder": "Entrez votre nom complet",
+      "username_label": "Nom d'utilisateur",
+      "username_placeholder": "Entrez votre nom d'utilisateur",
+      "email_label": "E-mail",
+      "email_placeholder": "Entrez votre e-mail",
+      "phone_label": "Numéro de téléphone",
+      "phone_placeholder": "Entrez votre numéro de téléphone",
+      "password_label": "Mot de passe",
+      "password_placeholder": "Entrez votre mot de passe",
+      "submit": "S'inscrire",
+      "invalid_email": "Adresse e-mail invalide.",
+      "invalid_fullname": "Nom complet invalide.",
+      "invalid_password": "Le mot de passe doit contenir au moins 8 caractères.",
+      "invalid_phone": "Numéro de téléphone invalide.",
+      "invalid_username": "Nom d'utilisateur invalide.",
+      "user_already_exist": "L'utilisateur existe déjà.",
+      "username_taken": "Ce nom d'utilisateur est déjà pris.",
+      "phone_taken": "Ce numéro de téléphone est déjà utilisé.",
+      "failed": "Échec de l'inscription",
+      "unexpected_error": "Une erreur inattendue est survenue."
     },
     "verify": {
       "title": "Vérification de l'e-mail",
@@ -88,6 +120,14 @@
     "edit_profile": "Modifier le profil",
     "security": "Sécurité et mot de passe",
     "preferences": "Préférences",
+    "logout_confirm": {
+      "title": "Encore un petit effort !",
+      "description_line_1": "Tu es super proche d’avancer !",
+      "description_line_2": "Si tu quittes maintenant, tu perds ta progression.",
+      "question": "On continue ?",
+      "continue": "Continuer",
+      "quit": "Quitter"
+    },
     "logout": "Se déconnecter",
     "change_avatar": "Changer d'avatar",
     "updated_success": "Profil mis à jour avec succès.",
@@ -177,6 +217,20 @@
     }
   },
   "voucher": {
+    "dialog": {
+      "title": "Limite d'essai gratuit atteinte",
+      "description": "Vos 3 essais gratuits sont terminés. Soumettez un code de bon pour continuer à apprendre. Contactez l'administrateur pour obtenir un code.",
+      "default_title": "Débloquer la catégorie",
+      "default_description": "Entrez votre code de bon pour débloquer cette catégorie et commencer votre parcours d'apprentissage !",
+      "start_now": "Commencer maintenant",
+      "or": "Ou",
+      "starting": "Démarrage...",
+      "start_free_trial": "Commencer l'essai gratuit"
+    },
+    "form": {
+      "submit": "Soumettre le bon",
+      "submitting": "Envoi en cours..."
+    },
     "errors": {
       "invalid_code": "Code de bon invalide.",
       "invalid_format": "Veuillez entrer un code à 5 chiffres valide."
@@ -197,6 +251,29 @@
       "router_error": "Erreur de routage de navigation",
       "generic_failed": "Échec de la navigation"
     }
+  },
+  "category_details": {
+    "title": "Détails de la catégorie",
+    "skills": "Compétences",
+    "quizzes": "Quiz",
+    "xp": "XP",
+    "skill": "Compétence",
+    "quiz": "Quiz",
+    "questions": "Questions",
+    "content_list_title": "Contenu",
+    "view_all": "Voir tout"
+  },
+  "skill": {
+    "completed": "Compétence terminée avec succès !",
+    "failed": "Échec de la validation de la compétence",
+    "lesson": "Leçon :"
+  },
+  "content_list": {
+    "title": "Liste de contenu"
+  },
+  "categories_list": {
+    "title": "Toutes les catégories",
+    "lessons": "leçons"
   },
   "quiz": {
     "stats": {
@@ -219,6 +296,21 @@
     "passed_message": "Vous avez réussi le premier quiz",
     "next": "Suivant",
     "back_home": "Retour à l'accueil"
+  },
+  "home": {
+    "category_label": "Catégorie : {{name}}",
+    "certificate": {
+      "unlocked": "Certificat débloqué",
+      "title": "Félicitations, vous l’avez fait !",
+      "description": "Votre certificat pour <strong>{{categoryName}}</strong> est prêt.",
+      "badge_pdf": "PDF",
+      "preview_aria_label": "Aperçu du certificat PDF",
+      "preview_title": "Aperçu du certificat PDF",
+      "open_link": "Ouvrir le certificat PDF",
+      "view_pdf": "Voir le PDF",
+      "download_pdf": "Télécharger le PDF",
+      "keep_going": "Continuez — d’autres victoires vous attendent."
+    }
   },
   "session": {
     "expired": {

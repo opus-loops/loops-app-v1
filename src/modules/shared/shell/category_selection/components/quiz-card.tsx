@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import { useTranslation } from "react-i18next"
 
 import { ProgressCircle } from "./progress-circle"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
@@ -21,6 +22,8 @@ export function QuizCard({
   progress,
   progressState,
 }: QuizCardProps) {
+  const { t } = useTranslation()
+
   return (
     <motion.button
       animate={{ opacity: 1, x: 0 }}
@@ -37,7 +40,7 @@ export function QuizCard({
         <div className="flex-1">
           <div className="mb-3 flex flex-col items-start gap-y-2">
             <span className="font-outfit text-xl font-semibold text-purple-400">
-              Quiz
+              {t("category_details.quiz")}
             </span>
             <span className="font-outfit text-loops-light text-sm font-normal">
               {item.content.label[0].content}
@@ -48,7 +51,7 @@ export function QuizCard({
             <div className="rounded bg-[#0717de] px-2 py-1">
               <span className="font-outfit text-loops-light text-xs font-medium">
                 {item.contentType === "quizzes" && item.content.questionsCount}{" "}
-                Questions
+                {t("category_details.questions")}
               </span>
             </div>
 
@@ -58,7 +61,7 @@ export function QuizCard({
 
             <div className="bg-loops-label-xp rounded px-2 py-1">
               <span className="font-outfit text-loops-light text-xs font-medium">
-                {item.contentType === "quizzes" && item.content.score}XP
+                {item.contentType === "quizzes" && item.content.score}{t("category_details.xp")}
               </span>
             </div>
 

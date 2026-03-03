@@ -14,10 +14,18 @@
     "verify": "Verify",
     "start": "Start",
     "continue": "Continue",
+    "continue_learning": "Continue Learning",
+    "starting": "Starting...",
+    "validate": "Validate",
     "minutes": "minutes",
     "min": "min",
     "sec": "sec",
-    "coming_soon": "Coming Soon!"
+    "coming_soon": "Coming Soon!",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
   },
   "first_install": {
     "language": {
@@ -63,7 +71,30 @@
       "unexpected_error": "An unexpected error occurred."
     },
     "register": {
-      "title": "Register"
+      "title": "Create Account",
+      "have_account": "Already have an account?",
+      "sign_in": "Sign in",
+      "fullname_label": "Full Name",
+      "fullname_placeholder": "Enter your full name",
+      "username_label": "Username",
+      "username_placeholder": "Enter your username",
+      "email_label": "Email",
+      "email_placeholder": "Enter your email",
+      "phone_label": "Phone Number",
+      "phone_placeholder": "Enter your phone number",
+      "password_label": "Password",
+      "password_placeholder": "Enter your password",
+      "submit": "Sign Up",
+      "invalid_email": "Invalid email address.",
+      "invalid_fullname": "Invalid full name.",
+      "invalid_password": "Password must be at least 8 characters.",
+      "invalid_phone": "Invalid phone number.",
+      "invalid_username": "Invalid username.",
+      "user_already_exist": "User already exists.",
+      "username_taken": "Username is already taken.",
+      "phone_taken": "Phone number is already used.",
+      "failed": "Registration Failed",
+      "unexpected_error": "An unexpected error occurred."
     },
     "verify": {
       "title": "Email Verification",
@@ -90,6 +121,14 @@
     "edit_profile": "Edit Profile",
     "security": "Security & Password",
     "preferences": "Preferences",
+    "logout_confirm": {
+      "title": "Just a little more effort!",
+      "description_line_1": "You are so close to advancing!",
+      "description_line_2": "If you quit now, you will lose your progress.",
+      "question": "Keep going?",
+      "continue": "Continue",
+      "quit": "Quit"
+    },
     "logout": "Logout",
     "change_avatar": "Change avatar",
     "updated_success": "Profile updated successfully.",
@@ -179,6 +218,20 @@
     }
   },
   "voucher": {
+    "dialog": {
+      "title": "Free trial limit reached",
+      "description": "Your 3 free trials are over. Submit a voucher code to continue learning. Contact the admin for a code.",
+      "default_title": "Unlock Category",
+      "default_description": "Enter your voucher code to unlock this category and start your learning journey!",
+      "start_now": "Start now",
+      "or": "Or",
+      "starting": "Starting...",
+      "start_free_trial": "Start Free Trial"
+    },
+    "form": {
+      "submit": "Submit Voucher",
+      "submitting": "Submitting..."
+    },
     "errors": {
       "invalid_code": "Invalid voucher code.",
       "invalid_format": "Please enter a valid 5-digit voucher code."
@@ -199,6 +252,29 @@
       "router_error": "Navigation routing error occurred",
       "generic_failed": "Navigation failed"
     }
+  },
+  "category_details": {
+    "title": "Category details",
+    "skills": "Skills",
+    "quizzes": "Quizzes",
+    "xp": "XP",
+    "skill": "Skill",
+    "quiz": "Quiz",
+    "questions": "Questions",
+    "content_list_title": "Content",
+    "view_all": "View all"
+  },
+  "skill": {
+    "completed": "Skill completed successfully!",
+    "failed": "Failed to complete skill",
+    "lesson": "Lesson:"
+  },
+  "content_list": {
+    "title": "Content list"
+  },
+  "categories_list": {
+    "title": "All categories",
+    "lessons": "lessons"
   },
   "quiz": {
     "stats": {
@@ -221,6 +297,21 @@
     "passed_message": "You passed the first Quiz",
     "next": "Next",
     "back_home": "Back to home"
+  },
+  "home": {
+    "category_label": "Category: {{name}}",
+    "certificate": {
+      "unlocked": "Certificate Unlocked",
+      "title": "Congratulations, you did it!",
+      "description": "Your certificate for <strong>{{categoryName}}</strong> is ready.",
+      "badge_pdf": "PDF",
+      "preview_aria_label": "Certificate PDF preview",
+      "preview_title": "Certificate PDF preview",
+      "open_link": "Open the certificate PDF",
+      "view_pdf": "View PDF",
+      "download_pdf": "Download PDF",
+      "keep_going": "Keep going — more wins are waiting."
+    }
   },
   "session": {
     "expired": {

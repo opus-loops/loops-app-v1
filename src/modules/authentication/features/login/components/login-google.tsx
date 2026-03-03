@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 import { useGoogleLogin } from "../services/use-google-login"
@@ -114,6 +115,7 @@ interface RevocationResponse {
 }
 
 export function LoginGoogle() {
+  const { t } = useTranslation()
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -242,7 +244,7 @@ export function LoginGoogle() {
               fill="#1976D2"
             />
           </svg>
-          Login with Google
+          {t("auth.login.google_login")}
         </>
       )}
     </Button>

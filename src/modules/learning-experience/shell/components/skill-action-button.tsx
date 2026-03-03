@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { useSkillStepper } from "./skill-stepper"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
@@ -14,6 +15,7 @@ type SkillActionButtonProps = {
 export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
   const { handleCompleteSkill } = useCompleteSkill()
   const { error, success } = useToast()
+  const { t } = useTranslation()
 
   const {
     canNavigateNext,
@@ -45,8 +47,8 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
 
     setIsLoading(false)
 
-    if (response._tag === "Success") success("Skill completed successfully!")
-    else error("Failed to complete skill")
+    if (response._tag === "Success") success(t("skill.completed"))
+    else error(t("skill.failed"))
   }
 
   const handleCompletedItemClick = async () => {
@@ -93,7 +95,11 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
         disabled={isLoading}
         onClick={handleButtonClick}
       >
-        {isLoading ? "Loading..." : isCompleted ? "Next" : "Validate"}
+        {isLoading
+          ? t("common.loading")
+          : isCompleted
+            ? t("common.next")
+            : t("common.validate")}
       </button>
 
       <VoucherDialog

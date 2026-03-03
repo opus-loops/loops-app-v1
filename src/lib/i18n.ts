@@ -29,8 +29,8 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     detection: {
-      caches: ["localStorage"],
-      order: ["localStorage", "navigator"],
+      caches: ["cookie"],
+      order: ["cookie", "navigator"],
     },
     fallbackLng: "en",
     interpolation: {

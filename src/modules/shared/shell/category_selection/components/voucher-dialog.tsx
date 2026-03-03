@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { VoucherSubmissionForm } from "./voucher-submission-form"
 import { useStartCategory } from "@/modules/content-management/features/category-selection/hooks/use-start-category"
@@ -23,15 +24,19 @@ type VoucherDialogProps = {
 }
 export function VoucherDialog({
   categoryId,
-  description = "Enter your voucher code to unlock this category and start your learning journey!",
+  description,
   onOpenChange,
   open: externalOpen,
   showFreeTrial = true,
   showTrigger = true,
-  title = "Unlock Category",
+  title,
 }: VoucherDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const { t } = useTranslation()
+
+  const dialogTitle = title || t("voucher.dialog.default_title")
+  const dialogDescription = description || t("voucher.dialog.default_description")
 
   // Use external open state if provided, otherwise use internal state
   const open = externalOpen !== undefined ? externalOpen : internalOpen
@@ -52,7 +57,7 @@ export function VoucherDialog({
       {showTrigger ? (
         <DialogTrigger asChild ref={triggerRef}>
           <Button className="font-outfit text-loops-light hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none transition-all duration-200">
-            Start now
+            {t("voucher.dialog.start_now")}
           </Button>
         </DialogTrigger>
       ) : null}
@@ -133,7 +138,7 @@ export function VoucherDialog({
                   transition={{ delay: 0.3, duration: 0.3 }}
                 >
                   <DialogTitle className="text-loops-light text-lg font-bold">
-                    {title}
+                    {dialogTitle}
                   </DialogTitle>
                 </motion.div>
               </DialogHeader>
@@ -146,7 +151,7 @@ export function VoucherDialog({
                 initial={{ opacity: 0, y: 20 }}
                 transition={{ delay: 0.4, duration: 0.3 }}
               >
-                {description}
+                {dialogDescription}
               </motion.p>
 
               {/* Form */}
@@ -170,7 +175,7 @@ export function VoucherDialog({
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
                         <span className="bg-loops-background text-loops-light/50 px-2 font-medium">
-                          Or
+                          {t("voucher.dialog.or")}
                         </span>
                       </div>
                     </div>
@@ -181,7 +186,7 @@ export function VoucherDialog({
                       onClick={onStartFreeTrial}
                       type="button"
                     >
-                      {isStartingFreeTrial ? "Starting..." : "Start Free Trial"}
+                      {isStartingFreeTrial ? t("voucher.dialog.starting") : t("voucher.dialog.start_free_trial")}
                     </Button>
                   </>
                 ) : null}

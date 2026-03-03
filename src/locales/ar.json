@@ -9,6 +9,8 @@
     "cancel": "إلغاء",
     "confirm": "تأكيد",
     "back": "رجوع",
+    "continue": "استمرار",
+    "continue_learning": "تابع التعلم",
     "next": "التالي",
     "submit": "إرسال",
     "verify": "تحقق",
@@ -61,7 +63,30 @@
       "unexpected_error": "حدث خطأ غير متوقع."
     },
     "register": {
-      "title": "إنشاء حساب"
+      "title": "إنشاء حساب",
+      "have_account": "هل لديك حساب بالفعل؟",
+      "sign_in": "تسجيل الدخول",
+      "fullname_label": "الاسم الكامل",
+      "fullname_placeholder": "أدخل اسمك الكامل",
+      "username_label": "اسم المستخدم",
+      "username_placeholder": "أدخل اسم المستخدم",
+      "email_label": "البريد الإلكتروني",
+      "email_placeholder": "أدخل بريدك الإلكتروني",
+      "phone_label": "رقم الهاتف",
+      "phone_placeholder": "أدخل رقم هاتفك",
+      "password_label": "كلمة المرور",
+      "password_placeholder": "أدخل كلمة المرور",
+      "submit": "إنشاء حساب",
+      "invalid_email": "البريد الإلكتروني غير صالح.",
+      "invalid_fullname": "الاسم الكامل غير صالح.",
+      "invalid_password": "يجب أن تكون كلمة المرور 8 أحرف على الأقل.",
+      "invalid_phone": "رقم الهاتف غير صالح.",
+      "invalid_username": "اسم المستخدم غير صالح.",
+      "user_already_exist": "المستخدم موجود بالفعل.",
+      "username_taken": "اسم المستخدم مأخوذ بالفعل.",
+      "phone_taken": "رقم الهاتف مستخدم بالفعل.",
+      "failed": "فشل إنشاء الحساب",
+      "unexpected_error": "حدث خطأ غير متوقع."
     },
     "verify": {
       "title": "تأكيد البريد الإلكتروني",
@@ -87,7 +112,15 @@
     "settings_title": "الإعدادات",
     "edit_profile": "تعديل الملف الشخصي",
     "security": "الأمان وكلمة المرور",
-    "preferences": "تفضيلات",
+    "preferences": "التفضيلات",
+    "logout_confirm": {
+      "title": "مجهود قليل آخر!",
+      "description_line_1": "أنت قريب جداً من التقدم!",
+      "description_line_2": "إذا خرجت الآن، ستفقد تقدمك.",
+      "question": "هل نستمر؟",
+      "continue": "استمرار",
+      "quit": "خروج"
+    },
     "logout": "تسجيل الخروج",
     "change_avatar": "تغيير الصورة الرمزية",
     "updated_success": "تم تحديث الملف الشخصي بنجاح.",
@@ -177,6 +210,20 @@
     }
   },
   "voucher": {
+    "dialog": {
+      "title": "وصلت إلى حد التجربة المجانية",
+      "description": "انتهت تجاربك المجانية الثلاث. أرسل رمز القسيمة لمتابعة التعلم. اتصل بالمسؤول للحصول على رمز.",
+      "default_title": "فتح الفئة",
+      "default_description": "أدخل رمز القسيمة لفتح هذه الفئة وبدء رحلة التعلم الخاصة بك!",
+      "start_now": "ابدأ الآن",
+      "or": "أو",
+      "starting": "جار البدء...",
+      "start_free_trial": "ابدأ التجربة المجانية"
+    },
+    "form": {
+      "submit": "إرسال القسيمة",
+      "submitting": "جار الإرسال..."
+    },
     "errors": {
       "invalid_code": "رمز القسيمة غير صالح.",
       "invalid_format": "الرجاء إدخال رمز قسيمة مكون من 5 أرقام."
@@ -198,6 +245,17 @@
       "generic_failed": "فشل التنقل"
     }
   },
+  "category_details": {
+    "title": "تفاصيل الفئة",
+    "skills": "المهارات",
+    "quizzes": "الاختبارات",
+    "xp": "نقطة خبرة",
+    "skill": "مهارة",
+    "quiz": "اختبار",
+    "questions": "أسئلة",
+    "content_list_title": "المحتوى",
+    "view_all": "عرض الكل"
+  },
   "quiz": {
     "stats": {
       "quizzes": "الاختبارات",
@@ -214,6 +272,21 @@
     "single_answer": "إجابة صحيحة واحدة",
     "arrange_items": "رتب العناصر بالترتيب",
     "question": "سؤال"
+  },
+  "home": {
+    "category_label": "الفئة: {{name}}",
+    "certificate": {
+      "unlocked": "تم فتح الشهادة",
+      "title": "تهانينا، لقد فعلتها!",
+      "description": "شهادتك الخاصة بـ <strong>{{categoryName}}</strong> جاهزة.",
+      "badge_pdf": "PDF",
+      "preview_aria_label": "معاينة شهادة PDF",
+      "preview_title": "معاينة شهادة PDF",
+      "open_link": "افتح الشهادة بصيغة PDF",
+      "view_pdf": "عرض PDF",
+      "download_pdf": "تحميل PDF",
+      "keep_going": "تابع — المزيد من النجاحات بانتظارك."
+    }
   },
   "session": {
     "expired": {

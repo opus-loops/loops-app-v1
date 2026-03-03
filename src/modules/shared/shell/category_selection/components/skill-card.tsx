@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import { useTranslation } from "react-i18next"
 
 import { ProgressCircle } from "./progress-circle"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
@@ -18,6 +19,8 @@ export function SkillCard({
   progress,
   progressState,
 }: SkillCardProps) {
+  const { t } = useTranslation()
+
   return (
     <motion.button
       animate={{ opacity: 1, x: 0 }}
@@ -33,7 +36,7 @@ export function SkillCard({
       <div className="flex items-center justify-between">
         <div className="flex flex-col items-start gap-y-2">
           <span className="text-loops-cyan font-outfit text-xl font-semibold">
-            Skill
+            {t("category_details.skill")}
           </span>
           <span className="font-outfit text-loops-light text-sm font-normal">
             {item.content.label[0].content}

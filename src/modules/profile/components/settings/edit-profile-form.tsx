@@ -3,10 +3,10 @@ import { ChevronDown, Phone, User2 } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import type { User } from "@/modules/shared/domain/entities/user"
 import { useUpdatePreferences } from "../../hooks/use-update-preferences"
 import { countryCodeOptions, splitPhoneNumber } from "../../utils/phone-utils"
 import { AvatarUpload } from "./avatar-upload"
-import type { User } from "@/modules/shared/domain/entities/user"
 
 import { Button } from "@/modules/shared/components/ui/button"
 import { Input } from "@/modules/shared/components/ui/input"
@@ -48,20 +48,20 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
       username: user.username,
     },
     onSubmit: async ({ value }) => {
-      const phoneNationalNumber = (value.phoneNationalNumber ?? "")
+      const phoneNationalNumber = value.phoneNationalNumber
         .trim()
         .replace(/[^\d]/g, "")
 
-      const phoneNumber = `${value.phoneCountryCode ?? ""}${phoneNationalNumber}`
+      const phoneNumber = `${value.phoneCountryCode}${phoneNationalNumber}`
 
-      const payload: any = {}
+      const payload: Record<string, any> = {}
 
-      if ((value.fullName ?? "") !== (user.fullName ?? "")) {
-        payload.fullName = (value.fullName ?? "").trim() || undefined
+      if (value.fullName !== user.fullName) {
+        payload.fullName = value.fullName.trim() || undefined
       }
 
-      if ((value.username ?? "") !== (user.username ?? "")) {
-        payload.username = (value.username ?? "").trim() || undefined
+      if (value.username !== user.username) {
+        payload.username = value.username.trim() || undefined
       }
 
       const initialPhoneNumberConstructed = `${initialPhone.countryCode}${initialPhone.nationalNumber}`
@@ -253,14 +253,14 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                 {(field) => (
                   <div className="relative flex items-center">
                     <select
-                      className="h-10 w-[100px] cursor-pointer appearance-none truncate bg-transparent pr-6 text-sm font-medium text-black outline-none"
+                      className="h-10 w-[150px] cursor-pointer appearance-none truncate bg-transparent pr-6 text-sm font-medium text-black outline-none"
                       id={field.name}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       value={field.state.value}
                     >
                       {countryCodeOptions.map((o) => (
-                        <option key={o.value} value={o.value}>
+                        <option key={o.code} value={o.value}>
                           {o.label}
                         </option>
                       ))}

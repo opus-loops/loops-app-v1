@@ -5,9 +5,10 @@ import {
 } from "@tanstack/react-query"
 import { useEffect } from "react"
 
-import { singleCategoryItemFn } from "./single-category-item-fn"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+import { redirect } from "@tanstack/react-router"
+import { singleCategoryItemFn } from "./single-category-item-fn"
 
 interface SingleCategoryItemParams {
   categoryId: string
@@ -28,6 +29,8 @@ export const singleCategoryItemQuery = (
       })
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") await handleSessionExpired()
+        if (response.error.code === "category_not_found")
+          throw redirect({ to: "/", search: { category: "all" } })
         throw new Error("Failed to fetch category item")
       }
       return response.value

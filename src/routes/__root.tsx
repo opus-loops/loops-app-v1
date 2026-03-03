@@ -12,19 +12,30 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
 import { useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 
-import appCss from "../styles/app.css?url"
 import type { RouterContext } from "@/router"
+import appCss from "../styles/app.css?url"
 
 import { useUpdatePreferences } from "@/modules/profile/hooks/use-update-preferences"
 import { Toaster } from "@/modules/shared/components/ui/sonner"
 import { authenticatedQuery } from "@/modules/shared/guards/use-auth"
 import { PENDING_LANGUAGE_KEY } from "@/modules/shared/shell/first_install/language-selection-screen"
+import { getLocaleFn } from "@/modules/shared/shell/i18n/get-locale-fn"
 import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
 import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  loader: async () => {
+    const locale = await getLocaleFn()
+    return { locale }
+  },
   component: function RootComponent() {
-    const { i18n } = useTranslation()
+    const { locale } = Route.useLoaderData()
+    const { i18n } = useTranslation(undefined, { lng: locale })
+
+    if (locale && i18n.language !== locale) {
+      void i18n.changeLanguage(locale)
+    }
+
     const { data: authData } = useQuery({
       ...authenticatedQuery,
       enabled: false,
@@ -87,7 +98,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
                 <Toaster
                   closeButton={true}
                   expand={false}
-                  position="bottom-right"
+                  position={dir === "rtl" ? "bottom-left" : "bottom-right"}
                   richColors={false}
                   toastOptions={{
                     style: {

@@ -1,4 +1,5 @@
 import { useRouter } from "@tanstack/react-router"
+import { useTranslation } from "react-i18next"
 
 import { VoucherDialog } from "./voucher-dialog"
 import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
@@ -17,6 +18,7 @@ export function CategoryActionButton({
   user,
 }: CategoryActionButtonProps) {
   const router = useRouter()
+  const { t } = useTranslation()
   const { handleUpdateCurrentCategory } = useUpdateCurrentCategory()
 
   const handleContinueLearning = async () => {
@@ -42,7 +44,7 @@ export function CategoryActionButton({
       onClick={handleContinueLearning}
       type="button"
     >
-      Continue Learning
+      {t("common.continue_learning")}
     </Button>
   )
 }

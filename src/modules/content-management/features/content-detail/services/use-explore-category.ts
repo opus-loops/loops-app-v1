@@ -1,7 +1,8 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 
-import { exploreCategoryFn } from "./explore-category-fn"
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+import { redirect } from "@tanstack/react-router"
+import { exploreCategoryFn } from "./explore-category-fn"
 
 interface ExploreCategoryParams {
   categoryId: string
@@ -19,6 +20,8 @@ export const exploreCategoryQuery = (
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") await handleSessionExpired()
+        if (response.error.code === "category_not_found")
+          throw redirect({ to: "/", search: { category: "all" } })
         throw new Error("Failed to fetch explore category")
       }
       return response.value

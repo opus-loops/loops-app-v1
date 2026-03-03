@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import { useTranslation } from "react-i18next"
 
 import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 
@@ -11,6 +12,7 @@ type CategoryCardProps = {
 }
 
 export function CategoryCard({ category, onClick }: CategoryCardProps) {
+  const { t } = useTranslation()
   const totalItemsCount = category.totalItemsCount
   const progress =
     category.startedCategory !== undefined
@@ -24,16 +26,24 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
 
   return (
     <motion.button
+      disabled={!category.isPublic}
       className={cn(
         "relative w-full overflow-hidden rounded-2xl p-4 text-left",
         "transition-all duration-200",
         category.startedCategory !== undefined
           ? "bg-gradient-to-r from-pink-600 to-pink-500"
           : "from-loops-locked-blue bg-gradient-to-r to-slate-900",
-        "shadow-lg hover:shadow-xl",
+        category.isPublic
+          ? "shadow-lg hover:shadow-xl"
+          : "cursor-not-allowed opacity-60 grayscale",
       )}
       onClick={onClick}
     >
+      {!category.isPublic && (
+        <div className="font-outfit absolute top-0 right-0 z-20 rounded-bl-xl bg-yellow-400 px-3 py-1 text-xs font-bold text-black shadow-md">
+          {t("common.coming_soon")}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-3">
@@ -55,7 +65,7 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
                 {category.name[0].content}
               </h3>
               <p className="font-outfit text-loops-light/80 text-sm">
-                {totalItemsCount} lessons
+                {totalItemsCount} {t("categories_list.lessons")}
               </p>
             </div>
           </div>

@@ -1,9 +1,10 @@
 import { motion } from "framer-motion"
+import { useTranslation } from "react-i18next"
 
+import type { User } from "@/modules/shared/domain/entities/user"
 import { BackButton } from "./back-button"
 import { CategoryActionButton } from "./category-action-button"
 import { CategoryItemCard } from "./category-item-card"
-import type { User } from "@/modules/shared/domain/entities/user"
 
 import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
@@ -26,6 +27,7 @@ export function CategoryDetails({
   showBackButton,
   user,
 }: CategoryDetailsProps) {
+  const { t } = useTranslation()
   const { categoryItems } = useCategoryContent({
     categoryId: category.categoryId,
     size: 3,
@@ -39,7 +41,7 @@ export function CategoryDetails({
         {showBackButton && <BackButton onBack={onBack} />}
 
         <h1 className="font-outfit text-loops-light text-xl font-bold tracking-tight">
-          Category details
+          {t("category_details.title")}
         </h1>
       </div>
 
@@ -81,18 +83,19 @@ export function CategoryDetails({
           <div className="flex flex-wrap items-center gap-2">
             <div className="bg-loops-label-skill rounded px-2 py-1">
               <span className="font-outfit text-loops-light text-xs font-medium">
-                {category.skillCount} Skills
+                {category.skillCount} {t("category_details.skills")}
               </span>
             </div>
             <div className="rounded bg-[#0717de] px-2 py-1">
               <span className="font-outfit text-loops-light text-xs font-medium">
-                {category.quizCount} Quizzes
+                {category.quizCount} {t("category_details.quizzes")}
               </span>
             </div>
             <DifficultyTag difficulty={category.difficulty} />
             <div className="rounded bg-[#ffc120] px-2 py-1">
               <span className="font-outfit text-loops-light text-xs font-medium">
-                {category.totalXP}XP
+                {category.totalXP}
+                {t("category_details.xp")}
               </span>
             </div>
           </div>
@@ -109,13 +112,13 @@ export function CategoryDetails({
                 <DocumentCopyIcon />
               </div>
               <h4 className="font-outfit text-loops-light flex-1 text-xl font-bold">
-                Content
+                {t("category_details.content_list_title")}
               </h4>
               <button
                 className="font-outfit hover:text-loops-light text-sm font-medium text-[#eff1f5] transition-colors"
                 onClick={onViewAll}
               >
-                View all
+                {t("category_details.view_all")}
               </button>
             </div>
 

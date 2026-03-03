@@ -1,11 +1,12 @@
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { motion } from "framer-motion"
 import { useRef } from "react"
+import { useTranslation } from "react-i18next"
 
-import { BackButton } from "./back-button"
-import { CategoryCard } from "./category-card"
 import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { LockIcon } from "@/modules/shared/components/icons/lock"
+import { BackButton } from "./back-button"
+import { CategoryCard } from "./category-card"
 
 type CategoriesListProps = {
   categories: Array<CategoryWithStartedCategory>
@@ -21,6 +22,7 @@ export function CategoriesList({
   showBackButton,
 }: CategoriesListProps) {
   const parentRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   const virtualizer = useVirtualizer({
     count: categories.length,
@@ -38,7 +40,7 @@ export function CategoriesList({
         {showBackButton && <BackButton onBack={onBack} />}
 
         <h1 className="font-outfit text-loops-light text-xl font-bold tracking-tight">
-          All categories
+          {t("categories_list.title")}
         </h1>
       </div>
 
@@ -94,7 +96,11 @@ export function CategoriesList({
 
                     <CategoryCard
                       category={category}
-                      onClick={() => onCategorySelect(category)}
+                      onClick={() => {
+                        if (category.isPublic) {
+                          onCategorySelect(category)
+                        }
+                      }}
                     />
                   </div>
                 </motion.div>

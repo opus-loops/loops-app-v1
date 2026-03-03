@@ -1,8 +1,9 @@
-import { Schema } from "effect"
 import type { Effect } from "effect"
+import { Schema } from "effect"
 
 import { categoryAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/category-already-started"
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
+import { categoryNotPublicErrorSchema } from "@/modules/shared/domain/errors/category-not-public"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { successResponseWithPayloadSchemaFactory } from "@/modules/shared/domain/types/success-response"
@@ -28,6 +29,7 @@ export const startCategoryErrorsSchema = Schema.Union(
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
+  categoryNotPublicErrorSchema,
   categoryAlreadyStartedErrorSchema,
   categoryNotFoundErrorSchema,
   userNotFoundErrorSchema,

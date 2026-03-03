@@ -91,7 +91,7 @@ export function VoucherSubmissionForm({
             disabled={isSubmitting}
             type="submit"
           >
-            {isSubmitting ? "Submitting..." : "Submit Voucher"}
+            {isSubmitting ? t("voucher.form.submitting") : t("voucher.form.submit")}
           </Button>
         )}
       </form.Subscribe>

@@ -1,5 +1,6 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 
+import { redirect } from "@tanstack/react-router"
 import { useGlobalError } from "../../session/global-error-provider"
 import { getSubQuizContentFn } from "./get-sub-quiz-content-fn"
 
@@ -25,6 +26,8 @@ export const subQuizContentQuery = (
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") await handleSessionExpired()
+        if (response.error.code === "category_not_found")
+          throw redirect({ to: "/", search: { category: "all" } })
         throw new Error("Failed to fetch sub-quiz content")
       }
 

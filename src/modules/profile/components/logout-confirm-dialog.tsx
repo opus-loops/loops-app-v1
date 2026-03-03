@@ -1,9 +1,10 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { useCallback, useState } from "react"
+import { useTranslation } from "react-i18next"
 
-import cryingLoopsUrl from "../../../../assets/images/crying-loops.png"
 import { ExitIcon } from "@/modules/shared/components/icons/exit"
 import { cn } from "@/modules/shared/lib/utils"
+import cryingLoopsUrl from "../../../../assets/images/crying-loops.png"
 
 type LogoutConfirmDialogProps = {
   onConfirmLogout: () => Promise<void> | void
@@ -16,6 +17,7 @@ export function LogoutConfirmDialog({
   onOpenChange,
   open,
 }: LogoutConfirmDialogProps) {
+  const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
 
   const handleContinue = useCallback(() => {
@@ -44,11 +46,11 @@ export function LogoutConfirmDialog({
         >
           <div className="flex flex-col items-center gap-4">
             <DialogPrimitive.Title className="text-loops-orange text-center text-2xl leading-[34px] font-semibold">
-              Encore un petit effort !
+              {t("profile.logout_confirm.title")}
             </DialogPrimitive.Title>
             <DialogPrimitive.Description className="text-loops-orange text-center text-base leading-[22px]">
-              Tu es super proche d’avancer !
-              <br /> Si tu quittes maintenant, tu perds ta progression.&nbsp;
+              {t("profile.logout_confirm.description_line_1")}
+              <br /> {t("profile.logout_confirm.description_line_2")}&nbsp;
             </DialogPrimitive.Description>
           </div>
 
@@ -61,7 +63,7 @@ export function LogoutConfirmDialog({
 
           <div className="flex w-full flex-col gap-4 px-5">
             <p className="text-loops-cyan text-center text-2xl leading-[34px] font-semibold">
-              On continue ?
+              {t("profile.logout_confirm.question")}
             </p>
 
             <button
@@ -70,7 +72,7 @@ export function LogoutConfirmDialog({
               onClick={handleContinue}
               type="button"
             >
-              Continuer
+              {t("profile.logout_confirm.continue")}
             </button>
 
             <button
@@ -102,7 +104,7 @@ export function LogoutConfirmDialog({
                 </svg>
               ) : (
                 <>
-                  <span>Quitter</span>
+                  <span>{t("profile.logout_confirm.quit")}</span>
                   <span className="h-6 w-6">
                     <ExitIcon />
                   </span>

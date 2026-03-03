@@ -1,4 +1,6 @@
 import { motion } from "framer-motion"
+import { useTranslation } from "react-i18next"
+
 import { BackButton } from "./back-button"
 import { CategoryItemCard } from "./category-item-card"
 import type { Variants } from "framer-motion"
@@ -18,6 +20,7 @@ export function ContentList({
   onBack,
   showBackButton,
 }: ContentListProps) {
+  const { t } = useTranslation()
   const { categoryItems } = useCategoryContent({
     categoryId: category.categoryId,
   })
@@ -69,7 +72,7 @@ export function ContentList({
         {showBackButton && <BackButton onBack={onBack} />}
 
         <h1 className="font-outfit text-loops-light text-xl font-bold tracking-tight">
-          Content list
+          {t("content_list.title")}
         </h1>
       </motion.div>
 

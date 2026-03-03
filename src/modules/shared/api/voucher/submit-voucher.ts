@@ -1,6 +1,6 @@
+import type { Effect } from "effect"
 import { Schema } from "effect"
 import { categoryAlreadyStartedWithSubscriptionErrorSchema } from "../../domain/errors/category-already-started-with-subscription"
-import type { Effect } from "effect"
 
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
@@ -15,6 +15,7 @@ import {
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
+import { categoryNotPublicErrorSchema } from "../../domain/errors/category-not-public"
 
 const submitVoucherArgsSchema = Schema.Struct({
   categoryId: Schema.String,
@@ -32,6 +33,7 @@ export const submitVoucherErrorsSchema = Schema.Union(
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
+  categoryNotPublicErrorSchema,
   voucherNotFoundErrorSchema,
   invalidExpiredVoucherErrorSchema,
   categoryAlreadyStartedWithSubscriptionErrorSchema,

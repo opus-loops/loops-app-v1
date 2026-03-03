@@ -108,12 +108,12 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
       <CelebrationParticles isActive={isCelebrationActive} />
       <VoucherDialog
         categoryId={quizItem.categoryId}
-        description="Your 3 free trials are over. Submit a voucher code to continue learning. Contact the admin for a code."
+        description={t("voucher.dialog.description")}
         onOpenChange={setIsVoucherDialogOpen}
         open={isVoucherDialogOpen}
         showFreeTrial={false}
         showTrigger={false}
-        title="Free trial limit reached"
+        title={t("voucher.dialog.title")}
       />
       {/* Container matching Figma frame1000009848 */}
       <div className="flex w-full max-w-[390px] flex-col items-center gap-10">
