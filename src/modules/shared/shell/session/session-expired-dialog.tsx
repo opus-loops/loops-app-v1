@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { cn } from "@/modules/shared/lib/utils"
-import cryingLoopsUrl from "../../../../../assets/images/crying-loops.png"
 
 interface SessionExpiredDialogProps {
   isOpen: boolean
@@ -87,7 +86,7 @@ export function SessionExpiredDialog({
             alt="Crying Loops mascot"
             className="h-[227px] w-[224px] object-contain select-none"
             draggable={false}
-            src={cryingLoopsUrl}
+            src="/assets/images/crying-loops.png"
           />
 
           <div className="flex w-full flex-col gap-4 px-5">

@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from "react"
 
-import {
-  LanguageSelectionScreen,
-  PENDING_LANGUAGE_KEY,
-} from "./language-selection-screen"
-import { WelcomeScreen } from "./welcome-screen"
-import type { ReactNode } from "react"
 import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
+import type { ReactNode } from "react"
+import { LanguageSelectionScreen } from "./language-selection-screen"
+import { getPendingLanguageFn } from "./services/get-pending-language-fn"
+import { WelcomeScreen } from "./welcome-screen"
 
 const FIRST_INSTALL_KEY = "isFirstInstall"
 
@@ -28,8 +26,9 @@ export function FirstInstallShell({ target }: FirstInstallShellProps) {
     const stored = localStorage.getItem(FIRST_INSTALL_KEY)
     setIsFirstInstall(stored !== "false")
 
-    const storedLanguage = localStorage.getItem(PENDING_LANGUAGE_KEY)
-    setHasSelectedLanguage(Boolean(storedLanguage))
+    getPendingLanguageFn().then((storedLanguage) => {
+      setHasSelectedLanguage(Boolean(storedLanguage))
+    })
   }, [])
 
   const markAsNotFirstInstall = useCallback(() => {
@@ -44,12 +43,6 @@ export function FirstInstallShell({ target }: FirstInstallShellProps) {
   }, [])
 
   const handleLanguageSelection = useCallback(() => {
-    if (
-      typeof window === "undefined" ||
-      typeof window.localStorage === "undefined"
-    )
-      return
-
     setHasSelectedLanguage(true)
   }, [])
 

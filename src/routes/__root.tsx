@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />
 import "@/lib/i18n"
-import { useQuery } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
   HeadContent,
@@ -9,71 +8,41 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
-import { useEffect, useRef } from "react"
-import { useTranslation } from "react-i18next"
+import { getI18n, useTranslation } from "react-i18next"
 
 import type { RouterContext } from "@/router"
 import appCss from "../styles/app.css?url"
 
-import { useUpdatePreferences } from "@/modules/profile/hooks/use-update-preferences"
+import { updatePreferencesFn } from "@/modules/profile/services/update-preferences-fn"
 import { Toaster } from "@/modules/shared/components/ui/sonner"
-import { authenticatedQuery } from "@/modules/shared/guards/use-auth"
-import { PENDING_LANGUAGE_KEY } from "@/modules/shared/shell/first_install/language-selection-screen"
-import { getLocaleFn } from "@/modules/shared/shell/i18n/get-locale-fn"
+import { isAuthenticated } from "@/modules/shared/guards/is-authenticated"
+import { deletePendingLanguageFn } from "@/modules/shared/shell/first_install/services/delete-pending-language-fn"
+import { getPendingLanguageFn } from "@/modules/shared/shell/first_install/services/get-pending-language-fn"
 import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
 import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  loader: async () => {
-    const locale = await getLocaleFn()
-    return { locale }
+  beforeLoad: async () => {
+    const i18n = getI18n()
+    const auth = await isAuthenticated()
+    const pendingLanguage = await getPendingLanguageFn()
+
+    if (auth._tag === "Success") {
+      if (pendingLanguage) {
+        await updatePreferencesFn({
+          data: { language: pendingLanguage },
+        })
+
+        await deletePendingLanguageFn()
+        return
+      }
+
+      const language = auth.value.user.language
+      i18n.changeLanguage(language)
+    }
   },
   component: function RootComponent() {
-    const { locale } = Route.useLoaderData()
-    const { i18n } = useTranslation(undefined, { lng: locale })
-
-    if (locale && i18n.language !== locale) {
-      void i18n.changeLanguage(locale)
-    }
-
-    const { data: authData } = useQuery({
-      ...authenticatedQuery,
-      enabled: false,
-    })
-    const { handleUpdatePreferences } = useUpdatePreferences()
-    const hasSyncedLanguageRef = useRef(false)
-
-    useEffect(() => {
-      const preferred = authData?.user.language
-      if (preferred && i18n.language !== preferred) {
-        void i18n.changeLanguage(preferred)
-      }
-    }, [authData?.user.language, i18n])
-
-    useEffect(() => {
-      if (hasSyncedLanguageRef.current) return
-      if (
-        typeof window === "undefined" ||
-        typeof window.localStorage === "undefined"
-      )
-        return
-
-      const stored = localStorage.getItem(PENDING_LANGUAGE_KEY)
-      if (stored !== "en" && stored !== "fr" && stored !== "ar") return
-      if (!authData?.user) return
-
-      hasSyncedLanguageRef.current = true
-
-      void (async () => {
-        if (i18n.language !== stored) await i18n.changeLanguage(stored)
-        const response = await handleUpdatePreferences({ language: stored })
-
-        if (response._tag === "Success")
-          localStorage.removeItem(PENDING_LANGUAGE_KEY)
-        else hasSyncedLanguageRef.current = false
-      })()
-    }, [authData?.user, handleUpdatePreferences, i18n])
-
+    const { i18n } = useTranslation()
     const dir = i18n.dir()
 
     return (
@@ -129,7 +98,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     )
   },
   head: () => ({
-    links: [{ href: appCss, rel: "stylesheet" }],
+    links: [
+      { href: appCss, rel: "stylesheet" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+    ],
     meta: [
       { charSet: "utf-8" },
       {

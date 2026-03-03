@@ -1,11 +1,13 @@
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { OptionCard } from "../onboarding/components/option-card"
 import { SpaceBackground } from "@/modules/shared/components/common/space-background"
 import { Button } from "@/modules/shared/components/ui/button"
+import { OptionCard } from "../onboarding/components/option-card"
+import { PENDING_LANGUAGE_KEY } from "./constants"
+import { setPendingLanguageFn } from "./services/set-pending-language-fn"
 
-export const PENDING_LANGUAGE_KEY = "loopsSelectedLanguage"
+export { PENDING_LANGUAGE_KEY }
 
 type LanguageId = "ar" | "en" | "fr"
 
@@ -26,6 +28,7 @@ export function LanguageSelectionScreen({
   onComplete: () => void
 }) {
   const { i18n, t } = useTranslation()
+
   const defaultLanguage = useMemo(() => {
     const current = i18n.resolvedLanguage ?? i18n.language
     if (current === "en" || current === "fr" || current === "ar") return current
@@ -36,13 +39,7 @@ export function LanguageSelectionScreen({
     useState<LanguageId>(defaultLanguage)
 
   const handleContinue = useCallback(async () => {
-    if (
-      typeof window === "undefined" ||
-      typeof window.localStorage === "undefined"
-    )
-      return
-
-    localStorage.setItem(PENDING_LANGUAGE_KEY, selectedLanguage)
+    await setPendingLanguageFn({ data: { language: selectedLanguage } })
     onComplete()
   }, [selectedLanguage, onComplete])
 
