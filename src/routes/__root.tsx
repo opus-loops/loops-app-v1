@@ -1,12 +1,5 @@
 /// <reference types="vite/client" />
 import "@/lib/i18n"
-import { useUpdatePreferences } from "@/modules/profile/hooks/use-update-preferences"
-import { Toaster } from "@/modules/shared/components/ui/sonner"
-import { authenticatedQuery } from "@/modules/shared/guards/use-auth"
-import { PENDING_LANGUAGE_KEY } from "@/modules/shared/shell/first_install/language-selection-screen"
-import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
-import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
-import type { RouterContext } from "@/router"
 import { useQuery } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
@@ -18,7 +11,16 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
 import { useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
+
 import appCss from "../styles/app.css?url"
+import type { RouterContext } from "@/router"
+
+import { useUpdatePreferences } from "@/modules/profile/hooks/use-update-preferences"
+import { Toaster } from "@/modules/shared/components/ui/sonner"
+import { authenticatedQuery } from "@/modules/shared/guards/use-auth"
+import { PENDING_LANGUAGE_KEY } from "@/modules/shared/shell/first_install/language-selection-screen"
+import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
+import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: function RootComponent() {
@@ -64,13 +66,13 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     const dir = i18n.dir()
 
     return (
-      <html lang={i18n.language} dir={dir}>
+      <html dir={dir} lang={i18n.language}>
         <head>
           <HeadContent />
         </head>
         <body>
           <GlobalErrorProvider>
-            {({ showSessionExpiredDialog, handleCloseDialog }) => (
+            {({ handleCloseDialog, showSessionExpiredDialog }) => (
               <>
                 <SessionExpiredDialog
                   isOpen={showSessionExpiredDialog}
@@ -83,10 +85,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
                   </div>
                 </div>
                 <Toaster
-                  position="bottom-right"
-                  expand={false}
-                  richColors={false}
                   closeButton={true}
+                  expand={false}
+                  position="bottom-right"
+                  richColors={false}
                   toastOptions={{
                     style: {
                       borderRadius: "0.75rem",
@@ -129,9 +131,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     ],
     scripts: [
       {
-        src: "https://accounts.google.com/gsi/client",
         async: true,
         defer: true,
+        src: "https://accounts.google.com/gsi/client",
       },
     ],
   }),

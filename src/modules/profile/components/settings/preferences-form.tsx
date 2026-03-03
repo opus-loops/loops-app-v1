@@ -1,27 +1,23 @@
-import { UserIcon } from "@/modules/shared/components/icons/user"
-import { Button } from "@/modules/shared/components/ui/button"
-import type { User } from "@/modules/shared/domain/entities/user"
-import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useForm } from "@tanstack/react-form"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
+
 import { useUpdatePreferences } from "../../hooks/use-update-preferences"
 import { PreferencesFields } from "./preferences/preferences-fields"
+import type { User } from "@/modules/shared/domain/entities/user"
+
+import { UserIcon } from "@/modules/shared/components/icons/user"
+import { Button } from "@/modules/shared/components/ui/button"
+import { useToast } from "@/modules/shared/hooks/use-toast"
 
 type PreferencesFormProps = {
   user: User
 }
 
-function dateToInputValue(date: Date | undefined) {
-  if (!date) return ""
-  const iso = date.toISOString()
-  return iso.split("T")[0] ?? ""
-}
-
 export function PreferencesForm({ user }: PreferencesFormProps) {
   const { handleUpdatePreferences } = useUpdatePreferences()
   const { error: toastError, success: toastSuccess } = useToast()
-  const { t, i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const initial = useMemo(() => {
     const normalizeCodingExperience = (raw: string | undefined) => {
@@ -30,10 +26,10 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
       const direct = ["beginner", "average", "skilled", "expert"] as const
       if (direct.includes(v as any)) return v
       const map: Record<string, string> = {
-        Beginner: "beginner",
         Average: "average",
-        Skilled: "skilled",
+        Beginner: "beginner",
         Expert: "expert",
+        Skilled: "skilled",
       }
       return map[v] ?? ""
     }
@@ -49,10 +45,10 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
       ] as const
       if (direct.includes(v as any)) return v
       const map: Record<string, string> = {
-        Student: "student",
-        Professional: "professional",
         Developer: "developer",
         Passionate: "passionate",
+        Professional: "professional",
+        Student: "student",
       }
       return map[v] ?? ""
     }
@@ -63,25 +59,25 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
       const direct = ["5min", "10min", "15min", "20min"] as const
       if (direct.includes(v as any)) return v
       const map: Record<string, string> = {
-        "5 min": "5min",
         "10 min": "10min",
         "15 min": "15min",
         "20 min": "20min",
+        "5 min": "5min",
       }
       return map[v] ?? ""
     }
 
     return {
-      birthDate: dateToInputValue(user.birthDate),
-      gender: user.gender ?? "",
-      duration: user.duration != null ? String(user.duration) : "",
-      country: user.country ?? "",
-      state: user.state ?? "",
-      city: user.city ?? "",
-      language: user.language ?? "en",
-      codingExperience: normalizeCodingExperience(user.codingExperience),
-      goals: normalizeGoals(user.goals),
       background: normalizeBackground(user.background),
+      birthDate: dateToInputValue(user.birthDate),
+      city: user.city ?? "",
+      codingExperience: normalizeCodingExperience(user.codingExperience),
+      country: user.country ?? "",
+      duration: user.duration != null ? String(user.duration) : "",
+      gender: user.gender ?? "",
+      goals: normalizeGoals(user.goals),
+      language: user.language ?? "en",
+      state: user.state ?? "",
     }
   }, [
     user.background,
@@ -98,16 +94,16 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
 
   const form = useForm({
     defaultValues: {
-      birthDate: initial.birthDate,
-      gender: initial.gender,
-      duration: initial.duration,
-      country: initial.country,
-      state: initial.state,
-      city: initial.city,
-      language: initial.language,
-      codingExperience: initial.codingExperience,
-      goals: initial.goals,
       background: initial.background,
+      birthDate: initial.birthDate,
+      city: initial.city,
+      codingExperience: initial.codingExperience,
+      country: initial.country,
+      duration: initial.duration,
+      gender: initial.gender,
+      goals: initial.goals,
+      language: initial.language,
+      state: initial.state,
     },
 
     onSubmit: async ({ value }) => {
@@ -255,20 +251,20 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
 
   return (
     <form
+      className="mt-10 flex w-full flex-col"
       onSubmit={(e) => {
         e.preventDefault()
         e.stopPropagation()
         void form.handleSubmit()
       }}
-      className="mt-10 flex w-full flex-col"
     >
       <div className="flex w-full flex-col items-center">
         <div className="mb-2">
           {user.avatarURL ? (
             <img
-              src={user.avatarURL}
               alt={user.fullName}
               className="border-loops-light h-24 w-24 rounded-full border-4 object-cover"
+              src={user.avatarURL}
             />
           ) : (
             <div className="bg-loops-l flex h-24 w-24 items-center justify-center rounded-full">
@@ -291,9 +287,9 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
       >
         {([canSubmit, isSubmitting]) => (
           <Button
-            type="submit"
-            disabled={!canSubmit}
             className="bg-loops-cyan hover:bg-loops-cyan/90 text-loops-light mt-10 h-14 w-full rounded-xl text-lg font-semibold shadow-none disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!canSubmit}
+            type="submit"
           >
             {isSubmitting ? t("common.saving") : t("profile.save_preferences")}
           </Button>
@@ -301,4 +297,10 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
       </form.Subscribe>
     </form>
   )
+}
+
+function dateToInputValue(date: Date | undefined) {
+  if (!date) return ""
+  const iso = date.toISOString()
+  return iso.split("T")[0] ?? ""
 }

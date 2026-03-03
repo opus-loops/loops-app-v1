@@ -1,10 +1,9 @@
-import { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option, Schema } from "effect"
-import {
-  SkillContent,
-  skillContentSchema,
-} from "../../domain/entities/skill-content"
+
+import { skillContentSchema } from "../../domain/entities/skill-content"
+import type { SkillContent } from "../../domain/entities/skill-content"
+import { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 // --- ERROR SCHEMAS -----------------------------------------------------------
 const fetchErrorSchema = Schema.Struct({
@@ -34,19 +33,19 @@ export type FetchContentSuccess = {
 }
 
 export type FetchContentWire =
-  | { _tag: "Success"; value: FetchContentSuccess }
   | { _tag: "Failure"; error: FetchContentErrors }
+  | { _tag: "Success"; value: FetchContentSuccess }
 
 // --- MAIN LOGIC AS EFFECT ----------------------------------------------------
 const fetchContentEffect = (url: string) =>
   Effect.gen(function* (_) {
     const response = yield* _(
       Effect.tryPromise({
-        try: () => fetch(url),
         catch: (error) =>
           ({
             code: "NetworkError" as const,
           }) satisfies typeof networkErrorSchema.Type,
+        try: () => fetch(url),
       }),
     )
 
@@ -60,11 +59,11 @@ const fetchContentEffect = (url: string) =>
 
     const json = yield* _(
       Effect.tryPromise({
-        try: () => response.json(),
         catch: (error) =>
           ({
             code: "NetworkError" as const,
           }) satisfies typeof networkErrorSchema.Type,
+        try: () => response.json(),
       }),
     )
 

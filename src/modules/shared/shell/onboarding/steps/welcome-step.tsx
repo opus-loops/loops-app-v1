@@ -1,5 +1,5 @@
-import { Button } from "@/modules/shared/components/ui/button"
 import { useOnboardingForm } from "../onboarding-context"
+import { Button } from "@/modules/shared/components/ui/button"
 
 export function WelcomeStep() {
   const form = useOnboardingForm()

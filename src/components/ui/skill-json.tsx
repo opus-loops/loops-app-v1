@@ -1,10 +1,29 @@
-import { SkillContent } from "@/modules/learning-experience/domain/entities/skill-content"
-import { cn } from "@/modules/shared/lib/utils"
 import { ImageIcon, Play } from "lucide-react"
 
+import type { SkillContent } from "@/modules/learning-experience/domain/entities/skill-content"
+
+import { cn } from "@/modules/shared/lib/utils"
+
+type BulletElementProps = {
+  data: NonNullable<SkillContent["content"]["elements"][number]["bullet"]>
+  index: number
+}
+type CTAElementProps = {
+  data: NonNullable<SkillContent["content"]["elements"][number]["cta"]>
+}
+
+type ImageElementProps = {
+  data: NonNullable<SkillContent["content"]["elements"][number]["image"]>
+}
+
 type SkillContentDisplayProps = { data: SkillContent }
+
+type VideoElementProps = {
+  data: NonNullable<SkillContent["content"]["elements"][number]["video"]>
+}
+
 export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
-  const { metadata, content } = data
+  const { content, metadata } = data
   const coverUrlJson = metadata.cover_image?.url_json
 
   return (
@@ -18,11 +37,11 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
         {coverUrlJson && (
           <div className="w-full overflow-hidden rounded-2xl">
             <img
-              src={coverUrlJson["20"]}
               alt={metadata.cover_image.alt}
               aria-description={metadata.cover_image.description}
-              title={metadata.cover_image.title}
               className="h-auto w-full object-cover"
+              src={coverUrlJson["20"]}
+              title={metadata.cover_image.title}
             />
           </div>
         )}
@@ -41,17 +60,17 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
             case "bullet":
               return (
                 <BulletElement
-                  key={index}
                   data={element.bullet!}
                   index={index}
+                  key={index}
                 />
               )
-            case "image":
-              return <ImageElement key={index} data={element.image!} />
-            case "video":
-              return <VideoElement key={index} data={element.video!} />
             case "cta":
-              return <CTAElement key={index} data={element.cta!} />
+              return <CTAElement data={element.cta!} key={index} />
+            case "image":
+              return <ImageElement data={element.image!} key={index} />
+            case "video":
+              return <VideoElement data={element.video!} key={index} />
             default:
               return null
           }
@@ -59,11 +78,6 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
       </div>
     </div>
   )
-}
-
-type BulletElementProps = {
-  data: NonNullable<SkillContent["content"]["elements"][number]["bullet"]>
-  index: number
 }
 
 function BulletElement({ data, index }: BulletElementProps) {
@@ -93,8 +107,29 @@ function BulletElement({ data, index }: BulletElementProps) {
   )
 }
 
-type ImageElementProps = {
-  data: NonNullable<SkillContent["content"]["elements"][number]["image"]>
+function CTAElement({ data }: CTAElementProps) {
+  const mascotUrlJson = data.mascot.url_json
+
+  return (
+    <div className="flex w-full items-center justify-between gap-4">
+      {mascotUrlJson && (
+        <div className="w-1/3 shrink-0">
+          <img
+            alt="Mascot"
+            className="h-auto w-full object-contain"
+            src={mascotUrlJson["20"] || Object.values(mascotUrlJson)[0]}
+          />
+        </div>
+      )}
+
+      <div className="flex flex-1 flex-col items-start space-y-2">
+        <h4 className="text-2xl font-bold text-[#31bce6]">{data.title}</h4>
+        <p className="text-sm leading-relaxed font-semibold text-[#dee2e6]">
+          {data.description}
+        </p>
+      </div>
+    </div>
+  )
 }
 
 function ImageElement({ data }: ImageElementProps) {
@@ -104,11 +139,11 @@ function ImageElement({ data }: ImageElementProps) {
     <div className="w-full overflow-hidden rounded-lg border border-[#31bce6]/20 bg-[#15153a]/50">
       {imageUrlJson ? (
         <img
-          src={imageUrlJson["20"]}
           alt={data.alt}
           aria-description={data.description}
-          title={data.title}
           className="h-auto w-full object-contain"
+          src={imageUrlJson["20"]}
+          title={data.title}
         />
       ) : (
         <div className="relative w-full">
@@ -122,10 +157,6 @@ function ImageElement({ data }: ImageElementProps) {
       )}
     </div>
   )
-}
-
-type VideoElementProps = {
-  data: NonNullable<SkillContent["content"]["elements"][number]["video"]>
 }
 
 function VideoElement({ data }: VideoElementProps) {
@@ -144,11 +175,11 @@ function VideoElement({ data }: VideoElementProps) {
       <div className="group relative w-full max-w-[320px] overflow-hidden rounded-2xl bg-black">
         {embedUrl ? (
           <iframe
-            src={embedUrl}
-            title={data.title || "YouTube video player"}
-            className="aspect-[9/16] w-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            className="aspect-[9/16] w-full"
+            src={embedUrl}
+            title={data.title || "YouTube video player"}
           />
         ) : (
           <>
@@ -164,35 +195,6 @@ function VideoElement({ data }: VideoElementProps) {
 
       {/* Divider */}
       <div className="h-px w-3/4 bg-[#ff4900] shadow-[0px_0px_0px_0px_#ff4900]" />
-    </div>
-  )
-}
-
-type CTAElementProps = {
-  data: NonNullable<SkillContent["content"]["elements"][number]["cta"]>
-}
-
-function CTAElement({ data }: CTAElementProps) {
-  const mascotUrlJson = data.mascot.url_json
-
-  return (
-    <div className="flex w-full items-center justify-between gap-4">
-      {mascotUrlJson && (
-        <div className="w-1/3 shrink-0">
-          <img
-            src={mascotUrlJson["20"] || Object.values(mascotUrlJson)[0]}
-            alt="Mascot"
-            className="h-auto w-full object-contain"
-          />
-        </div>
-      )}
-
-      <div className="flex flex-1 flex-col items-start space-y-2">
-        <h4 className="text-2xl font-bold text-[#31bce6]">{data.title}</h4>
-        <p className="text-sm leading-relaxed font-semibold text-[#dee2e6]">
-          {data.description}
-        </p>
-      </div>
     </div>
   )
 }

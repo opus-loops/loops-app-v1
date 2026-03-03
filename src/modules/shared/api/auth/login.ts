@@ -1,3 +1,7 @@
+import { Schema } from "effect"
+import { userPasswordNotSetOrInvalidProviderErrorSchema } from "../../domain/errors/user-password-not-set-or-invalid-provider"
+import type { Effect } from "effect"
+
 import { invalidCredentialsErrorSchema } from "@/modules/shared/domain/errors/invalid-credentials"
 import { loginTokensSchema } from "@/modules/shared/domain/types/login-tokens"
 import {
@@ -7,9 +11,6 @@ import {
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
-import type { Effect } from "effect"
-import { Schema } from "effect"
-import { userPasswordNotSetOrInvalidProviderErrorSchema } from "../../domain/errors/user-password-not-set-or-invalid-provider"
 
 const loginArgsSchema = Schema.Struct({
   password: Schema.String,

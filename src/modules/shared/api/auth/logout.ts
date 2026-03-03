@@ -1,4 +1,3 @@
-import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { internalErrorSchema } from "../../domain/errors/internal-error"
@@ -12,6 +11,7 @@ import {
 import { instanceFactory } from "../../utils/axios"
 import { parseApiResponse } from "../../utils/parse-api-response"
 import { parseEffectSchema } from "../../utils/parse-effect-schema"
+import type { Effect } from "effect"
 
 const logoutArgsSchema = Schema.Struct({ refreshToken: Schema.String })
 type LogoutArgs = Schema.Schema.Type<typeof logoutArgsSchema>

@@ -1,6 +1,7 @@
-import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+
 import { exploreCategoryFn } from "./explore-category-fn"
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 
 interface ExploreCategoryParams {
   categoryId: string
@@ -11,7 +12,6 @@ export const exploreCategoryQuery = (
   handleSessionExpired: () => Promise<void>,
 ) =>
   queryOptions({
-    queryKey: ["explore-category", params.categoryId],
     queryFn: async () => {
       const response = await exploreCategoryFn({
         data: { categoryId: params.categoryId },
@@ -23,6 +23,7 @@ export const exploreCategoryQuery = (
       }
       return response.value
     },
+    queryKey: ["explore-category", params.categoryId],
   })
 
 export function useExploreCategory(params: ExploreCategoryParams) {

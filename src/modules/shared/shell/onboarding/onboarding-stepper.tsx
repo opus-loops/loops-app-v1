@@ -1,7 +1,8 @@
-import { Button } from "@/modules/shared/components/ui/button"
-import type { ReactNode } from "react"
 import { createContext, useContext, useState } from "react"
 import { ProgressBar } from "./components/progress-bar"
+import type { ReactNode } from "react"
+
+import { Button } from "@/modules/shared/components/ui/button"
 
 export type OnboardingStep = "goal" | "level" | "status" | "welcome"
 

@@ -1,18 +1,20 @@
-import {
-  startCategoryErrorsSchema,
-  startCategoryFactory,
-  startCategorySuccessSchema,
-} from "@/modules/shared/api/explore/started_category/start-category"
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
+import type {
+  startCategoryErrorsSchema,
+  startCategorySuccessSchema,
+} from "@/modules/shared/api/explore/started_category/start-category"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
+import { startCategoryFactory } from "@/modules/shared/api/explore/started_category/start-category"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type StartCategoryErrors =
+  | { code: "Unauthorized" }
   | typeof startCategoryErrorsSchema.Type
   | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
 
 export type StartCategorySuccess = typeof startCategorySuccessSchema.Type
 

@@ -1,12 +1,13 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
+
 import { useGlobalError } from "../../session/global-error-provider"
+import { validateSequenceOrderFn } from "./validate-sequence-order-fn"
 import type {
   ValidateSequenceOrderArgs,
   ValidateSequenceOrderWire,
 } from "./validate-sequence-order-fn"
-import { validateSequenceOrderFn } from "./validate-sequence-order-fn"
 
 export function useValidateSequenceOrder() {
   const queryClient = useQueryClient()
@@ -15,9 +16,9 @@ export function useValidateSequenceOrder() {
 
   const handleValidateSequenceOrder = useCallback(
     async (args: ValidateSequenceOrderArgs) => {
-      const response = (await validateSequenceOrder({
+      const response = await validateSequenceOrder({
         data: args,
-      })) as ValidateSequenceOrderWire
+      })
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") {

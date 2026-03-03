@@ -1,37 +1,33 @@
-import type { getCompletedChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-completed-choice-question"
-import { getCompletedChoiceQuestionFactory } from "@/modules/shared/api/explore/choice_question/get-completed-choice-question"
-import type { getExploreChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"
-import { getExploreChoiceQuestionFactory } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"
-import {
-  listExploreSubQuizzesFactory,
-  type listExploreSubQuizzesErrorsSchema,
-} from "@/modules/shared/api/explore/quiz/list-explore-sub-quizzes"
-import {
-  getCompletedSequenceOrderFactory,
-  type getCompletedSequenceOrderErrorsSchema,
-} from "@/modules/shared/api/explore/sequence_order/get-completed-sequence-order"
-import {
-  getExploreSequenceOrderFactory,
-  type getExploreSequenceOrderErrorsSchema,
-} from "@/modules/shared/api/explore/sequence_order/get-explore-sequence-order"
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import { ChoiceQuestion } from "@/modules/shared/domain/entities/choice-question"
-import { SequenceOrder } from "@/modules/shared/domain/entities/sequence-order"
-import { SubQuiz } from "@/modules/shared/domain/entities/sub-quiz"
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
+import type { getCompletedChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-completed-choice-question"
+import type { getExploreChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"
+import type { listExploreSubQuizzesErrorsSchema } from "@/modules/shared/api/explore/quiz/list-explore-sub-quizzes"
+import type { getCompletedSequenceOrderErrorsSchema } from "@/modules/shared/api/explore/sequence_order/get-completed-sequence-order"
+import type { getExploreSequenceOrderErrorsSchema } from "@/modules/shared/api/explore/sequence_order/get-explore-sequence-order"
+import type { ChoiceQuestion } from "@/modules/shared/domain/entities/choice-question"
+import type { SequenceOrder } from "@/modules/shared/domain/entities/sequence-order"
+import type { SubQuiz } from "@/modules/shared/domain/entities/sub-quiz"
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
+import { getCompletedChoiceQuestionFactory } from "@/modules/shared/api/explore/choice_question/get-completed-choice-question"
+import { getExploreChoiceQuestionFactory } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"
+import { listExploreSubQuizzesFactory } from "@/modules/shared/api/explore/quiz/list-explore-sub-quizzes"
+import { getCompletedSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/get-completed-sequence-order"
+import { getExploreSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/get-explore-sequence-order"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type GetQuizContentErrors =
-  | typeof listExploreSubQuizzesErrorsSchema.Type
-  | typeof getCompletedChoiceQuestionErrorsSchema.Type
-  | typeof getExploreChoiceQuestionErrorsSchema.Type
-  | typeof getCompletedSequenceOrderErrorsSchema.Type
-  | typeof getExploreSequenceOrderErrorsSchema.Type
-  | typeof unknownErrorSchema.Type
   | { code: "Unauthorized" }
+  | typeof getCompletedChoiceQuestionErrorsSchema.Type
+  | typeof getCompletedSequenceOrderErrorsSchema.Type
+  | typeof getExploreChoiceQuestionErrorsSchema.Type
+  | typeof getExploreSequenceOrderErrorsSchema.Type
+  | typeof listExploreSubQuizzesErrorsSchema.Type
+  | typeof unknownErrorSchema.Type
 
 export type GetQuizContentSuccess = {
   subQuizzes: Array<EnhancedSubQuiz>
@@ -68,8 +64,8 @@ const fetchSubQuizContentEffect = (
             Effect.runPromiseExit(
               getCompletedChoiceQuestion({
                 categoryId,
-                quizId,
                 questionId,
+                quizId,
               }),
             ),
           ),
@@ -91,8 +87,8 @@ const fetchSubQuizContentEffect = (
               Effect.runPromiseExit(
                 getExploreChoiceQuestion({
                   categoryId,
-                  quizId,
                   questionId,
+                  quizId,
                 }),
               ),
             ),
@@ -106,10 +102,10 @@ const fetchSubQuizContentEffect = (
 
         return {
           ...subQuiz,
-          questionType: "choiceQuestions" as const,
           completedQuestion: completedChoiceQuestion,
           content: choiceQuestionContent,
           index,
+          questionType: "choiceQuestions" as const,
         }
       })
     } else if (questionType === "sequenceOrders") {
@@ -124,8 +120,8 @@ const fetchSubQuizContentEffect = (
             Effect.runPromiseExit(
               getCompletedSequenceOrder({
                 categoryId,
-                quizId,
                 questionId,
+                quizId,
               }),
             ),
           ),
@@ -148,8 +144,8 @@ const fetchSubQuizContentEffect = (
               Effect.runPromiseExit(
                 getExploreSequenceOrder({
                   categoryId,
-                  quizId,
                   questionId,
+                  quizId,
                 }),
               ),
             ),
@@ -162,10 +158,10 @@ const fetchSubQuizContentEffect = (
 
         return {
           ...subQuiz,
-          questionType: "sequenceOrders" as const,
           completedQuestion: completedSequenceOrder,
           content: sequenceOrderContent,
           index,
+          questionType: "sequenceOrders" as const,
         }
       })
     } else {

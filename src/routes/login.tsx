@@ -1,8 +1,9 @@
+import { Link, createFileRoute, redirect } from "@tanstack/react-router"
+
 import { LoginGoogle } from "@/modules/authentication/features/login/components/login-google"
 import { LoginForm } from "@/modules/authentication/features/login/services/login-form"
 import { isAuthenticated } from "@/modules/shared/guards/is-authenticated"
 import { FirstInstallShell } from "@/modules/shared/shell/first_install/first-install"
-import { createFileRoute, Link, redirect } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/login")({
   beforeLoad: async () => {

@@ -1,8 +1,9 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import type { ReactNode } from "react"
 import { createContext, useContext, useState } from "react"
+import type { ReactNode } from "react"
 
-export type QuizStep = "welcome" | "sub-quizzes" | "statistics"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
+export type QuizStep = "statistics" | "sub-quizzes" | "welcome"
 
 type QuizStepperContextType = {
   currentStep: QuizStep
@@ -12,17 +13,17 @@ type QuizStepperContextType = {
 const QuizStepperContext = createContext({} as QuizStepperContextType)
 
 type QuizStepperProps = {
-  quizItem: CategoryContentItem & { contentType: "quizzes" }
-  welcome: ReactNode
-  subQuizzesNavigator: ReactNode
+  quizItem: { contentType: "quizzes" } & CategoryContentItem
   statistics: ReactNode
+  subQuizzesNavigator: ReactNode
+  welcome: ReactNode
 }
 
 export function QuizStepper({
   quizItem,
-  welcome,
-  subQuizzesNavigator,
   statistics,
+  subQuizzesNavigator,
+  welcome,
 }: QuizStepperProps) {
   const [currentStep, setCurrentStep] = useState<QuizStep>("welcome")
   const goToStep = (step: QuizStep) => setCurrentStep(step)

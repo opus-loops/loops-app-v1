@@ -5,19 +5,19 @@ import type { Skill } from "./skill"
 import type { SkillContent } from "./skill-content"
 import type { StartedQuiz } from "./started-quiz"
 
-export type CategoryContentItem = CategoryItem &
-  (
-    | {
-        itemType: "skills"
-        content: Skill
-        contentType: "skills"
-        itemProgress?: CompletedSkill
-        skillContent?: SkillContent
-      }
-    | {
-        itemType: "quizzes"
-        content: Quiz
-        contentType: "quizzes"
-        itemProgress?: StartedQuiz
-      }
-  )
+export type CategoryContentItem = (
+  | {
+      content: Quiz
+      contentType: "quizzes"
+      itemProgress?: StartedQuiz
+      itemType: "quizzes"
+    }
+  | {
+      content: Skill
+      contentType: "skills"
+      itemProgress?: CompletedSkill
+      itemType: "skills"
+      skillContent?: SkillContent
+    }
+) &
+  CategoryItem

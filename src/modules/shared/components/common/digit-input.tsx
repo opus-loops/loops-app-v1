@@ -1,6 +1,7 @@
-import { cn } from "@/modules/shared/lib/utils"
-import type { ChangeEvent, KeyboardEvent } from "react"
 import React, { forwardRef } from "react"
+import type { ChangeEvent, KeyboardEvent } from "react"
+
+import { cn } from "@/modules/shared/lib/utils"
 
 interface DigitInputProps {
   autoFocus?: boolean

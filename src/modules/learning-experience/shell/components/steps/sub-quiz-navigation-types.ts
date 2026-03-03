@@ -1,34 +1,47 @@
+import type { Effect } from "effect"
+
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
-import { Effect } from "effect"
 
 /**
- * Represents possible errors that can occur during sub-quiz navigation.
- * Using a discriminated union allows for type-safe error handling.
+ * Interface for a high-level navigation manager.
+ * Responsible for orchestrating navigation decisions, often delegating to specific strategies.
  */
-export type SubQuizNavigationError =
-  | { readonly code: "NoNextSubQuiz" }
-  | { readonly code: "NoPreviousSubQuiz" }
-  | { readonly code: "CompletionRequired" }
-  | { readonly code: "ValidationFailed" }
-  | { readonly code: "InvalidQuestionType" }
-  | { readonly code: "FetchError" }
-  | { readonly code: "NoStrategyFound" }
-  | { readonly code: "NoAdjacentSubQuiz" }
-  | { readonly code: "NavigationNotAllowed" }
+export interface ISubQuizNavigationManager {
+  /**
+   * Checks if forward navigation is possible.
+   *
+   * @param context - The navigation context
+   * @returns boolean - True if forward navigation is allowed
+   */
+  canNavigateNext: (context: SubQuizNavigationContext) => boolean
 
-/**
- * Context required to perform navigation decisions and operations.
- * Contains information about the current state, available sub-quizzes, and the target adjacent sub-quiz.
- */
-export interface SubQuizNavigationContext {
-  /** The currently active sub-quiz */
-  currentSubQuiz: EnhancedSubQuiz
-  /** List of all available sub-quizzes in the current session */
-  subQuizzes: EnhancedSubQuiz[]
-  /** The target sub-quiz for navigation (next or previous), if available */
-  adjacentSubQuiz: EnhancedSubQuiz | undefined
-  /** ID of the parent category */
-  categoryId: string
+  /**
+   * Checks if backward navigation is possible.
+   *
+   * @param context - The navigation context
+   * @returns boolean - True if backward navigation is allowed
+   */
+  canNavigatePrevious: (context: SubQuizNavigationContext) => boolean
+
+  /**
+   * Executes forward navigation.
+   *
+   * @param context - The navigation context
+   * @returns Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> - Effect resolving to the next sub-quiz
+   */
+  navigateNext: (
+    context: SubQuizNavigationContext,
+  ) => Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError>
+
+  /**
+   * Executes backward navigation.
+   *
+   * @param context - The navigation context
+   * @returns Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> - Effect resolving to the previous sub-quiz
+   */
+  navigatePrevious: (
+    context: SubQuizNavigationContext,
+  ) => Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError>
 }
 
 /**
@@ -43,7 +56,7 @@ export interface ISubQuizNavigationStrategy {
    * @param context - The navigation context
    * @returns boolean - True if navigation is permitted
    */
-  canNavigate(context: SubQuizNavigationContext): boolean
+  canNavigate: (context: SubQuizNavigationContext) => boolean
 
   /**
    * Executes the navigation process.
@@ -53,9 +66,9 @@ export interface ISubQuizNavigationStrategy {
    * @param context - The navigation context
    * @returns Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> - An Effect resolving to the target sub-quiz
    */
-  navigate(
+  navigate: (
     context: SubQuizNavigationContext,
-  ): Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError>
+  ) => Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError>
 
   /**
    * Validates if a specific sub-quiz is considered completed.
@@ -64,57 +77,45 @@ export interface ISubQuizNavigationStrategy {
    * @param subQuiz - The sub-quiz to check
    * @returns boolean - True if the sub-quiz is completed
    */
-  validateCompletion(subQuiz: EnhancedSubQuiz): boolean
+  validateCompletion: (subQuiz: EnhancedSubQuiz) => boolean
 }
 
 /**
- * Interface for a high-level navigation manager.
- * Responsible for orchestrating navigation decisions, often delegating to specific strategies.
+ * Context required to perform navigation decisions and operations.
+ * Contains information about the current state, available sub-quizzes, and the target adjacent sub-quiz.
  */
-export interface ISubQuizNavigationManager {
-  /**
-   * Checks if forward navigation is possible.
-   *
-   * @param context - The navigation context
-   * @returns boolean - True if forward navigation is allowed
-   */
-  canNavigateNext(context: SubQuizNavigationContext): boolean
-
-  /**
-   * Checks if backward navigation is possible.
-   *
-   * @param context - The navigation context
-   * @returns boolean - True if backward navigation is allowed
-   */
-  canNavigatePrevious(context: SubQuizNavigationContext): boolean
-
-  /**
-   * Executes forward navigation.
-   *
-   * @param context - The navigation context
-   * @returns Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> - Effect resolving to the next sub-quiz
-   */
-  navigateNext(
-    context: SubQuizNavigationContext,
-  ): Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError>
-
-  /**
-   * Executes backward navigation.
-   *
-   * @param context - The navigation context
-   * @returns Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError> - Effect resolving to the previous sub-quiz
-   */
-  navigatePrevious(
-    context: SubQuizNavigationContext,
-  ): Effect.Effect<EnhancedSubQuiz, SubQuizNavigationError>
+export interface SubQuizNavigationContext {
+  /** The target sub-quiz for navigation (next or previous), if available */
+  adjacentSubQuiz: EnhancedSubQuiz | undefined
+  /** ID of the parent category */
+  categoryId: string
+  /** The currently active sub-quiz */
+  currentSubQuiz: EnhancedSubQuiz
+  /** List of all available sub-quizzes in the current session */
+  subQuizzes: Array<EnhancedSubQuiz>
 }
+
+/**
+ * Represents possible errors that can occur during sub-quiz navigation.
+ * Using a discriminated union allows for type-safe error handling.
+ */
+export type SubQuizNavigationError =
+  | { readonly code: "CompletionRequired" }
+  | { readonly code: "FetchError" }
+  | { readonly code: "InvalidQuestionType" }
+  | { readonly code: "NavigationNotAllowed" }
+  | { readonly code: "NoAdjacentSubQuiz" }
+  | { readonly code: "NoNextSubQuiz" }
+  | { readonly code: "NoPreviousSubQuiz" }
+  | { readonly code: "NoStrategyFound" }
+  | { readonly code: "ValidationFailed" }
 
 /**
  * Union type representing all registered navigation strategy keys.
  * Format: "{SourceType}-to-{TargetType}"
  */
 export type SubQuizNavigationStrategy =
-  | "choiceQuestions-to-sequenceOrders"
   | "choiceQuestions-to-choiceQuestions"
-  | "sequenceOrders-to-sequenceOrders"
+  | "choiceQuestions-to-sequenceOrders"
   | "sequenceOrders-to-choiceQuestions"
+  | "sequenceOrders-to-sequenceOrders"

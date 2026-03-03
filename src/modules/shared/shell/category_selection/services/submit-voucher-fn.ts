@@ -1,24 +1,26 @@
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   submitVoucherErrorsSchema,
   submitVoucherSuccessSchema,
 } from "@/modules/shared/api/voucher/submit-voucher"
-import { submitVoucherFactory } from "@/modules/shared/api/voucher/submit-voucher"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { submitVoucherFactory } from "@/modules/shared/api/voucher/submit-voucher"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type SubmitVoucherErrors =
+  | { code: "Unauthorized" }
   | typeof submitVoucherErrorsSchema.Type
   | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
 
 export type SubmitVoucherSuccess = typeof submitVoucherSuccessSchema.Type
 
 export type SubmitVoucherWire =
-  | { _tag: "Success"; value: SubmitVoucherSuccess }
   | { _tag: "Failure"; error: SubmitVoucherErrors }
+  | { _tag: "Success"; value: SubmitVoucherSuccess }
 
 // --- SERVER FUNCTION ---------------------------------------------------------
 export const submitVoucherFn = createServerFn({

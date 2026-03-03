@@ -1,53 +1,23 @@
-import { ExitIcon } from "@/modules/shared/components/icons/exit"
-import { UserIcon } from "@/modules/shared/components/icons/user"
-import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
-import type { User } from "@/modules/shared/domain/entities/user"
 import { Link } from "@tanstack/react-router"
 import { ChevronRight } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { useLogout } from "@/modules/authentication/features/login/services/use-logout"
 import { LogoutConfirmDialog } from "./logout-confirm-dialog"
+import type { User } from "@/modules/shared/domain/entities/user"
 
-type SettingsScreenProps = {
-  user: User
-}
+import { useLogout } from "@/modules/authentication/features/login/services/use-logout"
+import { ExitIcon } from "@/modules/shared/components/icons/exit"
+import { UserIcon } from "@/modules/shared/components/icons/user"
+import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
 
 type SettingsRowProps = {
   label: string
   to?: string
 }
 
-function SettingsRow({ label, to }: SettingsRowProps) {
-  const content = (
-    <>
-      <span className="text-loops-light text-base font-medium">{label}</span>
-      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white">
-        <ChevronRight className="h-4 w-4 text-[#000016]" />
-      </span>
-    </>
-  )
-
-  if (to) {
-    return (
-      <Link
-        to={to}
-        className="flex w-full items-center justify-between px-2 py-2 text-left"
-      >
-        {content}
-      </Link>
-    )
-  }
-
-  return (
-    <button
-      type="button"
-      className="flex w-full items-center justify-between px-2 py-2 text-left"
-    >
-      {content}
-    </button>
-  )
+type SettingsScreenProps = {
+  user: User
 }
 
 export function SettingsScreen({ user }: SettingsScreenProps) {
@@ -61,9 +31,9 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
         <div className="grid grid-cols-3 items-center">
           <div className="flex items-center">
             <OpenCategoriesButton
-              to="/profile/settings"
-              search={{ category: "all" }}
               className="h-11 w-11 rounded-xl bg-[#1f4b6682] shadow-lg backdrop-blur-sm hover:bg-[#1f4b66aa]"
+              search={{ category: "all" }}
+              to="/profile/settings"
             />
           </div>
 
@@ -77,9 +47,9 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
         <div className="mt-8 flex items-start gap-4 px-1">
           {user.avatarURL ? (
             <img
-              src={user.avatarURL}
               alt={user.fullName}
               className="h-[72px] w-[72px] shrink-0 rounded-full object-cover"
+              src={user.avatarURL}
             />
           ) : (
             <div className="bg-loops-pink flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full">
@@ -112,15 +82,18 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
             label={t("profile.security")}
             to="/profile/settings/security"
           />
-          <SettingsRow label={t("profile.preferences")} to="/profile/settings/preferences" />
+          <SettingsRow
+            label={t("profile.preferences")}
+            to="/profile/settings/preferences"
+          />
         </div>
 
         <div className="mt-auto pt-10">
           <button
-            type="button"
-            onClick={() => setIsLogoutDialogOpen(true)}
-            className="flex items-center gap-3 px-1 text-[#ff3b3b]"
             aria-label={t("profile.logout")}
+            className="flex items-center gap-3 px-1 text-[#ff3b3b]"
+            onClick={() => setIsLogoutDialogOpen(true)}
+            type="button"
           >
             <div className="h-6 w-6">
               <ExitIcon />
@@ -129,14 +102,45 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
           </button>
 
           <LogoutConfirmDialog
-            open={isLogoutDialogOpen}
-            onOpenChange={setIsLogoutDialogOpen}
             onConfirmLogout={async () => {
               await handleLogout()
             }}
+            onOpenChange={setIsLogoutDialogOpen}
+            open={isLogoutDialogOpen}
           />
         </div>
       </div>
     </div>
+  )
+}
+
+function SettingsRow({ label, to }: SettingsRowProps) {
+  const content = (
+    <>
+      <span className="text-loops-light text-base font-medium">{label}</span>
+      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white">
+        <ChevronRight className="h-4 w-4 text-[#000016]" />
+      </span>
+    </>
+  )
+
+  if (to) {
+    return (
+      <Link
+        className="flex w-full items-center justify-between px-2 py-2 text-left"
+        to={to}
+      >
+        {content}
+      </Link>
+    )
+  }
+
+  return (
+    <button
+      className="flex w-full items-center justify-between px-2 py-2 text-left"
+      type="button"
+    >
+      {content}
+    </button>
   )
 }

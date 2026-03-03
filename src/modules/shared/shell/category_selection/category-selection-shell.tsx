@@ -1,33 +1,36 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
-import { useExploreCategories } from "@/modules/content-management/features/category-selection/services/use-explore-categories"
-import { CategoriesListSkeleton } from "@/modules/shared/components/common/categories-list-skeleton"
-import { CategoryContentSkeleton } from "@/modules/shared/components/common/category-content-skeleton"
-import { CategoryDetailsSkeleton } from "@/modules/shared/components/common/category-details-skeleton"
-import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
-import type { User } from "@/modules/shared/domain/entities/user"
-import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
 import { useLocation, useRouter } from "@tanstack/react-router"
-import { Suspense, useCallback, type ReactNode } from "react"
+import { Suspense, useCallback } from "react"
 import { CategoriesList } from "./components/categories-list"
 import { CategoryDetails } from "./components/category-details"
 import { CategoryDetailsWrapper } from "./components/category-details-wrapper"
 import { ContentList } from "./components/content-list"
 import { ContentListWrapper } from "./components/content-list-wrapper"
+import type { ReactNode } from "react"
+
+import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
+import type { User } from "@/modules/shared/domain/entities/user"
+
+import { useExploreCategories } from "@/modules/content-management/features/category-selection/services/use-explore-categories"
+import { CategoriesListSkeleton } from "@/modules/shared/components/common/categories-list-skeleton"
+import { CategoryContentSkeleton } from "@/modules/shared/components/common/category-content-skeleton"
+import { CategoryDetailsSkeleton } from "@/modules/shared/components/common/category-details-skeleton"
+import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
+import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
 
 type CategorySelectionShellProps = {
   searchParams: {
     category?: string | undefined
-    type?: "details" | "content" | undefined
     contentId?: string | undefined
+    type?: "content" | "details" | undefined
   }
   target: ReactNode
   user: User
 }
 
 export function CategorySelectionShell({
+  searchParams,
   target,
   user,
-  searchParams,
 }: CategorySelectionShellProps) {
   const isLoading = usePageLoading()
 
@@ -72,7 +75,7 @@ function CategorySelectionScreen({
 }: {
   searchParams: {
     category?: string | undefined
-    type?: "details" | "content" | undefined
+    type?: "content" | "details" | undefined
   }
   user: User
 }) {
@@ -94,17 +97,17 @@ function CategorySelectionScreen({
     // Going back from content details to category details
     else if (searchParams.category !== "all" && searchParams.type === "content")
       router.navigate({
-        to: location.pathname,
         search: (prev: any) => ({ ...prev, type: "details" }),
+        to: location.pathname,
       } as any)
     // Going back from category details to categories list
     else if (searchParams.category !== "all" && searchParams.type === "details")
       router.navigate({
-        to: location.pathname,
         search: (prev: any) => {
           const { category, type, ...rest } = prev
           return { ...rest, category: "all" }
         },
+        to: location.pathname,
       } as any)
   }
 
@@ -120,22 +123,22 @@ function CategorySelectionScreen({
 
   const handleCategorySelect = (category: CategoryWithStartedCategory) =>
     router.navigate({
-      to: location.pathname,
       search: (prev: any) => ({
         ...prev,
         category: category.categoryId,
         type: "details",
       }),
+      to: location.pathname,
     } as any)
 
   const handleViewAllContent = (category: CategoryWithStartedCategory) =>
     router.navigate({
-      to: location.pathname,
       search: (prev: any) => ({
         ...prev,
         category: category.categoryId,
         type: "content",
       }),
+      to: location.pathname,
     } as any)
 
   return (
@@ -143,8 +146,8 @@ function CategorySelectionScreen({
       {shouldRenderAllCategories && (
         <CategoriesList
           categories={categories}
-          onCategorySelect={handleCategorySelect}
           onBack={handleBackNavigation}
+          onCategorySelect={handleCategorySelect}
           showBackButton={shouldShowBackButton()}
         />
       )}
@@ -163,20 +166,20 @@ function CategorySelectionScreen({
             return (
               <CategoryDetails
                 category={cachedCategory}
-                user={user}
                 onBack={handleBackNavigation}
                 onViewAll={() => handleViewAllContent(cachedCategory)}
                 showBackButton={shouldShowBackButton()}
+                user={user}
               />
             )
           // Fallback to wrapper with data fetching for direct URL access
           return (
             <CategoryDetailsWrapper
               categoryId={searchParams.category}
-              user={user}
               onBack={handleBackNavigation}
               onViewAll={(category) => handleViewAllContent(category)}
               showBackButton={shouldShowBackButton()}
+              user={user}
             />
           )
         })()}

@@ -1,28 +1,30 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
+import { motion } from "framer-motion"
+
+import { BackButton } from "./back-button"
+import { CategoryActionButton } from "./category-action-button"
+import { CategoryItemCard } from "./category-item-card"
+import type { User } from "@/modules/shared/domain/entities/user"
+
+import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
 import { DifficultyTag } from "@/modules/shared/components/common/difficulty-tag"
 import { CodeCircleIcon } from "@/modules/shared/components/icons/code-circle"
 import { DocumentCopyIcon } from "@/modules/shared/components/icons/document-copy"
-import type { User } from "@/modules/shared/domain/entities/user"
-import { motion } from "framer-motion"
-import { BackButton } from "./back-button"
-import { CategoryActionButton } from "./category-action-button"
-import { CategoryItemCard } from "./category-item-card"
 
 type CategoryDetailsProps = {
   category: CategoryWithStartedCategory
-  user: User
-  onViewAll: () => void
   onBack: () => void
+  onViewAll: () => void
   showBackButton: boolean
+  user: User
 }
 
 export function CategoryDetails({
   category,
-  user,
-  onViewAll,
   onBack,
+  onViewAll,
   showBackButton,
+  user,
 }: CategoryDetailsProps) {
   const { categoryItems } = useCategoryContent({
     categoryId: category.categoryId,
@@ -43,19 +45,19 @@ export function CategoryDetails({
 
       <div className="flex-1 overflow-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
           className="space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.3 }}
         >
           {imageUrl && (
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded-xl">
               <img
-                src={imageUrl}
                 alt={category.cover.alt}
-                title={category.cover.title}
                 aria-description={category.cover.description}
                 className="h-full w-full object-cover"
+                src={imageUrl}
+                title={category.cover.title}
               />
               <div className="absolute inset-0 bg-black/20" />
             </div>
@@ -110,8 +112,8 @@ export function CategoryDetails({
                 Content
               </h4>
               <button
-                onClick={onViewAll}
                 className="font-outfit hover:text-loops-light text-sm font-medium text-[#eff1f5] transition-colors"
+                onClick={onViewAll}
               >
                 View all
               </button>
@@ -121,9 +123,9 @@ export function CategoryDetails({
             <div className="space-y-4">
               {categoryItems.map((item, index) => (
                 <CategoryItemCard
-                  key={item.categoryItemId}
-                  item={item}
                   index={index}
+                  item={item}
+                  key={item.categoryItemId}
                 />
               ))}
             </div>
@@ -136,10 +138,10 @@ export function CategoryDetails({
 
       {/* Sticky Button Container */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
         className="bg-loops-background fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2 py-4 shadow-lg"
+        initial={{ opacity: 0, y: 20 }}
+        transition={{ delay: 0.2, duration: 0.3 }}
       >
         <CategoryActionButton category={category} user={user} />
       </motion.div>

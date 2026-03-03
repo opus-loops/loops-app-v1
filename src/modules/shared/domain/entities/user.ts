@@ -1,4 +1,5 @@
 import { Schema } from "effect"
+
 import { roleSchema } from "../value_objects/role"
 
 export const userSchema = Schema.Struct({
@@ -21,7 +22,7 @@ export const userSchema = Schema.Struct({
   isFirstTime: Schema.Boolean,
   isProfileCompleted: Schema.Boolean,
   language: Schema.Literal("en", "fr", "ar"),
-  phoneNumber: Schema.String,
+  phoneNumber: Schema.optional(Schema.String),
   role: roleSchema,
   state: Schema.optional(Schema.String),
   updatedAt: Schema.DateFromString,

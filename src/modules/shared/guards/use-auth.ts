@@ -1,5 +1,6 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { redirect } from "@tanstack/react-router"
+
 import { isAuthenticated } from "./is-authenticated"
 
 export const authenticatedQuery = queryOptions({

@@ -1,31 +1,32 @@
-import { Button } from "@/modules/shared/components/ui/button"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
+
 import { useGoogleLogin } from "../services/use-google-login"
+import { Button } from "@/modules/shared/components/ui/button"
 
 declare global {
   interface Window {
     google: {
       accounts: {
         id: {
+          cancel: () => void
+          disableAutoSelect: () => void
           initialize: (config: IdConfiguration) => void
+          onGoogleLibraryLoad: () => void
+          prompt: (
+            momentListener?: (notification: PromptMomentNotification) => void,
+          ) => void
           renderButton: (
             element: HTMLElement,
             config: GsiButtonConfiguration,
           ) => void
-          prompt: (
-            momentListener?: (notification: PromptMomentNotification) => void,
-          ) => void
-          disableAutoSelect: () => void
-          storeCredential: (
-            credential: { id: string; password: string },
-            callback?: () => void,
-          ) => void
-          cancel: () => void
-          onGoogleLibraryLoad: () => void
           revoke: (
             hint: string,
             callback: (done: RevocationResponse) => void,
+          ) => void
+          storeCredential: (
+            credential: { id: string; password: string },
+            callback?: () => void,
           ) => void
         }
       }
@@ -33,57 +34,59 @@ declare global {
   }
 }
 
-// Types based on official Google Identity Services documentation
-interface IdConfiguration {
-  client_id: string
-  auto_select?: boolean
-  callback?: (credentialResponse: CredentialResponse) => void
-  login_uri?: string
-  native_callback?: (response: { id: string; password: string }) => void
-  cancel_on_tap_outside?: boolean
-  prompt_parent_id?: string
-  nonce?: string
-  context?: "signin" | "signup" | "use"
-  state_cookie_domain?: string
-  ux_mode?: "popup" | "redirect"
-  allowed_parent_origin?: string | string[]
-  intermediate_iframe_close_callback?: () => void
-  itp_support?: boolean
-  login_hint?: string
-  hd?: string
-  use_fedcm_for_prompt?: boolean
-}
-
 interface CredentialResponse {
+  clientId?: string
   credential: string
   select_by:
     | "auto"
-    | "user"
-    | "user_1tap"
-    | "user_2tap"
-    | "btn"
-    | "btn_confirm"
     | "btn_add_session"
     | "btn_confirm_add_session"
-  clientId?: string
+    | "btn_confirm"
+    | "btn"
+    | "user_1tap"
+    | "user_2tap"
+    | "user"
 }
 
 interface GsiButtonConfiguration {
-  type?: "standard" | "icon"
-  theme?: "outline" | "filled_blue" | "filled_black"
-  size?: "large" | "medium" | "small"
-  text?: "signin_with" | "signup_with" | "continue_with" | "signin"
-  shape?: "rectangular" | "pill" | "circle" | "square"
-  logo_alignment?: "left" | "center"
-  width?: string | number
-  locale?: string
   click_listener?: () => void
+  locale?: string
+  logo_alignment?: "center" | "left"
+  shape?: "circle" | "pill" | "rectangular" | "square"
+  size?: "large" | "medium" | "small"
+  text?: "continue_with" | "signin_with" | "signin" | "signup_with"
+  theme?: "filled_black" | "filled_blue" | "outline"
+  type?: "icon" | "standard"
+  width?: number | string
+}
+
+// Types based on official Google Identity Services documentation
+interface IdConfiguration {
+  allowed_parent_origin?: Array<string> | string
+  auto_select?: boolean
+  callback?: (credentialResponse: CredentialResponse) => void
+  cancel_on_tap_outside?: boolean
+  client_id: string
+  context?: "signin" | "signup" | "use"
+  hd?: string
+  intermediate_iframe_close_callback?: () => void
+  itp_support?: boolean
+  login_hint?: string
+  login_uri?: string
+  native_callback?: (response: { id: string; password: string }) => void
+  nonce?: string
+  prompt_parent_id?: string
+  state_cookie_domain?: string
+  use_fedcm_for_prompt?: boolean
+  ux_mode?: "popup" | "redirect"
 }
 
 interface PromptMomentNotification {
-  isNotDisplayed: () => boolean
-  isSkippedMoment: () => boolean
-  isDismissedMoment: () => boolean
+  getDismissedReason: () =>
+    | "cancel_called"
+    | "credential_returned"
+    | "flow_restarted"
+  getMomentType: () => "dismissed" | "display" | "skipped"
   getNotDisplayedReason: () =>
     | "browser_not_supported"
     | "invalid_client"
@@ -91,25 +94,23 @@ interface PromptMomentNotification {
     | "opt_out_or_no_session"
     | "secure_http_required"
     | "suppressed_by_user"
-    | "unregistered_origin"
     | "unknown_reason"
-  isDisplayed: () => boolean
-  isDisplayMoment: () => boolean
+    | "unregistered_origin"
   getSkippedReason: () =>
     | "auto_cancel"
-    | "user_cancel"
-    | "tap_outside"
     | "issuing_failed"
-  getDismissedReason: () =>
-    | "credential_returned"
-    | "cancel_called"
-    | "flow_restarted"
-  getMomentType: () => "display" | "skipped" | "dismissed"
+    | "tap_outside"
+    | "user_cancel"
+  isDismissedMoment: () => boolean
+  isDisplayed: () => boolean
+  isDisplayMoment: () => boolean
+  isNotDisplayed: () => boolean
+  isSkippedMoment: () => boolean
 }
 
 interface RevocationResponse {
-  successful: boolean
   error?: string
+  successful: boolean
 }
 
 export function LoginGoogle() {
@@ -134,13 +135,13 @@ export function LoginGoogle() {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
     window.google.accounts.id.initialize({
-      client_id: clientId,
-      callback: handleCredentialResponse,
       auto_select: false,
+      callback: handleCredentialResponse,
       cancel_on_tap_outside: true,
+      client_id: clientId,
       context: "signin",
-      ux_mode: "popup",
       use_fedcm_for_prompt: false,
+      ux_mode: "popup",
     })
   }
 
@@ -188,18 +189,18 @@ export function LoginGoogle() {
 
   return (
     <Button
-      className="font-outfit text-loops-text hover:bg-loops-google/80 bg-loops-google w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
-      type="button"
-      ref={buttonRef}
+      className="font-outfit text-loops-text hover:bg-loops-google/80 bg-loops-google w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none disabled:cursor-not-allowed disabled:opacity-50"
       disabled={!isGoogleLoaded || isLoading}
       onClick={handleGoogleSignIn}
+      ref={buttonRef}
+      type="button"
     >
       {isLoading ? (
         <svg
-          className="animate-spin h-6 w-6 text-loops-text"
-          xmlns="http://www.w3.org/2000/svg"
+          className="text-loops-text h-6 w-6 animate-spin"
           fill="none"
           viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
         >
           <circle
             className="opacity-25"
@@ -211,8 +212,8 @@ export function LoginGoogle() {
           ></circle>
           <path
             className="opacity-75"
-            fill="currentColor"
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            fill="currentColor"
           ></path>
         </svg>
       ) : (

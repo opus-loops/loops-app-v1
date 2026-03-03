@@ -1,31 +1,32 @@
-import { BookIcon } from "@/modules/shared/components/icons/book"
-import { LockIcon } from "@/modules/shared/components/icons/lock"
-import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { useToast } from "@/modules/shared/hooks/use-toast"
-import { cn } from "@/modules/shared/lib/utils"
-import { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
-import { ProgressState } from "@/modules/shared/utils/types"
 import { useRouter } from "@tanstack/react-router"
 import { useState } from "react"
+
 import { BaseItemCircle } from "./shared/item-circle-base"
 import {
   getCircleColors,
   getItemClickability,
   isItemStartable,
 } from "./shared/item-circle-utils"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import type { ProgressState } from "@/modules/shared/utils/types"
+import { BookIcon } from "@/modules/shared/components/icons/book"
+import { LockIcon } from "@/modules/shared/components/icons/lock"
+import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
+import { useToast } from "@/modules/shared/hooks/use-toast"
+import { cn } from "@/modules/shared/lib/utils"
+import { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
 
 export type SkillItemCircleProps = {
-  item: CategoryContentItem & { contentType: "skills" }
-  index: number
   categoryId: string
+  index: number
+  item: { contentType: "skills" } & CategoryContentItem
   previousItems: Array<CategoryContentItem>
 }
 
 export function SkillItemCircle({
-  item,
-  index,
   categoryId,
+  index,
+  item,
   previousItems,
 }: SkillItemCircleProps) {
   const { error } = useToast()
@@ -50,12 +51,12 @@ export function SkillItemCircle({
     if (progressState === "completed" || progressState === "started") {
       setSelectedContent(item)
       router.navigate({
-        to: "/",
         search: {
           category: categoryId,
-          type: "content",
           contentId: item.itemId,
+          type: "content",
         },
+        to: "/",
       })
       return
     }
@@ -78,12 +79,12 @@ export function SkillItemCircle({
 
     setSelectedContent(item)
     router.navigate({
-      to: "/",
       search: {
         category: categoryId,
-        type: "content",
         contentId: item.itemId,
+        type: "content",
       },
+      to: "/",
     })
   }
 
@@ -97,11 +98,11 @@ export function SkillItemCircle({
   return (
     <BaseItemCircle
       colors={colors}
-      progress={progress}
+      index={index}
       isClickable={isClickable}
       isLoading={isLoading}
-      index={index}
       onClick={handleClick}
+      progress={progress}
     >
       {progressState === "locked" && isFirstItem === false && (
         <div className={cn("h-10 w-10 shrink-0 grow-0", colors.text)}>

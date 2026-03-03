@@ -1,9 +1,9 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+
 import { fetchContentFn } from "./fetch-content-fn"
 
 export const skillContentQuery = (url: string) =>
   queryOptions({
-    queryKey: ["skill-content", url],
     queryFn: async () => {
       const response = await fetchContentFn({
         data: { url },
@@ -15,14 +15,15 @@ export const skillContentQuery = (url: string) =>
 
       return response.value
     },
+    queryKey: ["skill-content", url],
   })
 
 export function useSkillContent(url: string) {
-  const { data, isLoading, isError } = useSuspenseQuery(skillContentQuery(url))
+  const { data, isError, isLoading } = useSuspenseQuery(skillContentQuery(url))
 
   return {
     content: data.content,
-    isLoading,
     isError,
+    isLoading,
   }
 }

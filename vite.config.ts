@@ -1,16 +1,14 @@
+import fs from "node:fs/promises"
 import tailwindcss from "@tailwindcss/vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import viteReact from "@vitejs/plugin-react"
 import { nitro } from "nitro/vite"
-import fs from "node:fs/promises"
-import path from "node:path"
 import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 import tsConfigPaths from "vite-tsconfig-paths"
 
 // TODO: handle error propagation
 // TODO: handle all expected and unexpected errors
-
 
 const nitroRawPrefix = "nitro:raw:"
 const nitroRawResolvedPrefix = "\0nitro:raw:"
@@ -19,28 +17,9 @@ const nitroRawJsonProxySuffix = ".txt"
 
 export default defineConfig({
   plugins: [
-
     {
-      name: "nitro-raw-json-proxy",
       enforce: "pre",
-      resolveId: {
-        order: "pre",
-        handler(id) {
-          if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
-            return `${nitroRawJsonProxyPrefix}${id.slice(
-              nitroRawPrefix.length,
-            )}${nitroRawJsonProxySuffix}`
-          }
-          if (id.startsWith(nitroRawResolvedPrefix) && id.endsWith(".json")) {
-            return `${nitroRawJsonProxyPrefix}${id.slice(
-              nitroRawResolvedPrefix.length,
-            )}${nitroRawJsonProxySuffix}`
-          }
-          return null
-        },
-      },
       load: {
-        order: "pre",
         async handler(id) {
           if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
             const filePath = id.slice(nitroRawPrefix.length)
@@ -60,6 +39,24 @@ export default defineConfig({
           const raw = await fs.readFile(filePath, "utf8")
           return `export default ${JSON.stringify(raw)}`
         },
+        order: "pre",
+      },
+      name: "nitro-raw-json-proxy",
+      resolveId: {
+        handler(id) {
+          if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
+            return `${nitroRawJsonProxyPrefix}${id.slice(
+              nitroRawPrefix.length,
+            )}${nitroRawJsonProxySuffix}`
+          }
+          if (id.startsWith(nitroRawResolvedPrefix) && id.endsWith(".json")) {
+            return `${nitroRawJsonProxyPrefix}${id.slice(
+              nitroRawResolvedPrefix.length,
+            )}${nitroRawJsonProxySuffix}`
+          }
+          return null
+        },
+        order: "pre",
       },
     },
     nitro({
@@ -73,9 +70,6 @@ export default defineConfig({
     tanstackStart(),
     VitePWA({
       devOptions: { enabled: true },
-      workbox: {
-        globIgnores: ["**/country-codes.json"],
-      },
       manifest: {
         background_color: "#000016",
         categories: ["education"],
@@ -160,6 +154,9 @@ export default defineConfig({
         theme_color: "#31BCE6",
       },
       registerType: "autoUpdate",
+      workbox: {
+        globIgnores: ["**/country-codes.json"],
+      },
     }),
     tailwindcss(),
     viteReact(),

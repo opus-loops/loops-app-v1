@@ -1,25 +1,27 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   validateChoiceQuestionArgsSchema,
   validateChoiceQuestionErrorsSchema,
   validateChoiceQuestionSuccessSchema,
 } from "@/modules/shared/api/explore/choice_question/validate-choice-question"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import { validateChoiceQuestionFactory } from "@/modules/shared/api/explore/choice_question/validate-choice-question"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
-
-// --- TYPES (pure TS) ---------------------------------------------------------
-export type ValidateChoiceQuestionErrors =
-  | typeof validateChoiceQuestionErrorsSchema.Type
-  | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
-
-export type ValidateChoiceQuestionSuccess =
-  typeof validateChoiceQuestionSuccessSchema.Type
 
 export type ValidateChoiceQuestionArgs =
   typeof validateChoiceQuestionArgsSchema.Type
+
+// --- TYPES (pure TS) ---------------------------------------------------------
+export type ValidateChoiceQuestionErrors =
+  | { code: "Unauthorized" }
+  | typeof unknownErrorSchema.Type
+  | typeof validateChoiceQuestionErrorsSchema.Type
+
+export type ValidateChoiceQuestionSuccess =
+  typeof validateChoiceQuestionSuccessSchema.Type
 
 // JSON-safe wire union
 export type ValidateChoiceQuestionWire =

@@ -1,30 +1,30 @@
 import type { ReactNode } from "react"
 
 type PreferenceFieldProps = {
-  label: string
+  children: ReactNode
+  error?: null | string
   htmlFor: string
   icon?: ReactNode
-  children: ReactNode
-  error?: string | null
-  variant?: "surface" | "plain"
+  label: string
+  variant?: "plain" | "surface"
 }
 
 export function PreferenceField({
-  label,
-  htmlFor,
-  icon,
   children,
   error,
+  htmlFor,
+  icon,
+  label,
   variant = "surface",
 }: PreferenceFieldProps) {
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={htmlFor} className="text-loops-light text-sm font-medium">
+      <label className="text-loops-light text-sm font-medium" htmlFor={htmlFor}>
         {label}
       </label>
 
       {variant === "surface" ? (
-        <div className="focus-within:ring-loops-cyan/30 flex min-h-14 w-full items-center gap-3 rounded-2xl border border-transparent bg-loops-light px-4 shadow-sm backdrop-blur-md ring-offset-transparent focus-within:ring-2">
+        <div className="focus-within:ring-loops-cyan/30 bg-loops-light flex min-h-14 w-full items-center gap-3 rounded-2xl border border-transparent px-4 shadow-sm ring-offset-transparent backdrop-blur-md focus-within:ring-2">
           {icon ? (
             <span className="text-loops-cyan flex h-5 w-5 items-center justify-center">
               {icon}

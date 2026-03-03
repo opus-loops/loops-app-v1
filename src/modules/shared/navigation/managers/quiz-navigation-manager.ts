@@ -1,5 +1,7 @@
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { Effect } from "effect"
+
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
 import type { NavigationError } from "../types/navigation-types"
 
 /**
@@ -8,32 +10,6 @@ import type { NavigationError } from "../types/navigation-types"
  */
 export interface IQuizNavigationManager {
   /**
-   * Navigates to the next content item from a quiz.
-   *
-   * @param params - Navigation parameters
-   * @param params.currentItem - The current quiz item
-   * @param params.nextItem - The target next item
-   * @returns Effect resolving to the next item or failing with NavigationError
-   */
-  navigateToNext(params: {
-    currentItem: CategoryContentItem
-    nextItem: CategoryContentItem
-  }): Effect.Effect<CategoryContentItem, NavigationError>
-
-  /**
-   * Navigates to the previous content item from a quiz.
-   *
-   * @param params - Navigation parameters
-   * @param params.currentItem - The current quiz item
-   * @param params.previousItem - The target previous item
-   * @returns Effect resolving to the previous item or failing with NavigationError
-   */
-  navigateToPrevious(params: {
-    currentItem: CategoryContentItem
-    previousItem: CategoryContentItem
-  }): Effect.Effect<CategoryContentItem, NavigationError>
-
-  /**
    * Checks if navigation to the next item is allowed from a quiz.
    *
    * @param params - Navigation parameters
@@ -41,10 +17,10 @@ export interface IQuizNavigationManager {
    * @param params.nextItem - The target next item
    * @returns Effect resolving to boolean indicating if navigation is possible
    */
-  canNavigateNext(params: {
+  canNavigateNext: (params: {
     currentItem: CategoryContentItem
     nextItem: CategoryContentItem
-  }): Effect.Effect<boolean, NavigationError>
+  }) => Effect.Effect<boolean, NavigationError>
 
   /**
    * Checks if navigation to the previous item is allowed from a quiz.
@@ -54,10 +30,36 @@ export interface IQuizNavigationManager {
    * @param params.previousItem - The target previous item
    * @returns Effect resolving to boolean indicating if navigation is possible
    */
-  canNavigatePrevious(params: {
+  canNavigatePrevious: (params: {
     currentItem: CategoryContentItem
     previousItem: CategoryContentItem
-  }): Effect.Effect<boolean, NavigationError>
+  }) => Effect.Effect<boolean, NavigationError>
+
+  /**
+   * Navigates to the next content item from a quiz.
+   *
+   * @param params - Navigation parameters
+   * @param params.currentItem - The current quiz item
+   * @param params.nextItem - The target next item
+   * @returns Effect resolving to the next item or failing with NavigationError
+   */
+  navigateToNext: (params: {
+    currentItem: CategoryContentItem
+    nextItem: CategoryContentItem
+  }) => Effect.Effect<CategoryContentItem, NavigationError>
+
+  /**
+   * Navigates to the previous content item from a quiz.
+   *
+   * @param params - Navigation parameters
+   * @param params.currentItem - The current quiz item
+   * @param params.previousItem - The target previous item
+   * @returns Effect resolving to the previous item or failing with NavigationError
+   */
+  navigateToPrevious: (params: {
+    currentItem: CategoryContentItem
+    previousItem: CategoryContentItem
+  }) => Effect.Effect<CategoryContentItem, NavigationError>
 }
 
 /**
@@ -65,6 +67,38 @@ export interface IQuizNavigationManager {
  * Enforces completion requirements for quizzes before allowing forward navigation.
  */
 export class QuizNavigationManager implements IQuizNavigationManager {
+  /**
+   * Checks if navigation to the next item is possible.
+   * Returns true only if the current quiz is completed and the next item exists.
+   */
+  canNavigateNext(params: {
+    currentItem: CategoryContentItem
+    nextItem: CategoryContentItem
+  }): Effect.Effect<boolean, NavigationError> {
+    const { currentItem, nextItem } = params
+
+    if (currentItem.contentType !== "quizzes") return Effect.succeed(false)
+
+    const isCompleted = currentItem.itemProgress?.status === "completed"
+
+    const hasNextItem = !!nextItem
+
+    return Effect.succeed(isCompleted && hasNextItem)
+  }
+
+  /**
+   * Checks if navigation to the previous item is possible.
+   * Always allows navigation if the previous item exists.
+   */
+  canNavigatePrevious(params: {
+    currentItem: CategoryContentItem
+    previousItem: CategoryContentItem
+  }): Effect.Effect<boolean, NavigationError> {
+    const { previousItem } = params
+
+    return Effect.succeed(!!previousItem)
+  }
+
   /**
    * Navigates to the next content item.
    * Requires the current quiz to be completed.
@@ -123,37 +157,5 @@ export class QuizNavigationManager implements IQuizNavigationManager {
 
       return previousItem
     })
-  }
-
-  /**
-   * Checks if navigation to the next item is possible.
-   * Returns true only if the current quiz is completed and the next item exists.
-   */
-  canNavigateNext(params: {
-    currentItem: CategoryContentItem
-    nextItem: CategoryContentItem
-  }): Effect.Effect<boolean, NavigationError> {
-    const { currentItem, nextItem } = params
-
-    if (currentItem.contentType !== "quizzes") return Effect.succeed(false)
-
-    const isCompleted = currentItem.itemProgress?.status === "completed"
-
-    const hasNextItem = !!nextItem
-
-    return Effect.succeed(isCompleted && hasNextItem)
-  }
-
-  /**
-   * Checks if navigation to the previous item is possible.
-   * Always allows navigation if the previous item exists.
-   */
-  canNavigatePrevious(params: {
-    currentItem: CategoryContentItem
-    previousItem: CategoryContentItem
-  }): Effect.Effect<boolean, NavigationError> {
-    const { previousItem } = params
-
-    return Effect.succeed(!!previousItem)
   }
 }

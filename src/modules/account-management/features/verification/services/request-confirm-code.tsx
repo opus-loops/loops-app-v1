@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
+
 import { useRequestConfirm } from "./use-request-confirm"
 import { Button } from "@/modules/shared/components/ui/button"
 import { useToast } from "@/modules/shared/hooks/use-toast"
@@ -47,7 +48,9 @@ export function RequestConfirmCode({
         onClick={handleResendCode}
         type="button"
       >
-        {isLoading ? t("auth.verify.resend_loading") : t("auth.verify.resend_button")}
+        {isLoading
+          ? t("auth.verify.resend_loading")
+          : t("auth.verify.resend_button")}
       </Button>
     </div>
   )

@@ -1,29 +1,30 @@
-import { TimerIcon } from "@/modules/shared/components/icons/timer"
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
-import { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import { useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { SubQuizRef } from "../question-types/sequence-order-component"
+
+import type { SubQuizRef } from "../question-types/sequence-order-component"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import type { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+import { TimerIcon } from "@/modules/shared/components/icons/timer"
 
 type QuizHeaderProps = {
-  quizItem: CategoryContentItem & { contentType: "quizzes" }
-  selectedSubQuiz: EnhancedSubQuiz | undefined
   isTimerRunning: boolean
+  quizItem: { contentType: "quizzes" } & CategoryContentItem
+  selectedSubQuiz: EnhancedSubQuiz | undefined
   setIsTimerRunning: (isRunning: boolean) => void
-  subQuizRef: React.RefObject<SubQuizRef | null>
+  setTimeLeft: (time: ((prev: number) => number) | number) => void
+  subQuizRef: React.RefObject<null | SubQuizRef>
   timeLeft: number
-  setTimeLeft: (time: number | ((prev: number) => number)) => void
 }
 
 export function QuizHeader({
+  isTimerRunning,
   quizItem,
   selectedSubQuiz,
-  isTimerRunning,
   setIsTimerRunning,
+  setTimeLeft,
   subQuizRef,
   timeLeft,
-  setTimeLeft,
 }: QuizHeaderProps) {
   const { t } = useTranslation()
   const estimatedTime = selectedSubQuiz?.content?.estimatedTime ?? 0

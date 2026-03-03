@@ -3,11 +3,14 @@ import { languageOptions } from "./constants"
 type Language = (typeof languageOptions)[number]["value"]
 
 type LanguageSelectGroupProps = {
-  value: Language
   onChange: (value: Language) => void
+  value: Language
 }
 
-export function LanguageSelectGroup({ value, onChange }: LanguageSelectGroupProps) {
+export function LanguageSelectGroup({
+  onChange,
+  value,
+}: LanguageSelectGroupProps) {
   const selectedIndex = Math.max(
     0,
     languageOptions.findIndex((o) => o.value === value),
@@ -15,7 +18,6 @@ export function LanguageSelectGroup({ value, onChange }: LanguageSelectGroupProp
 
   return (
     <div
-      role="radiogroup"
       aria-label="Language"
       className="grid grid-cols-3 gap-2"
       onKeyDown={(e) => {
@@ -27,23 +29,24 @@ export function LanguageSelectGroup({ value, onChange }: LanguageSelectGroupProp
           languageOptions.length
         onChange(languageOptions[nextIndex].value)
       }}
+      role="radiogroup"
     >
       {languageOptions.map((option) => {
         const isSelected = option.value === value
         return (
           <button
-            key={option.value}
-            type="button"
-            role="radio"
             aria-checked={isSelected}
-            tabIndex={isSelected ? 0 : -1}
-            onClick={() => onChange(option.value)}
             className={[
-              "h-11 rounded-xl px-3 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+              "h-11 rounded-xl px-3 text-sm font-semibold transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none",
               isSelected
-                ? "bg-loops-cyan text-loops-light shadow-sm shadow-loops-cyan/20 focus-visible:ring-loops-cyan"
+                ? "bg-loops-cyan text-loops-light shadow-loops-cyan/20 focus-visible:ring-loops-cyan shadow-sm"
                 : "bg-loops-light text-loops-dark hover:bg-loops-light/90 focus-visible:ring-loops-dark/20",
             ].join(" ")}
+            key={option.value}
+            onClick={() => onChange(option.value)}
+            role="radio"
+            tabIndex={isSelected ? 0 : -1}
+            type="button"
           >
             {option.label}
           </button>

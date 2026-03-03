@@ -1,3 +1,7 @@
+import { createFileRoute } from "@tanstack/react-router"
+import { Suspense } from "react"
+import { z } from "zod"
+
 import { HomeScreen } from "@/modules/content-management/features/home/components/home-screen"
 import { HomeSkeleton } from "@/modules/shared/components/common/home-skeleton"
 import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
@@ -7,21 +11,10 @@ import { CategorySelectionShell } from "@/modules/shared/shell/category_selectio
 import { ConfirmationShell } from "@/modules/shared/shell/confirmation/confirmation-shell"
 import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-shell"
 import { SelectedContentShell } from "@/modules/shared/shell/selected_content/selected-content-shell"
-import { createFileRoute } from "@tanstack/react-router"
-import { Suspense } from "react"
-import { z } from "zod"
 
 export const Route = createFileRoute("/")({
   beforeLoad: async ({ context }) =>
     await context.queryClient.ensureQueryData(authenticatedQuery),
-  validateSearch: z.object({
-    category: z
-      .string()
-      .refine((value) => value === "all" || /^[0-9a-fA-F]{24}$/.test(value))
-      .optional(),
-    type: z.enum(["details", "content"]).optional(),
-    contentId: z.string().optional(),
-  }),
   component: function Home() {
     const { user } = useAuth()
     const search = Route.useSearch()
@@ -43,6 +36,7 @@ export const Route = createFileRoute("/")({
                   searchParams={search}
                   target={
                     <SelectedContentShell
+                      searchParams={search}
                       target={
                         <div className="relative min-h-screen">
                           {user.currentCategory && (
@@ -57,7 +51,6 @@ export const Route = createFileRoute("/")({
                           </div>
                         </div>
                       }
-                      searchParams={search}
                     />
                   }
                   user={user}
@@ -71,4 +64,12 @@ export const Route = createFileRoute("/")({
       </SelectedContentProvider>
     )
   },
+  validateSearch: z.object({
+    category: z
+      .string()
+      .refine((value) => value === "all" || /^[0-9a-fA-F]{24}$/.test(value))
+      .optional(),
+    contentId: z.string().optional(),
+    type: z.enum(["details", "content"]).optional(),
+  }),
 })

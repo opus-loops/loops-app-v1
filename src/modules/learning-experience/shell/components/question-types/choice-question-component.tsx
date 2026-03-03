@@ -1,7 +1,3 @@
-import { QuestionValidationPopup } from "@/modules/learning-experience/shell/components/question-types/question-validation-popup"
-import { cn } from "@/modules/shared/lib/utils"
-import { useValidateChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-validate-choice-question"
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import {
   forwardRef,
   useEffect,
@@ -10,26 +6,32 @@ import {
   useState,
 } from "react"
 
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+
+import { QuestionValidationPopup } from "@/modules/learning-experience/shell/components/question-types/question-validation-popup"
+import { cn } from "@/modules/shared/lib/utils"
+import { useValidateChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-validate-choice-question"
+
 export type SubQuizRef = {
   skip: () => void
   validate: (timeLeft: number) => Promise<void>
 }
 
 type ChoiceQuestionComponentProps = {
-  subQuiz: EnhancedSubQuiz & { questionType: "choiceQuestions" }
   categoryId: string
   onStopTimer: () => void
+  subQuiz: { questionType: "choiceQuestions" } & EnhancedSubQuiz
 }
 
 export const ChoiceQuestionComponent = forwardRef<
   SubQuizRef,
   ChoiceQuestionComponentProps
->(({ subQuiz, categoryId, onStopTimer }, ref) => {
+>(({ categoryId, onStopTimer, subQuiz }, ref) => {
   const { handleValidateChoiceQuestion } = useValidateChoiceQuestion()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [selectedChoices, setSelectedChoices] = useState<number[]>([])
+  const [selectedChoices, setSelectedChoices] = useState<Array<number>>([])
   const [isPopupOpen, setIsPopupOpen] = useState(false)
-  const pendingValidationQuestionIdRef = useRef<string | null>(null)
+  const pendingValidationQuestionIdRef = useRef<null | string>(null)
 
   const question = subQuiz.content
   const completedQuestion = subQuiz.completedQuestion
@@ -55,10 +57,10 @@ export const ChoiceQuestionComponent = forwardRef<
       setIsSubmitting(true)
       await handleValidateChoiceQuestion({
         categoryId,
-        quizId: subQuiz.quizId,
         questionId: subQuiz.questionId,
-        userAnswer: undefined,
+        quizId: subQuiz.quizId,
         spentTime: question?.estimatedTime ?? 0,
+        userAnswer: undefined,
       })
       setIsSubmitting(false)
     },
@@ -73,10 +75,10 @@ export const ChoiceQuestionComponent = forwardRef<
 
       await handleValidateChoiceQuestion({
         categoryId,
-        quizId: subQuiz.quizId,
         questionId: subQuiz.questionId,
-        userAnswer: selectedChoices,
+        quizId: subQuiz.quizId,
         spentTime,
+        userAnswer: selectedChoices,
       })
       setIsSubmitting(false)
     },
@@ -97,7 +99,7 @@ export const ChoiceQuestionComponent = forwardRef<
     if (!isValidated) return false
     if (!idealOptions || !userAnswer) return false
     if (idealOptions.length !== userAnswer.length) return false
-    const toCounts = (values: readonly number[]) => {
+    const toCounts = (values: ReadonlyArray<number>) => {
       const map = new Map<number, number>()
       for (const v of values) map.set(v, (map.get(v) ?? 0) + 1)
       return map
@@ -174,14 +176,14 @@ export const ChoiceQuestionComponent = forwardRef<
               <svg
                 className="text-loops-light h-4 w-4"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth={3}
+                viewBox="0 0 24 24"
               >
                 <path
+                  d="M5 13l4 4L19 7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M5 13l4 4L19 7"
                 />
               </svg>
             ) : (
@@ -208,9 +210,9 @@ export const ChoiceQuestionComponent = forwardRef<
               viewBox="0 0 20 20"
             >
               <path
-                fillRule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                 clipRule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                fillRule="evenodd"
               />
             </svg>
           </div>
@@ -229,9 +231,9 @@ export const ChoiceQuestionComponent = forwardRef<
               viewBox="0 0 20 20"
             >
               <path
-                fillRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
                 clipRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                fillRule="evenodd"
               />
             </svg>
           </div>
@@ -255,12 +257,12 @@ export const ChoiceQuestionComponent = forwardRef<
         <QuestionValidationPopup
           isOpen={isPopupOpen}
           onOpenChange={setIsPopupOpen}
-          variant={popupVariant}
           subtitle={
             popupVariant === "correct"
               ? subQuiz.content.congratulatoryMessage[0].content
               : subQuiz.content.consolidationMessage[0].content
           }
+          variant={popupVariant}
         />
       )}
       {/* Question Text */}
@@ -281,8 +283,8 @@ export const ChoiceQuestionComponent = forwardRef<
 
           return (
             <div
-              key={index}
               className={getChoiceStyle(index)}
+              key={index}
               onClick={() => handleChoiceSelect(index)}
             >
               {getChoiceIcon(index)}

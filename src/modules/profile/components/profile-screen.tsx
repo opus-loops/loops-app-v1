@@ -1,20 +1,21 @@
-import { GearIcon } from "@/modules/shared/components/icons/gear"
-import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
-import loopsBgUrl from "../../../../assets/images/loops-bg.png"
-
-import { UserIcon } from "@/modules/shared/components/icons/user"
-import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
-import type { User } from "@/modules/shared/domain/entities/user"
 import { Link } from "@tanstack/react-router"
 import { Trophy } from "lucide-react"
 import { useMemo } from "react"
+
+import loopsBgUrl from "../../../../assets/images/loops-bg.png"
+import type { User } from "@/modules/shared/domain/entities/user"
+
+import { GearIcon } from "@/modules/shared/components/icons/gear"
+import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
+import { UserIcon } from "@/modules/shared/components/icons/user"
+import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
 
 type ProfileProgressSectionProps = {
   user: User
 }
 
 export function ProfileScreen({ user }: ProfileProgressSectionProps) {
-  const { level, levelProgressPercent, globalXp } = useMemo(() => {
+  const { globalXp, level, levelProgressPercent } = useMemo(() => {
     const safeXp = Number.isFinite(user.globalXP) ? user.globalXP : 0
     const computedLevel = Math.max(1, Math.floor(safeXp / 100) + 1)
     const computedProgress = ((safeXp % 100) + 100) % 100
@@ -30,8 +31,8 @@ export function ProfileScreen({ user }: ProfileProgressSectionProps) {
       <div className="mx-auto w-full max-w-sm">
         <div className="relative h-96 overflow-hidden">
           <img
-            src={loopsBgUrl}
             className="absolute inset-0 h-full w-full object-cover object-center"
+            src={loopsBgUrl}
           />
 
           <div className="to-loops-background from-loops-black absolute inset-0 bg-gradient-to-b via-transparent" />
@@ -40,9 +41,9 @@ export function ProfileScreen({ user }: ProfileProgressSectionProps) {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <OpenCategoriesButton
-                  to="/profile"
-                  search={{ category: "all" }}
                   className="h-11 w-11 rounded-xl bg-[#1f4b6682] shadow-lg backdrop-blur-sm hover:bg-[#1f4b66aa]"
+                  search={{ category: "all" }}
+                  to="/profile"
                 />
               </div>
 
@@ -55,8 +56,8 @@ export function ProfileScreen({ user }: ProfileProgressSectionProps) {
 
               <div className="flex items-center justify-end gap-2">
                 <Link
-                  to="/profile/settings"
                   className="h-11 w-11 rounded-xl bg-[#1f4b6682] p-2.5 text-[#31BCE6] shadow-lg backdrop-blur-sm transition-colors hover:bg-[#1f4b66aa]"
+                  to="/profile/settings"
                 >
                   <GearIcon />
                 </Link>
@@ -69,9 +70,9 @@ export function ProfileScreen({ user }: ProfileProgressSectionProps) {
           <div className="bg-loops-background flex flex-col gap-5 rounded-3xl px-3 py-6">
             {user.avatarURL ? (
               <img
-                src={user.avatarURL}
                 alt={user.fullName}
                 className="mx-auto h-20 w-20 rounded-full border-2 border-white object-cover"
+                src={user.avatarURL}
               />
             ) : (
               <div className="bg-loops-pink mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-white">

@@ -1,12 +1,13 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import {
   queryOptions,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query"
 import { useEffect } from "react"
+
 import { singleCategoryItemFn } from "./single-category-item-fn"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 
 interface SingleCategoryItemParams {
   categoryId: string
@@ -18,7 +19,6 @@ export const singleCategoryItemQuery = (
   handleSessionExpired: () => Promise<void>,
 ) =>
   queryOptions({
-    queryKey: ["single-category-item", params.categoryId, params.itemId],
     queryFn: async () => {
       const response = await singleCategoryItemFn({
         data: {
@@ -32,6 +32,7 @@ export const singleCategoryItemQuery = (
       }
       return response.value
     },
+    queryKey: ["single-category-item", params.categoryId, params.itemId],
   })
 
 export function useSingleCategoryItem(params: SingleCategoryItemParams) {

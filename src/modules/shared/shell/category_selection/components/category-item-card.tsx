@@ -1,14 +1,14 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { ProgressState } from "@/modules/shared/utils/types"
 import { QuizCard } from "./quiz-card"
 import { SkillCard } from "./skill-card"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import type { ProgressState } from "@/modules/shared/utils/types"
 
 type CategoryItemCardProps = {
-  item: CategoryContentItem
   index: number
+  item: CategoryContentItem
 }
 
-export function CategoryItemCard({ item, index }: CategoryItemCardProps) {
+export function CategoryItemCard({ index, item }: CategoryItemCardProps) {
   const getProgressState = (): ProgressState => {
     if (item.contentType === "skills") {
       if (item.itemProgress?.isCompleted) return "completed"
@@ -47,20 +47,20 @@ export function CategoryItemCard({ item, index }: CategoryItemCardProps) {
   if (item.contentType === "skills") {
     return (
       <SkillCard
-        item={item}
         index={index}
-        progressState={progressState}
+        item={item}
         progress={progress}
+        progressState={progressState}
       />
     )
   }
 
   return (
     <QuizCard
-      item={item}
       index={index}
-      progressState={progressState}
+      item={item}
       progress={progress}
+      progressState={progressState}
     />
   )
 }

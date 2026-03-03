@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
-import { WelcomeScreen } from "./welcome-screen"
-import type { ReactNode } from "react"
-import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
+
 import {
   LanguageSelectionScreen,
   PENDING_LANGUAGE_KEY,
 } from "./language-selection-screen"
+import { WelcomeScreen } from "./welcome-screen"
+import type { ReactNode } from "react"
+import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
 
 const FIRST_INSTALL_KEY = "isFirstInstall"
 
@@ -13,9 +14,9 @@ type FirstInstallShellProps = { target: ReactNode }
 
 export function FirstInstallShell({ target }: FirstInstallShellProps) {
   const [isFirstInstall, setIsFirstInstall] = useState<boolean | null>(null)
-  const [hasSelectedLanguage, setHasSelectedLanguage] = useState<boolean | null>(
-    null,
-  )
+  const [hasSelectedLanguage, setHasSelectedLanguage] = useState<
+    boolean | null
+  >(null)
 
   useEffect(() => {
     if (

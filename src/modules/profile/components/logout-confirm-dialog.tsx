@@ -1,20 +1,20 @@
-import cryingLoopsUrl from "../../../../assets/images/crying-loops.png"
-
-import { ExitIcon } from "@/modules/shared/components/icons/exit"
-import { cn } from "@/modules/shared/lib/utils"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { useCallback, useState } from "react"
 
+import cryingLoopsUrl from "../../../../assets/images/crying-loops.png"
+import { ExitIcon } from "@/modules/shared/components/icons/exit"
+import { cn } from "@/modules/shared/lib/utils"
+
 type LogoutConfirmDialogProps = {
-  open: boolean
-  onOpenChange: (open: boolean) => void
   onConfirmLogout: () => Promise<void> | void
+  onOpenChange: (open: boolean) => void
+  open: boolean
 }
 
 export function LogoutConfirmDialog({
-  open,
-  onOpenChange,
   onConfirmLogout,
+  onOpenChange,
+  open,
 }: LogoutConfirmDialogProps) {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -33,7 +33,7 @@ export function LogoutConfirmDialog({
   }, [onConfirmLogout, onOpenChange])
 
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+    <DialogPrimitive.Root onOpenChange={onOpenChange} open={open}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/80" />
         <DialogPrimitive.Content
@@ -53,10 +53,10 @@ export function LogoutConfirmDialog({
           </div>
 
           <img
-            src={cryingLoopsUrl}
             alt="Crying Loops mascot"
             className="h-[227px] w-[224px] object-contain select-none"
             draggable={false}
+            src={cryingLoopsUrl}
           />
 
           <div className="flex w-full flex-col gap-4 px-5">
@@ -65,26 +65,26 @@ export function LogoutConfirmDialog({
             </p>
 
             <button
-              type="button"
+              className="bg-loops-cyan inline-flex w-full items-center justify-center rounded-lg px-4 py-2 text-[18px] leading-[30px] font-medium text-[#15153a] focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoading}
               onClick={handleContinue}
-              className="bg-loops-cyan inline-flex w-full items-center justify-center rounded-lg px-4 py-2 text-[18px] leading-[30px] font-medium text-[#15153a] focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20 disabled:cursor-not-allowed disabled:opacity-50"
+              type="button"
             >
               Continuer
             </button>
 
             <button
-              type="button"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-[18px] leading-[30px] font-medium text-[#ff383c] focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoading}
               onClick={handleQuit}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-[18px] leading-[30px] font-medium text-[#ff383c] focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20 disabled:cursor-not-allowed disabled:opacity-50"
+              type="button"
             >
               {isLoading ? (
                 <svg
                   className="h-6 w-6 animate-spin text-[#ff383c]"
-                  xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <circle
                     className="opacity-25"
@@ -96,8 +96,8 @@ export function LogoutConfirmDialog({
                   ></circle>
                   <path
                     className="opacity-75"
-                    fill="currentColor"
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    fill="currentColor"
                   ></path>
                 </svg>
               ) : (

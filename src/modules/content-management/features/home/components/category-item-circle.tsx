@@ -1,35 +1,35 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { QuizItemCircle } from "./quiz-item-circle"
 import { SkillItemCircle } from "./skill-item-circle"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 
 export type CategoryItemProps = {
-  item: CategoryContentItem
-  index: number
   categoryId: string
+  index: number
+  item: CategoryContentItem
   previousItems: Array<CategoryContentItem>
 }
 
 export function CategoryItemCircle({
-  item,
-  index,
   categoryId,
+  index,
+  item,
   previousItems,
 }: CategoryItemProps) {
   if (item.contentType === "quizzes")
     return (
       <QuizItemCircle
-        item={item}
-        index={index}
         categoryId={categoryId}
+        index={index}
+        item={item}
         previousItems={previousItems}
       />
     )
 
   return (
     <SkillItemCircle
-      item={item}
-      index={index}
       categoryId={categoryId}
+      index={index}
+      item={item}
       previousItems={previousItems}
     />
   )

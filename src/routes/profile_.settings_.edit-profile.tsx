@@ -1,23 +1,17 @@
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { ChevronLeft } from "lucide-react"
+import z from "zod"
+
 import { EditProfileForm } from "@/modules/profile/components/settings/edit-profile-form"
 import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
 import { authenticatedQuery, useAuth } from "@/modules/shared/guards/use-auth"
 import { CategorySelectionShell } from "@/modules/shared/shell/category_selection/category-selection-shell"
 import { ConfirmationShell } from "@/modules/shared/shell/confirmation/confirmation-shell"
 import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-shell"
-import { Link, createFileRoute } from "@tanstack/react-router"
-import { ChevronLeft } from "lucide-react"
-import z from "zod"
 
 export const Route = createFileRoute("/profile_/settings_/edit-profile")({
   beforeLoad: async ({ context }) =>
     await context.queryClient.ensureQueryData(authenticatedQuery),
-  validateSearch: z.object({
-    category: z
-      .string()
-      .refine((value) => value === "all" || /^[0-9a-fA-F]{24}$/.test(value))
-      .optional(),
-    type: z.enum(["details", "content"]).optional(),
-  }),
   component: function RouteComponent() {
     const { user } = useAuth()
     const search = Route.useSearch()
@@ -35,9 +29,9 @@ export const Route = createFileRoute("/profile_/settings_/edit-profile")({
                       <div className="mx-auto flex min-h-screen w-full max-w-sm flex-col px-5 pt-10 pb-28">
                         <div className="flex items-center gap-4">
                           <Link
-                            to="/profile/settings"
-                            className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#1f4b6682] shadow-lg backdrop-blur-sm hover:bg-[#1f4b66aa]"
                             aria-label="Back to settings"
+                            className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#1f4b6682] shadow-lg backdrop-blur-sm hover:bg-[#1f4b66aa]"
+                            to="/profile/settings"
                           >
                             <ChevronLeft className="text-loops-light h-6 w-6" />
                           </Link>
@@ -64,4 +58,11 @@ export const Route = createFileRoute("/profile_/settings_/edit-profile")({
       />
     )
   },
+  validateSearch: z.object({
+    category: z
+      .string()
+      .refine((value) => value === "all" || /^[0-9a-fA-F]{24}$/.test(value))
+      .optional(),
+    type: z.enum(["details", "content"]).optional(),
+  }),
 })

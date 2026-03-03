@@ -1,16 +1,17 @@
-import { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
-import { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
 import { Effect } from "effect"
-import {
+
+import { ChoiceQuestionToChoiceQuestionStrategy } from "./strategies/choice-question-to-choice-question-strategy"
+import { ChoiceQuestionToSequenceOrderStrategy } from "./strategies/choice-question-to-sequence-order-strategy"
+import { SequenceOrderToChoiceQuestionStrategy } from "./strategies/sequence-order-to-choice-question-strategy"
+import { SequenceOrderToSequenceOrderStrategy } from "./strategies/sequence-order-to-sequence-order-strategy"
+import type { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
+import type {
   ISubQuizNavigationStrategy,
   SubQuizNavigationContext,
   SubQuizNavigationError,
   SubQuizNavigationStrategy,
 } from "../sub-quiz-navigation-types"
-import { ChoiceQuestionToChoiceQuestionStrategy } from "./strategies/choice-question-to-choice-question-strategy"
-import { ChoiceQuestionToSequenceOrderStrategy } from "./strategies/choice-question-to-sequence-order-strategy"
-import { SequenceOrderToChoiceQuestionStrategy } from "./strategies/sequence-order-to-choice-question-strategy"
-import { SequenceOrderToSequenceOrderStrategy } from "./strategies/sequence-order-to-sequence-order-strategy"
+import type { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
 
 /**
  * Selector class that determines the appropriate navigation strategy based on the current and target sub-quiz types.

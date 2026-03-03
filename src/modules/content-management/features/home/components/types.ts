@@ -1,13 +1,13 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-
-export type CategoryMappingProps = {
-  categoryItems: Array<CategoryContentItem>
-  categoryId: string
-}
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 
 export type CategoryItemProps = {
-  item: CategoryContentItem
-  index: number
   categoryId: string
+  index: number
+  item: CategoryContentItem
   previousItems: Array<CategoryContentItem>
+}
+
+export type CategoryMappingProps = {
+  categoryId: string
+  categoryItems: Array<CategoryContentItem>
 }

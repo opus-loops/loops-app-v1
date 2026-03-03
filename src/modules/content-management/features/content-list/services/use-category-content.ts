@@ -1,6 +1,7 @@
-import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+
 import { categoryContentFn } from "./category-content-fn"
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 
 interface CategoryContentParams {
   categoryId: string
@@ -12,7 +13,6 @@ export const categoryContentQuery = (
   handleSessionExpired: () => Promise<void>,
 ) =>
   queryOptions({
-    queryKey: ["category-content", params.categoryId],
     queryFn: async () => {
       const response = await categoryContentFn({
         data: {
@@ -26,6 +26,7 @@ export const categoryContentQuery = (
       }
       return response.value
     },
+    queryKey: ["category-content", params.categoryId],
   })
 
 export function useCategoryContent(params: CategoryContentParams) {

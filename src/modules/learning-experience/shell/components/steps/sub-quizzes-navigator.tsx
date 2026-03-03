@@ -1,23 +1,22 @@
-import { Button } from "@/modules/shared/components/ui/button"
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useRef, useState } from "react"
+
 import { ChoiceQuestionComponent } from "../question-types/choice-question-component"
-import {
-  SequenceOrderComponent,
-  SubQuizRef,
-} from "../question-types/sequence-order-component"
+import { SequenceOrderComponent } from "../question-types/sequence-order-component"
 import { QuizHeader } from "./quiz-header"
 import { useSubQuizNavigation } from "./use-sub-quiz-navigation"
+import type { SubQuizRef } from "../question-types/sequence-order-component"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import { Button } from "@/modules/shared/components/ui/button"
 
 type SubQuizzesNavigatorProps = {
-  quizItem: CategoryContentItem & { contentType: "quizzes" }
+  quizItem: { contentType: "quizzes" } & CategoryContentItem
 }
 
 // TODO: disable the button when navigating, question not validated, validating...
 export function SubQuizzesNavigator({ quizItem }: SubQuizzesNavigatorProps) {
   const subQuizRef = useRef<SubQuizRef>(null)
 
-  const { selectedSubQuiz, navigateNext, canNavigateNext, navigationState } =
+  const { canNavigateNext, navigateNext, navigationState, selectedSubQuiz } =
     useSubQuizNavigation({ quizItem })
 
   const estimatedTime = selectedSubQuiz?.content?.estimatedTime ?? 0
@@ -46,42 +45,42 @@ export function SubQuizzesNavigator({ quizItem }: SubQuizzesNavigatorProps) {
   return (
     <div className="flex w-full flex-col items-center">
       <QuizHeader
+        isTimerRunning={isTimerRunning}
         quizItem={quizItem}
         selectedSubQuiz={selectedSubQuiz}
-        timeLeft={timeLeft}
-        setTimeLeft={setTimeLeft}
-        isTimerRunning={isTimerRunning}
         setIsTimerRunning={setIsTimerRunning}
+        setTimeLeft={setTimeLeft}
         subQuizRef={subQuizRef}
+        timeLeft={timeLeft}
       />
 
       {selectedSubQuiz &&
         selectedSubQuiz.questionType === "choiceQuestions" && (
           <ChoiceQuestionComponent
-            key={selectedSubQuiz.subQuizId}
-            ref={subQuizRef}
             categoryId={quizItem.categoryId}
-            subQuiz={selectedSubQuiz}
+            key={selectedSubQuiz.subQuizId}
             onStopTimer={() => setIsTimerRunning(false)}
+            ref={subQuizRef}
+            subQuiz={selectedSubQuiz}
           />
         )}
 
       {selectedSubQuiz && //
         selectedSubQuiz.questionType === "sequenceOrders" && (
           <SequenceOrderComponent
-            key={selectedSubQuiz.subQuizId}
-            ref={subQuizRef}
             categoryId={quizItem.categoryId}
-            subQuiz={selectedSubQuiz}
+            key={selectedSubQuiz.subQuizId}
             onStopTimer={() => setIsTimerRunning(false)}
+            ref={subQuizRef}
+            subQuiz={selectedSubQuiz}
           />
         )}
 
       {selectedSubQuiz && (
         <div className="mx-auto mt-8 flex w-full max-w-2xl justify-end px-2">
           <Button
-            onClick={handleButtonClicked}
             className="text-loops-light bg-cyan-500 px-8 hover:bg-cyan-600"
+            onClick={handleButtonClicked}
           >
             {isCompleted
               ? navigationState?.isNavigating

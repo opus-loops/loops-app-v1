@@ -1,10 +1,11 @@
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
+
+import { getLoggedUserFactory } from "../api/users/get-logged-user"
 import type {
   getLoggedUserErrorsSchema,
   getLoggedUserSuccessSchema,
 } from "../api/users/get-logged-user"
-import { getLoggedUserFactory } from "../api/users/get-logged-user"
 import type { unknownErrorSchema } from "../utils/types"
 
 // --- TYPES (pure TS) ---------------------------------------------------------

@@ -1,12 +1,13 @@
 import axios from "axios"
-import type { Effect } from "effect"
 import { Schema } from "effect"
+
 import { invalidRefreshTokenErrorSchema } from "../../domain/errors/invalid-refresh-token"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import { loginTokensSchema } from "../../domain/types/login-tokens"
 import { invalidInputFactory } from "../../domain/utils/invalid-input"
 import { parseApiResponse } from "../../utils/parse-api-response"
 import { parseEffectSchema } from "../../utils/parse-effect-schema"
+import type { Effect } from "effect"
 
 const refreshArgsSchema = Schema.Struct({ refresh: Schema.String })
 type RefreshArgs = Schema.Schema.Type<typeof refreshArgsSchema>

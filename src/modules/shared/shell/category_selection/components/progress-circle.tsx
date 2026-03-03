@@ -1,6 +1,7 @@
+import type { ProgressState } from "@/modules/shared/utils/types"
+
 import { LockIcon } from "@/modules/shared/components/icons/lock"
 import { cn } from "@/modules/shared/lib/utils"
-import { ProgressState } from "@/modules/shared/utils/types"
 
 export function ProgressCircle({
   progress,
@@ -24,31 +25,31 @@ export function ProgressCircle({
     <div className="relative h-16 w-16">
       <svg className="h-16 w-16 -rotate-90 transform">
         <circle
+          className="text-gray-700"
           cx="32"
           cy="32"
+          fill="transparent"
           r="28"
           stroke="currentColor"
           strokeWidth="4"
-          fill="transparent"
-          className="text-gray-700"
         />
         <circle
-          cx="32"
-          cy="32"
-          r="28"
-          stroke="currentColor"
-          strokeWidth="4"
-          fill="transparent"
-          strokeDasharray={`${2 * Math.PI * 28}`}
-          strokeDashoffset={`${
-            2 * Math.PI * 28 - (progress / 100) * 2 * Math.PI * 28
-          }`}
           className={cn(
             "transition-all duration-300 ease-in-out",
             progressState === "completed"
               ? "text-green-400"
               : "text-loops-cyan",
           )}
+          cx="32"
+          cy="32"
+          fill="transparent"
+          r="28"
+          stroke="currentColor"
+          strokeDasharray={`${2 * Math.PI * 28}`}
+          strokeDashoffset={`${
+            2 * Math.PI * 28 - (progress / 100) * 2 * Math.PI * 28
+          }`}
+          strokeWidth="4"
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">

@@ -1,3 +1,6 @@
+import { Schema } from "effect"
+import type { Effect } from "effect"
+
 import { invalidTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-token"
 import { loginTokensSchema } from "@/modules/shared/domain/types/login-tokens"
 import {
@@ -7,8 +10,6 @@ import {
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
-import type { Effect } from "effect"
-import { Schema } from "effect"
 
 const googleLoginArgsSchema = Schema.Struct({
   accessToken: Schema.String,

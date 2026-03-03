@@ -1,6 +1,6 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { ProgressState } from "@/modules/shared/utils/types"
-import { CircleColors } from "./item-circle-base"
+import type { CircleColors } from "./item-circle-base"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import type { ProgressState } from "@/modules/shared/utils/types"
 
 export const getCircleColors = (
   progressState: ProgressState,
@@ -8,31 +8,31 @@ export const getCircleColors = (
 ): CircleColors => {
   if (progressState === "completed")
     return {
-      outer: "bg-green-500",
       inner: "bg-green-600",
+      outer: "bg-green-500",
       progress: "stroke-green-400",
       text: "text-loops-light",
     }
 
   if (isFirstItem && progressState === "locked")
     return {
-      outer: "bg-pink-500",
       inner: "bg-pink-600",
+      outer: "bg-pink-500",
       progress: "stroke-pink-400",
       text: "text-loops-light",
     }
 
   if (progressState === "started")
     return {
-      outer: "bg-blue-500",
       inner: "bg-blue-600",
+      outer: "bg-blue-500",
       progress: "stroke-cyan-400",
       text: "text-loops-light",
     }
 
   return {
-    outer: "bg-loops-light/20",
     inner: "bg-loops-light/10",
+    outer: "bg-loops-light/20",
     progress: "stroke-white/30",
     text: "text-loops-light/70",
   }

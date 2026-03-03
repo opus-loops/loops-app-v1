@@ -1,12 +1,16 @@
 import type { ReactNode } from "react"
 
 type PreferencesGroupProps = {
-  title: string
-  subtitle?: string
   children: ReactNode
+  subtitle?: string
+  title: string
 }
 
-export function PreferencesGroup({ title, subtitle, children }: PreferencesGroupProps) {
+export function PreferencesGroup({
+  children,
+  subtitle,
+  title,
+}: PreferencesGroupProps) {
   return (
     <section className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-md">
       <div className="mb-4 flex flex-col gap-1">

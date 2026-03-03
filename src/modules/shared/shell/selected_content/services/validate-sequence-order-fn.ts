@@ -1,25 +1,27 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   validateSequenceOrderArgsSchema,
   validateSequenceOrderErrorsSchema,
   validateSequenceOrderSuccessSchema,
 } from "@/modules/shared/api/explore/sequence_order/validate-sequence-order"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import { validateSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/validate-sequence-order"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
-
-// --- TYPES (pure TS) ---------------------------------------------------------
-export type ValidateSequenceOrderErrors =
-  | typeof validateSequenceOrderErrorsSchema.Type
-  | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
-
-export type ValidateSequenceOrderSuccess =
-  typeof validateSequenceOrderSuccessSchema.Type
 
 export type ValidateSequenceOrderArgs =
   typeof validateSequenceOrderArgsSchema.Type
+
+// --- TYPES (pure TS) ---------------------------------------------------------
+export type ValidateSequenceOrderErrors =
+  | { code: "Unauthorized" }
+  | typeof unknownErrorSchema.Type
+  | typeof validateSequenceOrderErrorsSchema.Type
+
+export type ValidateSequenceOrderSuccess =
+  typeof validateSequenceOrderSuccessSchema.Type
 
 // JSON-safe wire union
 export type ValidateSequenceOrderWire =

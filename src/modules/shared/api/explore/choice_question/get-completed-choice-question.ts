@@ -1,3 +1,6 @@
+import { Schema } from "effect"
+import type { Effect } from "effect"
+
 import { completedChoiceQuestionSchema } from "@/modules/shared/domain/entities/completed-choice-question"
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
@@ -16,13 +19,11 @@ import {
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
-import type { Effect } from "effect"
-import { Schema } from "effect"
 
 const getCompletedChoiceQuestionArgsSchema = Schema.Struct({
   categoryId: Schema.String,
-  quizId: Schema.String,
   questionId: Schema.String,
+  quizId: Schema.String,
 })
 
 type GetCompletedChoiceQuestionArgs =
@@ -32,10 +33,10 @@ export const getCompletedChoiceQuestionErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
       authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
-      quizId: Schema.optional(UseCaseErrorSchema),
       questionId: Schema.optional(UseCaseErrorSchema),
+      quizId: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   categoryNotFoundErrorSchema,

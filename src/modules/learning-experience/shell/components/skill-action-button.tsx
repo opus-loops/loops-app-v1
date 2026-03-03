@@ -1,23 +1,24 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import { useState } from "react"
+
+import { useSkillStepper } from "./skill-stepper"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useContentNavigation } from "@/modules/shared/navigation"
 import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
 import { useCompleteSkill } from "@/modules/shared/shell/category_selection/hooks/use-complete-skill"
-import { useState } from "react"
-import { useSkillStepper } from "./skill-stepper"
 
 type SkillActionButtonProps = {
-  skillItem: CategoryContentItem & { contentType: "skills" }
+  skillItem: { contentType: "skills" } & CategoryContentItem
 }
 
 export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
   const { handleCompleteSkill } = useCompleteSkill()
-  const { success, error } = useToast()
+  const { error, success } = useToast()
 
   const {
-    navigateToNext,
     canNavigateNext,
     isNextItemCompleted,
+    navigateToNext,
     validateAndStartItem,
   } = useContentNavigation({ categoryId: skillItem.categoryId })
 
@@ -88,9 +89,9 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
   return (
     <>
       <button
-        onClick={handleButtonClick}
-        disabled={isLoading}
         className="font-outfit text-loops-light w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={isLoading}
+        onClick={handleButtonClick}
       >
         {isLoading ? "Loading..." : isCompleted ? "Next" : "Validate"}
       </button>
@@ -98,11 +99,11 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
       <VoucherDialog
         categoryId={skillItem.categoryId}
         description="Your 3 free trials are over. Submit a voucher code to continue learning. Contact the admin for a code."
+        onOpenChange={setIsVoucherDialogOpen}
         open={isVoucherDialogOpen}
         showFreeTrial={false}
         showTrigger={false}
         title="Free trial limit reached"
-        onOpenChange={setIsVoucherDialogOpen}
       />
     </>
   )

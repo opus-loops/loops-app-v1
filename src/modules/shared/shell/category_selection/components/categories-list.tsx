@@ -1,30 +1,31 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
-import { LockIcon } from "@/modules/shared/components/icons/lock"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { motion } from "framer-motion"
 import { useRef } from "react"
+
 import { BackButton } from "./back-button"
 import { CategoryCard } from "./category-card"
+import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
+import { LockIcon } from "@/modules/shared/components/icons/lock"
 
 type CategoriesListProps = {
   categories: Array<CategoryWithStartedCategory>
-  onCategorySelect: (category: CategoryWithStartedCategory) => void
   onBack: () => void
+  onCategorySelect: (category: CategoryWithStartedCategory) => void
   showBackButton: boolean
 }
 
 export function CategoriesList({
-  onCategorySelect,
   categories,
   onBack,
+  onCategorySelect,
   showBackButton,
 }: CategoriesListProps) {
   const parentRef = useRef<HTMLDivElement>(null)
 
   const virtualizer = useVirtualizer({
     count: categories.length,
-    getScrollElement: () => parentRef.current,
     estimateSize: () => 136,
+    getScrollElement: () => parentRef.current,
   })
 
   const items = virtualizer.getVirtualItems()
@@ -43,32 +44,32 @@ export function CategoriesList({
 
       {/* Virtualized List */}
       <div
-        ref={parentRef}
         className="flex-1 overflow-auto px-4"
+        ref={parentRef}
         style={{ contain: "strict" }}
       >
-        <div style={{ height: totalSize, width: "100%", position: "relative" }}>
+        <div style={{ height: totalSize, position: "relative", width: "100%" }}>
           <motion.div
-            style={{ position: "absolute", top: 0, left: 0, width: "100%" }}
             animate={{ y: startOfFirstItem }}
+            style={{ left: 0, position: "absolute", top: 0, width: "100%" }}
             transition={{
-              type: "spring",
-              stiffness: 400,
               damping: 40,
               mass: 0.8,
+              stiffness: 400,
+              type: "spring",
             }}
           >
             {items.map((virtualItem) => {
               const category = categories[virtualItem.index]
               return (
                 <motion.div
-                  key={virtualItem.key}
-                  data-index={virtualItem.index}
-                  ref={virtualizer.measureElement}
-                  initial={{ opacity: 0, y: 0 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: virtualItem.index * 0.05 }}
                   className="mb-3"
+                  data-index={virtualItem.index}
+                  initial={{ opacity: 0, y: 0 }}
+                  key={virtualItem.key}
+                  ref={virtualizer.measureElement}
+                  transition={{ delay: virtualItem.index * 0.05 }}
                 >
                   <div className="flex w-full items-center gap-x-2">
                     {category.startedCategory !== undefined && (

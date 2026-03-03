@@ -1,3 +1,6 @@
+import { Schema } from "effect"
+import type { Effect } from "effect"
+
 import { categorySchema } from "@/modules/shared/domain/entities/category"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
@@ -7,16 +10,14 @@ import {
 } from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
-import type { Effect } from "effect"
-import { Schema } from "effect"
 
 const listExploreCategoriesQuerySchema = Schema.Struct({
-  query: Schema.optional(Schema.String),
-  sort: Schema.optional(Schema.Number.pipe(Schema.int())),
-  sortBy: Schema.optional(Schema.String),
-  size: Schema.optional(Schema.Number.pipe(Schema.int())),
   offset: Schema.optional(Schema.Number.pipe(Schema.int())),
   page: Schema.optional(Schema.Number.pipe(Schema.int())),
+  query: Schema.optional(Schema.String),
+  size: Schema.optional(Schema.Number.pipe(Schema.int())),
+  sort: Schema.optional(Schema.Number.pipe(Schema.int())),
+  sortBy: Schema.optional(Schema.String),
 })
 
 export type ListExploreCategoriesQuery =
@@ -26,13 +27,13 @@ export const listExploreCategoriesErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
       authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(UseCaseErrorSchema),
-      query: Schema.optional(UseCaseErrorSchema),
-      sort: Schema.optional(UseCaseErrorSchema),
-      sortBy: Schema.optional(UseCaseErrorSchema),
-      size: Schema.optional(UseCaseErrorSchema),
       offset: Schema.optional(UseCaseErrorSchema),
       page: Schema.optional(UseCaseErrorSchema),
+      query: Schema.optional(UseCaseErrorSchema),
+      size: Schema.optional(UseCaseErrorSchema),
+      sort: Schema.optional(UseCaseErrorSchema),
+      sortBy: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   invalidExpiredTokenErrorSchema,
@@ -45,12 +46,12 @@ export type ListExploreCategoriesErrors =
 export const listExploreCategoriesSuccessSchema = Schema.Struct({
   categories: Schema.Array(categorySchema),
   metadata: Schema.Struct({
-    query: Schema.optional(Schema.String),
-    sort: Schema.Number.pipe(Schema.int()),
-    sortBy: Schema.String,
-    size: Schema.Number.pipe(Schema.int()),
     offset: Schema.Number.pipe(Schema.int()),
     page: Schema.Number.pipe(Schema.int()),
+    query: Schema.optional(Schema.String),
+    size: Schema.Number.pipe(Schema.int()),
+    sort: Schema.Number.pipe(Schema.int()),
+    sortBy: Schema.String,
     total: Schema.Number.pipe(Schema.int()),
     totalPages: Schema.Number.pipe(Schema.int()),
   }),

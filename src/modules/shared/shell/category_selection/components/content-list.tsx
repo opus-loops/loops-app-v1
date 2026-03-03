@@ -1,8 +1,11 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
-import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
-import { motion, Variants } from "framer-motion"
+import { motion } from "framer-motion"
 import { BackButton } from "./back-button"
 import { CategoryItemCard } from "./category-item-card"
+import type { Variants } from "framer-motion"
+
+import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
+
+import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
 
 type ContentListProps = {
   category: CategoryWithStartedCategory
@@ -24,10 +27,10 @@ export function ContentList({
     visible: {
       opacity: 1,
       transition: {
+        delayChildren: 0.2,
         duration: 0.3,
         ease: [0.25, 0.46, 0.45, 0.94],
         staggerChildren: 0.1,
-        delayChildren: 0.2,
       },
     },
   }
@@ -35,20 +38,20 @@ export function ContentList({
   const cardVariants: Variants = {
     hidden: {
       opacity: 0,
-      y: 30,
       scale: 0.95,
+      y: 30,
     },
     visible: {
       opacity: 1,
-      y: 0,
       scale: 1,
       transition: {
+        damping: 15,
         duration: 0.6,
         ease: [0.25, 0.46, 0.45, 0.94],
-        type: "spring",
         stiffness: 100,
-        damping: 15,
+        type: "spring",
       },
+      y: 0,
     },
   }
 
@@ -58,9 +61,9 @@ export function ContentList({
     <div className="flex h-full flex-col">
       {/* Header Section */}
       <motion.div
+        animate={{ opacity: 1, y: 0 }}
         className="relative flex items-center justify-center px-4 py-6"
         initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
         {showBackButton && <BackButton onBack={onBack} />}
@@ -73,10 +76,10 @@ export function ContentList({
       {/* Content Items */}
       <div className="flex-1 overflow-y-auto px-4 pb-6">
         <motion.div
-          className="space-y-4"
-          variants={containerVariants}
-          initial="hidden"
           animate="visible"
+          className="space-y-4"
+          initial="hidden"
+          variants={containerVariants}
         >
           {categoryItems.map((item, index) => (
             <motion.div
@@ -91,7 +94,7 @@ export function ContentList({
                 transition: { duration: 0.1, ease: "easeInOut" },
               }}
             >
-              <CategoryItemCard item={item} index={index} />
+              <CategoryItemCard index={index} item={item} />
             </motion.div>
           ))}
         </motion.div>

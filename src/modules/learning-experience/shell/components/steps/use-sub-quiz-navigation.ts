@@ -1,15 +1,17 @@
+import { Effect } from "effect"
+import { useCallback, useMemo } from "react"
+
+import { useQuizStepper } from "../quiz-stepper"
+import { SubQuizNavigatorManager } from "./navigation/managers/sub-quiz-navigator-manager"
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+
+import type { SubQuizNavigationError } from "./sub-quiz-navigation-types"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import type { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
 import { useSelectedSubQuiz } from "@/modules/learning-experience/contexts/selected-sub-quiz-context"
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
 import { useQuizContent } from "@/modules/shared/shell/selected_content/services/use-quiz-content"
 import { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
 import { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
-import { Effect } from "effect"
-import { useCallback, useMemo } from "react"
-import { useQuizStepper } from "../quiz-stepper"
-import { SubQuizNavigatorManager } from "./navigation/managers/sub-quiz-navigator-manager"
-import { SubQuizNavigationError } from "./sub-quiz-navigation-types"
 
 type UseSubQuizNavigationProps = {
   /**
@@ -18,7 +20,7 @@ type UseSubQuizNavigationProps = {
    * @see CategoryContentItem
    * @see StartedQuiz
    */
-  quizItem: CategoryContentItem & { contentType: "quizzes" }
+  quizItem: { contentType: "quizzes" } & CategoryContentItem
 }
 
 /**
@@ -41,16 +43,16 @@ type UseSubQuizNavigationProps = {
 export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
   const { currentStep, goToStep } = useQuizStepper()
   const { subQuizzes } = useQuizContent({
-    quizId: quizItem.itemId,
     categoryId: quizItem.categoryId,
+    quizId: quizItem.itemId,
   })
 
   const {
-    selectedSubQuizIndex,
-    navigationState,
     navigateToSubQuiz,
-    setNavigationState,
+    navigationState,
     resetNavigationState,
+    selectedSubQuizIndex,
+    setNavigationState,
   } = useSelectedSubQuiz()
 
   const selectedSubQuiz =
@@ -75,9 +77,9 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
     if (!nextSubQuiz) return true
 
     return manager.canNavigateNext({
+      adjacentSubQuiz: nextSubQuiz,
       categoryId: quizItem.categoryId,
       currentSubQuiz: selectedSubQuiz,
-      adjacentSubQuiz: nextSubQuiz,
       subQuizzes,
     })
   }, [manager, selectedSubQuiz, currentStep, subQuizzes, quizItem.categoryId])
@@ -95,9 +97,9 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
     if (!previousSubQuiz) return true
 
     return manager.canNavigatePrevious({
+      adjacentSubQuiz: previousSubQuiz,
       categoryId: quizItem.categoryId,
       currentSubQuiz: selectedSubQuiz,
-      adjacentSubQuiz: previousSubQuiz,
       subQuizzes,
     })
   }, [manager, selectedSubQuiz, currentStep, subQuizzes, quizItem.categoryId])
@@ -119,7 +121,7 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
             resetNavigationState()
           },
           onSuccess: (targetSubQuiz) => {
-            navigateToSubQuiz({ index: targetSubQuiz.index, direction })
+            navigateToSubQuiz({ direction, index: targetSubQuiz.index })
             resetNavigationState()
           },
         }),
@@ -145,8 +147,8 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
 
     if (itemProgress.status === "completed") {
       navigateToSubQuiz({
-        index: firstSubQuiz.index,
         direction: "next",
+        index: firstSubQuiz.index,
       })
       goToStep("sub-quizzes")
       resetNavigationState()
@@ -157,14 +159,14 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
       if (firstSubQuiz.questionType === "choiceQuestions") {
         await startChoiceQuestion.handleStartChoiceQuestion({
           categoryId: quizItem.categoryId,
-          quizId: quizItem.itemId,
           questionId: firstSubQuiz.questionId,
+          quizId: quizItem.itemId,
         })
       } else if (firstSubQuiz.questionType === "sequenceOrders") {
         await startSequenceOrder.handleStartSequenceOrder({
           categoryId: quizItem.categoryId,
-          quizId: quizItem.itemId,
           questionId: firstSubQuiz.questionId,
+          quizId: quizItem.itemId,
         })
       }
     }
@@ -175,8 +177,8 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
       )
       if (lastStartedSubQuiz) {
         navigateToSubQuiz({
-          index: lastStartedSubQuiz.index,
           direction: "next",
+          index: lastStartedSubQuiz.index,
         })
         goToStep("sub-quizzes")
         resetNavigationState()
@@ -186,7 +188,7 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
 
     if (!itemProgress.progressPointer) {
       await startFirstSubQuiz()
-      navigateToSubQuiz({ index: firstSubQuiz.index, direction: "next" })
+      navigateToSubQuiz({ direction: "next", index: firstSubQuiz.index })
       goToStep("sub-quizzes")
       resetNavigationState()
     }
@@ -221,9 +223,9 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
 
     await handleNavigationResult(
       manager.navigateNext({
+        adjacentSubQuiz: nextSubQuiz,
         categoryId: quizItem.categoryId,
         currentSubQuiz: selectedSubQuiz,
-        adjacentSubQuiz: nextSubQuiz,
         subQuizzes,
       }),
       "next",
@@ -255,7 +257,7 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
           previousSubQuizIndex: undefined,
         })
 
-        navigateToSubQuiz({ index: lastSubQuiz.index, direction: "previous" })
+        navigateToSubQuiz({ direction: "previous", index: lastSubQuiz.index })
         resetNavigationState()
         return
       }
@@ -280,9 +282,9 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
 
     await handleNavigationResult(
       manager.navigatePrevious({
+        adjacentSubQuiz: previousSubQuiz,
         categoryId: quizItem.categoryId,
         currentSubQuiz: selectedSubQuiz,
-        adjacentSubQuiz: previousSubQuiz,
         subQuizzes,
       }),
       "previous",
@@ -303,11 +305,11 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
     canNavigateNext,
     canNavigatePrevious,
 
-    navigateNext,
-    navigatePrevious,
-
     initializeQuiz,
-    selectedSubQuiz,
+    navigateNext,
+
+    navigatePrevious,
     navigationState,
+    selectedSubQuiz,
   }
 }

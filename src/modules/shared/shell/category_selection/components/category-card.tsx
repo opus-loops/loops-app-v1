@@ -1,7 +1,9 @@
-import { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
+import { motion } from "framer-motion"
+
+import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
+
 import { LockIcon } from "@/modules/shared/components/icons/lock"
 import { cn } from "@/modules/shared/lib/utils"
-import { motion } from "framer-motion"
 
 type CategoryCardProps = {
   category: CategoryWithStartedCategory
@@ -22,7 +24,6 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
 
   return (
     <motion.button
-      onClick={onClick}
       className={cn(
         "relative w-full overflow-hidden rounded-2xl p-4 text-left",
         "transition-all duration-200",
@@ -31,6 +32,7 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
           : "from-loops-locked-blue bg-gradient-to-r to-slate-900",
         "shadow-lg hover:shadow-xl",
       )}
+      onClick={onClick}
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">
@@ -39,11 +41,11 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
             {imageUrl && (
               <div className="bg-loops-light/20 flex h-20 w-20 items-center justify-center rounded-lg backdrop-blur-sm">
                 <img
-                  src={imageUrl}
                   alt={category.cover.alt}
-                  title={category.cover.title}
                   aria-description={category.cover.description}
                   className="h-full w-full rounded-lg object-cover"
+                  src={imageUrl}
+                  title={category.cover.title}
                 />
               </div>
             )}

@@ -17,10 +17,10 @@ export function CategoryDetailsSkeleton() {
 
       <div className="flex-1 overflow-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
           className="space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         >
           {/* Category Cover Image Skeleton */}
           <div className="relative h-48 w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-700/30 to-slate-800/20">
@@ -44,8 +44,8 @@ export function CategoryDetailsSkeleton() {
           <div className="flex flex-wrap items-center gap-2">
             {[16, 20, 14, 12].map((width, index) => (
               <div
-                key={index}
                 className={`h-6 w-${width} rounded bg-gradient-to-r from-slate-700/40 to-slate-600/20`}
+                key={index}
               >
                 <div className="h-full w-full animate-pulse rounded bg-gradient-to-r from-slate-600/20 to-slate-500/10" />
               </div>
@@ -56,8 +56,8 @@ export function CategoryDetailsSkeleton() {
           <div className="space-y-2">
             {["w-full", "w-3/4", "w-1/2"].map((width, index) => (
               <div
-                key={index}
                 className={`h-4 ${width} rounded bg-gradient-to-r from-slate-700/40 to-slate-600/20`}
+                key={index}
               >
                 <div className="h-full w-full animate-pulse rounded bg-gradient-to-r from-slate-600/20 to-slate-500/10" />
               </div>
@@ -82,15 +82,15 @@ export function CategoryDetailsSkeleton() {
             <div className="space-y-3">
               {[...Array(3)].map((_, index) => (
                 <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
+                  className="bg-loops-light/20 rounded-xl border border-white/10 p-4 backdrop-blur-sm"
+                  initial={{ opacity: 0, x: -20 }}
+                  key={index}
                   transition={{
                     delay: index * 0.15,
                     duration: 0.5,
                     ease: [0.25, 0.46, 0.45, 0.94],
                   }}
-                  className="bg-loops-light/20 rounded-xl border border-white/10 p-4 backdrop-blur-sm"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">

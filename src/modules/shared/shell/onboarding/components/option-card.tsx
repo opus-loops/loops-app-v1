@@ -1,5 +1,6 @@
-import { cn } from "@/modules/shared/lib/utils"
 import type { ReactNode } from "react"
+
+import { cn } from "@/modules/shared/lib/utils"
 
 type OptionCardProps = {
   className?: string

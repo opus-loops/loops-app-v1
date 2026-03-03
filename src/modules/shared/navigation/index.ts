@@ -1,5 +1,5 @@
-// Types
-export type * from "./types/navigation-types"
+// Hooks
+export { useContentNavigation } from "./hooks/use-content-navigation"
 
 // Managers
 export { NavigationManager } from "./managers/navigation-manager"
@@ -8,5 +8,5 @@ export { NavigationManager } from "./managers/navigation-manager"
 export { NavigationCompletionService } from "./services/navigation-completion-service"
 export type { INavigationCompletionService } from "./services/navigation-completion-service"
 
-// Hooks
-export { useContentNavigation } from "./hooks/use-content-navigation"
+// Types
+export type * from "./types/navigation-types"

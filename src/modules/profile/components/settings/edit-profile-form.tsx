@@ -1,14 +1,16 @@
-import { Button } from "@/modules/shared/components/ui/button"
-import { Input } from "@/modules/shared/components/ui/input"
-import type { User } from "@/modules/shared/domain/entities/user"
-import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useForm } from "@tanstack/react-form"
 import { ChevronDown, Phone, User2 } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+
 import { useUpdatePreferences } from "../../hooks/use-update-preferences"
 import { countryCodeOptions, splitPhoneNumber } from "../../utils/phone-utils"
 import { AvatarUpload } from "./avatar-upload"
+import type { User } from "@/modules/shared/domain/entities/user"
+
+import { Button } from "@/modules/shared/components/ui/button"
+import { Input } from "@/modules/shared/components/ui/input"
+import { useToast } from "@/modules/shared/hooks/use-toast"
 
 type EditProfileFormProps = {
   user: User
@@ -26,8 +28,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
-  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string | null>(null)
-  const [uploadedAvatarUrl, setUploadedAvatarUrl] = useState<string | null>(
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<null | string>(null)
+  const [uploadedAvatarUrl, setUploadedAvatarUrl] = useState<null | string>(
     null,
   )
 
@@ -41,9 +43,9 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   const form = useForm({
     defaultValues: {
       fullName: user.fullName,
-      username: user.username,
       phoneCountryCode: initialPhone.countryCode,
       phoneNationalNumber: initialPhone.nationalNumber,
+      username: user.username,
     },
     onSubmit: async ({ value }) => {
       const phoneNationalNumber = (value.phoneNationalNumber ?? "")
@@ -149,9 +151,9 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
       <div className="flex flex-col items-center">
         <AvatarUpload
           displayedAvatarUrl={displayedAvatarUrl}
-          hasNewAvatar={!!(avatarFile || uploadedAvatarUrl)}
-          fullName={user.fullName}
           fileInputRef={fileInputRef}
+          fullName={user.fullName}
+          hasNewAvatar={!!(avatarFile || uploadedAvatarUrl)}
           onFileSelect={(file) => {
             if (avatarPreviewUrl && avatarPreviewUrl.startsWith("blob:"))
               URL.revokeObjectURL(avatarPreviewUrl)
@@ -182,21 +184,21 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           {(field) => (
             <div className="flex flex-col gap-2">
               <label
-                htmlFor={field.name}
                 className="text-loops-light text-sm font-medium"
+                htmlFor={field.name}
               >
                 {t("profile.labels.full_name")}
               </label>
               <div className="flex h-14 w-full items-center gap-3 rounded-xl bg-white px-4">
                 <User2 className="text-loops-cyan h-5 w-5" />
                 <Input
+                  className="border-none bg-transparent p-0 text-black shadow-none focus-visible:ring-0"
                   id={field.name}
                   name={field.name}
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
                   placeholder={t("profile.fields.full_name")}
-                  className="border-none bg-transparent p-0 text-black shadow-none focus-visible:ring-0"
+                  value={field.state.value}
                 />
               </div>
               {field.state.meta.isTouched &&
@@ -213,21 +215,21 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           {(field) => (
             <div className="flex flex-col gap-2">
               <label
-                htmlFor={field.name}
                 className="text-loops-light text-sm font-medium"
+                htmlFor={field.name}
               >
                 {t("profile.labels.username")}
               </label>
               <div className="flex h-14 w-full items-center gap-3 rounded-xl bg-white px-4">
                 <User2 className="text-loops-cyan h-5 w-5" />
                 <Input
+                  className="border-none bg-transparent p-0 text-black shadow-none focus-visible:ring-0"
                   id={field.name}
                   name={field.name}
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
                   placeholder={t("profile.fields.username")}
-                  className="border-none bg-transparent p-0 text-black shadow-none focus-visible:ring-0"
+                  value={field.state.value}
                 />
               </div>
               {field.state.meta.isTouched &&
@@ -251,11 +253,11 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                 {(field) => (
                   <div className="relative flex items-center">
                     <select
-                      id={field.name}
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      onBlur={field.handleBlur}
                       className="h-10 w-[100px] cursor-pointer appearance-none truncate bg-transparent pr-6 text-sm font-medium text-black outline-none"
+                      id={field.name}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      value={field.state.value}
                     >
                       {countryCodeOptions.map((o) => (
                         <option key={o.value} value={o.value}>
@@ -273,14 +275,14 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
               <form.Field name="phoneNationalNumber">
                 {(field) => (
                   <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                    placeholder={t("profile.fields.phone")}
-                    inputMode="tel"
                     className="h-auto border-none bg-transparent p-0 text-sm text-black shadow-none placeholder:text-gray-400 focus-visible:ring-0"
+                    id={field.name}
+                    inputMode="tel"
+                    name={field.name}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder={t("profile.fields.phone")}
+                    value={field.state.value}
                   />
                 )}
               </form.Field>
@@ -305,9 +307,9 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
       >
         {([canSubmit, isSubmitting]) => (
           <Button
-            type="submit"
-            disabled={!canSubmit}
             className="bg-loops-cyan hover:bg-loops-cyan/90 text-loops-light mt-10 h-14 w-full rounded-xl text-lg font-semibold shadow-none disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!canSubmit}
+            type="submit"
           >
             {isSubmitting ? t("common.saving") : t("common.save")}
           </Button>

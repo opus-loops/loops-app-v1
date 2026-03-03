@@ -1,14 +1,15 @@
 import { Link, useLocation } from "@tanstack/react-router"
-import { ReactNode } from "react"
+
 import { cn } from "../../lib/utils"
+import type { ReactNode } from "react"
 
 interface TabItemProps {
-  label: string
-  icon: ReactNode
   href: string
+  icon: ReactNode
+  label: string
 }
 
-export function TabItem({ label, icon, href }: TabItemProps) {
+export function TabItem({ href, icon, label }: TabItemProps) {
   const location = useLocation()
   const isActive = location.pathname === href
 
@@ -23,11 +24,11 @@ export function TabItem({ label, icon, href }: TabItemProps) {
 
       {/* Tab content */}
       <Link
-        to={href}
         className={cn(
           "flex flex-col items-center gap-y-1 transition-colors duration-200",
           isActive ? "mt-1.5" : "mt-3",
         )}
+        to={href}
       >
         <div
           className={cn(

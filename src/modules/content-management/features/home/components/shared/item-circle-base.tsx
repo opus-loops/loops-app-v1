@@ -1,40 +1,37 @@
-import { cn } from "@/modules/shared/lib/utils"
 import { motion } from "framer-motion"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 
-export type CircleColors = {
-  outer: string
-  inner: string
-  progress: string
-  text: string
-}
+import { cn } from "@/modules/shared/lib/utils"
 
 export type BaseItemCircleProps = {
   children: ReactNode
   colors: CircleColors
-  progress: number
+  index: number
   isClickable: boolean
   isLoading: boolean
-  index: number
   onClick?: () => void
+  progress: number
+}
+
+export type CircleColors = {
+  inner: string
+  outer: string
+  progress: string
+  text: string
 }
 
 export function BaseItemCircle({
   children,
   colors,
-  progress,
+  index,
   isClickable,
   isLoading,
-  index,
   onClick,
+  progress,
 }: BaseItemCircleProps) {
   return (
     <motion.button
-      onClick={isClickable ? onClick : undefined}
-      disabled={isLoading || !isClickable}
-      initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: index * 0.1 }}
       className={cn(
         "relative flex h-28 w-28 items-center justify-center rounded-full transition-all duration-200",
         colors.outer,
@@ -42,28 +39,32 @@ export function BaseItemCircle({
         !isClickable && "cursor-not-allowed",
         isLoading && "cursor-wait opacity-50",
       )}
+      disabled={isLoading || !isClickable}
+      initial={{ opacity: 0, scale: 0.8 }}
+      onClick={isClickable ? onClick : undefined}
+      transition={{ delay: index * 0.1 }}
     >
       {/* Progress Circle */}
       <svg className="absolute inset-0 -rotate-90" viewBox="0 0 100 100">
         <circle
+          className="text-loops-light/50"
           cx="50"
           cy="50"
-          r="45"
           fill="none"
+          r="45"
           stroke="currentColor"
           strokeWidth="5"
-          className="text-loops-light/50"
         />
         {progress > 0 && (
           <circle
+            className={colors.progress}
             cx="50"
             cy="50"
-            r="45"
             fill="none"
-            strokeWidth="3"
-            strokeLinecap="round"
+            r="45"
             strokeDasharray={`${progress * 2.83} 283`}
-            className={colors.progress}
+            strokeLinecap="round"
+            strokeWidth="3"
           />
         )}
       </svg>

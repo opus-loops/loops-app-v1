@@ -1,8 +1,9 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import type { ReactNode } from "react"
 import { createContext, useContext, useState } from "react"
+import type { ReactNode } from "react"
 
-export type SkillStep = "welcome" | "content"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
+export type SkillStep = "content" | "welcome"
 
 type SkillStepperContextType = {
   currentStep: SkillStep
@@ -12,12 +13,16 @@ type SkillStepperContextType = {
 const SkillStepperContext = createContext({} as SkillStepperContextType)
 
 type SkillStepperProps = {
-  skillItem: CategoryContentItem & { contentType: "skills" }
-  welcome: ReactNode
   content: ReactNode
+  skillItem: { contentType: "skills" } & CategoryContentItem
+  welcome: ReactNode
 }
 
-export function SkillStepper({ skillItem: _skillItem, welcome, content }: SkillStepperProps) {
+export function SkillStepper({
+  content,
+  skillItem: _skillItem,
+  welcome,
+}: SkillStepperProps) {
   const [currentStep, setCurrentStep] = useState<SkillStep>("welcome")
   const goToStep = (step: SkillStep) => setCurrentStep(step)
 

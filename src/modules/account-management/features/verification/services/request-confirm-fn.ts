@@ -1,18 +1,20 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   requestConfirmErrorsSchema,
   requestConfirmSuccessSchema,
 } from "@/modules/shared/api/account/request-confirm"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import { requestConfirmFactory } from "@/modules/shared/api/account/request-confirm"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type RequestConfirmErrors =
+  | { code: "Unauthorized" }
   | typeof requestConfirmErrorsSchema.Type
   | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
 
 export type RequestConfirmSuccess = typeof requestConfirmSuccessSchema.Type
 

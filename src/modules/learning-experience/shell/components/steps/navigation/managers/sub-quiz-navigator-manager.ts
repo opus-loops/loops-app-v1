@@ -1,15 +1,17 @@
-import { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
-import { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import { Effect } from "effect"
-import {
+
+import { SubQuizStrategySelector } from "../sub-quiz-strategy-selector"
+import { ChoiceQuestionNavigationManager } from "./choice-question-navigation-manager"
+import { SequenceOrderNavigationManager } from "./sequence-order-navigation-manager"
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+
+import type {
   ISubQuizNavigationManager,
   SubQuizNavigationContext,
   SubQuizNavigationError,
 } from "../../sub-quiz-navigation-types"
-import { SubQuizStrategySelector } from "../sub-quiz-strategy-selector"
-import { ChoiceQuestionNavigationManager } from "./choice-question-navigation-manager"
-import { SequenceOrderNavigationManager } from "./sequence-order-navigation-manager"
+import type { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
+import type { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
 
 /**
  * Manager class responsible for handling sub-quiz navigation logic.
@@ -45,10 +47,6 @@ export class SubQuizNavigatorManager implements ISubQuizNavigationManager {
       "sequenceOrders",
       new SequenceOrderNavigationManager(strategySelector),
     )
-  }
-
-  private getManager(questionType: string): ISubQuizNavigationManager | null {
-    return this.managers.get(questionType) || null
   }
 
   /**
@@ -115,5 +113,9 @@ export class SubQuizNavigatorManager implements ISubQuizNavigationManager {
     }
 
     return manager.navigatePrevious(context)
+  }
+
+  private getManager(questionType: string): ISubQuizNavigationManager | null {
+    return this.managers.get(questionType) || null
   }
 }

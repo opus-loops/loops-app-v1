@@ -1,9 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
+
 import { useGlobalError } from "../../session/global-error-provider"
-import type { StartSkillWire } from "./start-skill-fn"
 import { startSkillFn } from "./start-skill-fn"
+import type { StartSkillWire } from "./start-skill-fn"
 
 export function useStartSkill() {
   const startSkillServer = useServerFn(startSkillFn)
@@ -13,9 +14,9 @@ export function useStartSkill() {
   const handleStartSkill = useCallback(
     async (params: { categoryId: string; skillId: string }) => {
       // Call server function → returns JSON-safe union
-      const response = (await startSkillServer({
+      const response = await startSkillServer({
         data: { categoryId: params.categoryId, skillId: params.skillId },
-      })) as StartSkillWire
+      })
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") {

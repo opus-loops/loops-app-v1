@@ -18,8 +18,8 @@ export function ContentScreenSkeleton() {
           <div className="w-full max-w-sm space-y-6">
             {/* Main content box skeleton */}
             <motion.div
-              className="bg-loops-light/10 rounded-3xl p-8"
               animate={{ opacity: [0.5, 1, 0.5] }}
+              className="bg-loops-light/10 rounded-3xl p-8"
               transition={{ duration: 2, repeat: Infinity }}
             >
               {/* Glow effect skeleton */}
@@ -31,7 +31,7 @@ export function ContentScreenSkeleton() {
               {/* Stats skeleton */}
               <div className="mb-6 flex items-end justify-center gap-8">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex flex-col items-center space-y-3">
+                  <div className="flex flex-col items-center space-y-3" key={i}>
                     <div className="bg-loops-light/30 h-6 w-6 animate-pulse rounded"></div>
                     <div className="space-y-2 text-center">
                       <div className="bg-loops-light/30 h-6 w-8 animate-pulse rounded"></div>
@@ -58,7 +58,7 @@ export function ContentScreenSkeleton() {
       <div className="bg-loops-background/95 fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2 backdrop-blur-sm">
         <div className="flex items-center justify-around px-4 py-3">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="flex flex-col items-center space-y-1">
+            <div className="flex flex-col items-center space-y-1" key={i}>
               <div className="bg-loops-light/20 h-6 w-6 animate-pulse rounded"></div>
               <div className="bg-loops-light/10 h-3 w-8 animate-pulse rounded"></div>
             </div>

@@ -20,15 +20,15 @@ export function CategoryContentSkeleton() {
         <div className="space-y-3">
           {[...Array(3)].map((_, index) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
+              className="bg-loops-light/20 rounded-xl border border-white/10 p-4 backdrop-blur-sm"
+              initial={{ opacity: 0, x: -20 }}
+              key={index}
               transition={{
                 delay: index * 0.15,
                 duration: 0.5,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
-              className="bg-loops-light/20 rounded-xl border border-white/10 p-4 backdrop-blur-sm"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">

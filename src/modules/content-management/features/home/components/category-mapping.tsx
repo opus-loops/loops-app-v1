@@ -1,11 +1,12 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useMemo } from "react"
+
 import { CategoryItemCircle } from "./category-item-circle"
-import { CategoryMappingProps } from "./types"
+import type { CategoryMappingProps } from "./types"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 
 export function CategoryMapping({
-  categoryItems,
   categoryId,
+  categoryItems,
 }: CategoryMappingProps) {
   const renderRow = (params: {
     items: Array<CategoryContentItem>
@@ -18,11 +19,11 @@ export function CategoryMapping({
       const previousItems = categoryItems.slice(0, itemIndex)
 
       return (
-        <div key={`row-${params.rowIndex}`} className="flex justify-center">
+        <div className="flex justify-center" key={`row-${params.rowIndex}`}>
           <CategoryItemCircle
-            item={params.items[0]}
-            index={itemIndex}
             categoryId={categoryId}
+            index={itemIndex}
+            item={params.items[0]}
             previousItems={previousItems}
           />
         </div>
@@ -30,17 +31,17 @@ export function CategoryMapping({
     }
 
     return (
-      <div key={`row-${params.rowIndex}`} className="flex justify-center gap-8">
+      <div className="flex justify-center gap-8" key={`row-${params.rowIndex}`}>
         {params.items.map((item, itemIndex) => {
           const globalIndex = categoryItems.indexOf(item)
           const previousItems = categoryItems.slice(0, globalIndex)
 
           return (
             <CategoryItemCircle
+              categoryId={categoryId}
+              index={globalIndex}
               item={item}
               key={`row-${params.rowIndex}-column-${itemIndex}`}
-              index={globalIndex}
-              categoryId={categoryId}
               previousItems={previousItems}
             />
           )

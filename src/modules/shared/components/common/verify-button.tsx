@@ -1,30 +1,28 @@
-import { cn } from "@/modules/shared/lib/utils"
 import React from "react"
 import { useTranslation } from "react-i18next"
 
+import { cn } from "@/modules/shared/lib/utils"
+
 interface VerifyButtonProps {
-  onClick?: () => void
+  children?: React.ReactNode
+  className?: string
   disabled?: boolean
   loading?: boolean
-  className?: string
-  children?: React.ReactNode
+  onClick?: () => void
 }
 
 export const VerifyButton: React.FC<VerifyButtonProps> = ({
-  onClick,
+  children,
+  className,
   disabled = false,
   loading = false,
-  className,
-  children,
+  onClick,
 }) => {
   const { t } = useTranslation()
   const content = children || t("common.verify")
 
   return (
     <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled || loading}
       className={cn(
         "h-14 w-full max-w-sm px-6",
         "bg-loops-cyan hover:bg-loops-cyan/90",
@@ -36,6 +34,9 @@ export const VerifyButton: React.FC<VerifyButtonProps> = ({
         "disabled:hover:bg-loops-cyan disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100",
         className,
       )}
+      disabled={disabled || loading}
+      onClick={onClick}
+      type="button"
     >
       {loading ? (
         <div className="flex items-center justify-center gap-2">

@@ -1,4 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+
 import { useGlobalError } from "../../session/global-error-provider"
 import { getQuizContentFn } from "./get-quiz-content-fn"
 
@@ -12,7 +13,6 @@ export const quizContentQuery = (
   handleSessionExpired: () => Promise<void>,
 ) =>
   queryOptions({
-    queryKey: ["quiz-content", params.categoryId, params.quizId],
     queryFn: async () => {
       const response = await getQuizContentFn({
         data: {
@@ -27,6 +27,7 @@ export const quizContentQuery = (
       }
       return response.value
     },
+    queryKey: ["quiz-content", params.categoryId, params.quizId],
   })
 
 export function useQuizContent(params: QuizContentParams) {

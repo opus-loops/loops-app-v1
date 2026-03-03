@@ -1,8 +1,8 @@
-import { ClockIcon } from "@/modules/shared/components/icons/clock"
-import { Button } from "@/modules/shared/components/ui/button"
 import { OptionCard } from "../components/option-card"
 import { useOnboardingForm } from "../onboarding-context"
 import { useOnboardingStepper } from "../onboarding-stepper"
+import { Button } from "@/modules/shared/components/ui/button"
+import { ClockIcon } from "@/modules/shared/components/icons/clock"
 
 const goalOptions = [
   {

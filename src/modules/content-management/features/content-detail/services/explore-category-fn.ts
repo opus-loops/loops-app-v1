@@ -1,34 +1,36 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type { getExploreCategoryErrorsSchema } from "@/modules/shared/api/explore/category/get-explore-category"
-import { getExploreCategoryFactory } from "@/modules/shared/api/explore/category/get-explore-category"
-import { getCertificateFactory } from "@/modules/shared/api/explore/certificate/get-certificate"
 import type { getStartedCategoryErrorsSchema } from "@/modules/shared/api/explore/started_category/get-started-category"
-import { getStartedCategoryFactory } from "@/modules/shared/api/explore/started_category/get-started-category"
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import type { Category } from "@/modules/shared/domain/entities/category"
 import type { Certificate } from "@/modules/shared/domain/entities/certificate"
 import type { StartedCategory } from "@/modules/shared/domain/entities/started-category"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+
+import { getExploreCategoryFactory } from "@/modules/shared/api/explore/category/get-explore-category"
+import { getCertificateFactory } from "@/modules/shared/api/explore/certificate/get-certificate"
+import { getStartedCategoryFactory } from "@/modules/shared/api/explore/started_category/get-started-category"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+
+export type CategoryWithStartedCategory = {
+  certificate?: Certificate
+  startedCategory?: StartedCategory
+} & Category
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type ExploreCategoryErrors =
-  | typeof unknownErrorSchema.Type
+  | { code: "Unauthorized" }
   | typeof getExploreCategoryErrorsSchema.Type
   | typeof getStartedCategoryErrorsSchema.Type
-  | { code: "Unauthorized" }
+  | typeof unknownErrorSchema.Type
 
-export type CategoryWithStartedCategory = Category & {
-  startedCategory?: StartedCategory
-  certificate?: Certificate
+export type ExploreCategoryParams = {
+  categoryId: string
 }
 
 export type ExploreCategorySuccess = {
   category: CategoryWithStartedCategory
-}
-
-export type ExploreCategoryParams = {
-  categoryId: string
 }
 
 // JSON-safe wire union
@@ -63,7 +65,7 @@ const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
     }
 
     const { category } = categoryExit.value
-    let categoryWithStartedData: CategoryWithStartedCategory = { ...category }
+    const categoryWithStartedData: CategoryWithStartedCategory = { ...category }
 
     // 2) Try to fetch the started category data
     const getStartedCategory = yield* _(

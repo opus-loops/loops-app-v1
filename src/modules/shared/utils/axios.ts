@@ -1,5 +1,6 @@
 import axios from "axios"
 import { Effect } from "effect"
+
 import { refreshAccessToken } from "../api/auth/refresh"
 import {
   deleteSession,
@@ -12,8 +13,8 @@ export const instanceFactory = async () => {
 
   if (!session) {
     return axios.create({
-      headers: { Authorization: "" },
       baseURL: baseApiURL,
+      headers: { Authorization: "" },
       withCredentials: true,
     })
   }
@@ -39,8 +40,8 @@ export const instanceFactory = async () => {
   await updateTokens(tokens)
 
   return axios.create({
-    headers: { Authorization: `Bearer ${tokens.accessToken}` },
     baseURL: baseApiURL,
+    headers: { Authorization: `Bearer ${tokens.accessToken}` },
     withCredentials: true,
   })
 }

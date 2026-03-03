@@ -1,38 +1,38 @@
 export const durationOptions = [
-  { value: 5, label: "5 minutes" },
-  { value: 10, label: "10 minutes" },
-  { value: 15, label: "15 minutes" },
-  { value: 20, label: "20 minutes" },
+  { label: "5 minutes", value: 5 },
+  { label: "10 minutes", value: 10 },
+  { label: "15 minutes", value: 15 },
+  { label: "20 minutes", value: 20 },
 ]
 
 export const genderOptions = [
-  { value: "male", label: "👦 Male" },
-  { value: "female", label: "👧 Female" },
+  { label: "👦 Male", value: "male" },
+  { label: "👧 Female", value: "female" },
 ]
 
 export const goalsOptions = [
-  { value: "5min", label: "5 min (Casual)" },
-  { value: "10min", label: "10 min (Medium)" },
-  { value: "15min", label: "15 min (Serious)" },
-  { value: "20min", label: "20 min (Hard)" },
+  { label: "5 min (Casual)", value: "5min" },
+  { label: "10 min (Medium)", value: "10min" },
+  { label: "15 min (Serious)", value: "15min" },
+  { label: "20 min (Hard)", value: "20min" },
 ]
 
 export const codingExperienceOptions = [
-  { value: "beginner", label: "Beginner" },
-  { value: "average", label: "Average" },
-  { value: "skilled", label: "Skilled" },
-  { value: "expert", label: "Expert" },
+  { label: "Beginner", value: "beginner" },
+  { label: "Average", value: "average" },
+  { label: "Skilled", value: "skilled" },
+  { label: "Expert", value: "expert" },
 ]
 
 export const backgroundOptions = [
-  { value: "student", label: "Student" },
-  { value: "professional", label: "Professional" },
-  { value: "developer", label: "Developer" },
-  { value: "passionate", label: "Passionate" },
+  { label: "Student", value: "student" },
+  { label: "Professional", value: "professional" },
+  { label: "Developer", value: "developer" },
+  { label: "Passionate", value: "passionate" },
 ]
 
 export const languageOptions = [
-  { value: "ar" as const, label: "🇸🇦 ar" },
-  { value: "fr" as const, label: "🇫🇷 fr" },
-  { value: "en" as const, label: "🇬🇧 en" },
+  { label: "🇸🇦 ar", value: "ar" as const },
+  { label: "🇫🇷 fr", value: "fr" as const },
+  { label: "🇬🇧 en", value: "en" as const },
 ]

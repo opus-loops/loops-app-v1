@@ -1,3 +1,6 @@
+import { Schema } from "effect"
+import type { Effect } from "effect"
+
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { unmatchedPasswordErrorSchema } from "@/modules/shared/domain/errors/unmatched-password"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
@@ -10,16 +13,14 @@ import {
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
-import type { Effect } from "effect"
-import { Schema } from "effect"
 
 export const updatePasswordErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
       authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(UseCaseErrorSchema),
-      password: Schema.optional(UseCaseErrorSchema),
       newPassword: Schema.optional(UseCaseErrorSchema),
+      password: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   unmatchedPasswordErrorSchema,
@@ -39,8 +40,8 @@ type UpdatePasswordResult = Effect.Effect<
 type UpdatePasswordSuccess = typeof updatePasswordSuccessSchema.Type
 
 const updatePasswordArgsSchema = Schema.Struct({
-  password: Schema.String,
   newPassword: Schema.String,
+  password: Schema.String,
 })
 
 type UpdatePasswordArgs = typeof updatePasswordArgsSchema.Type

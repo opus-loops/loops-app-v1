@@ -1,10 +1,12 @@
-import { QuestionValidationPopup } from "@/modules/learning-experience/shell/components/question-types/question-validation-popup"
-import { cn } from "@/modules/shared/lib/utils"
-import { useValidateSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-validate-sequence-order"
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import { Reorder } from "framer-motion"
 import { GripVertical } from "lucide-react"
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react"
+
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+
+import { QuestionValidationPopup } from "@/modules/learning-experience/shell/components/question-types/question-validation-popup"
+import { cn } from "@/modules/shared/lib/utils"
+import { useValidateSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-validate-sequence-order"
 
 export type SubQuizRef = {
   skip: () => void
@@ -12,15 +14,15 @@ export type SubQuizRef = {
 }
 
 type SequenceOrderComponentProps = {
-  subQuiz: EnhancedSubQuiz & { questionType: "sequenceOrders" }
   categoryId: string
   onStopTimer: () => void
+  subQuiz: { questionType: "sequenceOrders" } & EnhancedSubQuiz
 }
 
 export const SequenceOrderComponent = forwardRef<
   SubQuizRef,
   SequenceOrderComponentProps
->(({ subQuiz, categoryId, onStopTimer }, ref) => {
+>(({ categoryId, onStopTimer, subQuiz }, ref) => {
   const { handleValidateSequenceOrder } = useValidateSequenceOrder()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
@@ -51,10 +53,10 @@ export const SequenceOrderComponent = forwardRef<
 
       await handleValidateSequenceOrder({
         categoryId,
-        quizId: subQuiz.quizId,
         questionId: subQuiz.questionId,
-        userAnswer: undefined,
+        quizId: subQuiz.quizId,
         spentTime: subQuiz.content?.estimatedTime ?? 0,
+        userAnswer: undefined,
       })
 
       setIsSubmitting(false)
@@ -70,10 +72,10 @@ export const SequenceOrderComponent = forwardRef<
 
       await handleValidateSequenceOrder({
         categoryId,
-        quizId: subQuiz.quizId,
         questionId: subQuiz.questionId,
-        userAnswer: userOrder,
+        quizId: subQuiz.quizId,
         spentTime,
+        userAnswer: userOrder,
       })
 
       setIsSubmitting(false)
@@ -122,12 +124,12 @@ export const SequenceOrderComponent = forwardRef<
         <QuestionValidationPopup
           isOpen={isPopupOpen}
           onOpenChange={setIsPopupOpen}
-          variant={popupVariant}
           subtitle={
             popupVariant === "correct"
               ? subQuiz.content.congratulatoryMessage[0].content
               : subQuiz.content.consolidationMessage[0].content
           }
+          variant={popupVariant}
         />
       )}
       {subQuiz.content && (
@@ -140,16 +142,16 @@ export const SequenceOrderComponent = forwardRef<
 
       <Reorder.Group
         axis="y"
-        values={userOrder}
-        onReorder={!isValidated ? setUserOrder : () => {}}
         className="space-y-3"
+        onReorder={!isValidated ? setUserOrder : () => {}}
+        values={userOrder}
       >
         {userOrder.map((itemIndex) => (
           <Reorder.Item
+            className={getItemStyle(itemIndex)}
+            dragListener={!isValidated}
             key={itemIndex}
             value={itemIndex}
-            dragListener={!isValidated}
-            className={getItemStyle(itemIndex)}
             whileDrag={{ scale: 1.02, zIndex: 10 }}
           >
             {!isValidated && (

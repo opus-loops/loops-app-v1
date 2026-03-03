@@ -1,22 +1,23 @@
-import { ContentSkeleton } from "@/components/ui/content-skeleton"
-import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { BackButton } from "@/modules/shared/shell/category_selection/components/back-button"
 import { Suspense } from "react"
+
 import { SelectedSubQuizProvider } from "../../contexts/selected-sub-quiz-context"
 import { QuizStepper } from "./quiz-stepper"
 import { QuizStatisticsScreen } from "./steps/quiz-statistics-screen"
 import { QuizWelcomeScreen } from "./steps/quiz-welcome-screen"
 import { SubQuizzesNavigator } from "./steps/sub-quizzes-navigator"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import { BackButton } from "@/modules/shared/shell/category_selection/components/back-button"
+import { ContentSkeleton } from "@/components/ui/content-skeleton"
+import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
 
 type QuizContentScreenProps = {
-  quizItem: CategoryContentItem & { contentType: "quizzes" }
   onBack: () => void
+  quizItem: { contentType: "quizzes" } & CategoryContentItem
 }
 
 export function QuizContentScreen({
-  quizItem,
   onBack,
+  quizItem,
 }: QuizContentScreenProps) {
   return (
     <div className="bg-loops-background flex h-full flex-col">
@@ -29,9 +30,9 @@ export function QuizContentScreen({
           <Suspense fallback={<ContentSkeleton />}>
             <QuizStepper
               quizItem={quizItem}
-              welcome={<QuizWelcomeScreen quizItem={quizItem} />}
-              subQuizzesNavigator={<SubQuizzesNavigator quizItem={quizItem} />}
               statistics={<QuizStatisticsScreen quizItem={quizItem} />}
+              subQuizzesNavigator={<SubQuizzesNavigator quizItem={quizItem} />}
+              welcome={<QuizWelcomeScreen quizItem={quizItem} />}
             />
           </Suspense>
         </SelectedSubQuizProvider>

@@ -1,3 +1,6 @@
+import { Schema } from "effect"
+import type { Effect } from "effect"
+
 import { startedQuizSchema } from "@/modules/shared/domain/entities/started-quiz"
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
@@ -13,8 +16,6 @@ import {
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
-import type { Effect } from "effect"
-import { Schema } from "effect"
 
 const getStartedQuizArgsSchema = Schema.Struct({
   categoryId: Schema.String,
@@ -27,9 +28,9 @@ export const getStartedQuizErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
       authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
       quizId: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   quizNotFoundErrorSchema,

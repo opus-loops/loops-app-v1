@@ -1,18 +1,20 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   onboardingErrorsSchema,
   onboardingSuccessSchema,
 } from "@/modules/shared/api/profile/update-onboarding"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import { onboardingFactory } from "@/modules/shared/api/profile/update-onboarding"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type OnboardingErrors =
-  | typeof unknownErrorSchema.Type
-  | typeof onboardingErrorsSchema.Type
   | { code: "Unauthorized" }
+  | typeof onboardingErrorsSchema.Type
+  | typeof unknownErrorSchema.Type
 
 export type OnboardingSuccess = typeof onboardingSuccessSchema.Type
 

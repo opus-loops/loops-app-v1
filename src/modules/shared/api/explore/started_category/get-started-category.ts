@@ -1,3 +1,6 @@
+import { Schema } from "effect"
+import type { Effect } from "effect"
+
 import { startedCategorySchema } from "@/modules/shared/domain/entities/started-category"
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
@@ -10,8 +13,6 @@ import {
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
-import type { Effect } from "effect"
-import { Schema } from "effect"
 
 const getStartedCategoryArgsSchema = Schema.Struct({
   categoryId: Schema.String,
@@ -23,8 +24,8 @@ export const getStartedCategoryErrorsSchema = Schema.Union(
   invalidInputFactory(
     Schema.Struct({
       authorization: Schema.optional(Schema.String),
-      userId: Schema.optional(UseCaseErrorSchema),
       categoryId: Schema.optional(UseCaseErrorSchema),
+      userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
   categoryNotFoundErrorSchema,

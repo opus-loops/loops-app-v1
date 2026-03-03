@@ -1,5 +1,6 @@
-import { cn } from "@/modules/shared/lib/utils"
 import { useEffect, useState } from "react"
+
+import { cn } from "@/modules/shared/lib/utils"
 
 type CountdownTimerProps = {
   initialSeconds?: number

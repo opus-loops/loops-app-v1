@@ -1,11 +1,13 @@
-import { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import { Effect } from "effect"
-import {
+
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+
+import type {
   ISubQuizNavigationStrategy,
   SubQuizNavigationContext,
   SubQuizNavigationError,
 } from "../../sub-quiz-navigation-types"
+import type { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
 
 /**
  * Navigation strategy for transitioning from a Choice Question to another Choice Question.
@@ -36,21 +38,6 @@ export class ChoiceQuestionToChoiceQuestionStrategy implements ISubQuizNavigatio
   }
 
   /**
-   * Validates if the current sub-quiz is completed.
-   * Checks if the question type matches and if the status is marked as completed.
-   *
-   * @param subQuiz - The sub-quiz to validate
-   * @returns boolean - True if the sub-quiz is a completed choice question
-   */
-  validateCompletion(subQuiz: EnhancedSubQuiz): boolean {
-    return (
-      subQuiz.questionType === "choiceQuestions" &&
-      subQuiz.completedQuestion !== undefined &&
-      subQuiz.completedQuestion.status === "completed"
-    )
-  }
-
-  /**
    * Executes the navigation to the next choice question.
    * Starts the next question via the service and returns the adjacent sub-quiz.
    *
@@ -67,17 +54,32 @@ export class ChoiceQuestionToChoiceQuestionStrategy implements ISubQuizNavigatio
     }
 
     return Effect.tryPromise({
-      try: async () => {
-        await this.startChoiceQuestion.handleStartChoiceQuestion({
-          categoryId: context.categoryId,
-          quizId: context.adjacentSubQuiz!.quizId,
-          questionId: context.adjacentSubQuiz!.questionId,
-        })
-        return context.adjacentSubQuiz!
-      },
       catch: () => ({
         code: "FetchError" as const,
       }),
+      try: async () => {
+        await this.startChoiceQuestion.handleStartChoiceQuestion({
+          categoryId: context.categoryId,
+          questionId: context.adjacentSubQuiz!.questionId,
+          quizId: context.adjacentSubQuiz!.quizId,
+        })
+        return context.adjacentSubQuiz!
+      },
     })
+  }
+
+  /**
+   * Validates if the current sub-quiz is completed.
+   * Checks if the question type matches and if the status is marked as completed.
+   *
+   * @param subQuiz - The sub-quiz to validate
+   * @returns boolean - True if the sub-quiz is a completed choice question
+   */
+  validateCompletion(subQuiz: EnhancedSubQuiz): boolean {
+    return (
+      subQuiz.questionType === "choiceQuestions" &&
+      subQuiz.completedQuestion !== undefined &&
+      subQuiz.completedQuestion.status === "completed"
+    )
   }
 }

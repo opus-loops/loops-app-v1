@@ -1,28 +1,23 @@
-import {
-  PropsWithChildren,
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from "react"
+import { createContext, useCallback, useContext, useState } from "react"
+import type { PropsWithChildren } from "react"
+
+type SelectedSubQuizContextType = {
+  clearSelectedSubQuizIndex: () => void
+  navigateToSubQuiz: (params: {
+    direction: "next" | "previous"
+    index: number
+  }) => void
+  navigationState: SubQuizNavigationState
+  resetNavigationState: () => void
+  selectedSubQuizIndex: number | undefined
+  setNavigationState: (state: Partial<SubQuizNavigationState>) => void
+  setSelectedSubQuizIndex: (index: number) => void
+}
 
 type SubQuizNavigationState = {
   isNavigating: boolean
   navigationDirection: "next" | "previous" | undefined
   previousSubQuizIndex: number | undefined
-}
-
-type SelectedSubQuizContextType = {
-  selectedSubQuizIndex: number | undefined
-  navigationState: SubQuizNavigationState
-  setSelectedSubQuizIndex: (index: number) => void
-  clearSelectedSubQuizIndex: () => void
-  setNavigationState: (state: Partial<SubQuizNavigationState>) => void
-  resetNavigationState: () => void
-  navigateToSubQuiz: (params: {
-    index: number
-    direction: "next" | "previous"
-  }) => void
 }
 
 const SelectedSubQuizContext = createContext({} as SelectedSubQuizContextType)
@@ -55,8 +50,8 @@ export function SelectedSubQuizProvider({ children }: PropsWithChildren) {
   }, [])
 
   const navigateToSubQuiz = (params: {
-    index: number
     direction: "next" | "previous"
+    index: number
   }) => {
     setNavigationStateInternal({
       isNavigating: true,
@@ -69,13 +64,13 @@ export function SelectedSubQuizProvider({ children }: PropsWithChildren) {
   return (
     <SelectedSubQuizContext.Provider
       value={{
-        selectedSubQuizIndex,
-        navigationState,
-        setSelectedSubQuizIndex,
         clearSelectedSubQuizIndex,
-        setNavigationState,
-        resetNavigationState,
         navigateToSubQuiz,
+        navigationState,
+        resetNavigationState,
+        selectedSubQuizIndex,
+        setNavigationState,
+        setSelectedSubQuizIndex,
       }}
     >
       {children}

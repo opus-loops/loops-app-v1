@@ -2,8 +2,8 @@ export function CategoryIcon() {
   return (
     <svg
       className="size-full"
-      viewBox="0 0 46 45"
       fill="currentColor"
+      viewBox="0 0 46 45"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path d="M20.1875 14.0625C20.1875 10.9559 17.6691 8.4375 14.5625 8.4375C11.4559 8.4375 8.9375 10.9559 8.9375 14.0625C8.9375 17.1691 11.4559 19.6875 14.5625 19.6875C17.6691 19.6875 20.1875 17.1691 20.1875 14.0625Z" />

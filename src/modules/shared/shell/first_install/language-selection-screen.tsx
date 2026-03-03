@@ -1,22 +1,23 @@
-import { SpaceBackground } from "@/modules/shared/components/common/space-background"
-import { Button } from "@/modules/shared/components/ui/button"
-import { OptionCard } from "../onboarding/components/option-card"
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { OptionCard } from "../onboarding/components/option-card"
+import { SpaceBackground } from "@/modules/shared/components/common/space-background"
+import { Button } from "@/modules/shared/components/ui/button"
+
 export const PENDING_LANGUAGE_KEY = "loopsSelectedLanguage"
 
-type LanguageId = "en" | "fr" | "ar"
+type LanguageId = "ar" | "en" | "fr"
 
 const supportedLanguages: Array<{
+  code: string
   id: LanguageId
   name: string
-  code: string
-  variant: "medium" | "serious" | "hard"
+  variant: "hard" | "medium" | "serious"
 }> = [
-  { id: "en", name: "English", code: "EN", variant: "medium" },
-  { id: "fr", name: "Français", code: "FR", variant: "serious" },
-  { id: "ar", name: "العربية", code: "AR", variant: "hard" },
+  { code: "EN", id: "en", name: "English", variant: "medium" },
+  { code: "FR", id: "fr", name: "Français", variant: "serious" },
+  { code: "AR", id: "ar", name: "العربية", variant: "hard" },
 ]
 
 export function LanguageSelectionScreen({
@@ -24,7 +25,7 @@ export function LanguageSelectionScreen({
 }: {
   onComplete: () => void
 }) {
-  const { t, i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
   const defaultLanguage = useMemo(() => {
     const current = i18n.resolvedLanguage ?? i18n.language
     if (current === "en" || current === "fr" || current === "ar") return current
@@ -35,7 +36,10 @@ export function LanguageSelectionScreen({
     useState<LanguageId>(defaultLanguage)
 
   const handleContinue = useCallback(async () => {
-    if (typeof window === "undefined" || typeof window.localStorage === "undefined")
+    if (
+      typeof window === "undefined" ||
+      typeof window.localStorage === "undefined"
+    )
       return
 
     localStorage.setItem(PENDING_LANGUAGE_KEY, selectedLanguage)
@@ -59,7 +63,7 @@ export function LanguageSelectionScreen({
             {supportedLanguages.map((language) => (
               <OptionCard
                 icon={
-                  <div className="bg-loops-light/20 flex size-9 items-center justify-center rounded-full font-outfit text-sm font-semibold">
+                  <div className="bg-loops-light/20 font-outfit flex size-9 items-center justify-center rounded-full text-sm font-semibold">
                     {language.code}
                   </div>
                 }
@@ -88,4 +92,3 @@ export function LanguageSelectionScreen({
     </SpaceBackground>
   )
 }
-

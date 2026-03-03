@@ -1,5 +1,6 @@
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
+
 import countriesCitiesData from "../../../../../../assets/countries-cities.json"
 import { BirthDateCalendar } from "./birth-date-calendar"
 import {
@@ -14,32 +15,19 @@ import { LanguageSelectGroup } from "./language-select-group"
 import { PreferenceField } from "./preference-field"
 import { PreferencesGroup } from "./preferences-group"
 
-type FieldErrorProps = {
-  isTouched: boolean
-  errors: string[]
-}
-
-function getFieldError({ isTouched, errors }: FieldErrorProps) {
-  if (!isTouched || errors.length === 0) return null
-  return errors.join(", ")
-}
-
 type CountriesCities = {
   Countries: Array<{
     CountryName: string
     States: Array<{
+      Cities: Array<string>
       StateName: string
-      Cities: string[]
     }>
   }>
 }
 
-function toOptions(values: string[]) {
-  return values.map((v) => ({ value: v, label: v }))
-}
-
-function sortStrings(values: string[]) {
-  return [...values].sort((a, b) => a.localeCompare(b))
+type FieldErrorProps = {
+  errors: Array<string>
+  isTouched: boolean
 }
 
 type PreferencesFieldsProps = {
@@ -58,21 +46,21 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
   return (
     <div className="flex flex-col gap-6">
       <PreferencesGroup
-        title={t("profile.sections.personal")}
         subtitle={t("profile.sections.personal_subtitle")}
+        title={t("profile.sections.personal")}
       >
         <form.Field name="birthDate">
           {(field: any) => (
             <PreferenceField
-              label={t("profile.fields.birth_date")}
-              htmlFor={field.name}
               error={getFieldError(field.state.meta)}
+              htmlFor={field.name}
+              label={t("profile.fields.birth_date")}
               variant="plain"
             >
               <BirthDateCalendar
-                value={field.state.value}
-                onChange={field.handleChange}
                 onBlur={field.handleBlur}
+                onChange={field.handleChange}
+                value={field.state.value}
               />
             </PreferenceField>
           )}
@@ -81,14 +69,14 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
         <form.Field name="gender">
           {(field: any) => (
             <PreferenceField
-              label={t("profile.fields.gender")}
-              htmlFor={field.name}
               error={getFieldError(field.state.meta)}
+              htmlFor={field.name}
+              label={t("profile.fields.gender")}
               variant="plain"
             >
               <GenderRadioGroup
-                value={field.state.value}
                 onChange={field.handleChange}
+                value={field.state.value}
               />
             </PreferenceField>
           )}
@@ -97,14 +85,14 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
         <form.Field name="language">
           {(field: any) => (
             <PreferenceField
-              label={t("profile.fields.language")}
-              htmlFor={field.name}
               error={getFieldError(field.state.meta)}
+              htmlFor={field.name}
+              label={t("profile.fields.language")}
               variant="plain"
             >
               <LanguageSelectGroup
-                value={field.state.value}
                 onChange={field.handleChange}
+                value={field.state.value}
               />
             </PreferenceField>
           )}
@@ -132,28 +120,28 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
 
           return (
             <PreferencesGroup
-              title={t("profile.sections.location")}
               subtitle={t("profile.sections.location_subtitle")}
+              title={t("profile.sections.location")}
             >
               <form.Field name="country">
                 {(field: any) => (
                   <PreferenceField
-                    label={t("profile.fields.country")}
-                    htmlFor={field.name}
                     error={getFieldError(field.state.meta)}
+                    htmlFor={field.name}
+                    label={t("profile.fields.country")}
                   >
                     <InlineSelect
                       id={field.name}
                       name={field.name}
-                      value={field.state.value}
-                      placeholder={t("profile.placeholders.select_country")}
-                      options={countryOptions}
                       onBlur={field.handleBlur}
                       onChange={(next) => {
                         field.handleChange(next)
                         form.setFieldValue("state", "")
                         form.setFieldValue("city", "")
                       }}
+                      options={countryOptions}
+                      placeholder={t("profile.placeholders.select_country")}
+                      value={field.state.value}
                     />
                   </PreferenceField>
                 )}
@@ -162,26 +150,26 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
               <form.Field name="state">
                 {(field: any) => (
                   <PreferenceField
-                    label={t("profile.fields.state")}
-                    htmlFor={field.name}
                     error={getFieldError(field.state.meta)}
+                    htmlFor={field.name}
+                    label={t("profile.fields.state")}
                   >
                     <InlineSelect
+                      disabled={!country}
                       id={field.name}
                       name={field.name}
-                      value={field.state.value}
-                      placeholder={
-                        country
-                          ? t("profile.placeholders.select_state")
-                          : t("profile.placeholders.select_country_first")
-                      }
-                      options={stateOptions}
-                      disabled={!country}
                       onBlur={field.handleBlur}
                       onChange={(next) => {
                         field.handleChange(next)
                         form.setFieldValue("city", "")
                       }}
+                      options={stateOptions}
+                      placeholder={
+                        country
+                          ? t("profile.placeholders.select_state")
+                          : t("profile.placeholders.select_country_first")
+                      }
+                      value={field.state.value}
                     />
                   </PreferenceField>
                 )}
@@ -190,23 +178,23 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
               <form.Field name="city">
                 {(field: any) => (
                   <PreferenceField
-                    label={t("profile.fields.city")}
-                    htmlFor={field.name}
                     error={getFieldError(field.state.meta)}
+                    htmlFor={field.name}
+                    label={t("profile.fields.city")}
                   >
                     <InlineSelect
+                      disabled={!stateName}
                       id={field.name}
                       name={field.name}
-                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={field.handleChange}
+                      options={cityOptions}
                       placeholder={
                         stateName
                           ? t("profile.placeholders.select_city")
                           : t("profile.placeholders.select_state_first")
                       }
-                      options={cityOptions}
-                      disabled={!stateName}
-                      onBlur={field.handleBlur}
-                      onChange={field.handleChange}
+                      value={field.state.value}
                     />
                   </PreferenceField>
                 )}
@@ -217,27 +205,27 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
       </form.Subscribe>
 
       <PreferencesGroup
-        title={t("profile.sections.learning")}
         subtitle={t("profile.sections.learning_subtitle")}
+        title={t("profile.sections.learning")}
       >
         <form.Field name="duration">
           {(field: any) => (
             <PreferenceField
-              label={t("profile.fields.duration")}
-              htmlFor={field.name}
               error={getFieldError(field.state.meta)}
+              htmlFor={field.name}
+              label={t("profile.fields.duration")}
             >
               <InlineSelect
                 id={field.name}
                 name={field.name}
-                value={field.state.value}
-                onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                placeholder={t("profile.placeholders.daily_goal")}
+                onChange={field.handleChange}
                 options={durationOptions.map((o) => ({
-                  value: String(o.value),
                   label: `${o.value} ${t("common.minutes")}`,
+                  value: String(o.value),
                 }))}
+                placeholder={t("profile.placeholders.daily_goal")}
+                value={field.state.value}
               />
             </PreferenceField>
           )}
@@ -246,21 +234,21 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
         <form.Field name="codingExperience">
           {(field: any) => (
             <PreferenceField
-              label={t("profile.fields.experience")}
-              htmlFor={field.name}
               error={getFieldError(field.state.meta)}
+              htmlFor={field.name}
+              label={t("profile.fields.experience")}
             >
               <InlineSelect
                 id={field.name}
                 name={field.name}
-                value={field.state.value}
-                onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                placeholder={t("profile.placeholders.select_level")}
+                onChange={field.handleChange}
                 options={codingExperienceOptions.map((o) => ({
-                  value: o.value,
                   label: t(`profile.options.experience.${o.value}`),
+                  value: o.value,
                 }))}
+                placeholder={t("profile.placeholders.select_level")}
+                value={field.state.value}
               />
             </PreferenceField>
           )}
@@ -269,26 +257,26 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
         <form.Field name="goals">
           {(field: any) => (
             <PreferenceField
-              label={t("profile.fields.goals")}
-              htmlFor={field.name}
               error={getFieldError(field.state.meta)}
+              htmlFor={field.name}
+              label={t("profile.fields.goals")}
             >
               <InlineSelect
                 id={field.name}
                 name={field.name}
-                value={field.state.value}
-                onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                placeholder={t("profile.placeholders.select_goal")}
+                onChange={field.handleChange}
                 options={goalsOptions.map((o) => {
                   const minutes = o.value.replace(/\D/g, "")
                   const levelKey =
                     o.value.replace(/\d+min/, "").toLowerCase() || "casual"
                   return {
-                    value: o.value,
                     label: `${minutes} ${t("common.min")} (${t(`profile.options.goals.${levelKey}`)})`,
+                    value: o.value,
                   }
                 })}
+                placeholder={t("profile.placeholders.select_goal")}
+                value={field.state.value}
               />
             </PreferenceField>
           )}
@@ -297,21 +285,21 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
         <form.Field name="background">
           {(field: any) => (
             <PreferenceField
-              label={t("profile.fields.background")}
-              htmlFor={field.name}
               error={getFieldError(field.state.meta)}
+              htmlFor={field.name}
+              label={t("profile.fields.background")}
             >
               <InlineSelect
                 id={field.name}
                 name={field.name}
-                value={field.state.value}
-                onChange={field.handleChange}
                 onBlur={field.handleBlur}
-                placeholder={t("profile.placeholders.select_background")}
+                onChange={field.handleChange}
                 options={backgroundOptions.map((o) => ({
-                  value: o.value,
                   label: t(`profile.options.background.${o.value}`),
+                  value: o.value,
                 }))}
+                placeholder={t("profile.placeholders.select_background")}
+                value={field.state.value}
               />
             </PreferenceField>
           )}
@@ -319,4 +307,17 @@ export function PreferencesFields({ form }: PreferencesFieldsProps) {
       </PreferencesGroup>
     </div>
   )
+}
+
+function getFieldError({ errors, isTouched }: FieldErrorProps) {
+  if (!isTouched || errors.length === 0) return null
+  return errors.join(", ")
+}
+
+function sortStrings(values: Array<string>) {
+  return [...values].sort((a, b) => a.localeCompare(b))
+}
+
+function toOptions(values: Array<string>) {
+  return values.map((v) => ({ label: v, value: v }))
 }

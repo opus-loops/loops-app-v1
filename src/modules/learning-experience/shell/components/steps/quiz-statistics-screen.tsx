@@ -1,105 +1,34 @@
-import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
-import { NoteIcon } from "@/modules/shared/components/icons/note"
-import { TimerIcon } from "@/modules/shared/components/icons/timer"
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { useContentNavigation } from "@/modules/shared/navigation"
-import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useQuizStepper } from "../quiz-stepper"
 
-type QuizStatisticsScreenProps = {
-  quizItem: CategoryContentItem & { contentType: "quizzes" }
-}
+import { useQuizStepper } from "../quiz-stepper"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
+import { NoteIcon } from "@/modules/shared/components/icons/note"
+import { TimerIcon } from "@/modules/shared/components/icons/timer"
+import { useContentNavigation } from "@/modules/shared/navigation"
+import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
 
 type CelebrationParticle = {
-  id: string
   color: string
+  delay: number
+  duration: number
+  id: string
+  rotate: number
   size: number
   x: number
   y: number
-  rotate: number
-  duration: number
-  delay: number
+}
+
+type QuizStatisticsScreenProps = {
+  quizItem: { contentType: "quizzes" } & CategoryContentItem
 }
 
 const formatTime = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60)
   const remainingSeconds = (totalSeconds % 60).toString().padStart(2, "0")
   return `${minutes}:${remainingSeconds}`
-}
-
-function CelebrationParticles({ isActive }: { isActive: boolean }) {
-  const shouldReduceMotion = useReducedMotion()
-
-  const particles = useMemo<CelebrationParticle[]>(() => {
-    if (!isActive || shouldReduceMotion) return []
-
-    const colors = ["#31bce6", "#ffcc00", "#ff4900", "#ffffff"]
-
-    return Array.from({ length: 44 }, (_, index) => {
-      const angle = Math.random() * Math.PI * 2
-      const distance = 140 + Math.random() * 220
-      const x = Math.cos(angle) * distance
-      const y = Math.sin(angle) * distance - (60 + Math.random() * 80)
-      const size = 5 + Math.random() * 7
-
-      return {
-        id: `${index}-${Math.random().toString(16).slice(2)}`,
-        color: colors[Math.floor(Math.random() * colors.length)] ?? "#ffffff",
-        size,
-        x,
-        y,
-        rotate: (Math.random() * 220 - 110) * (Math.random() > 0.5 ? 1 : -1),
-        duration: 1.3 + Math.random() * 0.9,
-        delay: Math.random() * 0.2,
-      }
-    })
-  }, [isActive, shouldReduceMotion])
-
-  return (
-    <AnimatePresence>
-      {isActive && !shouldReduceMotion ? (
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          {particles.map((particle) => (
-            <motion.span
-              key={particle.id}
-              className="absolute rounded-full"
-              style={{
-                left: "50%",
-                top: "38%",
-                width: particle.size,
-                height: particle.size,
-                backgroundColor: particle.color,
-                boxShadow: `0 0 16px ${particle.color}66`,
-              }}
-              initial={{ x: 0, y: 0, opacity: 0, scale: 0.9, rotate: 0 }}
-              animate={{
-                x: particle.x,
-                y: particle.y,
-                opacity: [0, 1, 0],
-                scale: [0.9, 1, 0.7],
-                rotate: particle.rotate,
-              }}
-              transition={{
-                duration: particle.duration,
-                delay: particle.delay,
-                ease: "easeOut",
-              }}
-            />
-          ))}
-        </motion.div>
-      ) : null}
-    </AnimatePresence>
-  )
 }
 
 export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
@@ -110,10 +39,10 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   const { t } = useTranslation()
 
   const {
-    navigateToNext,
     canNavigateNext,
     exitContent,
     isNextItemCompleted,
+    navigateToNext,
     validateAndStartItem,
   } = useContentNavigation({ categoryId: quizItem.categoryId })
 
@@ -180,11 +109,11 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
       <VoucherDialog
         categoryId={quizItem.categoryId}
         description="Your 3 free trials are over. Submit a voucher code to continue learning. Contact the admin for a code."
+        onOpenChange={setIsVoucherDialogOpen}
         open={isVoucherDialogOpen}
         showFreeTrial={false}
         showTrigger={false}
         title="Free trial limit reached"
-        onOpenChange={setIsVoucherDialogOpen}
       />
       {/* Container matching Figma frame1000009848 */}
       <div className="flex w-full max-w-[390px] flex-col items-center gap-10">
@@ -193,9 +122,9 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
           {/* Mascot Image */}
           <div className="h-[282px] w-[316px]">
             <img
-              src="/assets/images/winning-loops.png"
               alt={t("quiz.winning_mascot_alt")}
               className="h-full w-full object-contain"
+              src="/assets/images/winning-loops.png"
             />
           </div>
 
@@ -262,9 +191,9 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
         <div className="flex w-full flex-col items-start gap-4">
           {/* Primary Button */}
           <button
-            onClick={handleNextClick}
-            disabled={isLoading}
             className="font-outfit text-loops-light w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isLoading}
+            onClick={handleNextClick}
           >
             {isLoading ? t("common.loading") : t("quiz.next")}
           </button>
@@ -279,5 +208,77 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
         </div>
       </div>
     </div>
+  )
+}
+
+function CelebrationParticles({ isActive }: { isActive: boolean }) {
+  const shouldReduceMotion = useReducedMotion()
+
+  const particles = useMemo<Array<CelebrationParticle>>(() => {
+    if (!isActive || shouldReduceMotion) return []
+
+    const colors = ["#31bce6", "#ffcc00", "#ff4900", "#ffffff"]
+
+    return Array.from({ length: 44 }, (_, index) => {
+      const angle = Math.random() * Math.PI * 2
+      const distance = 140 + Math.random() * 220
+      const x = Math.cos(angle) * distance
+      const y = Math.sin(angle) * distance - (60 + Math.random() * 80)
+      const size = 5 + Math.random() * 7
+
+      return {
+        color: colors[Math.floor(Math.random() * colors.length)] ?? "#ffffff",
+        delay: Math.random() * 0.2,
+        duration: 1.3 + Math.random() * 0.9,
+        id: `${index}-${Math.random().toString(16).slice(2)}`,
+        rotate: (Math.random() * 220 - 110) * (Math.random() > 0.5 ? 1 : -1),
+        size,
+        x,
+        y,
+      }
+    })
+  }, [isActive, shouldReduceMotion])
+
+  return (
+    <AnimatePresence>
+      {isActive && !shouldReduceMotion ? (
+        <motion.div
+          animate={{ opacity: 1 }}
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+          exit={{ opacity: 0 }}
+          initial={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {particles.map((particle) => (
+            <motion.span
+              animate={{
+                opacity: [0, 1, 0],
+                rotate: particle.rotate,
+                scale: [0.9, 1, 0.7],
+                x: particle.x,
+                y: particle.y,
+              }}
+              className="absolute rounded-full"
+              initial={{ opacity: 0, rotate: 0, scale: 0.9, x: 0, y: 0 }}
+              key={particle.id}
+              style={{
+                backgroundColor: particle.color,
+                boxShadow: `0 0 16px ${particle.color}66`,
+                height: particle.size,
+                left: "50%",
+                top: "38%",
+                width: particle.size,
+              }}
+              transition={{
+                delay: particle.delay,
+                duration: particle.duration,
+                ease: "easeOut",
+              }}
+            />
+          ))}
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   )
 }

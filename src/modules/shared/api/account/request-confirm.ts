@@ -1,3 +1,7 @@
+import { Schema } from "effect"
+import { instanceFactory } from "../../utils/axios"
+import type { Effect } from "effect"
+
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { invalidOperationErrorSchema } from "@/modules/shared/domain/errors/invalid-operation"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
@@ -7,9 +11,6 @@ import {
   invalidInputFactory,
 } from "@/modules/shared/domain/utils/invalid-input"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
-import type { Effect } from "effect"
-import { Schema } from "effect"
-import { instanceFactory } from "../../utils/axios"
 
 export const requestConfirmErrorsSchema = Schema.Union(
   invalidInputFactory(

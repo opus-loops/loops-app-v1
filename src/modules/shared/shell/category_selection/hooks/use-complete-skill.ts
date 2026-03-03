@@ -1,9 +1,11 @@
-import type { CompleteSkillWire } from "@/modules/shared/shell/category_selection/services/complete-skill-fn"
-import { completeSkillFn } from "@/modules/shared/shell/category_selection/services/complete-skill-fn"
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
+
 import { useGlobalError } from "../../session/global-error-provider"
+import type { CompleteSkillWire } from "@/modules/shared/shell/category_selection/services/complete-skill-fn"
+
+import { completeSkillFn } from "@/modules/shared/shell/category_selection/services/complete-skill-fn"
 
 export function useCompleteSkill() {
   const queryClient = useQueryClient()
@@ -19,9 +21,9 @@ export function useCompleteSkill() {
       skillId: string
     }) => {
       // Call server function → returns JSON-safe union
-      const response = (await completeSkillServer({
+      const response = await completeSkillServer({
         data: { categoryId, skillId },
-      })) as CompleteSkillWire
+      })
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") {

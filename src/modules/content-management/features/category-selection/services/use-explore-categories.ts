@@ -1,6 +1,7 @@
-import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+
 import { exploreCategoriesFn } from "./explore-categories-fn"
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 
 export const exploreCategoriesQuery = (
   handleSessionExpired: () => Promise<void>,

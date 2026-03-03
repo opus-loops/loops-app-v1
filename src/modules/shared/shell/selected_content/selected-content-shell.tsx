@@ -1,23 +1,25 @@
+import { Suspense } from "react"
+import { SelectedContentScreen } from "./components/selected-content-screen"
+import { SelectedContentWrapper } from "./components/selected-content-wrapper"
+import type { ReactNode } from "react"
+
 import { ContentScreenSkeleton } from "@/modules/shared/components/common/content-screen-skeleton"
 import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
 import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
 import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
-import { Suspense, type ReactNode } from "react"
-import { SelectedContentScreen } from "./components/selected-content-screen"
-import { SelectedContentWrapper } from "./components/selected-content-wrapper"
 
 type SelectedContentShellProps = {
   searchParams: {
     category?: string | undefined
-    type?: "details" | "content" | undefined
     contentId?: string | undefined
+    type?: "content" | "details" | undefined
   }
   target: ReactNode
 }
 
 export function SelectedContentShell({
-  target,
   searchParams,
+  target,
 }: SelectedContentShellProps) {
   const isLoading = usePageLoading()
   const { selectedItem } = useSelectedContent()

@@ -1,11 +1,12 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+
 import { useGlobalError } from "../../session/global-error-provider"
 import { getSubQuizContentFn } from "./get-sub-quiz-content-fn"
 
 interface SubQuizContentParams {
   categoryId: string
-  quizId: string
   questionId: string
+  quizId: string
 }
 
 export const subQuizContentQuery = (
@@ -13,18 +14,12 @@ export const subQuizContentQuery = (
   handleSessionExpired: () => Promise<void>,
 ) =>
   queryOptions({
-    queryKey: [
-      "sub-quiz-content",
-      params.categoryId,
-      params.quizId,
-      params.questionId,
-    ],
     queryFn: async () => {
       const response = await getSubQuizContentFn({
         data: {
           categoryId: params.categoryId,
-          quizId: params.quizId,
           questionId: params.questionId,
+          quizId: params.quizId,
         },
       })
 
@@ -35,6 +30,12 @@ export const subQuizContentQuery = (
 
       return response.value
     },
+    queryKey: [
+      "sub-quiz-content",
+      params.categoryId,
+      params.quizId,
+      params.questionId,
+    ],
   })
 
 export function useSubQuizContent(params: SubQuizContentParams) {

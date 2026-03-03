@@ -1,11 +1,7 @@
+import { createContext, useCallback, useContext, useState } from "react"
+import type { PropsWithChildren } from "react"
+
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import {
-  PropsWithChildren,
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from "react"
 
 type NavigationState = {
   isNavigating: boolean
@@ -14,16 +10,16 @@ type NavigationState = {
 }
 
 type SelectedContentContextType = {
-  selectedItem: CategoryContentItem | undefined
-  navigationState: NavigationState
-  setSelectedContent: (item: CategoryContentItem) => void
   clearSelectedContent: () => void
-  setNavigationState: (state: Partial<NavigationState>) => void
-  resetNavigationState: () => void
   navigateToItem: (params: {
-    item: CategoryContentItem
     direction: "next" | "previous"
+    item: CategoryContentItem
   }) => void
+  navigationState: NavigationState
+  resetNavigationState: () => void
+  selectedItem: CategoryContentItem | undefined
+  setNavigationState: (state: Partial<NavigationState>) => void
+  setSelectedContent: (item: CategoryContentItem) => void
 }
 
 const SelectedContentContext = createContext({} as SelectedContentContextType)
@@ -55,8 +51,8 @@ export function SelectedContentProvider({ children }: PropsWithChildren) {
   }, [])
 
   const navigateToItem = (params: {
-    item: CategoryContentItem
     direction: "next" | "previous"
+    item: CategoryContentItem
   }) => {
     setNavigationStateInternal({
       isNavigating: true,
@@ -69,13 +65,13 @@ export function SelectedContentProvider({ children }: PropsWithChildren) {
   return (
     <SelectedContentContext.Provider
       value={{
-        selectedItem,
-        navigationState,
-        setSelectedContent,
         clearSelectedContent,
-        setNavigationState,
-        resetNavigationState,
         navigateToItem,
+        navigationState,
+        resetNavigationState,
+        selectedItem,
+        setNavigationState,
+        setSelectedContent,
       }}
     >
       {children}

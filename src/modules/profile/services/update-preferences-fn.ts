@@ -1,27 +1,29 @@
-import { uploadFileFactory } from "@/modules/shared/api/file/upload-file"
-import {
-  updatePreferencesErrorsSchema,
-  updatePreferencesFactory,
-  updatePreferencesSuccessSchema,
-  type UpdatePreferencesArgs,
-} from "@/modules/shared/api/profile/update-preferences"
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
+import type {
+  UpdatePreferencesArgs,
+  updatePreferencesErrorsSchema,
+  updatePreferencesSuccessSchema,
+} from "@/modules/shared/api/profile/update-preferences"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
+import { uploadFileFactory } from "@/modules/shared/api/file/upload-file"
+import { updatePreferencesFactory } from "@/modules/shared/api/profile/update-preferences"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type UpdatePreferencesErrors =
-  | typeof updatePreferencesErrorsSchema.Type
-  | typeof unknownErrorSchema.Type
   | { code: "Unauthorized" }
+  | typeof unknownErrorSchema.Type
+  | typeof updatePreferencesErrorsSchema.Type
+
+export type UpdatePreferencesFnArgs = {
+  avatarFile?: File
+} & UpdatePreferencesArgs
 
 export type UpdatePreferencesSuccess =
   typeof updatePreferencesSuccessSchema.Type
-
-export type UpdatePreferencesFnArgs = UpdatePreferencesArgs & {
-  avatarFile?: File
-}
 
 // JSON-safe wire union
 export type UpdatePreferencesWire =

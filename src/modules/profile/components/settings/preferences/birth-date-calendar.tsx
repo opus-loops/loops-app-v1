@@ -1,15 +1,20 @@
-import { Calendar as CalendarIcon } from "lucide-react"
-import { Calendar } from "@/modules/shared/components/ui/calendar"
 import { format, parseISO } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 
+import { Calendar } from "@/modules/shared/components/ui/calendar"
+
 type BirthDateCalendarProps = {
-  value: string
-  onChange: (value: string) => void
   onBlur: () => void
+  onChange: (value: string) => void
+  value: string
 }
 
-export function BirthDateCalendar({ value, onChange, onBlur }: BirthDateCalendarProps) {
+export function BirthDateCalendar({
+  onBlur,
+  onChange,
+  value,
+}: BirthDateCalendarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const selectedDate = useMemo(() => {
@@ -24,23 +29,24 @@ export function BirthDateCalendar({ value, onChange, onBlur }: BirthDateCalendar
   return (
     <div className="flex flex-col gap-3">
       <button
-        type="button"
-        onClick={() => setIsOpen((v) => !v)}
-        onBlur={onBlur}
-        className="flex h-12 w-full items-center justify-between rounded-xl border border-transparent bg-loops-light px-3 text-left text-sm font-semibold text-loops-dark shadow-sm backdrop-blur-md transition hover:bg-loops-light/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-loops-cyan/60"
         aria-expanded={isOpen}
+        className="bg-loops-light text-loops-dark hover:bg-loops-light/90 focus-visible:ring-loops-cyan/60 flex h-12 w-full items-center justify-between rounded-xl border border-transparent px-3 text-left text-sm font-semibold shadow-sm backdrop-blur-md transition focus-visible:ring-2 focus-visible:outline-none"
+        onBlur={onBlur}
+        onClick={() => setIsOpen((v) => !v)}
+        type="button"
       >
         <span className={value ? "text-loops-dark" : "text-loops-dark/60"}>
           {selectedDate ? format(selectedDate, "PPP") : "Select birth date"}
         </span>
-        <CalendarIcon className="h-4 w-4 text-loops-cyan" />
+        <CalendarIcon className="text-loops-cyan h-4 w-4" />
       </button>
 
       {isOpen ? (
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-2 backdrop-blur-md">
           <Calendar
+            captionLayout="dropdown"
+            className="text-loops-light bg-transparent"
             mode="single"
-            selected={selectedDate}
             onSelect={(date) => {
               if (!date) {
                 onChange("")
@@ -49,9 +55,8 @@ export function BirthDateCalendar({ value, onChange, onBlur }: BirthDateCalendar
               onChange(format(date, "yyyy-MM-dd"))
               setIsOpen(false)
             }}
+            selected={selectedDate}
             toDate={new Date()}
-            captionLayout="dropdown"
-            className="bg-transparent text-loops-light"
           />
         </div>
       ) : null}

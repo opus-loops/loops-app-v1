@@ -1,11 +1,13 @@
-import { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import { Effect } from "effect"
-import {
+
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+
+import type {
   ISubQuizNavigationStrategy,
   SubQuizNavigationContext,
   SubQuizNavigationError,
 } from "../../sub-quiz-navigation-types"
+import type { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
 
 /**
  * Navigation strategy for transitioning from a Choice Question to a Sequence Order Question.
@@ -36,21 +38,6 @@ export class ChoiceQuestionToSequenceOrderStrategy implements ISubQuizNavigation
   }
 
   /**
-   * Validates if the current sub-quiz is completed.
-   * Checks if the question type matches and if the status is marked as completed.
-   *
-   * @param subQuiz - The sub-quiz to validate
-   * @returns boolean - True if the sub-quiz is a completed choice question
-   */
-  validateCompletion(subQuiz: EnhancedSubQuiz): boolean {
-    return (
-      subQuiz.questionType === "choiceQuestions" &&
-      subQuiz.completedQuestion !== undefined &&
-      subQuiz.completedQuestion.status === "completed"
-    )
-  }
-
-  /**
    * Executes the navigation to the next sequence order question.
    * Starts the next question via the service and returns the adjacent sub-quiz.
    *
@@ -67,17 +54,32 @@ export class ChoiceQuestionToSequenceOrderStrategy implements ISubQuizNavigation
     }
 
     return Effect.tryPromise({
-      try: async () => {
-        await this.startSequenceOrder.handleStartSequenceOrder({
-          categoryId: context.categoryId,
-          quizId: context.adjacentSubQuiz!.quizId,
-          questionId: context.adjacentSubQuiz!.questionId,
-        })
-        return context.adjacentSubQuiz!
-      },
       catch: () => ({
         code: "FetchError" as const,
       }),
+      try: async () => {
+        await this.startSequenceOrder.handleStartSequenceOrder({
+          categoryId: context.categoryId,
+          questionId: context.adjacentSubQuiz!.questionId,
+          quizId: context.adjacentSubQuiz!.quizId,
+        })
+        return context.adjacentSubQuiz!
+      },
     })
+  }
+
+  /**
+   * Validates if the current sub-quiz is completed.
+   * Checks if the question type matches and if the status is marked as completed.
+   *
+   * @param subQuiz - The sub-quiz to validate
+   * @returns boolean - True if the sub-quiz is a completed choice question
+   */
+  validateCompletion(subQuiz: EnhancedSubQuiz): boolean {
+    return (
+      subQuiz.questionType === "choiceQuestions" &&
+      subQuiz.completedQuestion !== undefined &&
+      subQuiz.completedQuestion.status === "completed"
+    )
   }
 }

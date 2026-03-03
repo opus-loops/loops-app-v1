@@ -1,18 +1,20 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   startQuizErrorsSchema,
   startQuizSuccessSchema,
 } from "@/modules/shared/api/explore/quiz/start-quiz"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import { startQuizFactory } from "@/modules/shared/api/explore/quiz/start-quiz"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type StartQuizErrors =
+  | { code: "Unauthorized" }
   | typeof startQuizErrorsSchema.Type
   | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
 
 export type StartQuizSuccess = typeof startQuizSuccessSchema.Type
 

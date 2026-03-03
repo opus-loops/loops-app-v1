@@ -2,15 +2,15 @@ import { Schema } from "effect"
 
 // TODO: change isCompleted to status like in started-quiz
 export const completedSkillSchema = Schema.Struct({
-  version: Schema.Number.pipe(Schema.int()),
-  user: Schema.String,
   category: Schema.String,
-  skill: Schema.String,
+  endedAt: Schema.optional(Schema.DateFromString),
   isCompleted: Schema.Boolean,
   passedTime: Schema.Number.pipe(Schema.int()),
   score: Schema.Number.pipe(Schema.int()),
+  skill: Schema.String,
   startedAt: Schema.DateFromString,
-  endedAt: Schema.optional(Schema.DateFromString),
+  user: Schema.String,
+  version: Schema.Number.pipe(Schema.int()),
 })
 
 export type CompletedSkill = typeof completedSkillSchema.Type

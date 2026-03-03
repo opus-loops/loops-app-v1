@@ -1,9 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
+
 import { useGlobalError } from "../../session/global-error-provider"
-import type { StartChoiceQuestionWire } from "./start-choice-question-fn"
 import { startChoiceQuestionFn } from "./start-choice-question-fn"
+import type { StartChoiceQuestionWire } from "./start-choice-question-fn"
 
 export function useStartChoiceQuestion() {
   const queryClient = useQueryClient()
@@ -13,17 +14,17 @@ export function useStartChoiceQuestion() {
   const handleStartChoiceQuestion = useCallback(
     async ({
       categoryId,
-      quizId,
       questionId,
+      quizId,
     }: {
       categoryId: string
-      quizId: string
       questionId: string
+      quizId: string
     }) => {
       // Call server function → returns JSON-safe union
-      const response = (await startChoiceQuestion({
-        data: { categoryId, quizId, questionId },
-      })) as StartChoiceQuestionWire
+      const response = await startChoiceQuestion({
+        data: { categoryId, questionId, quizId },
+      })
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") {

@@ -1,9 +1,10 @@
-import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
-import type { OnboardingWire } from "./onboarding-fn"
+
 import { onboardingFn } from "./onboarding-fn"
+import type { OnboardingWire } from "./onboarding-fn"
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 
 export function useOnboarding() {
   const onboardingServer = useServerFn(onboardingFn)
@@ -13,9 +14,9 @@ export function useOnboarding() {
 
   const handleOnboarding = useCallback(
     async (formData: { dailyGoal: string; level: string; status: string }) => {
-      const response = (await onboardingServer({
+      const response = await onboardingServer({
         data: formData,
-      })) as OnboardingWire
+      })
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") {

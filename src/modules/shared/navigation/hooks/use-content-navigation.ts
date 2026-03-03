@@ -1,18 +1,22 @@
-import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
-import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { useToast } from "@/modules/shared/hooks/use-toast"
-import { useStartQuiz } from "@/modules/shared/shell/category_selection/services/use-start-quiz"
-import { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
 import { useQueryClient } from "@tanstack/react-query"
 import { useCanGoBack, useRouter } from "@tanstack/react-router"
 import { Effect } from "effect"
 import { useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
+
 import { NavigationManager } from "../managers/navigation-manager"
 import { NavigationCompletionService } from "../services/navigation-completion-service"
-import type { NavigationError } from "../types/navigation-types"
-import type { NavigationStartWire } from "../types/navigation-types"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
+import type {
+  NavigationError,
+  NavigationStartWire,
+} from "../types/navigation-types"
+import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
+import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
+import { useToast } from "@/modules/shared/hooks/use-toast"
+import { useStartQuiz } from "@/modules/shared/shell/category_selection/services/use-start-quiz"
+import { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
 
 type UseContentNavigationProps = { categoryId: string }
 
@@ -31,16 +35,16 @@ export function useContentNavigation({
   const router = useRouter()
   const canGoBack = useCanGoBack()
   const queryClient = useQueryClient()
-  const { success, error } = useToast()
+  const { error, success } = useToast()
   const { t } = useTranslation()
 
   const {
-    selectedItem,
-    navigationState,
-    navigateToItem,
     clearSelectedContent,
-    setNavigationState,
+    navigateToItem,
+    navigationState,
     resetNavigationState,
+    selectedItem,
+    setNavigationState,
   } = useSelectedContent()
 
   const { categoryItems } = useCategoryContent({ categoryId })
@@ -69,13 +73,13 @@ export function useContentNavigation({
         Effect.match(navigationEffect, {
           onFailure: (navigationError) => {
             const errorMessages: Record<NavigationError["_tag"], string> = {
+              CompletionRequired: t("navigation.errors.completion_required"),
+              FetchError: t("navigation.errors.fetch_error"),
+              InvalidContentType: t("navigation.errors.invalid_content_type"),
               NoNextItem: t("navigation.errors.no_next_item"),
               NoPreviousItem: t("navigation.errors.no_previous_item"),
-              CompletionRequired: t("navigation.errors.completion_required"),
-              ValidationFailed: t("navigation.errors.validation_failed"),
-              InvalidContentType: t("navigation.errors.invalid_content_type"),
-              FetchError: t("navigation.errors.fetch_error"),
               RouterError: t("navigation.errors.router_error"),
+              ValidationFailed: t("navigation.errors.validation_failed"),
             }
 
             error(
@@ -85,25 +89,25 @@ export function useContentNavigation({
           },
           onSuccess: async (targetItem) => {
             const routerEffect = Effect.tryPromise({
-              try: () =>
-                router.navigate({
-                  to: "/",
-                  search: (prev: any) => ({
-                    ...prev,
-                    type: "content",
-                    contentId: targetItem.itemId,
-                    category: targetItem.categoryId,
-                  }),
-                }),
               catch: () => ({
                 code: "router_error" as const,
                 message: "Failed to navigate with router",
               }),
+              try: () =>
+                router.navigate({
+                  search: (prev: any) => ({
+                    ...prev,
+                    category: targetItem.categoryId,
+                    contentId: targetItem.itemId,
+                    type: "content",
+                  }),
+                  to: "/",
+                }),
             })
 
             await Effect.runPromise(routerEffect)
 
-            navigateToItem({ item: targetItem, direction })
+            navigateToItem({ direction, item: targetItem })
           },
         }),
       )
@@ -244,11 +248,11 @@ export function useContentNavigation({
       clearSelectedContent()
 
       const routerEffect = Effect.tryPromise({
-        try: () => router.navigate({ to: "/" }),
         catch: () => ({
           code: "router_error" as const,
           message: "Failed to navigate with router",
         }),
+        try: () => router.navigate({ to: "/" }),
       })
 
       await Effect.runPromise(routerEffect)
@@ -267,11 +271,11 @@ export function useContentNavigation({
     resetNavigationState()
 
     const routerEffect = Effect.tryPromise({
-      try: () => router.navigate({ to: "/" }),
       catch: () => ({
         code: "router_error" as const,
         message: "Failed to navigate with router",
       }),
+      try: () => router.navigate({ to: "/" }),
     })
 
     await Effect.runPromise(routerEffect)
@@ -281,20 +285,21 @@ export function useContentNavigation({
    * Validates prerequisites for the next item and starts it.
    * Used for "Continue" actions where the next item needs to be initialized.
    */
-  const validateAndStartItem = useCallback(async (): Promise<NavigationStartWire> => {
-    if (!selectedItem) return { _tag: "Skipped", reason: "NoSelectedItem" }
+  const validateAndStartItem =
+    useCallback(async (): Promise<NavigationStartWire> => {
+      if (!selectedItem) return { _tag: "Skipped", reason: "NoSelectedItem" }
 
-    const nextItemId = selectedItem.nextCategoryItem
-    if (!nextItemId) return { _tag: "Skipped", reason: "NoNextItem" }
+      const nextItemId = selectedItem.nextCategoryItem
+      if (!nextItemId) return { _tag: "Skipped", reason: "NoNextItem" }
 
-    const nextItem = categoryItems.find(
-      (item) => item.categoryItemId === nextItemId,
-    )
+      const nextItem = categoryItems.find(
+        (item) => item.categoryItemId === nextItemId,
+      )
 
-    if (!nextItem) return { _tag: "Skipped", reason: "NextItemNotFound" }
+      if (!nextItem) return { _tag: "Skipped", reason: "NextItemNotFound" }
 
-    return await completionService.validateAndStartItem(nextItem)
-  }, [completionService, selectedItem, categoryItems])
+      return await completionService.validateAndStartItem(nextItem)
+    }, [completionService, selectedItem, categoryItems])
 
   /**
    * Checks if the next item is completed.
@@ -316,16 +321,16 @@ export function useContentNavigation({
   }, [completionService, selectedItem, categoryItems])
 
   return {
-    navigateToNext,
-    navigateToPrevious,
-    handleBackNavigation,
-    exitContent,
+    canGoBack,
     canNavigateNext,
     canNavigatePrevious,
-    selectedItem,
-    navigationState,
+    exitContent,
+    handleBackNavigation,
     isNextItemCompleted,
+    navigateToNext,
+    navigateToPrevious,
+    navigationState,
+    selectedItem,
     validateAndStartItem,
-    canGoBack,
   }
 }

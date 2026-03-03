@@ -1,10 +1,11 @@
-import { useToast } from "@/modules/shared/hooks/use-toast"
-import { useOnboarding } from "@/modules/user-onboarding/features/welcome/services/use-onboarding"
 import { useForm } from "@tanstack/react-form"
-import type { PropsWithChildren } from "react"
 import { createContext, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
+import type { PropsWithChildren } from "react"
+
+import { useToast } from "@/modules/shared/hooks/use-toast"
+import { useOnboarding } from "@/modules/user-onboarding/features/welcome/services/use-onboarding"
 
 export const OnboardingFormSchema = z.object({
   dailyGoal: z.enum(["5min", "10min", "15min", "20min"]),

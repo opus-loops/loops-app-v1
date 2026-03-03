@@ -1,6 +1,3 @@
-import { SpaceBackground } from "@/modules/shared/components/common/space-background"
-import { Button } from "@/modules/shared/components/ui/button"
-import { cn } from "@/modules/shared/lib/utils"
 import { animate, motion, useMotionValue } from "framer-motion"
 import {
   useCallback,
@@ -10,6 +7,10 @@ import {
   useState,
 } from "react"
 import { useTranslation } from "react-i18next"
+
+import { SpaceBackground } from "@/modules/shared/components/common/space-background"
+import { Button } from "@/modules/shared/components/ui/button"
+import { cn } from "@/modules/shared/lib/utils"
 
 type Slide = {
   id: number

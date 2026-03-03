@@ -1,18 +1,18 @@
-import {
-  updateCurrentCategoryErrorsSchema,
-  updateCurrentCategoryFactory,
-} from "@/modules/shared/api/profile/update-current-category"
-import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
+import type { updateCurrentCategoryErrorsSchema } from "@/modules/shared/api/profile/update-current-category"
+import type { successResponseSchema } from "@/modules/shared/domain/types/success-response"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
+import { updateCurrentCategoryFactory } from "@/modules/shared/api/profile/update-current-category"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type UpdateCurrentCategoryErrors =
-  | typeof updateCurrentCategoryErrorsSchema.Type
-  | typeof unknownErrorSchema.Type
   | { code: "Unauthorized" }
+  | typeof unknownErrorSchema.Type
+  | typeof updateCurrentCategoryErrorsSchema.Type
 
 export type UpdateCurrentCategorySuccess = typeof successResponseSchema.Type
 

@@ -1,9 +1,13 @@
 import countryCodesRaw from "../../../../assets/country-codes.json"
 
 export type CountryCodeRaw = {
-  name: string
-  dial_code: string
   code: string
+  dial_code: string
+  name: string
+}
+
+export function normalizeDialCode(dialCode: string) {
+  return dialCode.replace(/\s+/g, "")
 }
 
 export function toFlagEmoji(countryCode: string) {
@@ -16,11 +20,7 @@ export function toFlagEmoji(countryCode: string) {
   )
 }
 
-export function normalizeDialCode(dialCode: string) {
-  return dialCode.replace(/\s+/g, "")
-}
-
-export const countryCodeOptions = (countryCodesRaw as CountryCodeRaw[])
+export const countryCodeOptions = (countryCodesRaw as Array<CountryCodeRaw>)
   .map((c) => {
     const dialCode = normalizeDialCode(c.dial_code)
     const flagEmoji = toFlagEmoji(c.code)
@@ -28,9 +28,9 @@ export const countryCodeOptions = (countryCodesRaw as CountryCodeRaw[])
       code: c.code,
       dialCode,
       flagEmoji,
+      label: `${flagEmoji} ${dialCode} ${c.name}`.trim(),
       name: c.name,
       value: dialCode,
-      label: `${flagEmoji} ${dialCode} ${c.name}`.trim(),
     }
   })
   .filter((c) => c.dialCode.startsWith("+") && c.dialCode.length > 1)

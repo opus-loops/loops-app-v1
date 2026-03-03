@@ -1,26 +1,26 @@
 import { cn } from "@/modules/shared/lib/utils"
 
 type DifficultyTagProps = {
-  difficulty: number
   className?: string
+  difficulty: number
 }
 
 const difficultyConfig = {
   1: {
-    label: "Beginner",
     colorClass: "bg-green-500",
+    label: "Beginner",
   },
   2: {
-    label: "Intermediate",
     colorClass: "bg-yellow-500",
+    label: "Intermediate",
   },
   3: {
-    label: "Advanced",
     colorClass: "bg-red-500",
+    label: "Advanced",
   },
 } as const
 
-export function DifficultyTag({ difficulty, className }: DifficultyTagProps) {
+export function DifficultyTag({ className, difficulty }: DifficultyTagProps) {
   const config = difficultyConfig[difficulty as keyof typeof difficultyConfig]
 
   return (

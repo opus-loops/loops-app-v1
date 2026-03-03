@@ -1,31 +1,32 @@
-import { LockIcon } from "@/modules/shared/components/icons/lock"
-import { MedalStarIcon } from "@/modules/shared/components/icons/medal-star"
-import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { useToast } from "@/modules/shared/hooks/use-toast"
-import { cn } from "@/modules/shared/lib/utils"
-import { useStartQuiz } from "@/modules/shared/shell/category_selection/services/use-start-quiz"
-import { ProgressState } from "@/modules/shared/utils/types"
 import { useRouter } from "@tanstack/react-router"
 import { useState } from "react"
+
 import { BaseItemCircle } from "./shared/item-circle-base"
 import {
   getCircleColors,
   getItemClickability,
   isItemStartable,
 } from "./shared/item-circle-utils"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import type { ProgressState } from "@/modules/shared/utils/types"
+import { LockIcon } from "@/modules/shared/components/icons/lock"
+import { MedalStarIcon } from "@/modules/shared/components/icons/medal-star"
+import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
+import { useToast } from "@/modules/shared/hooks/use-toast"
+import { cn } from "@/modules/shared/lib/utils"
+import { useStartQuiz } from "@/modules/shared/shell/category_selection/services/use-start-quiz"
 
 export type QuizItemCircleProps = {
-  item: CategoryContentItem & { contentType: "quizzes" }
-  index: number
   categoryId: string
+  index: number
+  item: { contentType: "quizzes" } & CategoryContentItem
   previousItems: Array<CategoryContentItem>
 }
 
 export function QuizItemCircle({
-  item,
-  index,
   categoryId,
+  index,
+  item,
   previousItems,
 }: QuizItemCircleProps) {
   const { error } = useToast()
@@ -54,12 +55,12 @@ export function QuizItemCircle({
     if (progressState === "completed" || progressState === "started") {
       setSelectedContent(item)
       router.navigate({
-        to: "/",
         search: {
           category: categoryId,
-          type: "content",
           contentId: item.itemId,
+          type: "content",
         },
+        to: "/",
       })
       return
     }
@@ -79,12 +80,12 @@ export function QuizItemCircle({
 
     setSelectedContent(item)
     router.navigate({
-      to: "/",
       search: {
         category: categoryId,
-        type: "content",
         contentId: item.itemId,
+        type: "content",
       },
+      to: "/",
     })
   }
 
@@ -98,11 +99,11 @@ export function QuizItemCircle({
   return (
     <BaseItemCircle
       colors={colors}
-      progress={progress}
+      index={index}
       isClickable={isClickable}
       isLoading={isLoading}
-      index={index}
       onClick={handleClick}
+      progress={progress}
     >
       {progressState === "locked" && isFirstItem === false && (
         <div className={cn("h-10 w-10 shrink-0 grow-0", colors.text)}>

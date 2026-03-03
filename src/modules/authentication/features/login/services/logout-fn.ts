@@ -1,22 +1,23 @@
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
-import {
-  logoutFactory,
-  type logoutErrorsSchema,
-  type logoutSuccessSchema,
+import type {
+  logoutErrorsSchema,
+  logoutSuccessSchema,
 } from "@/modules/shared/api/auth/logout"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
+import { logoutFactory } from "@/modules/shared/api/auth/logout"
 import {
   deleteSession,
   getSession,
 } from "@/modules/shared/shell/session/session"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 // --- TYPES ---------------------------------------------------------------
 export type LogoutErrors =
+  | { code: "Unauthorized" }
   | typeof logoutErrorsSchema.Type
   | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
 
 export type LogoutSuccess = typeof logoutSuccessSchema.Type
 

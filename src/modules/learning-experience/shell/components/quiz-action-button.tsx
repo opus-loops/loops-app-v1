@@ -1,10 +1,11 @@
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { ChevronRight } from "lucide-react"
 import { useState } from "react"
+
 import { useSubQuizNavigation } from "./steps/use-sub-quiz-navigation"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 
 type QuizActionButtonProps = {
-  quizItem: CategoryContentItem & { contentType: "quizzes" }
+  quizItem: { contentType: "quizzes" } & CategoryContentItem
 }
 
 export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
@@ -22,9 +23,9 @@ export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
 
   return (
     <button
-      onClick={handleStartQuiz}
-      disabled={isLoading}
       className="font-outfit text-loops-light flex w-full max-w-sm items-center justify-center rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
+      disabled={isLoading}
+      onClick={handleStartQuiz}
     >
       <span className="font-outfit text-[18px] font-medium text-[#15153a]">
         {isLoading ? "Starting..." : "Start"}

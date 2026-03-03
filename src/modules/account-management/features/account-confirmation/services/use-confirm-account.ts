@@ -1,9 +1,10 @@
-import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
-import type { ConfirmAccountWire } from "./confirm-account-fn"
+
 import { confirmAccountFn } from "./confirm-account-fn"
+import type { ConfirmAccountWire } from "./confirm-account-fn"
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 
 export function useConfirmAccount() {
   const confirmAccountServer = useServerFn(confirmAccountFn)
@@ -13,9 +14,9 @@ export function useConfirmAccount() {
   const handleConfirmAccount = useCallback(
     async (confirmationCode: number) => {
       // Call server function → returns JSON-safe union
-      const response = (await confirmAccountServer({
+      const response = await confirmAccountServer({
         data: { confirmationCode },
-      })) as ConfirmAccountWire
+      })
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") {

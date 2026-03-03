@@ -1,35 +1,35 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   listExploreCategoriesErrorsSchema,
   listExploreCategoriesSuccessSchema,
 } from "@/modules/shared/api/explore/category/list-explore-categories"
-import { listExploreCategoriesFactory } from "@/modules/shared/api/explore/category/list-explore-categories"
-import { getCertificateFactory } from "@/modules/shared/api/explore/certificate/get-certificate"
-import {
-  getStartedCategoryFactory,
-  type getStartedCategoryErrorsSchema,
-} from "@/modules/shared/api/explore/started_category/get-started-category"
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import type { getStartedCategoryErrorsSchema } from "@/modules/shared/api/explore/started_category/get-started-category"
 import type { Category } from "@/modules/shared/domain/entities/category"
 import type { Certificate } from "@/modules/shared/domain/entities/certificate"
 import type { StartedCategory } from "@/modules/shared/domain/entities/started-category"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+
+import { listExploreCategoriesFactory } from "@/modules/shared/api/explore/category/list-explore-categories"
+import { getCertificateFactory } from "@/modules/shared/api/explore/certificate/get-certificate"
+import { getStartedCategoryFactory } from "@/modules/shared/api/explore/started_category/get-started-category"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+
+export type CategoryWithStartedCategory = {
+  certificate?: Certificate
+  startedCategory?: StartedCategory
+} & Category
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type ExploreCategoriesErrors =
-  | typeof unknownErrorSchema.Type
-  | typeof listExploreCategoriesErrorsSchema.Type
-  | typeof getStartedCategoryErrorsSchema.Type
   | { code: "Unauthorized" }
-
-export type CategoryWithStartedCategory = Category & {
-  startedCategory?: StartedCategory
-  certificate?: Certificate
-}
+  | typeof getStartedCategoryErrorsSchema.Type
+  | typeof listExploreCategoriesErrorsSchema.Type
+  | typeof unknownErrorSchema.Type
 
 export type ExploreCategoriesSuccess = {
-  categories: CategoryWithStartedCategory[]
+  categories: Array<CategoryWithStartedCategory>
   metadata: (typeof listExploreCategoriesSuccessSchema.Type)["metadata"]
 }
 
@@ -61,7 +61,7 @@ const fetchExploreCategoriesEffect = () =>
     }
 
     const categoriesData = categoriesExit.value
-    const categoriesWithStartedData: CategoryWithStartedCategory[] = []
+    const categoriesWithStartedData: Array<CategoryWithStartedCategory> = []
 
     // 2) For each category, try to fetch its started category data
     for (const category of categoriesData.categories) {
@@ -77,7 +77,9 @@ const fetchExploreCategoriesEffect = () =>
         ),
       )
 
-      let categoryWithStartedData: CategoryWithStartedCategory = { ...category }
+      const categoryWithStartedData: CategoryWithStartedCategory = {
+        ...category,
+      }
 
       // If started category exists, add it to the category data
       if (startedCategoryExit._tag === "Success") {

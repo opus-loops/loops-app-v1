@@ -1,3 +1,7 @@
+import { useForm } from "@tanstack/react-form"
+import { Link } from "@tanstack/react-router"
+import { useTranslation } from "react-i18next"
+
 import { useLogin } from "@/modules/authentication/features/login/services/use-login"
 import { DangerIcon } from "@/modules/shared/components/icons/danger"
 import { LockIcon } from "@/modules/shared/components/icons/lock"
@@ -6,9 +10,6 @@ import { Button } from "@/modules/shared/components/ui/button"
 import { Input } from "@/modules/shared/components/ui/input"
 import { PasswordInput } from "@/modules/shared/components/ui/password-input"
 import { useToast } from "@/modules/shared/hooks/use-toast"
-import { useForm } from "@tanstack/react-form"
-import { Link } from "@tanstack/react-router"
-import { useTranslation } from "react-i18next"
 
 export function LoginForm() {
   const { handleLogin } = useLogin()
@@ -172,9 +173,9 @@ export function LoginForm() {
             {isSubmitting ? (
               <svg
                 className="h-6 w-6 animate-spin text-white"
-                xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <circle
                   className="opacity-25"
@@ -186,8 +187,8 @@ export function LoginForm() {
                 ></circle>
                 <path
                   className="opacity-75"
-                  fill="currentColor"
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  fill="currentColor"
                 ></path>
               </svg>
             ) : (

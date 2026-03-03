@@ -1,18 +1,20 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   completeSkillErrorsSchema,
   completeSkillSuccessSchema,
 } from "@/modules/shared/api/explore/skill/complete-skill"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import { completeSkillFactory } from "@/modules/shared/api/explore/skill/complete-skill"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type CompleteSkillErrors =
+  | { code: "Unauthorized" }
   | typeof completeSkillErrorsSchema.Type
   | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
 
 export type CompleteSkillSuccess = typeof completeSkillSuccessSchema.Type
 

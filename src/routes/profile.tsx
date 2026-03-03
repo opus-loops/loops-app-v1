@@ -1,22 +1,16 @@
+import { createFileRoute } from "@tanstack/react-router"
+import z from "zod"
+
 import { ProfileScreen } from "@/modules/profile/components/profile-screen"
 import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
 import { authenticatedQuery, useAuth } from "@/modules/shared/guards/use-auth"
 import { CategorySelectionShell } from "@/modules/shared/shell/category_selection/category-selection-shell"
 import { ConfirmationShell } from "@/modules/shared/shell/confirmation/confirmation-shell"
 import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-shell"
-import { createFileRoute } from "@tanstack/react-router"
-import z from "zod"
 
 export const Route = createFileRoute("/profile")({
   beforeLoad: async ({ context }) =>
     await context.queryClient.ensureQueryData(authenticatedQuery),
-  validateSearch: z.object({
-    category: z
-      .string()
-      .refine((value) => value === "all" || /^[0-9a-fA-F]{24}$/.test(value))
-      .optional(),
-    type: z.enum(["details", "content"]).optional(),
-  }),
   component: function RouteComponent() {
     const { user } = useAuth()
     const search = Route.useSearch()
@@ -48,4 +42,11 @@ export const Route = createFileRoute("/profile")({
       />
     )
   },
+  validateSearch: z.object({
+    category: z
+      .string()
+      .refine((value) => value === "all" || /^[0-9a-fA-F]{24}$/.test(value))
+      .optional(),
+    type: z.enum(["details", "content"]).optional(),
+  }),
 })

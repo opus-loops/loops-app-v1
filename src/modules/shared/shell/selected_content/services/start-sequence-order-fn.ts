@@ -1,18 +1,20 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   startSequenceOrderErrorsSchema,
   startSequenceOrderSuccessSchema,
 } from "@/modules/shared/api/explore/sequence_order/start-sequence-order"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import { startSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/start-sequence-order"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type StartSequenceOrderErrors =
+  | { code: "Unauthorized" }
   | typeof startSequenceOrderErrorsSchema.Type
   | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
 
 export type StartSequenceOrderSuccess =
   typeof startSequenceOrderSuccessSchema.Type
@@ -30,8 +32,8 @@ export const startSequenceOrderFn = createServerFn({
     (data) =>
       data as {
         readonly categoryId: string
-        readonly quizId: string
         readonly questionId: string
+        readonly quizId: string
       },
   )
   .handler(async (ctx): Promise<StartSequenceOrderWire> => {
@@ -50,8 +52,8 @@ export const startSequenceOrderFn = createServerFn({
     const exit = await Effect.runPromiseExit(
       startSequenceOrder({
         categoryId: ctx.data.categoryId,
-        quizId: ctx.data.quizId,
         questionId: ctx.data.questionId,
+        quizId: ctx.data.quizId,
       }),
     )
 

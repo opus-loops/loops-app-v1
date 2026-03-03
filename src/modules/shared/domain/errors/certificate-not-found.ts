@@ -4,4 +4,5 @@ export const certificateNotFoundErrorSchema = Schema.Struct({
   code: Schema.Literal("certificate_not_found"),
 })
 
-export type CertificateNotFoundError = typeof certificateNotFoundErrorSchema.Type
+export type CertificateNotFoundError =
+  typeof certificateNotFoundErrorSchema.Type

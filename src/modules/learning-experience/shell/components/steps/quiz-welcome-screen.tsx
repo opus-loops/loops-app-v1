@@ -1,12 +1,13 @@
+import { useTranslation } from "react-i18next"
+
+import { QuizActionButton } from "../quiz-action-button"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
 import { NoteIcon } from "@/modules/shared/components/icons/note"
 import { TimerIcon } from "@/modules/shared/components/icons/timer"
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { useTranslation } from "react-i18next"
-import { QuizActionButton } from "../quiz-action-button"
 
 type QuizWelcomeScreenProps = {
-  quizItem: CategoryContentItem & { contentType: "quizzes" }
+  quizItem: { contentType: "quizzes" } & CategoryContentItem
 }
 
 export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
@@ -16,9 +17,9 @@ export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
     <div className="font-outfit bg-loops-background relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
       <div className="pointer-events-none absolute top-1/2 -left-px z-0 h-[592px] w-[459px] -translate-y-1/2 opacity-50">
         <img
-          src="/assets/svg/doodle.svg"
           alt={t("quiz.doodle_alt")}
           className="h-full w-full"
+          src="/assets/svg/doodle.svg"
         />
       </div>
 
@@ -29,9 +30,9 @@ export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
 
         <div className="relative h-55 w-82">
           <img
-            src="/assets/images/racing-loops.png"
             alt={t("quiz.mascot_alt")}
             className="h-full w-full object-contain"
+            src="/assets/images/racing-loops.png"
           />
         </div>
 

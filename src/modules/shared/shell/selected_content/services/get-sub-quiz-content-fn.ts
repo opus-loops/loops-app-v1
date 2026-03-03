@@ -1,24 +1,26 @@
-import type { getExploreSubQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
-import { getExploreSubQuizFactory } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
+import type { getExploreSubQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
+import { getExploreSubQuizFactory } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type GetSubQuizContentErrors =
-  | typeof unknownErrorSchema.Type
-  | typeof getExploreSubQuizErrorsSchema.Type
   | { code: "Unauthorized" }
-
-export type GetSubQuizContentSuccess = {
-  subQuiz: any // This will be the actual sub-quiz data from the API
-}
+  | typeof getExploreSubQuizErrorsSchema.Type
+  | typeof unknownErrorSchema.Type
 
 export type GetSubQuizContentParams = {
   categoryId: string
-  quizId: string
   questionId: string
+  quizId: string
+}
+
+export type GetSubQuizContentSuccess = {
+  subQuiz: any // This will be the actual sub-quiz data from the API
 }
 
 export type GetSubQuizContentWire =
@@ -28,7 +30,7 @@ export type GetSubQuizContentWire =
 // --- MAIN LOGIC AS EFFECT ----------------------------------------------------
 const fetchSubQuizContentEffect = (params: GetSubQuizContentParams) =>
   Effect.gen(function* (_) {
-    const { categoryId, quizId, questionId } = params
+    const { categoryId, questionId, quizId } = params
 
     // Fetch the sub-quiz content
     const getExploreSubQuiz = yield* _(
@@ -40,8 +42,8 @@ const fetchSubQuizContentEffect = (params: GetSubQuizContentParams) =>
         Effect.runPromiseExit(
           getExploreSubQuiz({
             categoryId,
-            quizId,
             questionId,
+            quizId,
           }),
         ),
       ),
@@ -68,8 +70,8 @@ export const getSubQuizContentFn = createServerFn({
     (data) =>
       data as {
         readonly categoryId: string
-        readonly quizId: string
         readonly questionId: string
+        readonly quizId: string
       },
   )
   .handler(async (ctx): Promise<GetSubQuizContentWire> => {

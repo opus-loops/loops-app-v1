@@ -1,68 +1,66 @@
 import { toast as sonnerToast } from "sonner"
 
 export interface ToastOptions {
-  duration?: number
-  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-center" | "bottom-center"
-  dismissible?: boolean
   description?: string
+  dismissible?: boolean
+  duration?: number
+  position?:
+    | "bottom-center"
+    | "bottom-left"
+    | "bottom-right"
+    | "top-center"
+    | "top-left"
+    | "top-right"
 }
 
 export interface UseToastReturn {
-  success: (message: string, options?: ToastOptions) => void
+  dismiss: (id?: number | string) => void
   error: (message: string, options?: ToastOptions) => void
-  dismiss: (id?: string | number) => void
+  success: (message: string, options?: ToastOptions) => void
 }
 
 export const useToast = (): UseToastReturn => {
   const success = (message: string, options: ToastOptions = {}) => {
-    const {
-      duration = 5000,
-      dismissible = true,
-      description,
-    } = options
+    const { description, dismissible = true, duration = 5000 } = options
 
     sonnerToast.success(message, {
-      duration,
-      dismissible,
-      description,
       className: "toast-success",
+      description,
+      dismissible,
+      duration,
       style: {
         background: "var(--color-success)",
-        color: "var(--color-success-foreground)",
         border: "1px solid var(--color-success-border)",
         borderRadius: "0.75rem",
+        boxShadow: "0 4px 12px rgba(16, 185, 129, 0.15)",
+        color: "var(--color-success-foreground)",
         fontSize: "0.875rem",
         fontWeight: "500",
-        boxShadow: "0 4px 12px rgba(16, 185, 129, 0.15)",
       },
     })
   }
 
   const error = (message: string, options: ToastOptions = {}) => {
-    const {
-      duration = 5000,
-      dismissible = true,
-      description,
-    } = options
+    const { description, dismissible = true, duration = 5000 } = options
 
     sonnerToast.error(message, {
-      duration,
-      dismissible,
-      description,
       className: "toast-error",
+      description,
+      dismissible,
+      duration,
       style: {
         background: "var(--color-destructive)",
-        color: "var(--color-destructive-foreground)",
         border: "1px solid var(--color-destructive-border)",
         borderRadius: "0.75rem",
+        boxShadow: "0 4px 12px rgba(239, 68, 68, 0.15)",
+        color: "var(--color-destructive-foreground)",
         fontSize: "0.875rem",
         fontWeight: "500",
-        boxShadow: "0 4px 12px rgba(239, 68, 68, 0.15)",
       },
     })
   }
 
-  const dismiss = (id?: string | number) => {
+  const dismiss = (id?: number | string) => {
     if (id) {
       sonnerToast.dismiss(id)
     } else {
@@ -71,8 +69,8 @@ export const useToast = (): UseToastReturn => {
   }
 
   return {
-    success,
-    error,
     dismiss,
+    error,
+    success,
   }
 }

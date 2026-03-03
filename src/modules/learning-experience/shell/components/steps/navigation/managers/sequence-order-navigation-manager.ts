@@ -1,11 +1,13 @@
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import { Effect } from "effect"
-import {
+
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+
+import type {
   ISubQuizNavigationManager,
   SubQuizNavigationContext,
   SubQuizNavigationError,
 } from "../../sub-quiz-navigation-types"
-import { SubQuizStrategySelector } from "../sub-quiz-strategy-selector"
+import type { SubQuizStrategySelector } from "../sub-quiz-strategy-selector"
 
 /**
  * Navigation manager specifically for Sequence Order Questions.

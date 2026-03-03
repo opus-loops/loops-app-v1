@@ -1,58 +1,58 @@
 import { ChevronDown } from "lucide-react"
 
 type InlineSelectOption = {
-  value: string
   label: string
+  value: string
 }
 
 type InlineSelectProps = {
+  disabled?: boolean
   id: string
   name: string
-  value: string
-  options: InlineSelectOption[]
-  placeholder?: string
-  disabled?: boolean
-  onChange: (value: string) => void
   onBlur: () => void
+  onChange: (value: string) => void
+  options: Array<InlineSelectOption>
+  placeholder?: string
+  value: string
 }
 
 export function InlineSelect({
+  disabled = false,
   id,
   name,
-  value,
+  onBlur,
+  onChange,
   options,
   placeholder,
-  disabled = false,
-  onChange,
-  onBlur,
+  value,
 }: InlineSelectProps) {
   return (
     <div className="relative flex items-center">
       <select
+        className="text-loops-dark h-10 w-full cursor-pointer appearance-none truncate bg-transparent pr-7 text-sm font-medium outline-none disabled:cursor-not-allowed disabled:opacity-60"
+        disabled={disabled}
         id={id}
         name={name}
-        value={value}
-        disabled={disabled}
-        onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
-        className="h-10 w-full cursor-pointer appearance-none truncate bg-transparent pr-7 text-sm font-medium text-loops-dark outline-none disabled:cursor-not-allowed disabled:opacity-60"
+        onChange={(e) => onChange(e.target.value)}
+        value={value}
       >
         {placeholder ? (
-          <option value="" disabled className="bg-loops-light text-loops-dark">
+          <option className="bg-loops-light text-loops-dark" disabled value="">
             {placeholder}
           </option>
         ) : null}
         {options.map((o) => (
           <option
+            className="bg-loops-light text-loops-dark"
             key={o.value}
             value={o.value}
-            className="bg-loops-light text-loops-dark"
           >
             {o.label}
           </option>
         ))}
       </select>
-      <ChevronDown className="pointer-events-none absolute top-1/2 right-0 h-4 w-4 -translate-y-1/2 text-loops-dark/60" />
+      <ChevronDown className="text-loops-dark/60 pointer-events-none absolute top-1/2 right-0 h-4 w-4 -translate-y-1/2" />
     </div>
   )
 }

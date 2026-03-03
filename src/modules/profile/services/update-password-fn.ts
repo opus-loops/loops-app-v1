@@ -1,19 +1,21 @@
-import {
-  updatePasswordErrorsSchema,
-  updatePasswordFactory,
-  updatePasswordSuccessSchema,
-} from "@/modules/shared/api/profile/update-password"
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import { deleteSession } from "@/modules/shared/shell/session/session"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
+import type {
+  updatePasswordErrorsSchema,
+  updatePasswordSuccessSchema,
+} from "@/modules/shared/api/profile/update-password"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
+import { updatePasswordFactory } from "@/modules/shared/api/profile/update-password"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { deleteSession } from "@/modules/shared/shell/session/session"
+
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type UpdatePasswordErrors =
-  | typeof updatePasswordErrorsSchema.Type
-  | typeof unknownErrorSchema.Type
   | { code: "Unauthorized" }
+  | typeof unknownErrorSchema.Type
+  | typeof updatePasswordErrorsSchema.Type
 
 export type UpdatePasswordSuccess = typeof updatePasswordSuccessSchema.Type
 
@@ -27,8 +29,8 @@ export const updatePasswordFn = createServerFn({ method: "POST" })
   .inputValidator(
     (data) =>
       data as {
-        readonly password: string
         readonly newPassword: string
+        readonly password: string
       },
   )
   .handler(async (ctx): Promise<UpdatePasswordWire> => {

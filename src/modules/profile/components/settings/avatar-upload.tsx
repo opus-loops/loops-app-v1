@@ -1,36 +1,36 @@
 import { Pencil, Trash2, User2 } from "lucide-react"
-import { type RefObject } from "react"
+import type { RefObject } from "react"
 
 type AvatarUploadProps = {
-  displayedAvatarUrl: string | null | undefined
-  hasNewAvatar: boolean
+  displayedAvatarUrl: null | string | undefined
+  fileInputRef: RefObject<HTMLInputElement | null>
   fullName: string
+  hasNewAvatar: boolean
   onFileSelect: (file: File) => void
   onRemove: () => void
-  fileInputRef: RefObject<HTMLInputElement | null>
 }
 
 export function AvatarUpload({
   displayedAvatarUrl,
-  hasNewAvatar,
+  fileInputRef,
   fullName,
+  hasNewAvatar,
   onFileSelect,
   onRemove,
-  fileInputRef,
 }: AvatarUploadProps) {
   return (
     <div className="flex flex-col items-center">
       <button
-        type="button"
-        onClick={() => fileInputRef.current?.click()}
-        className="focus-visible:ring-loops-cyan relative h-24 w-24 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000016]"
         aria-label="Change avatar"
+        className="focus-visible:ring-loops-cyan relative h-24 w-24 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000016]"
+        onClick={() => fileInputRef.current?.click()}
+        type="button"
       >
         {displayedAvatarUrl ? (
           <img
-            src={displayedAvatarUrl}
             alt={fullName}
             className="h-24 w-24 rounded-full object-cover"
+            src={displayedAvatarUrl}
           />
         ) : (
           <div className="bg-loops-pink flex h-24 w-24 items-center justify-center rounded-full">
@@ -44,8 +44,6 @@ export function AvatarUpload({
       </button>
 
       <input
-        ref={fileInputRef}
-        type="file"
         accept="image/*"
         className="hidden"
         onChange={(e) => {
@@ -53,17 +51,19 @@ export function AvatarUpload({
           if (!file) return
           onFileSelect(file)
         }}
+        ref={fileInputRef}
+        type="file"
       />
 
       {hasNewAvatar ? (
         <button
-          type="button"
+          aria-label="Remove selected avatar"
+          className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-[#ff3b3b]"
           onClick={() => {
             onRemove()
             if (fileInputRef.current) fileInputRef.current.value = ""
           }}
-          className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-[#ff3b3b]"
-          aria-label="Remove selected avatar"
+          type="button"
         >
           <Trash2 className="h-4 w-4" />
           Remove

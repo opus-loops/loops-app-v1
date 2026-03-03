@@ -1,5 +1,5 @@
-import type { Effect } from "effect"
 import { Schema } from "effect"
+
 import { userSchema } from "../../domain/entities/user"
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
@@ -9,6 +9,7 @@ import {
 } from "../../domain/utils/invalid-input"
 import { instanceFactory } from "../../utils/axios"
 import { parseApiResponse } from "../../utils/parse-api-response"
+import type { Effect } from "effect"
 
 export const getLoggedUserErrorsSchema = Schema.Union(
   invalidInputFactory(

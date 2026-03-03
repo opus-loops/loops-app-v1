@@ -1,6 +1,3 @@
-import type { User } from "@/modules/shared/domain/entities/user"
-import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
-import type { ReactNode } from "react"
 import { LoadingScreen } from "../../components/common/loading-screen"
 import { OnboardingFormProvider } from "./onboarding-context"
 import { OnboardingStepper } from "./onboarding-stepper"
@@ -8,6 +5,9 @@ import { ChooseGoalsStep } from "./steps/choose-goals-step"
 import { ChooseLevelStep } from "./steps/choose-level-step"
 import { ChooseStatusStep } from "./steps/choose-status-step"
 import { WelcomeStep } from "./steps/welcome-step"
+import type { User } from "@/modules/shared/domain/entities/user"
+import type { ReactNode } from "react"
+import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
 
 type OnboardingShellProps = {
   target: ReactNode

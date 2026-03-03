@@ -1,18 +1,20 @@
+import { createServerFn } from "@tanstack/react-start"
+import { Cause, Effect, Option } from "effect"
+
 import type {
   startChoiceQuestionErrorsSchema,
   startChoiceQuestionSuccessSchema,
 } from "@/modules/shared/api/explore/choice_question/start-choice-question"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import { startChoiceQuestionFactory } from "@/modules/shared/api/explore/choice_question/start-choice-question"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
-import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type StartChoiceQuestionErrors =
+  | { code: "Unauthorized" }
   | typeof startChoiceQuestionErrorsSchema.Type
   | typeof unknownErrorSchema.Type
-  | { code: "Unauthorized" }
 
 export type StartChoiceQuestionSuccess =
   typeof startChoiceQuestionSuccessSchema.Type
@@ -30,8 +32,8 @@ export const startChoiceQuestionFn = createServerFn({
     (data) =>
       data as {
         readonly categoryId: string
-        readonly quizId: string
         readonly questionId: string
+        readonly quizId: string
       },
   )
   .handler(async (ctx): Promise<StartChoiceQuestionWire> => {
@@ -51,8 +53,8 @@ export const startChoiceQuestionFn = createServerFn({
     const exit = await Effect.runPromiseExit(
       startChoiceQuestion({
         categoryId: ctx.data.categoryId,
-        quizId: ctx.data.quizId,
         questionId: ctx.data.questionId,
+        quizId: ctx.data.quizId,
       }),
     )
 

@@ -1,3 +1,8 @@
+import { useRouter } from "@tanstack/react-router"
+import { AlertTriangle, Clock } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
+
 import { Button } from "@/modules/shared/components/ui/button"
 import {
   Dialog,
@@ -6,10 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/modules/shared/components/ui/dialog"
-import { useRouter } from "@tanstack/react-router"
-import { AlertTriangle, Clock } from "lucide-react"
-import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
 
 interface SessionExpiredDialogProps {
   isOpen: boolean
@@ -40,8 +41,8 @@ export function SessionExpiredDialog({
           const redirectTo = `${pathname}${search}${hash}`
 
           router.navigate({
-            to: "/login",
             search: { redirect: redirectTo },
+            to: "/login",
           })
           return 0
         }
@@ -96,15 +97,15 @@ export function SessionExpiredDialog({
           </div>
 
           <Button
+            className="font-outfit from-loops-purple to-loops-blue hover:from-loops-purple/90 hover:to-loops-blue/90 text-loops-light w-full bg-gradient-to-r font-medium"
             onClick={() => {
               onClose()
               const redirectTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
               router.navigate({
-                to: "/login",
                 search: { redirect: redirectTo },
+                to: "/login",
               })
             }}
-            className="font-outfit from-loops-purple to-loops-blue hover:from-loops-purple/90 hover:to-loops-blue/90 text-loops-light w-full bg-gradient-to-r font-medium"
             size="lg"
           >
             {t("session.expired.go_to_login")}

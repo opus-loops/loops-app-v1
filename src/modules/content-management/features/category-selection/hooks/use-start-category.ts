@@ -1,9 +1,10 @@
-import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
+
 import { startCategoryFn } from "../services/start-category-fn"
+import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 
 export function useStartCategory() {
   const runStartCategory = useServerFn(startCategoryFn)
@@ -28,7 +29,7 @@ export function useStartCategory() {
           queryKey: ["authenticated"],
         })
 
-        await router.navigate({ to: "/", search: {} })
+        await router.navigate({ search: {}, to: "/" })
       }
 
       return response

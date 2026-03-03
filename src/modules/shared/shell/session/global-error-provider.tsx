@@ -1,8 +1,8 @@
 import { useServerFn } from "@tanstack/react-start"
-import type { ReactNode } from "react"
 import { createContext, useContext, useState } from "react"
 
 import { sessionCleanupFn } from "./session-cleanup-fn"
+import type { ReactNode } from "react"
 
 type GlobalErrorContextType = {
   handleCloseDialog: () => void
@@ -11,10 +11,6 @@ type GlobalErrorContextType = {
 }
 
 const GlobalErrorContext = createContext({} as GlobalErrorContextType)
-
-export function useGlobalError() {
-  return useContext(GlobalErrorContext)
-}
 
 type GlobalErrorProviderProps = {
   children: ((props: GlobalErrorContextType) => ReactNode) | ReactNode
@@ -51,4 +47,8 @@ export function GlobalErrorProvider({ children }: GlobalErrorProviderProps) {
         : children}
     </GlobalErrorContext.Provider>
   )
+}
+
+export function useGlobalError() {
+  return useContext(GlobalErrorContext)
 }

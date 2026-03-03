@@ -1,6 +1,7 @@
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
 import { QuizContentScreen } from "@/modules/learning-experience/shell/components/quiz-content-screen"
 import { SkillContentScreen } from "@/modules/learning-experience/shell/components/skill-content-screen"
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useContentNavigation } from "@/modules/shared/navigation"
 
 type SelectedContentScreenProps = {
@@ -18,15 +19,15 @@ export function SelectedContentScreen({
     <div className="relative flex-1 overflow-hidden">
       {selectedItem.contentType === "skills" && (
         <SkillContentScreen
-          skillItem={selectedItem}
           onBack={handleBackNavigation}
+          skillItem={selectedItem}
         />
       )}
 
       {selectedItem.contentType === "quizzes" && (
         <QuizContentScreen
-          quizItem={selectedItem}
           onBack={handleBackNavigation}
+          quizItem={selectedItem}
         />
       )}
     </div>

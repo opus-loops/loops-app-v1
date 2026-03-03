@@ -1,3 +1,7 @@
+import { AnimatePresence, motion } from "framer-motion"
+import { useRef, useState } from "react"
+
+import { VoucherSubmissionForm } from "./voucher-submission-form"
 import { useStartCategory } from "@/modules/content-management/features/category-selection/hooks/use-start-category"
 import { Button } from "@/modules/shared/components/ui/button"
 import {
@@ -7,27 +11,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/modules/shared/components/ui/dialog"
-import { AnimatePresence, motion } from "framer-motion"
-import { useRef, useState } from "react"
-import { VoucherSubmissionForm } from "./voucher-submission-form"
 
 type VoucherDialogProps = {
   categoryId: string
-  open?: boolean
+  description?: string
   onOpenChange?: (open: boolean) => void
+  open?: boolean
   showFreeTrial?: boolean
   showTrigger?: boolean
   title?: string
-  description?: string
 }
 export function VoucherDialog({
   categoryId,
-  open: externalOpen,
+  description = "Enter your voucher code to unlock this category and start your learning journey!",
   onOpenChange,
+  open: externalOpen,
   showFreeTrial = true,
   showTrigger = true,
   title = "Unlock Category",
-  description = "Enter your voucher code to unlock this category and start your learning journey!",
 }: VoucherDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -47,7 +48,7 @@ export function VoucherDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog onOpenChange={setOpen} open={open}>
       {showTrigger ? (
         <DialogTrigger asChild ref={triggerRef}>
           <Button className="font-outfit text-loops-light hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none transition-all duration-200">
@@ -58,11 +59,6 @@ export function VoucherDialog({
       <DialogContent className="bg-loops-background border-loops-gray/20 max-w-sm rounded-3xl border p-0 shadow-2xl">
         <AnimatePresence>
           <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.8,
-              y: 20,
-            }}
             animate={{
               opacity: 1,
               scale: 1,
@@ -73,52 +69,57 @@ export function VoucherDialog({
               scale: 0.8,
               y: 20,
             }}
+            initial={{
+              opacity: 0,
+              scale: 0.8,
+              y: 20,
+            }}
             transition={{
-              type: "spring",
-              stiffness: 300,
               damping: 30,
+              stiffness: 300,
+              type: "spring",
             }}
           >
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center px-6 py-6"
               exit={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 10 }}
               transition={{
                 delay: 0.1,
                 duration: 0.3,
                 ease: "easeOut",
               }}
-              className="flex flex-col items-center px-6 py-6"
             >
               {/* Icon */}
               <motion.div
+                animate={{ rotate: 0, scale: 1 }}
                 className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-blue-600"
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                exit={{ scale: 0, rotate: 180 }}
+                exit={{ rotate: 180, scale: 0 }}
+                initial={{ rotate: -180, scale: 0 }}
                 transition={{
-                  delay: 0.2,
-                  type: "spring",
-                  stiffness: 200,
                   damping: 20,
+                  delay: 0.2,
+                  stiffness: 200,
+                  type: "spring",
                 }}
               >
                 <motion.svg
+                  animate={{ opacity: 1 }}
                   className="text-loops-light h-10 w-10"
+                  exit={{ opacity: 0 }}
                   fill="none"
+                  initial={{ opacity: 0 }}
                   stroke="currentColor"
+                  transition={{ delay: 0.4, duration: 0.2 }}
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ delay: 0.4, duration: 0.2 }}
                 >
                   <path
+                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
                   />
                 </motion.svg>
               </motion.div>
@@ -126,9 +127,9 @@ export function VoucherDialog({
               {/* Title */}
               <DialogHeader className="mb-4 text-center">
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0, y: 20 }}
                   transition={{ delay: 0.3, duration: 0.3 }}
                 >
                   <DialogTitle className="text-loops-light text-lg font-bold">
@@ -139,10 +140,10 @@ export function VoucherDialog({
 
               {/* Description */}
               <motion.p
-                className="text-loops-light/80 font-outfit mb-6 text-center text-sm leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                className="text-loops-light/80 font-outfit mb-6 text-center text-sm leading-relaxed"
                 exit={{ opacity: 0, y: -20 }}
+                initial={{ opacity: 0, y: 20 }}
                 transition={{ delay: 0.4, duration: 0.3 }}
               >
                 {description}
@@ -150,10 +151,10 @@ export function VoucherDialog({
 
               {/* Form */}
               <motion.div
-                className="w-full"
-                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
+                className="w-full"
                 exit={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 30 }}
                 transition={{ delay: 0.5, duration: 0.3 }}
               >
                 <VoucherSubmissionForm
@@ -177,8 +178,8 @@ export function VoucherDialog({
                     <Button
                       className="font-outfit text-loops-light border-loops-light/20 w-full rounded-xl border-2 bg-transparent py-6 text-base leading-5 font-semibold capitalize transition-all duration-200 hover:bg-white/5"
                       disabled={isStartingFreeTrial}
-                      type="button"
                       onClick={onStartFreeTrial}
+                      type="button"
                     >
                       {isStartingFreeTrial ? "Starting..." : "Start Free Trial"}
                     </Button>

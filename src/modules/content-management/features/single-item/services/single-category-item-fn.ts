@@ -1,39 +1,41 @@
-import type { getExploreCategoryItemErrorsSchema } from "@/modules/shared/api/explore/category/get-explore-category-item"
-import { getExploreCategoryItemFactory } from "@/modules/shared/api/explore/category/get-explore-category-item"
-import type { getExploreQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
-import { getExploreQuizFactory } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
-import type { getStartedQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-started-quiz"
-import { getStartedQuizFactory } from "@/modules/shared/api/explore/quiz/get-started-quiz"
-import type { getCompletedSkillErrorsSchema } from "@/modules/shared/api/explore/skill/get-completed-skill"
-import { getCompletedSkillFactory } from "@/modules/shared/api/explore/skill/get-completed-skill"
-import type { getExploreSkillErrorsSchema } from "@/modules/shared/api/explore/skill/get-explore-skill"
-import { getExploreSkillFactory } from "@/modules/shared/api/explore/skill/get-explore-skill"
-import type { getExploreSkillContentErrorsSchema } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
-import { getExploreSkillContentFactory } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
-import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { createServerFn } from "@tanstack/react-start"
 import { Cause, Effect, Option } from "effect"
 
+import type { getExploreCategoryItemErrorsSchema } from "@/modules/shared/api/explore/category/get-explore-category-item"
+import type { getExploreQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
+import type { getStartedQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-started-quiz"
+import type { getCompletedSkillErrorsSchema } from "@/modules/shared/api/explore/skill/get-completed-skill"
+import type { getExploreSkillErrorsSchema } from "@/modules/shared/api/explore/skill/get-explore-skill"
+import type { getExploreSkillContentErrorsSchema } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
+import { getExploreCategoryItemFactory } from "@/modules/shared/api/explore/category/get-explore-category-item"
+import { getExploreQuizFactory } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
+import { getStartedQuizFactory } from "@/modules/shared/api/explore/quiz/get-started-quiz"
+import { getCompletedSkillFactory } from "@/modules/shared/api/explore/skill/get-completed-skill"
+import { getExploreSkillFactory } from "@/modules/shared/api/explore/skill/get-explore-skill"
+import { getExploreSkillContentFactory } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
+import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type SingleCategoryItemErrors =
-  | typeof unknownErrorSchema.Type
-  | typeof getExploreCategoryItemErrorsSchema.Type
-  | typeof getExploreSkillErrorsSchema.Type
-  | typeof getExploreQuizErrorsSchema.Type
-  | typeof getCompletedSkillErrorsSchema.Type
-  | typeof getStartedQuizErrorsSchema.Type
-  | typeof getExploreSkillContentErrorsSchema.Type
   | { code: "Unauthorized" }
-
-export type SingleCategoryItemSuccess = {
-  categoryItem: CategoryContentItem
-}
+  | typeof getCompletedSkillErrorsSchema.Type
+  | typeof getExploreCategoryItemErrorsSchema.Type
+  | typeof getExploreQuizErrorsSchema.Type
+  | typeof getExploreSkillContentErrorsSchema.Type
+  | typeof getExploreSkillErrorsSchema.Type
+  | typeof getStartedQuizErrorsSchema.Type
+  | typeof unknownErrorSchema.Type
 
 export type SingleCategoryItemParams = {
   categoryId: string
   itemId: string
+}
+
+export type SingleCategoryItemSuccess = {
+  categoryItem: CategoryContentItem
 }
 
 export type SingleCategoryItemWire =
@@ -132,14 +134,14 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
         }
 
         const skillCategoryItem: CategoryContentItem = {
-          categoryItemId: categoryItem.categoryItemId,
           categoryId: categoryItem.categoryId,
-          itemId: categoryItem.itemId,
-          itemType: "skills" as const,
-          previousCategoryItem: categoryItem.previousCategoryItem,
-          nextCategoryItem: categoryItem.nextCategoryItem,
+          categoryItemId: categoryItem.categoryItemId,
           content: skillExit.value.skill,
           contentType: "skills" as const,
+          itemId: categoryItem.itemId,
+          itemType: "skills" as const,
+          nextCategoryItem: categoryItem.nextCategoryItem,
+          previousCategoryItem: categoryItem.previousCategoryItem,
         }
 
         if (completedSkill) skillCategoryItem["itemProgress"] = completedSkill
@@ -186,14 +188,14 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
             : undefined
 
         const quizCategoryItem: CategoryContentItem = {
-          categoryItemId: categoryItem.categoryItemId,
           categoryId: categoryItem.categoryId,
-          itemId: categoryItem.itemId,
-          itemType: "quizzes" as const,
-          previousCategoryItem: categoryItem.previousCategoryItem,
-          nextCategoryItem: categoryItem.nextCategoryItem,
+          categoryItemId: categoryItem.categoryItemId,
           content: quizExit.value.quiz,
           contentType: "quizzes" as const,
+          itemId: categoryItem.itemId,
+          itemType: "quizzes" as const,
+          nextCategoryItem: categoryItem.nextCategoryItem,
+          previousCategoryItem: categoryItem.previousCategoryItem,
         }
 
         if (startedQuiz) quizCategoryItem["itemProgress"] = startedQuiz
