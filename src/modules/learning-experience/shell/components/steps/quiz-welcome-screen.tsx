@@ -19,7 +19,7 @@ export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
         <img
           alt={t("quiz.doodle_alt")}
           className="h-full w-full"
-          src="/assets/svg/doodle.svg"
+          src="/svg/doodle.svg"
         />
       </div>
 
@@ -32,7 +32,7 @@ export function QuizWelcomeScreen({ quizItem }: QuizWelcomeScreenProps) {
           <img
             alt={t("quiz.mascot_alt")}
             className="h-full w-full object-contain"
-            src="/assets/images/racing-loops.png"
+            src="/images/racing-loops.png"
           />
         </div>
 

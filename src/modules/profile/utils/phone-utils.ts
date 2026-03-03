@@ -1,4 +1,4 @@
-import countryCodesRaw from "../../../../assets/country-codes.json"
+import countryCodesRaw from "@/data/country-codes.json"
 
 export type CountryCodeRaw = {
   code: string

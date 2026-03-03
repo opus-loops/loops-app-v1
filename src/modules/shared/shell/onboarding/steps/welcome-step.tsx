@@ -11,7 +11,7 @@ export function WelcomeStep() {
           <img
             alt="Join our community"
             className="aspect[16/9] w-9/12 max-w-md select-none"
-            src="../../../../../assets/onboarding/3.svg"
+            src="/onboarding/3.svg"
           />
         </div>
 

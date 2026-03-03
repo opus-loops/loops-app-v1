@@ -3,7 +3,7 @@ import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
 import type { User } from "@/modules/shared/domain/entities/user"
-import countriesCitiesData from "../../../../../assets/countries-cities.json"
+import countriesCitiesData from "@/data/countries-cities.json"
 import { useUpdatePreferences } from "../../hooks/use-update-preferences"
 
 import { UserIcon } from "@/modules/shared/components/icons/user"

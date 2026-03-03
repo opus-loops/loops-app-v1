@@ -26,7 +26,7 @@ export function ComingSoonScreen({ children }: { children?: ReactNode }) {
           <img
             alt={t("common.coming_soon")}
             className="h-full w-full object-contain drop-shadow-2xl filter"
-            src="/assets/images/flying-loops.png"
+            src="/images/flying-loops.png"
           />
 
           {/* Decorative elements */}

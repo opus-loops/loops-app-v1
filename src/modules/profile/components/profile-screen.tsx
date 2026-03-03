@@ -2,7 +2,8 @@ import { Link } from "@tanstack/react-router"
 import { Trophy } from "lucide-react"
 import { useMemo } from "react"
 
-import loopsBgUrl from "../../../../assets/images/loops-bg.png"
+const loopsBgUrl = "/images/loops-bg.png"
+
 import type { User } from "@/modules/shared/domain/entities/user"
 
 import { GearIcon } from "@/modules/shared/components/icons/gear"

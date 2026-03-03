@@ -20,15 +20,15 @@ type Slide = {
 const slides: Array<Slide> = [
   {
     id: 1,
-    image: "../../../../assets/onboarding/1.svg",
+    image: "/onboarding/1.svg",
   },
   {
     id: 2,
-    image: "../../../../assets/onboarding/2.svg",
+    image: "/onboarding/2.svg",
   },
   {
     id: 3,
-    image: "../../../../assets/onboarding/3.svg",
+    image: "/onboarding/3.svg",
   },
 ]
 

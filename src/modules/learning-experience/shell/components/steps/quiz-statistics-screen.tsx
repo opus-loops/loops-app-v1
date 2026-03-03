@@ -124,7 +124,7 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
             <img
               alt={t("quiz.winning_mascot_alt")}
               className="h-full w-full object-contain"
-              src="/assets/images/winning-loops.png"
+              src="/images/winning-loops.png"
             />
           </div>
 

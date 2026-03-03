@@ -86,7 +86,7 @@ export function SessionExpiredDialog({
             alt="Crying Loops mascot"
             className="h-[227px] w-[224px] object-contain select-none"
             draggable={false}
-            src="/assets/images/crying-loops.png"
+            src="/images/crying-loops.png"
           />
 
           <div className="flex w-full flex-col gap-4 px-5">

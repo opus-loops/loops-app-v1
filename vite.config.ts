@@ -90,12 +90,12 @@ export default defineConfig({
         icons: [
           {
             sizes: "72x72",
-            src: "./assets/icons/72x72.png",
+            src: "/icons/72x72.png",
             type: "image/png",
           },
           {
             sizes: "128x128",
-            src: "./assets/icons/128x128.png",
+            src: "/icons/128x128.png",
             type: "image/png",
           },
           {

@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next"
 
 import { ExitIcon } from "@/modules/shared/components/icons/exit"
 import { cn } from "@/modules/shared/lib/utils"
-import cryingLoopsUrl from "../../../../assets/images/crying-loops.png"
+
+const cryingLoopsUrl = "/images/crying-loops.png"
 
 type LogoutConfirmDialogProps = {
   onConfirmLogout: () => Promise<void> | void
