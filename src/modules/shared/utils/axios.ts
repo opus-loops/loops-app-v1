@@ -5,16 +5,21 @@ import { refreshAccessToken } from "../api/auth/refresh"
 import {
   deleteSession,
   getSession,
+  getUserTimezone,
   updateTokens,
 } from "../shell/session/session"
 
 export const instanceFactory = async () => {
   const session = await getSession()
+  const userTimezone = getUserTimezone()
 
   if (!session) {
     return axios.create({
       baseURL: baseApiURL,
-      headers: { Authorization: "" },
+      headers: {
+        Authorization: "",
+        "X-User-Timezone": userTimezone ?? "UTC",
+      },
       withCredentials: true,
     })
   }
@@ -29,6 +34,10 @@ export const instanceFactory = async () => {
     return axios.create({
       baseURL: baseApiURL,
       withCredentials: true,
+      headers: {
+        Authorization: "",
+        "X-User-Timezone": userTimezone ?? "UTC",
+      },
     })
   }
 
@@ -41,7 +50,10 @@ export const instanceFactory = async () => {
 
   return axios.create({
     baseURL: baseApiURL,
-    headers: { Authorization: `Bearer ${tokens.accessToken}` },
+    headers: {
+      Authorization: `Bearer ${tokens.accessToken}`,
+      "X-User-Timezone": userTimezone ?? "UTC",
+    },
     withCredentials: true,
   })
 }

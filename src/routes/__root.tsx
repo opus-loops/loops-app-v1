@@ -8,6 +8,7 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
+import { useEffect } from "react"
 import { getI18n, useTranslation } from "react-i18next"
 
 import type { RouterContext } from "@/router"
@@ -20,6 +21,8 @@ import { deletePendingLanguageFn } from "@/modules/shared/shell/first_install/se
 import { getPendingLanguageFn } from "@/modules/shared/shell/first_install/services/get-pending-language-fn"
 import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
 import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
+import { setUserTimezoneFn } from "@/modules/shared/shell/session/set-user-timezone-fn"
+import { useServerFn } from "@tanstack/react-start"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   beforeLoad: async () => {
@@ -44,6 +47,12 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: function RootComponent() {
     const { i18n } = useTranslation()
     const dir = i18n.dir()
+    const setUserTimezone = useServerFn(setUserTimezoneFn)
+
+    useEffect(() => {
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+      if (timezone) void setUserTimezone({ data: { timezone } })
+    }, [setUserTimezone])
 
     return (
       <html dir={dir} lang={i18n.language}>

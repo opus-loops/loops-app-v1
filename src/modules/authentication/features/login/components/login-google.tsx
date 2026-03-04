@@ -150,12 +150,9 @@ export function LoginGoogle() {
   // TODO: handle api response
   const handleCredentialResponse = async (response: CredentialResponse) => {
     setIsLoading(true)
-    try {
-      const googleToken = response.credential
-      await handleGoogleLogin(googleToken)
-    } finally {
-      setIsLoading(false)
-    }
+    const googleToken = response.credential
+    await handleGoogleLogin(googleToken)
+    setIsLoading(false)
   }
 
   const handleGoogleSignIn = () => {

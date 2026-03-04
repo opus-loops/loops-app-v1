@@ -3,6 +3,7 @@ import {
   getCookie,
   setCookie,
 } from "@tanstack/react-start/server"
+
 import { SignJWT, jwtVerify } from "jose"
 
 export type Session = {
@@ -70,4 +71,8 @@ export async function updateTokens({
   }
 
   await createSession(newPayload)
+}
+
+export function getUserTimezone() {
+  return getCookie("user_timezone")
 }

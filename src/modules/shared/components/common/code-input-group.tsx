@@ -108,7 +108,7 @@ export function CodeInputGroup({ length = 5, onChange }: CodeInputGroupProps) {
   )
 
   return (
-    <div className="flex items-center justify-center gap-3">
+    <div className="flex items-center justify-center gap-3" dir="ltr">
       {digits.map((digit, index) => (
         <DigitInput
           autoFocus={index === 0}
