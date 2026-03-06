@@ -19,7 +19,7 @@ export function LoginForm() {
   const form = useForm({
     defaultValues: { password: "", username: "" },
     onSubmit: async ({ value, formApi }) => {
-      if (!formApi.state.canSubmit) return
+      if (!formApi.state.isSubmitting) return
 
       const response = await handleLogin(value.username, value.password)
 

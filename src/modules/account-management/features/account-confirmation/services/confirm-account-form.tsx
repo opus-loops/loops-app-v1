@@ -22,7 +22,7 @@ export function ConfirmAccountForm() {
       confirmationCode: "",
     },
     onSubmit: async ({ value, formApi }) => {
-      if (!formApi.state.canSubmit) return
+      if (!formApi.state.isSubmitting) return
 
       const confirmationCode = parseInt(value.confirmationCode, 10)
       const response = await handleConfirmAccount(confirmationCode)

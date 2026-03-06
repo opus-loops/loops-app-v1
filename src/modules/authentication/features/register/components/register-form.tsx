@@ -27,7 +27,7 @@ export function RegisterForm() {
       username: "",
     },
     onSubmit: async ({ value, formApi }) => {
-      if (!formApi.state.canSubmit) return
+      if (!formApi.state.isSubmitting) return
 
       const phoneNationalNumber = value.phoneNationalNumber
         .trim()
