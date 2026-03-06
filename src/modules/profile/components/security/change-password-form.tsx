@@ -1,8 +1,8 @@
 import { useForm } from "@tanstack/react-form"
 import { useTranslation } from "react-i18next"
 
-import { useUpdatePassword } from "../../hooks/use-update-password"
 import type { User } from "@/modules/shared/domain/entities/user"
+import { useUpdatePassword } from "../../hooks/use-update-password"
 
 import { DangerIcon } from "@/modules/shared/components/icons/danger"
 import { LockIcon } from "@/modules/shared/components/icons/lock"
@@ -173,13 +173,11 @@ export function ChangePasswordForm({ user }: ChangePasswordFormProps) {
           </form.Field>
 
           {/* Submit Button */}
-          <form.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting]}
-          >
-            {([canSubmit, isSubmitting]) => (
+          <form.Subscribe selector={(state) => [state.isSubmitting]}>
+            {([isSubmitting]) => (
               <Button
                 className="bg-loops-cyan hover:bg-loops-cyan/90 font-outfit mt-4 h-14 w-full rounded-xl text-lg font-bold text-white shadow-none disabled:cursor-not-allowed disabled:opacity-50"
-                disabled={!canSubmit}
+                disabled={isSubmitting}
                 type="submit"
               >
                 {isSubmitting ? (

@@ -1,11 +1,11 @@
 import { useForm } from "@tanstack/react-form"
 import { useTranslation } from "react-i18next"
 
-import { useSubmitVoucher } from "../services/use-submit-voucher"
 import { CodeInputGroup } from "@/modules/shared/components/common/code-input-group"
 import { DangerIcon } from "@/modules/shared/components/icons/danger"
 import { Button } from "@/modules/shared/components/ui/button"
 import { useToast } from "@/modules/shared/hooks/use-toast"
+import { useSubmitVoucher } from "../services/use-submit-voucher"
 
 type VoucherSubmissionFormProps = {
   categoryId: string
@@ -82,16 +82,16 @@ export function VoucherSubmissionForm({
         )}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
+      <form.Subscribe selector={(state) => [state.isSubmitting]}>
+        {([isSubmitting]) => (
           <Button
             className="font-outfit text-loops-light hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-6 text-base leading-5 font-semibold capitalize shadow-none transition-all duration-200"
             disabled={isSubmitting}
             type="submit"
           >
-            {isSubmitting ? t("voucher.form.submitting") : t("voucher.form.submit")}
+            {isSubmitting
+              ? t("voucher.form.submitting")
+              : t("voucher.form.submit")}
           </Button>
         )}
       </form.Subscribe>

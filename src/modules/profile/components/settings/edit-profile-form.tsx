@@ -302,13 +302,11 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
         </div>
       </div>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
+      <form.Subscribe selector={(state) => [state.isSubmitting]}>
+        {([isSubmitting]) => (
           <Button
             className="bg-loops-cyan hover:bg-loops-cyan/90 text-loops-light mt-10 h-14 w-full rounded-xl text-lg font-semibold shadow-none disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={!canSubmit}
+            disabled={isSubmitting}
             type="submit"
           >
             {isSubmitting ? t("common.saving") : t("common.save")}

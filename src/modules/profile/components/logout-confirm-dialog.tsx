@@ -19,18 +19,18 @@ export function LogoutConfirmDialog({
   open,
 }: LogoutConfirmDialogProps) {
   const { t } = useTranslation()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleContinue = useCallback(() => {
     onOpenChange(false)
   }, [onOpenChange])
 
   const handleQuit = useCallback(async () => {
-    setIsLoading(true)
+    setIsSubmitting(true)
     try {
       await onConfirmLogout()
     } finally {
-      setIsLoading(false)
+      setIsSubmitting(false)
       onOpenChange(false)
     }
   }, [onConfirmLogout, onOpenChange])
@@ -69,7 +69,7 @@ export function LogoutConfirmDialog({
 
             <button
               className="bg-loops-cyan inline-flex w-full items-center justify-center rounded-lg px-4 py-2 text-[18px] leading-[30px] font-medium text-[#15153a] focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={isLoading}
+              disabled={isSubmitting}
               onClick={handleContinue}
               type="button"
             >
@@ -78,11 +78,11 @@ export function LogoutConfirmDialog({
 
             <button
               className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-[18px] leading-[30px] font-medium text-[#ff383c] focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={isLoading}
+              disabled={isSubmitting}
               onClick={handleQuit}
               type="button"
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <svg
                   className="h-6 w-6 animate-spin text-[#ff383c]"
                   fill="none"

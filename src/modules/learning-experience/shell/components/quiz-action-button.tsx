@@ -10,28 +10,28 @@ type QuizActionButtonProps = {
 }
 
 export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
-  const [canSubmit, setCanSubmit] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const { t } = useTranslation()
   const { initializeQuiz } = useSubQuizNavigation({
     quizItem,
   })
 
   const handleStartQuiz = async () => {
-    if (canSubmit) return
-    setCanSubmit(true)
+    if (isSubmitting) return
+    setIsSubmitting(true)
     await initializeQuiz()
-    setCanSubmit(false)
+    setIsSubmitting(false)
   }
 
   return (
     <Button
       className="font-outfit text-loops-light hover:bg-loops-cyan/90 bg-loops-cyan flex w-full max-w-sm items-center justify-center rounded-xl px-6 py-3 text-lg font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
-      disabled={canSubmit}
+      disabled={isSubmitting}
       onClick={handleStartQuiz}
       type="button"
     >
-      {canSubmit ? t("common.starting") : t("common.start")}
-      {!canSubmit && <ChevronRight className="text-loops-main h-5 w-5" />}
+      {isSubmitting ? t("common.starting") : t("common.start")}
+      {!isSubmitting && <ChevronRight className="text-loops-main h-5 w-5" />}
     </Button>
   )
 }

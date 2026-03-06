@@ -2,13 +2,13 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { useQuizStepper } from "../quiz-stepper"
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
 import { NoteIcon } from "@/modules/shared/components/icons/note"
 import { TimerIcon } from "@/modules/shared/components/icons/timer"
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useContentNavigation } from "@/modules/shared/navigation"
 import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
+import { useQuizStepper } from "../quiz-stepper"
 
 type CelebrationParticle = {
   color: string
@@ -33,7 +33,7 @@ const formatTime = (totalSeconds: number): string => {
 
 export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   const { itemProgress: startedQuiz } = quizItem
-  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isCelebrationActive, setIsCelebrationActive] = useState(true)
   const [isVoucherDialogOpen, setIsVoucherDialogOpen] = useState(false)
   const { t } = useTranslation()
@@ -68,21 +68,21 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   }, [shouldReduceMotion])
 
   const handleNextClick = async () => {
-    setIsLoading(true)
+    setIsSubmitting(true)
 
     // Check if we can navigate to next item
     const canNavigate = canNavigateNext && isNextItemCompleted
 
     if (canNavigate) {
       // Normal navigation - next item is already started
-      setIsLoading(false)
+      setIsSubmitting(false)
       return await navigateToNext()
     }
 
     // Try to start the next item and navigate to it
     const response = await validateAndStartItem()
 
-    setIsLoading(false)
+    setIsSubmitting(false)
 
     // Successfully started next item, now navigate
     if (
@@ -192,10 +192,10 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
           {/* Primary Button */}
           <button
             className="font-outfit text-loops-light w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isLoading}
+            disabled={isSubmitting}
             onClick={handleNextClick}
           >
-            {isLoading ? t("common.loading") : t("quiz.next")}
+            {isSubmitting ? t("common.loading") : t("quiz.next")}
           </button>
 
           {/* Secondary Button */}
