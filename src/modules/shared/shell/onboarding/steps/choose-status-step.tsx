@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { OptionCard } from "../components/option-card"
 import { useOnboardingForm } from "../onboarding-context"
 import { useOnboardingStepper } from "../onboarding-stepper"
@@ -15,7 +16,6 @@ const statusOptions = [
       </div>
     ),
     id: "student" as const,
-    title: "Student",
     variant: "student" as const,
   },
   {
@@ -25,7 +25,6 @@ const statusOptions = [
       </div>
     ),
     id: "professional" as const,
-    title: "Professional",
     variant: "professional" as const,
   },
   {
@@ -35,7 +34,6 @@ const statusOptions = [
       </div>
     ),
     id: "developer" as const,
-    title: "Developer",
     variant: "developer" as const,
   },
   {
@@ -45,12 +43,12 @@ const statusOptions = [
       </div>
     ),
     id: "passionate" as const,
-    title: "Passionate",
     variant: "passionate" as const,
   },
 ]
 
 export function ChooseStatusStep() {
+  const { t } = useTranslation()
   const form = useOnboardingForm()
   const { nextStep } = useOnboardingStepper()
 
@@ -63,10 +61,10 @@ export function ChooseStatusStep() {
       <div className="flex flex-1 flex-col justify-center">
         <div className="mb-8 text-center">
           <h2 className="font-outfit text-loops-light mb-2 text-2xl font-semibold">
-            Choose your status
+            {t("first_install.status.title")}
           </h2>
           <p className="font-outfit mx-auto max-w-sm text-lg leading-8 text-gray-300">
-            Let us know your status so we can customize your learning experience
+            {t("first_install.status.description")}
           </p>
         </div>
 
@@ -80,7 +78,7 @@ export function ChooseStatusStep() {
                     isSelected={field.state.value === option.id}
                     key={option.id}
                     onClick={() => handleStatusSelect(option.id)}
-                    title={option.title}
+                    title={t(`first_install.status.options.${option.id}.title`)}
                     variant={option.variant}
                   />
                 ))}
@@ -94,7 +92,7 @@ export function ChooseStatusStep() {
           onClick={() => nextStep()}
           type="submit"
         >
-          Continue
+          {t("common.continue")}
         </Button>
       </div>
     </div>

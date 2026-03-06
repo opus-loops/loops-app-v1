@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
-import { useGoogleLogin } from "../services/use-google-login"
 import { Button } from "@/modules/shared/components/ui/button"
+import { useGoogleLogin } from "../services/use-google-login"
 
 declare global {
   interface Window {
@@ -117,7 +117,7 @@ interface RevocationResponse {
 export function LoginGoogle() {
   const { t } = useTranslation()
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   const { handleGoogleLogin } = useGoogleLogin()
@@ -147,16 +147,33 @@ export function LoginGoogle() {
     })
   }
 
-  // TODO: handle api response
-  const handleCredentialResponse = async (response: CredentialResponse) => {
-    setIsLoading(true)
-    const googleToken = response.credential
-    await handleGoogleLogin(googleToken)
-    setIsLoading(false)
+  const handleCredentialResponse = async ({
+    credential,
+  }: CredentialResponse) => {
+    if (isSubmitting) return
+
+    setIsSubmitting(true)
+    const response = await handleGoogleLogin(credential)
+
+    if (response._tag === "Failure") {
+      if (response.error.code === "invalid_token")
+        toast.error(t("auth.login.failed"), {
+          description: t("auth.login.invalid_token"),
+        })
+      else if (response.error.code === "invalid_input")
+        toast.error(t("auth.login.failed"), {
+          description: t("auth.login.invalid_input"),
+        })
+      else
+        toast.error(t("auth.login.failed"), {
+          description: t("auth.login.unexpected_error"),
+        })
+    }
+    setIsSubmitting(false)
   }
 
   const handleGoogleSignIn = () => {
-    setIsLoading(true)
+    setIsSubmitting(true)
     window.google.accounts.id.prompt((notification) => {
       if (notification.isNotDisplayed()) {
         const reason = notification.getNotDisplayedReason()
@@ -175,12 +192,12 @@ export function LoginGoogle() {
           toast.error("This domain is not authorized for Google Sign-In.")
         else toast.error("Google Sign-In is not available right now.")
 
-        setIsLoading(false)
+        setIsSubmitting(false)
       } else if (notification.getMomentType() === "skipped") {
-        setIsLoading(false)
+        setIsSubmitting(false)
       } else if (notification.getMomentType() === "dismissed") {
         if (notification.getDismissedReason() !== "credential_returned") {
-          setIsLoading(false)
+          setIsSubmitting(false)
         }
       }
     })
@@ -189,12 +206,12 @@ export function LoginGoogle() {
   return (
     <Button
       className="font-outfit text-loops-text hover:bg-loops-google/80 bg-loops-google w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none disabled:cursor-not-allowed disabled:opacity-50"
-      disabled={!isGoogleLoaded || isLoading}
+      disabled={!isGoogleLoaded || isSubmitting}
       onClick={handleGoogleSignIn}
       ref={buttonRef}
       type="button"
     >
-      {isLoading ? (
+      {isSubmitting ? (
         <svg
           className="text-loops-text h-6 w-6 animate-spin"
           fill="none"

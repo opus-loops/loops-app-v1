@@ -34,20 +34,56 @@
     "welcome": {
       "skip": "Passer",
       "next": "Suivant",
-      "start_now": "Commencer",
+      "start_now": "C'est parti !",
       "slides": {
         "1": {
-          "title": "Bienvenue sur Loop’s",
-          "description": "Plongez dans Loop’s, où apprendre à coder devient une aventure épique"
+          "title": "Bienvenue sur Loops !",
+          "description": "Prépare-toi pour une aventure épique où tu construis, joues et gagnes !"
         },
         "2": {
-          "title": "Explorez notre univers",
-          "description": "Apprenez et progressez en programmation à travers des quêtes passionnantes et des défis stimulants"
+          "title": "Explore l'Univers du Code",
+          "description": "Accomplis des quêtes, résous des énigmes et améliore tes compétences en code."
         },
         "3": {
-          "title": "Rejoignez notre communauté",
-          "description": "Rejoignez notre communauté dynamique de codeurs passionnés"
+          "title": "Rejoins l'Équipe",
+          "description": "Fais partie d'une immense communauté de jeunes codeurs comme toi !"
         }
+      }
+    },
+    "completion": {
+      "title": "Tu es prêt !",
+      "description": "Prépare-toi à explorer, construire et t'amuser !",
+      "button": "C'est parti !",
+      "loading": "Démarrage..."
+    },
+    "goals": {
+      "title": "Choisis ton objectif quotidien",
+      "description": "Choisis un objectif pour booster ton cerveau ! Combien de temps veux-tu jouer ?",
+      "options": {
+        "5min": { "title": "5 min", "subtitle": "Juste pour le fun" },
+        "10min": { "title": "10 min", "subtitle": "Habitude quotidienne" },
+        "15min": { "title": "15 min", "subtitle": "Puissance cérébrale" },
+        "20min": { "title": "20 min", "subtitle": "Maître du code" }
+      }
+    },
+    "levels": {
+      "title": "Choisis ton niveau",
+      "description": "Que connais-tu déjà en code ? On va adapter le fun à ton niveau !",
+      "options": {
+        "beginner": { "title": "Débutant" },
+        "average": { "title": "Explorateur" },
+        "skilled": { "title": "Créateur" },
+        "expert": { "title": "Pro" }
+      }
+    },
+    "status": {
+      "title": "Qui es-tu ?",
+      "description": "Dis-nous en un peu plus sur toi ! Ça nous aide à rendre le jeu plus fun.",
+      "options": {
+        "student": { "title": "Élève" },
+        "professional": { "title": "Inventeur" },
+        "developer": { "title": "Codeur" },
+        "passionate": { "title": "Gamer" }
       }
     }
   },

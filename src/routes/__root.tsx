@@ -15,6 +15,7 @@ import type { RouterContext } from "@/router"
 import appCss from "../styles/app.css?url"
 
 import { updatePreferencesFn } from "@/modules/profile/services/update-preferences-fn"
+import { GlobalErrorComponent } from "@/modules/shared/components/common/global-error-component"
 import { Toaster } from "@/modules/shared/components/ui/sonner"
 import { isAuthenticated } from "@/modules/shared/guards/is-authenticated"
 import { deletePendingLanguageFn } from "@/modules/shared/shell/first_install/services/delete-pending-language-fn"
@@ -25,6 +26,7 @@ import { setUserTimezoneFn } from "@/modules/shared/shell/session/set-user-timez
 import { useServerFn } from "@tanstack/react-start"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  errorComponent: GlobalErrorComponent,
   beforeLoad: async () => {
     const i18n = getI18n()
     const auth = await isAuthenticated()

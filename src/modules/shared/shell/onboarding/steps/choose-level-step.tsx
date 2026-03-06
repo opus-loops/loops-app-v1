@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { OptionCard } from "../components/option-card"
 import { useOnboardingForm } from "../onboarding-context"
 import { useOnboardingStepper } from "../onboarding-stepper"
@@ -15,7 +16,6 @@ const levelOptions = [
       </div>
     ),
     id: "beginner" as const,
-    title: "Beginner",
     variant: "beginner" as const,
   },
   {
@@ -25,7 +25,6 @@ const levelOptions = [
       </div>
     ),
     id: "average" as const,
-    title: "Average",
     variant: "average" as const,
   },
   {
@@ -35,7 +34,6 @@ const levelOptions = [
       </div>
     ),
     id: "skilled" as const,
-    title: "Skilled",
     variant: "skilled" as const,
   },
   {
@@ -45,12 +43,12 @@ const levelOptions = [
       </div>
     ),
     id: "expert" as const,
-    title: "Expert",
     variant: "expert" as const,
   },
 ]
 
 export function ChooseLevelStep() {
+  const { t } = useTranslation()
   const form = useOnboardingForm()
   const { nextStep } = useOnboardingStepper()
 
@@ -67,11 +65,10 @@ export function ChooseLevelStep() {
       <div className="flex flex-1 flex-col justify-center">
         <div className="mb-8 text-center">
           <h2 className="font-outfit text-loops-light mb-2 text-2xl font-semibold">
-            Choose your level
+            {t("first_install.levels.title")}
           </h2>
           <p className="font-outfit mx-auto max-w-sm text-lg leading-6 text-gray-300">
-            Pick your level to ensure a personalized learning journey that
-            matches your current skills.
+            {t("first_install.levels.description")}
           </p>
         </div>
 
@@ -85,7 +82,7 @@ export function ChooseLevelStep() {
                     isSelected={field.state.value === option.id}
                     key={option.id}
                     onClick={() => handleLevelSelect(option.id)}
-                    title={option.title}
+                    title={t(`first_install.levels.options.${option.id}.title`)}
                     variant={option.variant}
                   />
                 ))}
@@ -99,7 +96,7 @@ export function ChooseLevelStep() {
           onClick={() => nextStep()}
           type="submit"
         >
-          Continue
+          {t("common.continue")}
         </Button>
       </div>
     </div>

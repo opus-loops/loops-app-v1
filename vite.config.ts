@@ -1,8 +1,9 @@
-import fs from "node:fs/promises"
+import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite"
 import tailwindcss from "@tailwindcss/vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import viteReact from "@vitejs/plugin-react"
 import { nitro } from "nitro/vite"
+import fs from "node:fs/promises"
 import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 import tsConfigPaths from "vite-tsconfig-paths"
@@ -68,6 +69,11 @@ export default defineConfig({
     }),
     tsConfigPaths(),
     tanstackStart(),
+    sentryTanstackStart({
+      org: "opuslab-edtech-95",
+      project: "loops-app",
+      authToken: process.env.SENTRY_AUTH_TOKEN as string,
+    }),
     VitePWA({
       devOptions: { enabled: true },
       manifest: {
@@ -161,7 +167,4 @@ export default defineConfig({
     tailwindcss(),
     viteReact(),
   ],
-  server: {
-    port: 3001,
-  },
 })

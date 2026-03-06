@@ -18,7 +18,9 @@ export function LoginForm() {
 
   const form = useForm({
     defaultValues: { password: "", username: "" },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value, formApi }) => {
+      if (!formApi.state.canSubmit) return
+
       const response = await handleLogin(value.username, value.password)
 
       if (response._tag === "Failure") {
@@ -47,19 +49,18 @@ export function LoginForm() {
           return
         }
 
-        if (response.error.code === "invalid_credentials") {
+        if (response.error.code === "invalid_credentials")
           toastError(t("auth.login.invalid_credentials"))
-        } else if (
+        else if (
           response.error.code === "user_password_not_set_or_invalid_provider"
-        ) {
+        )
           toastError(t("auth.login.failed"), {
             description: t("auth.login.invalid_provider"),
           })
-        } else {
+        else
           toastError(t("auth.login.failed"), {
             description: t("auth.login.unexpected_error"),
           })
-        }
       }
     },
   })

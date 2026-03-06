@@ -2,7 +2,6 @@ import { useForm } from "@tanstack/react-form"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { useConfirmAccount } from "./use-confirm-account"
 import { RequestConfirmCode } from "@/modules/account-management/features/verification/services/request-confirm-code"
 import { CodeInputGroup } from "@/modules/shared/components/common/code-input-group"
 import { CountdownTimer } from "@/modules/shared/components/common/countdown-timer"
@@ -10,6 +9,7 @@ import { DangerIcon } from "@/modules/shared/components/icons/danger"
 import { Button } from "@/modules/shared/components/ui/button"
 import { Label } from "@/modules/shared/components/ui/label"
 import { useToast } from "@/modules/shared/hooks/use-toast"
+import { useConfirmAccount } from "./use-confirm-account"
 
 export function ConfirmAccountForm() {
   const { handleConfirmAccount } = useConfirmAccount()
@@ -21,7 +21,9 @@ export function ConfirmAccountForm() {
     defaultValues: {
       confirmationCode: "",
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value, formApi }) => {
+      if (!formApi.state.canSubmit) return
+
       const confirmationCode = parseInt(value.confirmationCode, 10)
       const response = await handleConfirmAccount(confirmationCode)
 

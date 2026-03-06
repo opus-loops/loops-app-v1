@@ -26,7 +26,9 @@ export function RegisterForm() {
       phoneNationalNumber: "",
       username: "",
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value, formApi }) => {
+      if (!formApi.state.canSubmit) return
+
       const phoneNationalNumber = value.phoneNationalNumber
         .trim()
         .replace(/[^\d]/g, "")

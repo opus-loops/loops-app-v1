@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 import { Download, Eye, Sparkles, Trophy } from "lucide-react"
 import { Trans, useTranslation } from "react-i18next"
 
-import { Button } from "@/modules/shared/components/ui/button"
+import { buttonVariants } from "@/modules/shared/components/ui/button"
 import {
   Card,
   CardContent,
@@ -11,6 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/modules/shared/components/ui/card"
+import { cn } from "@/modules/shared/lib/utils"
+import { Link } from "@tanstack/react-router"
 
 interface CertificateCardProps {
   categoryName: string
@@ -47,7 +49,7 @@ export function CertificateCard({
           {/* Shimmer effect overlay */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/5 via-white/0 to-transparent opacity-50" />
 
-          <CardHeader className="relative items-center text-center pb-2">
+          <CardHeader className="relative items-center pb-2 text-center">
             <motion.div
               animate={{
                 rotate: [0, -10, 10, -10, 0],
@@ -77,7 +79,7 @@ export function CertificateCard({
             <CardDescription className="font-outfit text-slate-300">
               <Trans
                 components={{
-                  strong: <span className="text-[#FFCE51] font-bold" />,
+                  strong: <span className="font-bold text-[#FFCE51]" />,
                 }}
                 i18nKey="home.certificate.description"
                 values={{ categoryName }}
@@ -101,39 +103,39 @@ export function CertificateCard({
                     </p>
                   </div>
                 </object>
-                
+
                 {/* Overlay on hover/interaction hint */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/10 pointer-events-none" />
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/10" />
               </div>
             </div>
           </CardContent>
 
           <CardFooter className="flex flex-col gap-3 pt-6 pb-8">
             <div className="grid w-full grid-cols-2 gap-3">
-              <Button
-                asChild
-                className="bg-loops-background-secondary text-loops-light hover:bg-loops-background-secondary/80 h-12 border-none font-semibold transition-transform hover:scale-[1.02] active:scale-[0.98]"
-                variant="secondary"
+              <Link
+                className={cn(
+                  buttonVariants({ variant: "secondary" }),
+                  "bg-loops-background-secondary text-loops-light hover:bg-loops-background-secondary/80 h-12 border-none font-semibold transition-transform hover:scale-[1.02] active:scale-[0.98]",
+                )}
+                to={certificate.pdfURL}
+                rel="noreferrer noopener"
+                target="_blank"
               >
-                <a
-                  href={certificate.pdfURL}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                >
-                  <Eye className="mr-2 size-4" />
-                  {t("home.certificate.view_pdf")}
-                </a>
-              </Button>
+                <Eye className="mr-2 size-4" />
+                {t("home.certificate.view_pdf")}
+              </Link>
 
-              <Button
-                asChild
-                className="bg-loops-cyan hover:bg-loops-cyan/90 text-loops-light h-12 border-none font-bold shadow-lg shadow-cyan-500/20 transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              <Link
+                className={cn(
+                  buttonVariants({ variant: "secondary" }),
+                  "bg-loops-background-secondary text-loops-light hover:bg-loops-background-secondary/80 h-12 border-none font-semibold transition-transform hover:scale-[1.02] active:scale-[0.98]",
+                )}
+                download
+                to={certificate.pdfURL}
               >
-                <a download href={certificate.pdfURL}>
-                  <Download className="mr-2 size-4" />
-                  {t("home.certificate.download_pdf")}
-                </a>
-              </Button>
+                <Download className="mr-2 size-4" />
+                {t("home.certificate.download_pdf")}
+              </Link>
             </div>
 
             <p className="font-outfit mt-2 flex items-center gap-2 text-xs font-medium text-slate-400">

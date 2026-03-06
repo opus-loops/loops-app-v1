@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { useRequestConfirm } from "./use-request-confirm"
 import { Button } from "@/modules/shared/components/ui/button"
 import { useToast } from "@/modules/shared/hooks/use-toast"
+import { useRequestConfirm } from "./use-request-confirm"
 
 type RequestConfirmCodeProps = {
   handleCodeExpirationChange: (seconds: number) => void
@@ -12,15 +12,17 @@ type RequestConfirmCodeProps = {
 export function RequestConfirmCode({
   handleCodeExpirationChange,
 }: RequestConfirmCodeProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const { handleRequestConfirm } = useRequestConfirm()
   const { error, success } = useToast()
   const { t } = useTranslation()
 
   const handleResendCode = async () => {
-    setIsLoading(true)
+    if (isSubmitting) return
+
+    setIsSubmitting(true)
     const response = await handleRequestConfirm()
-    setIsLoading(false)
+    setIsSubmitting(false)
 
     if (response._tag === "Success") {
       const remainingSeconds =
@@ -44,11 +46,11 @@ export function RequestConfirmCode({
       </p>
       <Button
         className="font-outfit bg-loops-white text-loops-text hover:bg-loops-white/90 w-full rounded-xl py-7 text-lg leading-5 font-semibold shadow-none"
-        disabled={isLoading}
+        disabled={isSubmitting}
         onClick={handleResendCode}
         type="button"
       >
-        {isLoading
+        {isSubmitting
           ? t("auth.verify.resend_loading")
           : t("auth.verify.resend_button")}
       </Button>

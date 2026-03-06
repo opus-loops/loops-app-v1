@@ -35,20 +35,56 @@
     "welcome": {
       "skip": "Skip",
       "next": "Next",
-      "start_now": "Start now",
+      "start_now": "Let's Go!",
       "slides": {
         "1": {
-          "title": "Welcome to Loop’s",
-          "description": "Dive into Loop’s, where learning to code becomes an epic adventure"
+          "title": "Welcome to Loops!",
+          "description": "Get ready for an epic coding adventure where you build, play, and win!"
         },
         "2": {
-          "title": "Explore our coding universe",
-          "description": "Learn and progress in programming through exciting quests and stimulating challenges"
+          "title": "Explore the Code Universe",
+          "description": "Complete quests, solve puzzles, and level up your coding skills."
         },
         "3": {
-          "title": "Join our community",
-          "description": "Join our vibrant community of passionate coders"
+          "title": "Join the Team",
+          "description": "Become part of a huge community of young coders just like you!"
         }
+      }
+    },
+    "completion": {
+      "title": "You're Ready to Go!",
+      "description": "Get ready to explore, build, and have fun!",
+      "button": "Let's Play!",
+      "loading": "Starting..."
+    },
+    "goals": {
+      "title": "Choose your daily goals",
+      "description": "Pick a daily goal to power up your brain! How much time do you want to play?",
+      "options": {
+        "5min": { "title": "5 min", "subtitle": "Just for Fun" },
+        "10min": { "title": "10 min", "subtitle": "Daily Habit" },
+        "15min": { "title": "15 min", "subtitle": "Brain Power" },
+        "20min": { "title": "20 min", "subtitle": "Code Master" }
+      }
+    },
+    "levels": {
+      "title": "Choose your level",
+      "description": "How much coding do you already know? We'll match the fun to your level!",
+      "options": {
+        "beginner": { "title": "Newbie" },
+        "average": { "title": "Explorer" },
+        "skilled": { "title": "Creator" },
+        "expert": { "title": "Pro" }
+      }
+    },
+    "status": {
+      "title": "Choose your status",
+      "description": "Tell us a bit about you! This helps us make the game more fun.",
+      "options": {
+        "student": { "title": "Student" },
+        "professional": { "title": "Inventor" },
+        "developer": { "title": "Coder" },
+        "passionate": { "title": "Gamer" }
       }
     }
   },

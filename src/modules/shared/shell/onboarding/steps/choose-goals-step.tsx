@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { OptionCard } from "../components/option-card"
 import { useOnboardingForm } from "../onboarding-context"
 import { useOnboardingStepper } from "../onboarding-stepper"
@@ -12,8 +13,6 @@ const goalOptions = [
       </div>
     ),
     id: "5min" as const,
-    subtitle: "Casual",
-    title: "5 min",
     variant: "casual" as const,
   },
   {
@@ -23,8 +22,6 @@ const goalOptions = [
       </div>
     ),
     id: "10min" as const,
-    subtitle: "Medium",
-    title: "10 min",
     variant: "medium" as const,
   },
   {
@@ -34,8 +31,6 @@ const goalOptions = [
       </div>
     ),
     id: "15min" as const,
-    subtitle: "Serious",
-    title: "15 min",
     variant: "serious" as const,
   },
   {
@@ -45,13 +40,12 @@ const goalOptions = [
       </div>
     ),
     id: "20min" as const,
-    subtitle: "Hard",
-    title: "20 min",
     variant: "hard" as const,
   },
 ]
 
 export function ChooseGoalsStep() {
+  const { t } = useTranslation()
   const form = useOnboardingForm()
   const { nextStep } = useOnboardingStepper()
 
@@ -64,11 +58,10 @@ export function ChooseGoalsStep() {
       <div className="flex flex-1 flex-col justify-center">
         <div className="mb-8 text-center">
           <h2 className="font-outfit text-loops-light mb-2 text-2xl font-semibold">
-            Choose your daily goals
+            {t("first_install.goals.title")}
           </h2>
           <p className="font-outfit mx-auto max-w-sm text-lg leading-6 text-gray-300">
-            Tailor your learning experience by selecting the time commitment
-            that suits you best.
+            {t("first_install.goals.description")}
           </p>
         </div>
 
@@ -82,8 +75,8 @@ export function ChooseGoalsStep() {
                     isSelected={field.state.value === option.id}
                     key={option.id}
                     onClick={() => handleGoalSelect(option.id)}
-                    subtitle={option.subtitle}
-                    title={option.title}
+                    subtitle={t(`first_install.goals.options.${option.id}.subtitle`)}
+                    title={t(`first_install.goals.options.${option.id}.title`)}
                     variant={option.variant}
                   />
                 ))}
@@ -97,7 +90,7 @@ export function ChooseGoalsStep() {
           onClick={() => nextStep()}
           type="submit"
         >
-          Continue
+          {t("common.continue")}
         </Button>
       </div>
     </div>

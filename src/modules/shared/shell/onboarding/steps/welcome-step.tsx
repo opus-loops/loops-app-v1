@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next"
 import { useOnboardingForm } from "../onboarding-context"
 import { Button } from "@/modules/shared/components/ui/button"
 
 export function WelcomeStep() {
+  const { t } = useTranslation()
   const form = useOnboardingForm()
 
   return (
@@ -9,7 +11,7 @@ export function WelcomeStep() {
       <div className="flex flex-1 flex-col items-center justify-center text-center">
         <div className="mb-8 flex flex-col items-center">
           <img
-            alt="Join our community"
+            alt={t("first_install.welcome.slides.3.title")}
             className="aspect[16/9] w-9/12 max-w-md select-none"
             src="/onboarding/3.svg"
           />
@@ -17,10 +19,10 @@ export function WelcomeStep() {
 
         <div className="mb-8">
           <h2 className="font-outfit text-loops-light mb-4 text-2xl font-semibold">
-            Welcome to Loop&apos;s
+            {t("first_install.completion.title")}
           </h2>
           <p className="font-outfit text-lg text-gray-300">
-            For a better coding learning
+            {t("first_install.completion.description")}
           </p>
         </div>
 
@@ -41,7 +43,7 @@ export function WelcomeStep() {
                 disabled={!canSubmit}
                 type="submit"
               >
-                {isSubmitting ? "Loading..." : "Get Started"}
+                {isSubmitting ? t("first_install.completion.loading") : t("first_install.completion.button")}
               </Button>
             )}
           </form.Subscribe>

@@ -93,7 +93,7 @@ export function OnboardingStepper({
             )}
             <ProgressBar />
           </div>
-          <div className="h-full flex-1">
+          <div className="flex-1">
             {currentStep === "level" && level}
             {currentStep === "status" && status}
             {currentStep === "goal" && goal}
