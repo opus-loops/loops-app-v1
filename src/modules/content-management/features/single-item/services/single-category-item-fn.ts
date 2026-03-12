@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type { getExploreCategoryItemErrorsSchema } from "@/modules/shared/api/explore/category/get-explore-category-item"
 import type { getExploreQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
@@ -17,6 +17,7 @@ import { getCompletedSkillFactory } from "@/modules/shared/api/explore/skill/get
 import { getExploreSkillFactory } from "@/modules/shared/api/explore/skill/get-explore-skill"
 import { getExploreSkillContentFactory } from "@/modules/shared/api/explore/skill/get-explore-skill-content"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type SingleCategoryItemErrors =
@@ -59,13 +60,8 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
     )
 
     if (categoryItemExit._tag === "Failure") {
-      const failure = Option.getOrElse(
-        Cause.failureOption(categoryItemExit.cause),
-        () => ({
-          code: "UnknownError" as const,
-        }),
-      )
-      return yield* Effect.fail(failure)
+      const failure = handleServerFnFailure(categoryItemExit.cause)
+      return yield* Effect.fail(failure as SingleCategoryItemErrors)
     }
 
     const categoryItem = categoryItemExit.value.categoryItem
@@ -242,13 +238,8 @@ export const singleCategoryItemFn = createServerFn({
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
-        // Fallback if you sometimes throw defects: map to a typed error variant in your union
-        return {
-          code: "UnknownError" as const,
-        }
-      })
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = { _tag: "Failure", error: failure as SingleCategoryItemErrors }
     }
 
     // 3) Return JSON-serializable value (Start will serialize it)

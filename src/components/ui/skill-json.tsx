@@ -42,7 +42,7 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
               alt={metadata.cover_image.alt}
               aria-description={metadata.cover_image.description}
               className="h-auto w-full object-cover"
-              src={coverUrlJson["20"]}
+              src={coverUrlJson["100"]}
               title={metadata.cover_image.title}
             />
           </div>
@@ -119,7 +119,7 @@ function CTAElement({ data }: CTAElementProps) {
           <img
             alt="Mascot"
             className="h-auto w-full object-contain"
-            src={mascotUrlJson["20"] || Object.values(mascotUrlJson)[0]}
+            src={mascotUrlJson["100"] || Object.values(mascotUrlJson)[0]}
           />
         </div>
       )}
@@ -144,7 +144,7 @@ function ImageElement({ data }: ImageElementProps) {
           alt={data.alt}
           aria-description={data.description}
           className="h-auto w-full object-contain"
-          src={imageUrlJson["20"]}
+          src={imageUrlJson["100"]}
           title={data.title}
         />
       ) : (

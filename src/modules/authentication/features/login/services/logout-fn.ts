@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type {
   logoutErrorsSchema,
@@ -12,6 +12,7 @@ import {
   deleteSession,
   getSession,
 } from "@/modules/shared/shell/session/session"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 // --- TYPES ---------------------------------------------------------------
 export type LogoutErrors =
@@ -54,15 +55,8 @@ export const logoutFn = createServerFn({ method: "POST" })
       // Clear server-side session cookie
       deleteSession()
     } else {
-      const failure = Option.getOrElse(
-        Cause.failureOption(exit.cause), //
-        () => {
-          return {
-            code: "UnknownError" as const,
-          }
-        },
-      )
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = { _tag: "Failure", error: failure as LogoutErrors }
     }
 
     return wire

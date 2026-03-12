@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type {
   UpdatePreferencesArgs,
@@ -11,6 +11,7 @@ import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { uploadFileFactory } from "@/modules/shared/api/file/upload-file"
 import { updatePreferencesFactory } from "@/modules/shared/api/profile/update-preferences"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type UpdatePreferencesErrors =
@@ -65,12 +66,7 @@ export const updatePreferencesFn = createServerFn({ method: "POST" })
           avatarURL: uploadExit.value.fileUrl,
         }
       } else {
-        const failure = Option.getOrElse(
-          Cause.failureOption(uploadExit.cause),
-          () => ({
-            code: "UnknownError" as const,
-          }),
-        )
+        const failure = handleServerFnFailure(uploadExit.cause)
         // Map upload errors to UpdatePreferencesErrors or generic error
         // Note: You might want to define specific upload errors in UpdatePreferencesErrors union
         // For now, we return it as part of the failure
@@ -89,18 +85,10 @@ export const updatePreferencesFn = createServerFn({ method: "POST" })
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(
-        Cause.failureOption(exit.cause), //
-        () => {
-          // Fallback if you sometimes throw defects: map to a typed error variant in your union
-          return {
-            code: "UnknownError" as const,
-          }
-        },
-      )
+      const failure = handleServerFnFailure(exit.cause)
       wire = {
         _tag: "Failure",
-        error: failure,
+        error: failure as UpdatePreferencesErrors,
         uploadedAvatarURL: finalPreferences.avatarURL,
       }
     }

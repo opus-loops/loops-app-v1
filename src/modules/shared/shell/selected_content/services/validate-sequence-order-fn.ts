@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type {
   validateSequenceOrderArgsSchema,
@@ -10,6 +10,7 @@ import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 import { validateSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/validate-sequence-order"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 export type ValidateSequenceOrderArgs =
   typeof validateSequenceOrderArgsSchema.Type
@@ -45,24 +46,19 @@ export const validateSequenceOrderFn = createServerFn({
       }
 
     // 1) Run your Effect on the server
-    const validateChoiceQuestion = await validateSequenceOrderFactory()
-    const exit = await Effect.runPromiseExit(validateChoiceQuestion(ctx.data))
+    const validateSequenceOrder = await validateSequenceOrderFactory()
+    const exit = await Effect.runPromiseExit(validateSequenceOrder(ctx.data))
 
     // 2) Map Exit -> plain JSON union (no Schema/Exit/Cause on the wire)
     let wire: ValidateSequenceOrderWire
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(
-        Cause.failureOption(exit.cause), //
-        () => {
-          // Fallback if you sometimes throw defects: map to a typed error variant in your union
-          return {
-            code: "UnknownError" as const,
-          }
-        },
-      )
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = {
+        _tag: "Failure",
+        error: failure as ValidateSequenceOrderErrors,
+      }
     }
 
     // 3) Return JSON-serializable value (Start will serialize it)

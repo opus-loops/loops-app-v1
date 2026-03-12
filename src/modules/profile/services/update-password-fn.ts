@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type {
   updatePasswordErrorsSchema,
@@ -10,6 +10,7 @@ import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 import { updatePasswordFactory } from "@/modules/shared/api/profile/update-password"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
 import { deleteSession } from "@/modules/shared/shell/session/session"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type UpdatePasswordErrors =
@@ -54,13 +55,8 @@ export const updatePasswordFn = createServerFn({ method: "POST" })
       deleteSession()
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
-        // Fallback if you sometimes throw defects: map to a typed error variant in your union
-        return {
-          code: "UnknownError" as const,
-        }
-      })
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = { _tag: "Failure", error: failure as UpdatePasswordErrors }
     }
 
     // 3) Return JSON-serializable value (Start will serialize it)

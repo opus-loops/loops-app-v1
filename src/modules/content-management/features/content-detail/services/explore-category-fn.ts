@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type { getExploreCategoryErrorsSchema } from "@/modules/shared/api/explore/category/get-explore-category"
 import type { getStartedCategoryErrorsSchema } from "@/modules/shared/api/explore/started_category/get-started-category"
@@ -12,6 +12,7 @@ import { getExploreCategoryFactory } from "@/modules/shared/api/explore/category
 import { getCertificateFactory } from "@/modules/shared/api/explore/certificate/get-certificate"
 import { getStartedCategoryFactory } from "@/modules/shared/api/explore/started_category/get-started-category"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 export type CategoryWithStartedCategory = {
   certificate?: Certificate
@@ -55,13 +56,8 @@ const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
     )
 
     if (categoryExit._tag === "Failure") {
-      const failure = Option.getOrElse(
-        Cause.failureOption(categoryExit.cause),
-        () => ({
-          code: "UnknownError" as const,
-        }),
-      )
-      return yield* Effect.fail(failure)
+      const failure = handleServerFnFailure(categoryExit.cause)
+      return yield* Effect.fail(failure as ExploreCategoryErrors)
     }
 
     const { category } = categoryExit.value
@@ -133,13 +129,8 @@ export const exploreCategoryFn = createServerFn({ method: "GET" })
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
-        // Fallback if you sometimes throw defects: map to a typed error variant in your union
-        return {
-          code: "UnknownError" as const,
-        }
-      })
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = { _tag: "Failure", error: failure as ExploreCategoryErrors }
     }
 
     // 3) Return JSON-serializable value (Start will serialize it)

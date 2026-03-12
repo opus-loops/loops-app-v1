@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type {
   completeSkillErrorsSchema,
@@ -9,6 +9,7 @@ import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 import { completeSkillFactory } from "@/modules/shared/api/explore/skill/complete-skill"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type CompleteSkillErrors =
@@ -59,14 +60,8 @@ export const completeSkillFn = createServerFn({
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
-        // Fallback if you sometimes throw defects: map to a typed error variant in your union
-        // Make sure your completeSkillErrorsSchema includes an UnknownError or similar branch.
-        return {
-          code: "UnknownError" as const,
-        }
-      })
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = { _tag: "Failure", error: failure as CompleteSkillErrors }
     }
 
     return wire

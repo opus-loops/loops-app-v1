@@ -1,8 +1,8 @@
 import { ChevronRight } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-import { useSkillStepper } from "../skill-stepper"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import { useSkillStepper } from "../skill-stepper"
 
 type SkillWelcomeScreenProps = {
   skillItem: { contentType: "skills" } & CategoryContentItem
@@ -30,7 +30,7 @@ export function SkillWelcomeScreen({ skillItem }: SkillWelcomeScreenProps) {
               alt={skillItem.content.cover.alt}
               aria-description={skillItem.content.cover.description}
               className="h-56 w-full object-cover"
-              src={skillItem.content.cover.urls?.[20]}
+              src={skillItem.content.cover.urls?.[100]}
               title={skillItem.content.cover.title}
             />
           </div>

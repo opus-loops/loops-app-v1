@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type { getCompletedChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-completed-choice-question"
 import type { getExploreChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"
@@ -18,6 +18,7 @@ import { listExploreSubQuizzesFactory } from "@/modules/shared/api/explore/quiz/
 import { getCompletedSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/get-completed-sequence-order"
 import { getExploreSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/get-explore-sequence-order"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type GetQuizContentErrors =
@@ -198,13 +199,8 @@ const fetchQuizContentEffect = (
     )
 
     if (subQuizzesExit._tag === "Failure") {
-      const failure = Option.getOrElse(
-        Cause.failureOption(subQuizzesExit.cause),
-        () => ({
-          code: "UnknownError" as const,
-        }),
-      )
-      return yield* Effect.fail(failure)
+      const failure = handleServerFnFailure(subQuizzesExit.cause)
+      return yield* Effect.fail(failure as GetQuizContentErrors)
     }
 
     const { subQuizzes } = subQuizzesExit.value
@@ -264,16 +260,8 @@ export const getQuizContentFn = createServerFn({
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(
-        Cause.failureOption(exit.cause), //
-        () => {
-          // Fallback if you sometimes throw defects: map to a typed error variant in your union
-          return {
-            code: "UnknownError" as const,
-          }
-        },
-      )
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = { _tag: "Failure", error: failure as GetQuizContentErrors }
     }
 
     // 3) Return JSON-serializable value (Start will serialize it)

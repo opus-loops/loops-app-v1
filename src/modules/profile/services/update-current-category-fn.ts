@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type { updateCurrentCategoryErrorsSchema } from "@/modules/shared/api/profile/update-current-category"
 import type { successResponseSchema } from "@/modules/shared/domain/types/success-response"
@@ -7,6 +7,7 @@ import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 import { updateCurrentCategoryFactory } from "@/modules/shared/api/profile/update-current-category"
 import { getLoggedUserFactory } from "@/modules/shared/api/users/get-logged-user"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type UpdateCurrentCategoryErrors =
@@ -49,13 +50,8 @@ export const updateCurrentCategoryFn = createServerFn({ method: "POST" })
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
-        // Fallback if you sometimes throw defects: map to a typed error variant in your union
-        return {
-          code: "UnknownError" as const,
-        }
-      })
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = { _tag: "Failure", error: failure as UpdateCurrentCategoryErrors }
     }
 
     // 3) Return JSON-serializable value (Start will serialize it)

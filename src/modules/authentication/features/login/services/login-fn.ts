@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type {
   loginErrorsSchema,
@@ -9,6 +9,7 @@ import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 import { loginFactory } from "@/modules/shared/api/auth/login"
 import { createSession } from "@/modules/shared/shell/session/session"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type LoginErrors =
@@ -52,17 +53,8 @@ export const loginFn = createServerFn({ method: "POST" })
         refreshToken: exit.value.refresh.token,
       })
     } else {
-      const failure = Option.getOrElse(
-        Cause.failureOption(exit.cause), //
-        () => {
-          // Fallback if you sometimes throw defects: map to a typed error variant in your union
-          // Make sure your loginErrorsSchema includes an UnknownError or similar branch.
-          return {
-            code: "UnknownError" as const,
-          }
-        },
-      )
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = { _tag: "Failure", error: failure as LoginErrors }
     }
 
     // 4) Return JSON-serializable value (Start will serialize it)

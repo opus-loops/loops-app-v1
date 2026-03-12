@@ -1,9 +1,10 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option, Schema } from "effect"
+import { Effect, Schema } from "effect"
 
-import { skillContentSchema } from "../../domain/entities/skill-content"
-import type { SkillContent } from "../../domain/entities/skill-content"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 import { unknownErrorSchema } from "@/modules/shared/utils/types"
+import type { SkillContent } from "../../domain/entities/skill-content"
+import { skillContentSchema } from "../../domain/entities/skill-content"
 
 // --- ERROR SCHEMAS -----------------------------------------------------------
 const fetchErrorSchema = Schema.Struct({
@@ -92,13 +93,8 @@ export const fetchContentFn = createServerFn({
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
     } else {
-      const failure = Option.getOrElse(Cause.failureOption(exit.cause), () => {
-        // Fallback if you sometimes throw defects: map to a typed error variant in your union
-        return {
-          code: "UnknownError" as const,
-        } satisfies typeof unknownErrorSchema.Type
-      })
-      wire = { _tag: "Failure", error: failure }
+      const failure = handleServerFnFailure(exit.cause)
+      wire = { _tag: "Failure", error: failure as FetchContentErrors }
     }
 
     // 3) Return JSON-serializable value (Start will serialize it)

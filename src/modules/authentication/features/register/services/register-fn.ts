@@ -6,6 +6,7 @@ import type {
   registerSuccessSchema,
 } from "@/modules/shared/api/users/register"
 import { registerFactory } from "@/modules/shared/api/users/register"
+import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
@@ -49,12 +50,7 @@ export const registerFn = createServerFn({ method: "POST" })
       return { _tag: "Success", value: exit.value } as RegisterWire
     }
 
-    if (exit.cause._tag === "Fail") {
-      return { _tag: "Failure", error: exit.cause.error } as RegisterWire
-    }
+    const failure = handleServerFnFailure(exit.cause)
 
-    return {
-      _tag: "Failure",
-      error: { code: "UnknownError" },
-    } as RegisterWire
+    return { _tag: "Failure", error: failure }
   })
