@@ -131,7 +131,7 @@ export const ChoiceQuestionComponent = forwardRef<
       // Non-validated state
       const isSelected = selectedChoices.includes(index)
       return cn(
-        "flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all",
+        "flex items-center p-4 w-full rounded-lg border-2 cursor-pointer transition-all",
         "bg-slate-800 border-slate-600 text-loops-light hover:border-slate-500",
         isSelected && "border-cyan-400 bg-slate-700",
       )
@@ -143,17 +143,17 @@ export const ChoiceQuestionComponent = forwardRef<
 
       if (isCorrect) {
         return cn(
-          "flex items-center p-4 rounded-lg border-2",
+          "flex items-center p-4 w-full rounded-lg border-2",
           "bg-green-900/30 border-green-500 text-loops-light",
         )
       } else if (wasSelected) {
         return cn(
-          "flex items-center p-4 rounded-lg border-2",
+          "flex items-center p-4 rounded-lg w-full border-2",
           "bg-red-900/30 border-red-500 text-loops-light",
         )
       } else {
         return cn(
-          "flex items-center p-4 rounded-lg border-2",
+          "flex items-center p-4 rounded-lg w-full border-2",
           "bg-slate-800 border-slate-600 text-loops-light opacity-60",
         )
       }
@@ -252,7 +252,7 @@ export const ChoiceQuestionComponent = forwardRef<
   }
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto w-full max-w-2xl">
       {subQuiz.content && (
         <QuestionValidationPopup
           isOpen={isPopupOpen}
@@ -265,15 +265,14 @@ export const ChoiceQuestionComponent = forwardRef<
           variant={popupVariant}
         />
       )}
-      {/* Question Text */}
+
       <div className="mb-8">
         <h2 className="text-loops-light text-xl leading-relaxed font-medium">
           {question.headline[0].content}
         </h2>
       </div>
 
-      {/* Choices */}
-      <div className="space-y-4">
+      <div className="w-full space-y-4">
         {question.choices.map((choice, index) => {
           const choiceText =
             choice.find((c) => c.language === question.defaultLanguage)
