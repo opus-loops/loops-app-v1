@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Effect } from "effect"
+import { Cause, Effect, Option } from "effect"
 
 import type { getExploreSubQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"

@@ -19,30 +19,8 @@ const nitroRawJsonProxySuffix = ".txt"
 export default defineConfig({
   plugins: [
     {
-      enforce: "pre",
-      load: {
-        async handler(id) {
-          if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
-            const filePath = id.slice(nitroRawPrefix.length)
-            const raw = await fs.readFile(filePath, "utf8")
-            return `export default ${JSON.stringify(raw)}`
-          }
-          if (id.startsWith(nitroRawResolvedPrefix) && id.endsWith(".json")) {
-            const filePath = id.slice(nitroRawResolvedPrefix.length)
-            const raw = await fs.readFile(filePath, "utf8")
-            return `export default ${JSON.stringify(raw)}`
-          }
-          if (!id.startsWith(nitroRawJsonProxyPrefix)) return null
-          const filePathWithSuffix = id.slice(nitroRawJsonProxyPrefix.length)
-          const filePath = filePathWithSuffix.endsWith(nitroRawJsonProxySuffix)
-            ? filePathWithSuffix.slice(0, -nitroRawJsonProxySuffix.length)
-            : filePathWithSuffix
-          const raw = await fs.readFile(filePath, "utf8")
-          return `export default ${JSON.stringify(raw)}`
-        },
-        order: "pre",
-      },
       name: "nitro-raw-json-proxy",
+      enforce: "pre",
       resolveId: {
         handler(id) {
           if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
@@ -50,17 +28,46 @@ export default defineConfig({
               nitroRawPrefix.length,
             )}${nitroRawJsonProxySuffix}`
           }
+
           if (id.startsWith(nitroRawResolvedPrefix) && id.endsWith(".json")) {
             return `${nitroRawJsonProxyPrefix}${id.slice(
               nitroRawResolvedPrefix.length,
             )}${nitroRawJsonProxySuffix}`
           }
+
           return null
+        },
+        order: "pre",
+      },
+      load: {
+        async handler(id) {
+          if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
+            const filePath = id.slice(nitroRawPrefix.length)
+            const raw = await fs.readFile(filePath, "utf8")
+            return `export default ${JSON.stringify(raw)}`
+          }
+
+          if (id.startsWith(nitroRawResolvedPrefix) && id.endsWith(".json")) {
+            const filePath = id.slice(nitroRawResolvedPrefix.length)
+            const raw = await fs.readFile(filePath, "utf8")
+            return `export default ${JSON.stringify(raw)}`
+          }
+
+          if (!id.startsWith(nitroRawJsonProxyPrefix)) return null
+
+          const filePathWithSuffix = id.slice(nitroRawJsonProxyPrefix.length)
+          const filePath = filePathWithSuffix.endsWith(nitroRawJsonProxySuffix)
+            ? filePathWithSuffix.slice(0, -nitroRawJsonProxySuffix.length)
+            : filePathWithSuffix
+
+          const raw = await fs.readFile(filePath, "utf8")
+          return `export default ${JSON.stringify(raw)}`
         },
         order: "pre",
       },
     },
     nitro({
+      sourcemap: true,
       experimental: {
         vite: {
           assetsImport: false,
@@ -73,23 +80,30 @@ export default defineConfig({
       org: "opuslab-edtech-95",
       project: "loops-app",
       authToken: process.env.SENTRY_AUTH_TOKEN as string,
+      telemetry: false,
+      sourcemaps: {
+        assets: ["./.output/**/*", "./dist/**/*"],
+      },
     }),
     VitePWA({
-      devOptions: { enabled: true },
+      devOptions: {
+        enabled: true,
+      },
+      registerType: "autoUpdate",
       manifest: {
         background_color: "#000016",
         categories: ["education"],
         description: `
           Loops – Learn Coding Through Play! 🧠🎮
           Loops is the ultimate app to help kids discover the world of coding in a fun, engaging, and competitive way! Designed specifically for young learners, Loops teaches essential digital skills through interactive lessons, playful challenges, and gamified experiences.
-        
+
           🧩 Why Kids Love Loops:
           - 🚀 Learn to code step by step through games and interactive activities
           - 🏆 Unlock badges and rewards as you progress
           - ⚔️ Join competitive quiz rooms to test your skills against friends
           - 🎮 Gamified lessons that turn learning into an adventure
           - 👾 Fun characters and kid-friendly design for ages 9–16
-        
+
           💡 Whether your child is just starting out or looking to level up their tech skills, Loops makes learning coding easy, exciting, and effective!
         `,
         display: "fullscreen",
@@ -106,65 +120,69 @@ export default defineConfig({
           },
           {
             sizes: "144x144",
-            src: "./assets/icons/144x144.png",
+            src: "/icons/144x144.png",
             type: "image/png",
           },
           {
             sizes: "192x192",
-            src: "./assets/icons/192x192.png",
-            type: "image/pnsg",
+            src: "/icons/192x192.png",
+            type: "image/png",
           },
           {
             sizes: "512x512",
-            src: "./assets/icons/512x512.png",
+            src: "/icons/512x512.png",
             type: "image/png",
           },
         ],
-        id: "https://loops.tn?version=2",
+        id: "https://app.loops.tn",
         name: "Loops - Digital skills learning app for kids",
         orientation: "portrait",
         screenshots: [
           {
             sizes: "1080x1920",
-            src: "./assets/screenshots/1.jpg",
-            type: "image/jpg",
+            src: "/screenshots/1.jpg",
+            type: "image/jpeg",
           },
           {
             sizes: "1080x1920",
-            src: "./assets/screenshots/2.jpg",
-            type: "image/jpg",
+            src: "/screenshots/2.jpg",
+            type: "image/jpeg",
           },
           {
             sizes: "1080x1920",
-            src: "./assets/screenshots/3.jpg",
-            type: "image/jpg",
+            src: "/screenshots/3.jpg",
+            type: "image/jpeg",
           },
           {
             sizes: "1080x1920",
-            src: "./assets/screenshots/4.jpg",
-            type: "image/jpg",
+            src: "/screenshots/4.jpg",
+            type: "image/jpeg",
           },
           {
             sizes: "1080x1920",
-            src: "./assets/screenshots/5.jpg",
-            type: "image/jpg",
+            src: "/screenshots/5.jpg",
+            type: "image/jpeg",
           },
           {
             sizes: "1080x1920",
-            src: "./assets/screenshots/6.jpg",
-            type: "image/jpg",
+            src: "/screenshots/6.jpg",
+            type: "image/jpeg",
           },
         ],
         short_name: "Loops",
         start_url: "/",
         theme_color: "#31BCE6",
       },
-      registerType: "autoUpdate",
       workbox: {
+        globDirectory: ".output/public",
         globIgnores: ["**/country-codes.json"],
       },
     }),
     tailwindcss(),
     viteReact(),
   ],
+  build: {
+    sourcemap: true,
+    emptyOutDir: true,
+  },
 })

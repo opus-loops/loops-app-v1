@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Effect } from "effect"
+import { Cause, Effect, Option } from "effect"
 
 import type { getCompletedChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-completed-choice-question"
 import type { getExploreChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"

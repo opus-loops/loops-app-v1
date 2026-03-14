@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Effect } from "effect"
+import { Cause, Effect, Option } from "effect"
 
 import type { updateCurrentCategoryErrorsSchema } from "@/modules/shared/api/profile/update-current-category"
 import type { successResponseSchema } from "@/modules/shared/domain/types/success-response"
