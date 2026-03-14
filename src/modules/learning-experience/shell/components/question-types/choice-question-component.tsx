@@ -15,7 +15,7 @@ import { cn } from "@/modules/shared/lib/utils"
 import { useValidateChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-validate-choice-question"
 
 export type SubQuizRef = {
-  skip: () => void
+  skip: (isTimeUp?: boolean) => void
   validate: (timeLeft: number) => Promise<void>
 }
 
@@ -34,6 +34,7 @@ export const ChoiceQuestionComponent = forwardRef<
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedChoices, setSelectedChoices] = useState<Array<number>>([])
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [isTimeUpSkip, setIsTimeUpSkip] = useState(false)
   const pendingValidationQuestionIdRef = useRef<null | string>(null)
 
   const question = subQuiz.content
@@ -43,6 +44,7 @@ export const ChoiceQuestionComponent = forwardRef<
 
   useEffect(() => {
     setIsPopupOpen(false)
+    setIsTimeUpSkip(false)
     setSelectedChoices([])
     pendingValidationQuestionIdRef.current = null
   }, [subQuiz.questionId])
@@ -56,9 +58,11 @@ export const ChoiceQuestionComponent = forwardRef<
   }, [isValidated, subQuiz.questionId])
 
   useImperativeHandle(ref, () => ({
-    skip: async () => {
+    skip: async (isTimeUp = false) => {
       if (isSubmitting || isValidated) return
       setIsSubmitting(true)
+      setIsTimeUpSkip(isTimeUp)
+      pendingValidationQuestionIdRef.current = subQuiz.questionId
       await handleValidateChoiceQuestion({
         categoryId,
         questionId: subQuiz.questionId,
@@ -116,7 +120,11 @@ export const ChoiceQuestionComponent = forwardRef<
     return true
   })()
 
-  const popupVariant = isCorrectAnswer ? "correct" : "incorrect"
+  const popupVariant = isTimeUpSkip
+    ? "time-up"
+    : isCorrectAnswer
+      ? "correct"
+      : "incorrect"
 
   const handleChoiceSelect = (index: number) => {
     if (isValidated) return
@@ -149,7 +157,7 @@ export const ChoiceQuestionComponent = forwardRef<
           "flex items-center p-4 w-full rounded-lg border-2 transition-colors",
           wasSelected
             ? "bg-green-900/40 border-green-500 text-green-400"
-            : "bg-green-900/20 border-green-700 text-green-500 opacity-90",
+            : "bg-yellow-900/20 border-yellow-700 text-yellow-500 opacity-90",
         )
       } else if (wasSelected) {
         return cn(
@@ -201,7 +209,14 @@ export const ChoiceQuestionComponent = forwardRef<
       const wasSelected = completedQuestion.userAnswer?.includes(index) ?? false
 
       if (isCorrect) {
-        return <CheckCircle2 className="mr-3 h-6 w-6 shrink-0 text-green-500" />
+        return (
+          <CheckCircle2
+            className={cn(
+              "mr-3 h-6 w-6 shrink-0",
+              wasSelected ? "text-green-500" : "text-yellow-500",
+            )}
+          />
+        )
       } else if (wasSelected) {
         return <XCircle className="mr-3 h-6 w-6 shrink-0 text-red-500" />
       } else {
@@ -224,9 +239,11 @@ export const ChoiceQuestionComponent = forwardRef<
           isOpen={isPopupOpen}
           onOpenChange={setIsPopupOpen}
           subtitle={
-            popupVariant === "correct"
-              ? subQuiz.content.congratulatoryMessage[0].content
-              : subQuiz.content.consolidationMessage[0].content
+            popupVariant === "time-up"
+              ? t("quiz.time_up_message")
+              : popupVariant === "correct"
+                ? subQuiz.content.congratulatoryMessage[0].content
+                : subQuiz.content.consolidationMessage[0].content
           }
           variant={popupVariant}
         />
@@ -272,7 +289,7 @@ export const ChoiceQuestionComponent = forwardRef<
                     </span>
                   )}
                   {isMissedOption && (
-                    <span className="text-[10px] font-bold tracking-wider text-green-400 uppercase opacity-80">
+                    <span className="text-[10px] font-bold tracking-wider text-yellow-500 uppercase opacity-80">
                       {t("quiz.validation.correct_answer")}
                     </span>
                   )}

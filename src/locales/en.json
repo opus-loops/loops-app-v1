@@ -336,8 +336,10 @@
       "should_be": "Should be:",
       "well_chosen": "Well chosen!",
       "correct_answer": "Correct answer",
-      "incorrect": "Incorrect"
+      "incorrect": "Incorrect",
+      "time_up": "Time's up!"
     },
+    "time_up_message": "You didn't answer in time, so this question was skipped.",
     "congrats": "Congrats !",
     "passed_message": "You passed the first Quiz",
     "next": "Next",

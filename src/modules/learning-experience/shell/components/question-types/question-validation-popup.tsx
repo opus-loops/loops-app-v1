@@ -1,6 +1,7 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { AnimatePresence, motion } from "framer-motion"
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/modules/shared/components/ui/button"
 import { cn } from "@/modules/shared/lib/utils"
@@ -10,7 +11,7 @@ type QuestionValidationPopupProps = {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
   subtitle?: string
-  variant: "correct" | "incorrect"
+  variant: "correct" | "incorrect" | "time-up"
 }
 
 // TODO: use shadcn component instead of custom radix dialog
@@ -20,10 +21,16 @@ export function QuestionValidationPopup({
   subtitle,
   variant,
 }: QuestionValidationPopupProps) {
+  const { t } = useTranslation()
   const isCorrect = variant === "correct"
+  const isTimeUp = variant === "time-up"
 
-  const accentColor = isCorrect ? "#34c759" : "#ff383c"
-  const dialogTitle = isCorrect ? "Excellent !" : "Not this time..."
+  const accentColor = isCorrect ? "#34c759" : isTimeUp ? "#ff9500" : "#ff383c"
+  const dialogTitle = isCorrect
+    ? "Excellent !"
+    : isTimeUp
+      ? t("quiz.validation.time_up")
+      : "Not this time..."
 
   const mascotSrc = useMemo(() => {
     const mascotPool = isCorrect ? mascotLinks.happyLoo : mascotLinks.sadLoo

@@ -49,7 +49,7 @@ export function QuizHeader({
     if (!isTimerRunning || timeLeft <= 0) {
       if (timeLeft === 0 && isTimerRunning) {
         setIsTimerRunning(false)
-        subQuizRef.current?.skip()
+        subQuizRef.current?.skip(true)
       }
       return
     }
@@ -74,7 +74,7 @@ export function QuizHeader({
 
   const subtitle =
     selectedSubQuiz?.questionType === "choiceQuestions"
-      ? selectedSubQuiz?.content?.isMultiple
+      ? selectedSubQuiz.content?.isMultiple
         ? t("quiz.multiple_answers")
         : t("quiz.single_answer")
       : t("quiz.arrange_items")

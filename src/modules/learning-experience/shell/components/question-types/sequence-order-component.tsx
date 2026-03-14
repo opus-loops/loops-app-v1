@@ -16,7 +16,7 @@ import { cn } from "@/modules/shared/lib/utils"
 import { useValidateSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-validate-sequence-order"
 
 export type SubQuizRef = {
-  skip: () => void
+  skip: (isTimeUp?: boolean) => void
   validate: (timeLeft: number) => Promise<void>
 }
 
@@ -34,6 +34,7 @@ export const SequenceOrderComponent = forwardRef<
   const { handleValidateSequenceOrder } = useValidateSequenceOrder()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [isTimeUpSkip, setIsTimeUpSkip] = useState(false)
   const pendingValidationQuestionIdRef = useRef<null | string>(null)
 
   const completedQuestion = subQuiz.completedQuestion
@@ -46,6 +47,7 @@ export const SequenceOrderComponent = forwardRef<
 
   useEffect(() => {
     setIsPopupOpen(false)
+    setIsTimeUpSkip(false)
     setUserOrder(subQuiz.content?.sequence.map((_, index) => index) || [])
     pendingValidationQuestionIdRef.current = null
   }, [subQuiz.questionId])
@@ -59,10 +61,12 @@ export const SequenceOrderComponent = forwardRef<
   }, [isValidated, subQuiz.questionId])
 
   useImperativeHandle(ref, () => ({
-    skip: async () => {
+    skip: async (isTimeUp = false) => {
       if (isSubmitting || isValidated) return
 
       setIsSubmitting(true)
+      setIsTimeUpSkip(isTimeUp)
+      pendingValidationQuestionIdRef.current = subQuiz.questionId
 
       await handleValidateSequenceOrder({
         categoryId,
@@ -122,16 +126,18 @@ export const SequenceOrderComponent = forwardRef<
     }
   }
 
-  const popupVariant = (() => {
-    const idealOrder = subQuiz.content?.idealOrder
-    const userAnswer = completedQuestion?.userAnswer
-    if (!idealOrder || !userAnswer) return "incorrect"
-    if (idealOrder.length !== userAnswer.length) return "incorrect"
-    for (let i = 0; i < idealOrder.length; i++) {
-      if (idealOrder[i] !== userAnswer[i]) return "incorrect"
-    }
-    return "correct"
-  })()
+  const popupVariant = isTimeUpSkip
+    ? "time-up"
+    : (() => {
+        const idealOrder = subQuiz.content?.idealOrder
+        const userAnswer = completedQuestion?.userAnswer
+        if (!idealOrder || !userAnswer) return "incorrect"
+        if (idealOrder.length !== userAnswer.length) return "incorrect"
+        for (let i = 0; i < idealOrder.length; i++) {
+          if (idealOrder[i] !== userAnswer[i]) return "incorrect"
+        }
+        return "correct"
+      })()
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -140,9 +146,11 @@ export const SequenceOrderComponent = forwardRef<
           isOpen={isPopupOpen}
           onOpenChange={setIsPopupOpen}
           subtitle={
-            popupVariant === "correct"
-              ? subQuiz.content.congratulatoryMessage[0].content
-              : subQuiz.content.consolidationMessage[0].content
+            popupVariant === "time-up"
+              ? t("quiz.time_up_message")
+              : popupVariant === "correct"
+                ? subQuiz.content.congratulatoryMessage[0].content
+                : subQuiz.content.consolidationMessage[0].content
           }
           variant={popupVariant}
         />
