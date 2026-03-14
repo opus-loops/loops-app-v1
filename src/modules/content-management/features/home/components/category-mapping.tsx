@@ -1,8 +1,10 @@
 import { useMemo } from "react"
 
-import { CategoryItemCircle } from "./category-item-circle"
-import type { CategoryMappingProps } from "./types"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
+import type { CategoryMappingProps } from "./types"
+
+import { CategoryItemCircle } from "./category-item-circle"
 
 export function CategoryMapping({
   categoryId,

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 
 import { SpaceBackground } from "@/modules/shared/components/common/space-background"
 import { Button } from "@/modules/shared/components/ui/button"
+
 import { OptionCard } from "../onboarding/components/option-card"
 import { PENDING_LANGUAGE_KEY } from "./constants"
 import { setPendingLanguageFn } from "./services/set-pending-language-fn"

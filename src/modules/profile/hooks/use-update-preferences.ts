@@ -2,9 +2,11 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
-import { updatePreferencesFn } from "../services/update-preferences-fn"
-import type { UpdatePreferencesFnArgs } from "../services/update-preferences-fn"
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+
+import type { UpdatePreferencesFnArgs } from "../services/update-preferences-fn"
+
+import { updatePreferencesFn } from "../services/update-preferences-fn"
 
 export function useUpdatePreferences() {
   const runUpdatePreferences = useServerFn(updatePreferencesFn)

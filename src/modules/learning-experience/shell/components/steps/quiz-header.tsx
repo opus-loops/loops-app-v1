@@ -1,11 +1,13 @@
 import { useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
-import type { SubQuizRef } from "../question-types/sequence-order-component"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import type { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+
 import { TimerIcon } from "@/modules/shared/components/icons/timer"
+
+import type { SubQuizRef } from "../question-types/sequence-order-component"
 
 type QuizHeaderProps = {
   isTimerRunning: boolean

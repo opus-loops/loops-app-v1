@@ -1,7 +1,8 @@
+import type { ReactNode } from "react"
+
 import { Link, useLocation } from "@tanstack/react-router"
 
 import { cn } from "../../lib/utils"
-import type { ReactNode } from "react"
 
 interface TabItemProps {
   href: string

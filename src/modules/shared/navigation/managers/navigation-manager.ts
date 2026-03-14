@@ -1,15 +1,16 @@
 import { Effect } from "effect"
 
-import { QuizNavigationManager } from "./quiz-navigation-manager"
-import { SkillNavigationManager } from "./skill-navigation-manager"
-import type { IQuizNavigationManager } from "./quiz-navigation-manager"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 
 import type {
   INavigationManager,
   NavigationError,
 } from "../types/navigation-types"
+import type { IQuizNavigationManager } from "./quiz-navigation-manager"
 import type { ISkillNavigationManager } from "./skill-navigation-manager"
+
+import { QuizNavigationManager } from "./quiz-navigation-manager"
+import { SkillNavigationManager } from "./skill-navigation-manager"
 
 /**
  * Main navigation manager that delegates to content-specific managers.

@@ -1,13 +1,15 @@
 import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
 
-import { ProgressCircle } from "./progress-circle"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import type { ProgressState } from "@/modules/shared/utils/types"
+
 import { DifficultyTag } from "@/modules/shared/components/common/difficulty-tag"
 import { ClockIcon } from "@/modules/shared/components/icons/clock"
 import { cn } from "@/modules/shared/lib/utils"
 import { formatTimeDuration } from "@/modules/shared/utils/format-duration"
+
+import { ProgressCircle } from "./progress-circle"
 
 type QuizCardProps = {
   index: number
@@ -61,7 +63,8 @@ export function QuizCard({
 
             <div className="bg-loops-label-xp rounded px-2 py-1">
               <span className="font-outfit text-loops-light text-xs font-medium">
-                {item.contentType === "quizzes" && item.content.score}{t("category_details.xp")}
+                {item.contentType === "quizzes" && item.content.score}
+                {t("category_details.xp")}
               </span>
             </div>
 

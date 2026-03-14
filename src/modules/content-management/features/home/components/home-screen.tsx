@@ -3,14 +3,14 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
 import { useTranslation } from "react-i18next"
 
+import { SpaceBackground } from "@/modules/shared/components/common/space-background"
+import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
+import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
+
 import { useExploreCategory } from "../../content-detail/services/use-explore-category"
 import { useCategoryContent } from "../../content-list/services/use-category-content"
 import { CategoryMapping } from "./category-mapping"
 import { CertificateCard } from "./certificate-card"
-
-import { SpaceBackground } from "@/modules/shared/components/common/space-background"
-import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
-import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
 
 type HomeScreenProps = { categoryId: string }
 export function HomeScreen({ categoryId }: HomeScreenProps) {

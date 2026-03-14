@@ -2,9 +2,10 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
+import type { StartSkillWire } from "./start-skill-fn"
+
 import { useGlobalError } from "../../session/global-error-provider"
 import { startSkillFn } from "./start-skill-fn"
-import type { StartSkillWire } from "./start-skill-fn"
 
 export function useStartSkill() {
   const startSkillServer = useServerFn(startSkillFn)

@@ -33,11 +33,11 @@ export const instanceFactory = async () => {
 
     return axios.create({
       baseURL: baseApiURL,
-      withCredentials: true,
       headers: {
         Authorization: "",
         "X-User-Timezone": userTimezone ?? "UTC",
       },
+      withCredentials: true,
     })
   }
 

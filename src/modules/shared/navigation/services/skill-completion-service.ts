@@ -1,7 +1,7 @@
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import type { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
 
 import type { NavigationStartWire } from "../types/navigation-types"
-import type { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
 
 /**
  * Interface for service handling skill completion logic.

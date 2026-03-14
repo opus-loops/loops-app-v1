@@ -17,28 +17,17 @@ const nitroRawJsonProxyPrefix = "\0nitro-raw-json:"
 const nitroRawJsonProxySuffix = ".txt"
 
 export default defineConfig({
+  build: {
+    emptyOutDir: true,
+    minify: "esbuild",
+    rollupOptions: {
+      maxParallelFileOps: 10,
+    },
+    sourcemap: true,
+  },
   plugins: [
     {
-      name: "nitro-raw-json-proxy",
       enforce: "pre",
-      resolveId: {
-        handler(id) {
-          if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
-            return `${nitroRawJsonProxyPrefix}${id.slice(
-              nitroRawPrefix.length,
-            )}${nitroRawJsonProxySuffix}`
-          }
-
-          if (id.startsWith(nitroRawResolvedPrefix) && id.endsWith(".json")) {
-            return `${nitroRawJsonProxyPrefix}${id.slice(
-              nitroRawResolvedPrefix.length,
-            )}${nitroRawJsonProxySuffix}`
-          }
-
-          return null
-        },
-        order: "pre",
-      },
       load: {
         async handler(id) {
           if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
@@ -65,31 +54,49 @@ export default defineConfig({
         },
         order: "pre",
       },
+      name: "nitro-raw-json-proxy",
+      resolveId: {
+        handler(id) {
+          if (id.startsWith(nitroRawPrefix) && id.endsWith(".json")) {
+            return `${nitroRawJsonProxyPrefix}${id.slice(
+              nitroRawPrefix.length,
+            )}${nitroRawJsonProxySuffix}`
+          }
+
+          if (id.startsWith(nitroRawResolvedPrefix) && id.endsWith(".json")) {
+            return `${nitroRawJsonProxyPrefix}${id.slice(
+              nitroRawResolvedPrefix.length,
+            )}${nitroRawJsonProxySuffix}`
+          }
+
+          return null
+        },
+        order: "pre",
+      },
     },
     nitro({
-      sourcemap: true,
       experimental: {
         vite: {
           assetsImport: false,
         },
       },
+      sourcemap: true,
     }),
     tsConfigPaths(),
     tanstackStart(),
     sentryTanstackStart({
+      authToken: process.env.SENTRY_AUTH_TOKEN as string,
       org: "opuslab-edtech-95",
       project: "loops-app",
-      authToken: process.env.SENTRY_AUTH_TOKEN as string,
-      telemetry: false,
       sourcemaps: {
         assets: ["./.output/**/*", "./dist/**/*"],
       },
+      telemetry: false,
     }),
     VitePWA({
       devOptions: {
         enabled: true,
       },
-      registerType: "autoUpdate",
       manifest: {
         background_color: "#000016",
         categories: ["education"],
@@ -173,6 +180,7 @@ export default defineConfig({
         start_url: "/",
         theme_color: "#31BCE6",
       },
+      registerType: "autoUpdate",
       workbox: {
         globDirectory: ".output/public",
         globIgnores: ["**/country-codes.json"],
@@ -181,12 +189,4 @@ export default defineConfig({
     tailwindcss(),
     viteReact(),
   ],
-  build: {
-    sourcemap: true,
-    emptyOutDir: true,
-    minify: "esbuild",
-    rollupOptions: {
-      maxParallelFileOps: 10,
-    },
-  },
 })

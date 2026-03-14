@@ -1,14 +1,16 @@
 import { Suspense } from "react"
 
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+import type { SkillContent } from "@/modules/shared/domain/entities/skill-content"
+
+import { ContentSkeleton } from "@/components/ui/content-skeleton"
+import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
+import { BackButton } from "@/modules/shared/shell/category_selection/components/back-button"
+
 import { SkillActionButton } from "./skill-action-button"
 import { SkillContentRenderer } from "./skill-content-renderer"
 import { SkillStepper } from "./skill-stepper"
 import { SkillWelcomeScreen } from "./steps/skill-welcome-screen"
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import type { SkillContent } from "@/modules/shared/domain/entities/skill-content"
-import { ContentSkeleton } from "@/components/ui/content-skeleton"
-import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
-import { BackButton } from "@/modules/shared/shell/category_selection/components/back-button"
 
 type SkillContentScreenProps = {
   onBack: () => void

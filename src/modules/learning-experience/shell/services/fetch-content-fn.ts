@@ -3,7 +3,9 @@ import { Effect, Schema } from "effect"
 
 import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
 import { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import type { SkillContent } from "../../domain/entities/skill-content"
+
 import { skillContentSchema } from "../../domain/entities/skill-content"
 
 // --- ERROR SCHEMAS -----------------------------------------------------------

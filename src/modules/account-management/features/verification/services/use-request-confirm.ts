@@ -1,9 +1,11 @@
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
-import { requestConfirmFn } from "./request-confirm-fn"
-import type { RequestConfirmWire } from "./request-confirm-fn"
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+
+import type { RequestConfirmWire } from "./request-confirm-fn"
+
+import { requestConfirmFn } from "./request-confirm-fn"
 
 // src/features/request_confirm/use-request-confirm.ts
 

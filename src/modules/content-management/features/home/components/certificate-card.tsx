@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router"
 import { motion } from "framer-motion"
 import { Download, Eye, Sparkles, Trophy } from "lucide-react"
 import { Trans, useTranslation } from "react-i18next"
@@ -12,7 +13,6 @@ import {
   CardTitle,
 } from "@/modules/shared/components/ui/card"
 import { cn } from "@/modules/shared/lib/utils"
-import { Link } from "@tanstack/react-router"
 
 interface CertificateCardProps {
   categoryName: string
@@ -33,10 +33,10 @@ export function CertificateCard({
       className="mx-auto w-full max-w-sm pb-32"
       initial={{ opacity: 0, scale: 0.9, y: 20 }}
       transition={{
-        type: "spring",
-        stiffness: 260,
         damping: 20,
         delay: 0.2,
+        stiffness: 260,
+        type: "spring",
       }}
     >
       <div className="relative">
@@ -117,9 +117,9 @@ export function CertificateCard({
                   buttonVariants({ variant: "secondary" }),
                   "bg-loops-background-secondary text-loops-light hover:bg-loops-background-secondary/80 h-12 border-none font-semibold transition-transform hover:scale-[1.02] active:scale-[0.98]",
                 )}
-                to={certificate.pdfURL}
                 rel="noreferrer noopener"
                 target="_blank"
+                to={certificate.pdfURL}
               >
                 <Eye className="mr-2 size-4" />
                 {t("home.certificate.view_pdf")}
@@ -148,7 +148,7 @@ export function CertificateCard({
               {t("home.certificate.keep_going")}
               <motion.span
                 animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                transition={{ delay: 1, duration: 2, repeat: Infinity }}
               >
                 ✨
               </motion.span>

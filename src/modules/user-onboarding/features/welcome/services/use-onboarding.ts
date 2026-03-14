@@ -2,9 +2,11 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
-import { onboardingFn } from "./onboarding-fn"
-import type { OnboardingWire } from "./onboarding-fn"
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+
+import type { OnboardingWire } from "./onboarding-fn"
+
+import { onboardingFn } from "./onboarding-fn"
 
 export function useOnboarding() {
   const onboardingServer = useServerFn(onboardingFn)

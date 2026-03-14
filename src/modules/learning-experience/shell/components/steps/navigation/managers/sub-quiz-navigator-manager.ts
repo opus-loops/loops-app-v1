@@ -1,8 +1,7 @@
 import { Effect } from "effect"
 
-import { SubQuizStrategySelector } from "../sub-quiz-strategy-selector"
-import { ChoiceQuestionNavigationManager } from "./choice-question-navigation-manager"
-import { SequenceOrderNavigationManager } from "./sequence-order-navigation-manager"
+import type { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
+import type { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 
 import type {
@@ -10,8 +9,10 @@ import type {
   SubQuizNavigationContext,
   SubQuizNavigationError,
 } from "../../sub-quiz-navigation-types"
-import type { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
-import type { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
+
+import { SubQuizStrategySelector } from "../sub-quiz-strategy-selector"
+import { ChoiceQuestionNavigationManager } from "./choice-question-navigation-manager"
+import { SequenceOrderNavigationManager } from "./sequence-order-navigation-manager"
 
 /**
  * Manager class responsible for handling sub-quiz navigation logic.

@@ -4,7 +4,9 @@ import { useRef } from "react"
 import { useTranslation } from "react-i18next"
 
 import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
+
 import { LockIcon } from "@/modules/shared/components/icons/lock"
+
 import { BackButton } from "./back-button"
 import { CategoryCard } from "./category-card"
 

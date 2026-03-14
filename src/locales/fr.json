@@ -12,6 +12,7 @@
     "next": "Suivant",
     "submit": "Soumettre",
     "verify": "Vérifier",
+    "start": "Démarrer",
     "continue": "Continuer",
     "continue_learning": "Continuer à apprendre",
     "starting": "Démarrage...",
@@ -20,6 +21,9 @@
     "min": "min",
     "sec": "s",
     "coming_soon": "Bientôt disponible !",
+    "try_again": "Réessayer",
+    "home": "Accueil",
+    "view_answers": "Voir les réponses",
     "difficulty": {
       "beginner": "Débutant",
       "intermediate": "Intermédiaire",
@@ -328,6 +332,12 @@
     "single_answer": "Une seule bonne réponse",
     "arrange_items": "Organisez les éléments dans l'ordre",
     "question": "Question",
+    "validation": {
+      "should_be": "Devrait être :",
+      "well_chosen": "Bien choisi !",
+      "correct_answer": "Réponse correcte",
+      "incorrect": "Incorrect"
+    },
     "congrats": "Félicitations !",
     "passed_message": "Vous avez réussi le premier quiz",
     "next": "Suivant",

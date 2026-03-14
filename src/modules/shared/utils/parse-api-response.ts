@@ -1,8 +1,9 @@
+import type { AxiosResponse } from "axios"
+import type { Schema } from "effect"
+
 import { isAxiosError } from "axios"
 import { Effect } from "effect"
 
-import type { AxiosResponse } from "axios"
-import type { Schema } from "effect"
 import { parseEffectSchema } from "./parse-effect-schema"
 
 type ParseApiResponseArgs<T, U, TI, TR, UI, UR> = {

@@ -1,5 +1,6 @@
-import { createContext, useCallback, useContext, useState } from "react"
 import type { PropsWithChildren } from "react"
+
+import { createContext, useCallback, useContext, useState } from "react"
 
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 

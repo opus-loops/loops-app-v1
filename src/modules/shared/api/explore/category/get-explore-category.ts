@@ -1,13 +1,14 @@
-import { Schema } from "effect"
 import type { Effect } from "effect"
+
+import { Schema } from "effect"
 
 import { categorySchema } from "@/modules/shared/domain/entities/category"
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
-  UseCaseErrorSchema,
   invalidInputFactory,
+  UseCaseErrorSchema,
 } from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"

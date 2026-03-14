@@ -1,5 +1,7 @@
-import { Button } from "@/modules/shared/components/ui/button"
 import { useTranslation } from "react-i18next"
+
+import { Button } from "@/modules/shared/components/ui/button"
+
 import { useOnboardingForm } from "../onboarding-context"
 
 export function WelcomeStep() {

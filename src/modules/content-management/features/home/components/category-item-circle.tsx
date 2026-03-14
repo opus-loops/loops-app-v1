@@ -1,6 +1,7 @@
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
 import { QuizItemCircle } from "./quiz-item-circle"
 import { SkillItemCircle } from "./skill-item-circle"
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 
 export type CategoryItemProps = {
   categoryId: string

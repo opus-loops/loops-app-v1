@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { VoucherSubmissionForm } from "./voucher-submission-form"
 import { useStartCategory } from "@/modules/content-management/features/category-selection/hooks/use-start-category"
 import { Button } from "@/modules/shared/components/ui/button"
 import {
@@ -12,6 +11,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/modules/shared/components/ui/dialog"
+
+import { VoucherSubmissionForm } from "./voucher-submission-form"
 
 type VoucherDialogProps = {
   categoryId: string
@@ -36,7 +37,8 @@ export function VoucherDialog({
   const { t } = useTranslation()
 
   const dialogTitle = title || t("voucher.dialog.default_title")
-  const dialogDescription = description || t("voucher.dialog.default_description")
+  const dialogDescription =
+    description || t("voucher.dialog.default_description")
 
   // Use external open state if provided, otherwise use internal state
   const open = externalOpen !== undefined ? externalOpen : internalOpen
@@ -186,7 +188,9 @@ export function VoucherDialog({
                       onClick={onStartFreeTrial}
                       type="button"
                     >
-                      {isStartingFreeTrial ? t("voucher.dialog.starting") : t("voucher.dialog.start_free_trial")}
+                      {isStartingFreeTrial
+                        ? t("voucher.dialog.starting")
+                        : t("voucher.dialog.start_free_trial")}
                     </Button>
                   </>
                 ) : null}

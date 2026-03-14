@@ -2,12 +2,14 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
 import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
 import { NoteIcon } from "@/modules/shared/components/icons/note"
 import { TimerIcon } from "@/modules/shared/components/icons/timer"
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useContentNavigation } from "@/modules/shared/navigation"
 import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
+
 import { useQuizStepper } from "../quiz-stepper"
 
 type CelebrationParticle = {

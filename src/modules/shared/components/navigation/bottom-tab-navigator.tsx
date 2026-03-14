@@ -1,10 +1,11 @@
 import { useTranslation } from "react-i18next"
 
-import { TabItem } from "./tab-item"
 import { CategoryIcon } from "@/modules/shared/components/icons/category"
 import { FlashIcon } from "@/modules/shared/components/icons/flash"
 import { StarIcon } from "@/modules/shared/components/icons/star"
 import { UserIcon } from "@/modules/shared/components/icons/user"
+
+import { TabItem } from "./tab-item"
 
 export function BottomTabNavigator() {
   const { t } = useTranslation()

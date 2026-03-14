@@ -1,12 +1,15 @@
 import { useRef, useState } from "react"
 
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
+import { Button } from "@/modules/shared/components/ui/button"
+
+import type { SubQuizRef } from "../question-types/sequence-order-component"
+
 import { ChoiceQuestionComponent } from "../question-types/choice-question-component"
 import { SequenceOrderComponent } from "../question-types/sequence-order-component"
 import { QuizHeader } from "./quiz-header"
 import { useSubQuizNavigation } from "./use-sub-quiz-navigation"
-import type { SubQuizRef } from "../question-types/sequence-order-component"
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { Button } from "@/modules/shared/components/ui/button"
 
 type SubQuizzesNavigatorProps = {
   quizItem: { contentType: "quizzes" } & CategoryContentItem
@@ -83,7 +86,7 @@ export function SubQuizzesNavigator({ quizItem }: SubQuizzesNavigatorProps) {
             onClick={handleButtonClicked}
           >
             {isCompleted
-              ? navigationState?.isNavigating
+              ? navigationState.isNavigating
                 ? "Starting..."
                 : "Next Question"
               : isValidating

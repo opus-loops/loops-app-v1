@@ -1,8 +1,9 @@
+import type { ReactNode } from "react"
+
 import { useServerFn } from "@tanstack/react-start"
 import { createContext, useContext, useState } from "react"
 
 import { sessionCleanupFn } from "./session-cleanup-fn"
-import type { ReactNode } from "react"
 
 type GlobalErrorContextType = {
   handleCloseDialog: () => void

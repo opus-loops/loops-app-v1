@@ -14,10 +14,15 @@
     "next": "التالي",
     "submit": "إرسال",
     "verify": "تحقق",
+    "start": "بدء",
+    "starting": "جاري البدء...",
     "minutes": "دقائق",
     "min": "دقيقة",
     "sec": "ث",
-    "coming_soon": "قريباً!"
+    "coming_soon": "قريباً!",
+    "try_again": "حاول مرة أخرى",
+    "home": "الرئيسية",
+    "view_answers": "عرض الإجابات"
   },
   "first_install": {
     "language": {
@@ -307,7 +312,17 @@
     "multiple_answers": "إجابات صحيحة متعددة",
     "single_answer": "إجابة صحيحة واحدة",
     "arrange_items": "رتب العناصر بالترتيب",
-    "question": "سؤال"
+    "question": "سؤال",
+    "validation": {
+      "should_be": "يجب أن يكون:",
+      "well_chosen": "اختيار موفق!",
+      "correct_answer": "إجابة صحيحة",
+      "incorrect": "غير صحيح"
+    },
+    "congrats": "تهانينا !",
+    "passed_message": "لقد اجتزت الاختبار الأول",
+    "next": "التالي",
+    "back_home": "العودة للرئيسية"
   },
   "home": {
     "category_label": "الفئة: {{name}}",

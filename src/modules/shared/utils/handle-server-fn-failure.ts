@@ -10,7 +10,7 @@ import { Cause, Option } from "effect"
  */
 export function handleServerFnFailure<E>(
   cause: Cause.Cause<E>,
-): E | { code: "UnknownError" } {
+): { code: "UnknownError" } | E {
   const failure = Option.getOrElse(Cause.failureOption(cause), () => ({
     code: "UnknownError" as const,
   }))
@@ -22,5 +22,5 @@ export function handleServerFnFailure<E>(
     },
   })
 
-  return failure as E | { code: "UnknownError" }
+  return failure as { code: "UnknownError" } | E
 }

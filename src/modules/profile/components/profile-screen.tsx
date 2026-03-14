@@ -2,14 +2,14 @@ import { Link } from "@tanstack/react-router"
 import { Trophy } from "lucide-react"
 import { useMemo } from "react"
 
-const loopsBgUrl = "/images/loops-bg.png"
-
 import type { User } from "@/modules/shared/domain/entities/user"
 
 import { GearIcon } from "@/modules/shared/components/icons/gear"
 import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
 import { UserIcon } from "@/modules/shared/components/icons/user"
 import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
+
+const loopsBgUrl = "/images/loops-bg.png"
 
 type ProfileProgressSectionProps = {
   user: User

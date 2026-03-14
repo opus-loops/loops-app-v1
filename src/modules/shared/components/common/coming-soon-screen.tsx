@@ -1,6 +1,7 @@
+import type { ReactNode } from "react"
+
 import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
-import type { ReactNode } from "react"
 
 import { SpaceBackground } from "@/modules/shared/components/common/space-background"
 

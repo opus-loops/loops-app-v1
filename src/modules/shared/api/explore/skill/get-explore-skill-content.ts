@@ -1,5 +1,6 @@
-import { Schema } from "effect"
 import type { Effect } from "effect"
+
+import { Schema } from "effect"
 
 import { skillContentSchema } from "@/modules/shared/domain/entities/skill-content"
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
@@ -11,8 +12,8 @@ import { skillNotCompletedErrorSchema } from "@/modules/shared/domain/errors/ski
 import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
-  UseCaseErrorSchema,
   invalidInputFactory,
+  UseCaseErrorSchema,
 } from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"

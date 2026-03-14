@@ -2,6 +2,7 @@ import { ChevronRight } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
 import { useSkillStepper } from "../skill-stepper"
 
 type SkillWelcomeScreenProps = {

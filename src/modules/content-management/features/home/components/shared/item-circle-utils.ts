@@ -1,10 +1,12 @@
-import type { CircleColors } from "./item-circle-base"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import type { ProgressState } from "@/modules/shared/utils/types"
+
+import type { CircleColors } from "./item-circle-base"
 
 export const getCircleColors = (
   progressState: ProgressState,
   isFirstItem: boolean,
+  isStartable: boolean,
 ): CircleColors => {
   if (progressState === "completed")
     return {
@@ -23,6 +25,14 @@ export const getCircleColors = (
     }
 
   if (progressState === "started")
+    return {
+      inner: "bg-blue-600",
+      outer: "bg-blue-500",
+      progress: "stroke-cyan-400",
+      text: "text-loops-light",
+    }
+
+  if (isStartable)
     return {
       inner: "bg-blue-600",
       outer: "bg-blue-500",

@@ -3,8 +3,9 @@ import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
-import { updatePasswordFn } from "../services/update-password-fn"
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+
+import { updatePasswordFn } from "../services/update-password-fn"
 
 export function useUpdatePassword() {
   const runUpdatePassword = useServerFn(updatePasswordFn)

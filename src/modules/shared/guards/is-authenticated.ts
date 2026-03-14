@@ -5,9 +5,10 @@ import type {
   getLoggedUserErrorsSchema,
   getLoggedUserSuccessSchema,
 } from "../api/users/get-logged-user"
+import type { unknownErrorSchema } from "../utils/types"
+
 import { getLoggedUserFactory } from "../api/users/get-logged-user"
 import { handleServerFnFailure } from "../utils/handle-server-fn-failure"
-import type { unknownErrorSchema } from "../utils/types"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type IsAuthenticatedErrors =

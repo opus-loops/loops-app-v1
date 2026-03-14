@@ -1,3 +1,5 @@
+import type { Effect } from "effect"
+
 import { Schema } from "effect"
 
 import { internalErrorSchema } from "../../domain/errors/internal-error"
@@ -5,13 +7,12 @@ import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expi
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import { successResponseSchema } from "../../domain/types/success-response"
 import {
-  UseCaseErrorSchema,
   invalidInputFactory,
+  UseCaseErrorSchema,
 } from "../../domain/utils/invalid-input"
 import { instanceFactory } from "../../utils/axios"
 import { parseApiResponse } from "../../utils/parse-api-response"
 import { parseEffectSchema } from "../../utils/parse-effect-schema"
-import type { Effect } from "effect"
 
 const logoutArgsSchema = Schema.Struct({ refreshToken: Schema.String })
 type LogoutArgs = Schema.Schema.Type<typeof logoutArgsSchema>

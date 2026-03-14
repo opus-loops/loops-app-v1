@@ -4,13 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import type { User } from "@/modules/shared/domain/entities/user"
-import { useUpdatePreferences } from "../../hooks/use-update-preferences"
-import { countryCodeOptions, splitPhoneNumber } from "../../utils/phone-utils"
-import { AvatarUpload } from "./avatar-upload"
 
 import { Button } from "@/modules/shared/components/ui/button"
 import { Input } from "@/modules/shared/components/ui/input"
 import { useToast } from "@/modules/shared/hooks/use-toast"
+
+import { useUpdatePreferences } from "../../hooks/use-update-preferences"
+import { countryCodeOptions, splitPhoneNumber } from "../../utils/phone-utils"
+import { AvatarUpload } from "./avatar-upload"
 
 type EditProfileFormProps = {
   user: User

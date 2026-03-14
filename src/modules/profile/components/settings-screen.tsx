@@ -3,13 +3,14 @@ import { ChevronRight } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-import { LogoutConfirmDialog } from "./logout-confirm-dialog"
 import type { User } from "@/modules/shared/domain/entities/user"
 
 import { useLogout } from "@/modules/authentication/features/login/services/use-logout"
 import { ExitIcon } from "@/modules/shared/components/icons/exit"
 import { UserIcon } from "@/modules/shared/components/icons/user"
 import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
+
+import { LogoutConfirmDialog } from "./logout-confirm-dialog"
 
 type SettingsRowProps = {
   label: string

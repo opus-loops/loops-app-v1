@@ -3,8 +3,9 @@ import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
-import { startCategoryFn } from "../services/start-category-fn"
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+
+import { startCategoryFn } from "../services/start-category-fn"
 
 export function useStartCategory() {
   const runStartCategory = useServerFn(startCategoryFn)

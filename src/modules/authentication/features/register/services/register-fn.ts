@@ -5,9 +5,10 @@ import type {
   registerErrorsSchema,
   registerSuccessSchema,
 } from "@/modules/shared/api/users/register"
+import type { unknownErrorSchema } from "@/modules/shared/utils/types"
+
 import { registerFactory } from "@/modules/shared/api/users/register"
 import { handleServerFnFailure } from "@/modules/shared/utils/handle-server-fn-failure"
-import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 // --- TYPES (pure TS) ---------------------------------------------------------
 export type RegisterErrors =

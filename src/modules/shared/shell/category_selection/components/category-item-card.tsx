@@ -1,7 +1,8 @@
-import { QuizCard } from "./quiz-card"
-import { SkillCard } from "./skill-card"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import type { ProgressState } from "@/modules/shared/utils/types"
+
+import { QuizCard } from "./quiz-card"
+import { SkillCard } from "./skill-card"
 
 type CategoryItemCardProps = {
   index: number

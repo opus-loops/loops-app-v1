@@ -1,17 +1,19 @@
 import { Effect } from "effect"
 import { useCallback, useMemo } from "react"
 
-import { useQuizStepper } from "../quiz-stepper"
-import { SubQuizNavigatorManager } from "./navigation/managers/sub-quiz-navigator-manager"
-import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
-
-import type { SubQuizNavigationError } from "./sub-quiz-navigation-types"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import type { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
+import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
+
 import { useSelectedSubQuiz } from "@/modules/learning-experience/contexts/selected-sub-quiz-context"
 import { useQuizContent } from "@/modules/shared/shell/selected_content/services/use-quiz-content"
 import { useStartChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-start-choice-question"
 import { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
+
+import type { SubQuizNavigationError } from "./sub-quiz-navigation-types"
+
+import { useQuizStepper } from "../quiz-stepper"
+import { SubQuizNavigatorManager } from "./navigation/managers/sub-quiz-navigator-manager"
 
 type UseSubQuizNavigationProps = {
   /**

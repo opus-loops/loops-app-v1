@@ -1,5 +1,6 @@
-import { motion } from "framer-motion"
 import type { ReactNode } from "react"
+
+import { motion } from "framer-motion"
 
 import { cn } from "@/modules/shared/lib/utils"
 

@@ -21,6 +21,9 @@
     "min": "min",
     "sec": "sec",
     "coming_soon": "Coming Soon!",
+    "try_again": "Try Again",
+    "home": "Home",
+    "view_answers": "View Answers",
     "difficulty": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",
@@ -329,6 +332,12 @@
     "single_answer": "One correct answer",
     "arrange_items": "Arrange the items in order",
     "question": "Question",
+    "validation": {
+      "should_be": "Should be:",
+      "well_chosen": "Well chosen!",
+      "correct_answer": "Correct answer",
+      "incorrect": "Incorrect"
+    },
     "congrats": "Congrats !",
     "passed_message": "You passed the first Quiz",
     "next": "Next",

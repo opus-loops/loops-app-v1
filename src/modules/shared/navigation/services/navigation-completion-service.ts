@@ -1,12 +1,13 @@
-import { QuizCompletionService } from "./quiz-completion-service"
-import { SkillCompletionService } from "./skill-completion-service"
-import type { IQuizCompletionService } from "./quiz-completion-service"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-
-import type { NavigationStartWire } from "../types/navigation-types"
-import type { ISkillCompletionService } from "./skill-completion-service"
 import type { useStartQuiz } from "@/modules/shared/shell/category_selection/services/use-start-quiz"
 import type { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
+
+import type { NavigationStartWire } from "../types/navigation-types"
+import type { IQuizCompletionService } from "./quiz-completion-service"
+import type { ISkillCompletionService } from "./skill-completion-service"
+
+import { QuizCompletionService } from "./quiz-completion-service"
+import { SkillCompletionService } from "./skill-completion-service"
 
 /**
  * Interface for service handling navigation completion logic for different content types.

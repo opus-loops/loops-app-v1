@@ -1,5 +1,6 @@
-import { ContentList } from "./content-list"
 import { useExploreCategory } from "@/modules/content-management/features/content-detail/services/use-explore-category"
+
+import { ContentList } from "./content-list"
 
 type ContentListWrapperProps = {
   categoryId: string

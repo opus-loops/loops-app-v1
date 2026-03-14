@@ -1,17 +1,19 @@
-import { Schema } from "effect"
-import { instanceFactory } from "../../utils/axios"
 import type { Effect } from "effect"
+
+import { Schema } from "effect"
 
 import { expiredInvalidCodeErrorSchema } from "@/modules/shared/domain/errors/expired-invalid-code"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
-  UseCaseErrorSchema,
   invalidInputFactory,
+  UseCaseErrorSchema,
 } from "@/modules/shared/domain/utils/invalid-input"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
+
+import { instanceFactory } from "../../utils/axios"
 
 const confirmAccountArgsSchema = Schema.Struct({
   confirmationCode: Schema.Number.pipe(Schema.int()),

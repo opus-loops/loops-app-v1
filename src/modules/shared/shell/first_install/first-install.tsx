@@ -1,7 +1,9 @@
+import type { ReactNode } from "react"
+
 import { useCallback, useEffect, useState } from "react"
 
 import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
-import type { ReactNode } from "react"
+
 import { LanguageSelectionScreen } from "./language-selection-screen"
 import { getPendingLanguageFn } from "./services/get-pending-language-fn"
 import { WelcomeScreen } from "./welcome-screen"

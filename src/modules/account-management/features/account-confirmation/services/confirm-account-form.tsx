@@ -9,6 +9,7 @@ import { DangerIcon } from "@/modules/shared/components/icons/danger"
 import { Button } from "@/modules/shared/components/ui/button"
 import { Label } from "@/modules/shared/components/ui/label"
 import { useToast } from "@/modules/shared/hooks/use-toast"
+
 import { useConfirmAccount } from "./use-confirm-account"
 
 export function ConfirmAccountForm() {
@@ -21,7 +22,7 @@ export function ConfirmAccountForm() {
     defaultValues: {
       confirmationCode: "",
     },
-    onSubmit: async ({ value, formApi }) => {
+    onSubmit: async ({ formApi, value }) => {
       if (!formApi.state.isSubmitting) return
 
       const confirmationCode = parseInt(value.confirmationCode, 10)

@@ -1,11 +1,7 @@
+import type { ReactNode } from "react"
+
 import { useLocation, useRouter } from "@tanstack/react-router"
 import { Suspense, useCallback } from "react"
-import { CategoriesList } from "./components/categories-list"
-import { CategoryDetails } from "./components/category-details"
-import { CategoryDetailsWrapper } from "./components/category-details-wrapper"
-import { ContentList } from "./components/content-list"
-import { ContentListWrapper } from "./components/content-list-wrapper"
-import type { ReactNode } from "react"
 
 import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import type { User } from "@/modules/shared/domain/entities/user"
@@ -16,6 +12,12 @@ import { CategoryContentSkeleton } from "@/modules/shared/components/common/cate
 import { CategoryDetailsSkeleton } from "@/modules/shared/components/common/category-details-skeleton"
 import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
 import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
+
+import { CategoriesList } from "./components/categories-list"
+import { CategoryDetails } from "./components/category-details"
+import { CategoryDetailsWrapper } from "./components/category-details-wrapper"
+import { ContentList } from "./components/content-list"
+import { ContentListWrapper } from "./components/content-list-wrapper"
 
 type CategorySelectionShellProps = {
   searchParams: {

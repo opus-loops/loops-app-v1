@@ -1,6 +1,13 @@
 import { Reorder } from "framer-motion"
-import { GripVertical } from "lucide-react"
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react"
+import { CheckCircle2, GripVertical, XCircle } from "lucide-react"
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react"
+import { useTranslation } from "react-i18next"
 
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 
@@ -23,9 +30,11 @@ export const SequenceOrderComponent = forwardRef<
   SubQuizRef,
   SequenceOrderComponentProps
 >(({ categoryId, onStopTimer, subQuiz }, ref) => {
+  const { t } = useTranslation()
   const { handleValidateSequenceOrder } = useValidateSequenceOrder()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const pendingValidationQuestionIdRef = useRef<null | string>(null)
 
   const completedQuestion = subQuiz.completedQuestion
 
@@ -38,12 +47,16 @@ export const SequenceOrderComponent = forwardRef<
   useEffect(() => {
     setIsPopupOpen(false)
     setUserOrder(subQuiz.content?.sequence.map((_, index) => index) || [])
+    pendingValidationQuestionIdRef.current = null
   }, [subQuiz.questionId])
 
   useEffect(() => {
     if (!isValidated) return
+    // Only show popup if this specific question was just validated in this session
+    if (pendingValidationQuestionIdRef.current !== subQuiz.questionId) return
     setIsPopupOpen(true)
-  }, [isValidated])
+    pendingValidationQuestionIdRef.current = null
+  }, [isValidated, subQuiz.questionId])
 
   useImperativeHandle(ref, () => ({
     skip: async () => {
@@ -66,6 +79,7 @@ export const SequenceOrderComponent = forwardRef<
 
       onStopTimer()
       setIsSubmitting(true)
+      pendingValidationQuestionIdRef.current = subQuiz.questionId
 
       const estimatedTime = subQuiz.content?.estimatedTime ?? 0
       const spentTime = Math.max(0, estimatedTime - timeLeft)
@@ -89,19 +103,20 @@ export const SequenceOrderComponent = forwardRef<
         "hover:border-slate-500 transition-colors",
       )
     } else {
-      const correctPosition = subQuiz.content?.idealOrder?.indexOf(itemIndex)
+      const idealOrder = subQuiz.content?.idealOrder || []
       const userPosition = userOrder.indexOf(itemIndex)
-      const isCorrectPosition = correctPosition === userPosition
+      const correctItemAtIndex = idealOrder[userPosition]
+      const isCorrectItemAtThisPosition = correctItemAtIndex === itemIndex
 
-      if (isCorrectPosition) {
+      if (isCorrectItemAtThisPosition) {
         return cn(
           "flex items-center gap-3 p-4 rounded-lg border-2",
-          "bg-green-900/30 border-green-500 text-loops-light",
+          "bg-green-900/30 border-green-500 text-green-400",
         )
       } else {
         return cn(
           "flex items-center gap-3 p-4 rounded-lg border-2",
-          "bg-red-900/30 border-red-500 text-loops-light",
+          "bg-red-900/30 border-red-500 text-red-400",
         )
       }
     }
@@ -146,28 +161,56 @@ export const SequenceOrderComponent = forwardRef<
         onReorder={!isValidated ? setUserOrder : () => {}}
         values={userOrder}
       >
-        {userOrder.map((itemIndex) => (
-          <Reorder.Item
-            className={getItemStyle(itemIndex)}
-            dragListener={!isValidated}
-            key={itemIndex}
-            value={itemIndex}
-            whileDrag={{ scale: 1.02, zIndex: 10 }}
-          >
-            {!isValidated && (
-              <GripVertical className="h-5 w-5 text-slate-400" />
-            )}
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-700 text-xs font-medium text-slate-300">
-              {String.fromCharCode(65 + itemIndex)}
-            </span>
-            {subQuiz.content && (
-              <span className="text-base font-medium">
-                {subQuiz.content.sequence[itemIndex][0].content}
+        {userOrder.map((itemIndex, position) => {
+          const idealOrder = subQuiz.content?.idealOrder || []
+          const isCorrect = isValidated && idealOrder[position] === itemIndex
+
+          return (
+            <Reorder.Item
+              className={getItemStyle(itemIndex)}
+              dragListener={!isValidated}
+              key={itemIndex}
+              value={itemIndex}
+              whileDrag={{ scale: 1.02, zIndex: 10 }}
+            >
+              {!isValidated && (
+                <GripVertical className="h-5 w-5 text-slate-400" />
+              )}
+              {isValidated && isCorrect && (
+                <CheckCircle2 className="h-5 w-5 text-green-500" />
+              )}
+              {isValidated && !isCorrect && (
+                <XCircle className="h-5 w-5 text-red-500" />
+              )}
+              <span
+                className={cn(
+                  "flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-medium",
+                  !isValidated
+                    ? "bg-slate-700 text-slate-300"
+                    : isCorrect
+                      ? "bg-green-500 text-white"
+                      : "bg-red-500 text-white",
+                )}
+              >
+                {String.fromCharCode(65 + itemIndex)}
               </span>
-            )}
-          </Reorder.Item>
-        ))}
+              {subQuiz.content && (
+                <span className="text-base font-medium">
+                  {subQuiz.content.sequence[itemIndex][0].content}
+                </span>
+              )}
+              {isValidated && !isCorrect && (
+                <div className="ml-auto text-xs font-semibold text-red-400 opacity-80">
+                  {t("quiz.validation.should_be")}{" "}
+                  {subQuiz.content?.sequence[idealOrder[position]][0].content}
+                </div>
+              )}
+            </Reorder.Item>
+          )
+        })}
       </Reorder.Group>
     </div>
   )
 })
+
+SequenceOrderComponent.displayName = "SequenceOrderComponent"

@@ -2,10 +2,11 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
-import { useGlobalError } from "../../session/global-error-provider"
 import type { CompleteSkillWire } from "@/modules/shared/shell/category_selection/services/complete-skill-fn"
 
 import { completeSkillFn } from "@/modules/shared/shell/category_selection/services/complete-skill-fn"
+
+import { useGlobalError } from "../../session/global-error-provider"
 
 export function useCompleteSkill() {
   const queryClient = useQueryClient()

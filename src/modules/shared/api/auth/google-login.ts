@@ -1,11 +1,12 @@
-import { Schema } from "effect"
 import type { Effect } from "effect"
+
+import { Schema } from "effect"
 
 import { invalidTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-token"
 import { loginTokensSchema } from "@/modules/shared/domain/types/login-tokens"
 import {
-  UseCaseErrorSchema,
   invalidInputFactory,
+  UseCaseErrorSchema,
 } from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"

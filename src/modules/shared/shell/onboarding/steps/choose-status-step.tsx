@@ -1,12 +1,14 @@
 import { useTranslation } from "react-i18next"
-import { OptionCard } from "../components/option-card"
-import { useOnboardingForm } from "../onboarding-context"
-import { useOnboardingStepper } from "../onboarding-stepper"
+
 import { BriefCaseIcon } from "@/modules/shared/components/icons/brief-case"
 import { GameIcon } from "@/modules/shared/components/icons/game"
 import { MonitorIcon } from "@/modules/shared/components/icons/monitor"
 import { TeacherIcon } from "@/modules/shared/components/icons/teacher"
 import { Button } from "@/modules/shared/components/ui/button"
+
+import { OptionCard } from "../components/option-card"
+import { useOnboardingForm } from "../onboarding-context"
+import { useOnboardingStepper } from "../onboarding-stepper"
 
 const statusOptions = [
   {

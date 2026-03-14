@@ -4,19 +4,21 @@ import { Effect } from "effect"
 import { useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
-import { NavigationManager } from "../managers/navigation-manager"
-import { NavigationCompletionService } from "../services/navigation-completion-service"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 
-import type {
-  NavigationError,
-  NavigationStartWire,
-} from "../types/navigation-types"
 import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
 import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useStartQuiz } from "@/modules/shared/shell/category_selection/services/use-start-quiz"
 import { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
+
+import type {
+  NavigationError,
+  NavigationStartWire,
+} from "../types/navigation-types"
+
+import { NavigationManager } from "../managers/navigation-manager"
+import { NavigationCompletionService } from "../services/navigation-completion-service"
 
 type UseContentNavigationProps = { categoryId: string }
 

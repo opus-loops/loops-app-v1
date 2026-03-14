@@ -2,8 +2,9 @@ import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
-import { loginFn } from "./login-fn"
 import type { LoginWire } from "./login-fn"
+
+import { loginFn } from "./login-fn"
 
 export function useLogin() {
   const logUser = useServerFn(loginFn)

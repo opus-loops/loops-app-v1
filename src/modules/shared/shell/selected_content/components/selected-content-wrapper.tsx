@@ -1,8 +1,9 @@
 import { useEffect } from "react"
 
-import { SelectedContentScreen } from "./selected-content-screen"
 import { useSingleCategoryItem } from "@/modules/content-management/features/single-item/services/use-single-category-item"
 import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
+
+import { SelectedContentScreen } from "./selected-content-screen"
 
 type SelectedContentWrapperProps = {
   categoryId: string

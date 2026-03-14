@@ -1,10 +1,12 @@
 import { useTranslation } from "react-i18next"
 
-import { QuizActionButton } from "../quiz-action-button"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
 import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
 import { NoteIcon } from "@/modules/shared/components/icons/note"
 import { TimerIcon } from "@/modules/shared/components/icons/timer"
+
+import { QuizActionButton } from "../quiz-action-button"
 
 type QuizWelcomeScreenProps = {
   quizItem: { contentType: "quizzes" } & CategoryContentItem

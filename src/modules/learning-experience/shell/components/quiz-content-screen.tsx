@@ -1,14 +1,16 @@
 import { Suspense } from "react"
 
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
+import { ContentSkeleton } from "@/components/ui/content-skeleton"
+import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
+import { BackButton } from "@/modules/shared/shell/category_selection/components/back-button"
+
 import { SelectedSubQuizProvider } from "../../contexts/selected-sub-quiz-context"
 import { QuizStepper } from "./quiz-stepper"
 import { QuizStatisticsScreen } from "./steps/quiz-statistics-screen"
 import { QuizWelcomeScreen } from "./steps/quiz-welcome-screen"
 import { SubQuizzesNavigator } from "./steps/sub-quizzes-navigator"
-import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import { BackButton } from "@/modules/shared/shell/category_selection/components/back-button"
-import { ContentSkeleton } from "@/components/ui/content-skeleton"
-import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
 
 type QuizContentScreenProps = {
   onBack: () => void

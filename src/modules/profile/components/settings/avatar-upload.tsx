@@ -1,5 +1,6 @@
-import { Pencil, Trash2, User2 } from "lucide-react"
 import type { RefObject } from "react"
+
+import { Pencil, Trash2, User2 } from "lucide-react"
 
 type AvatarUploadProps = {
   displayedAvatarUrl: null | string | undefined

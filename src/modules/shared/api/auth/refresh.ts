@@ -1,3 +1,5 @@
+import type { Effect } from "effect"
+
 import axios from "axios"
 import { Schema } from "effect"
 
@@ -7,7 +9,6 @@ import { loginTokensSchema } from "../../domain/types/login-tokens"
 import { invalidInputFactory } from "../../domain/utils/invalid-input"
 import { parseApiResponse } from "../../utils/parse-api-response"
 import { parseEffectSchema } from "../../utils/parse-effect-schema"
-import type { Effect } from "effect"
 
 const refreshArgsSchema = Schema.Struct({ refresh: Schema.String })
 type RefreshArgs = Schema.Schema.Type<typeof refreshArgsSchema>

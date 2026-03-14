@@ -1,3 +1,4 @@
+import { CheckCircle2, XCircle } from "lucide-react"
 import {
   forwardRef,
   useEffect,
@@ -5,6 +6,7 @@ import {
   useRef,
   useState,
 } from "react"
+import { useTranslation } from "react-i18next"
 
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 
@@ -27,6 +29,7 @@ export const ChoiceQuestionComponent = forwardRef<
   SubQuizRef,
   ChoiceQuestionComponentProps
 >(({ categoryId, onStopTimer, subQuiz }, ref) => {
+  const { t } = useTranslation()
   const { handleValidateChoiceQuestion } = useValidateChoiceQuestion()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedChoices, setSelectedChoices] = useState<Array<number>>([])
@@ -46,10 +49,11 @@ export const ChoiceQuestionComponent = forwardRef<
 
   useEffect(() => {
     if (!isValidated) return
+    // Only show popup if this specific question was just validated in this session
     if (pendingValidationQuestionIdRef.current !== subQuiz.questionId) return
     setIsPopupOpen(true)
     pendingValidationQuestionIdRef.current = null
-  }, [isValidated])
+  }, [isValidated, subQuiz.questionId])
 
   useImperativeHandle(ref, () => ({
     skip: async () => {
@@ -138,23 +142,24 @@ export const ChoiceQuestionComponent = forwardRef<
     } else {
       // Validated state - show correct/incorrect
       const isCorrect = question.idealOptions?.includes(index)
-      const wasSelected =
-        completedQuestion?.userAnswer?.includes(index) ?? false
+      const wasSelected = completedQuestion.userAnswer?.includes(index) ?? false
 
       if (isCorrect) {
         return cn(
-          "flex items-center p-4 w-full rounded-lg border-2",
-          "bg-green-900/30 border-green-500 text-loops-light",
+          "flex items-center p-4 w-full rounded-lg border-2 transition-colors",
+          wasSelected
+            ? "bg-green-900/40 border-green-500 text-green-400"
+            : "bg-green-900/20 border-green-700 text-green-500 opacity-90",
         )
       } else if (wasSelected) {
         return cn(
           "flex items-center p-4 rounded-lg w-full border-2",
-          "bg-red-900/30 border-red-500 text-loops-light",
+          "bg-red-900/40 border-red-500 text-red-400",
         )
       } else {
         return cn(
           "flex items-center p-4 rounded-lg w-full border-2",
-          "bg-slate-800 border-slate-600 text-loops-light opacity-60",
+          "bg-slate-800 border-slate-700 text-loops-light opacity-50",
         )
       }
     }
@@ -166,7 +171,7 @@ export const ChoiceQuestionComponent = forwardRef<
       return (
         <div
           className={cn(
-            "mr-3 flex h-6 w-6 items-center justify-center border-2",
+            "mr-3 flex h-6 w-6 shrink-0 items-center justify-center border-2",
             question.isMultiple ? "rounded-md" : "rounded-full",
             isSelected ? "border-cyan-400 bg-cyan-400" : "border-slate-400",
           )}
@@ -193,56 +198,17 @@ export const ChoiceQuestionComponent = forwardRef<
       )
     } else {
       const isCorrect = question.idealOptions?.includes(index)
-      const wasSelected =
-        completedQuestion?.userAnswer?.includes(index) ?? false
+      const wasSelected = completedQuestion.userAnswer?.includes(index) ?? false
 
       if (isCorrect) {
-        return (
-          <div
-            className={cn(
-              "mr-3 flex h-6 w-6 items-center justify-center bg-green-500",
-              question.isMultiple ? "rounded-md" : "rounded-full",
-            )}
-          >
-            <svg
-              className="text-loops-light h-4 w-4"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                clipRule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                fillRule="evenodd"
-              />
-            </svg>
-          </div>
-        )
+        return <CheckCircle2 className="mr-3 h-6 w-6 shrink-0 text-green-500" />
       } else if (wasSelected) {
-        return (
-          <div
-            className={cn(
-              "mr-3 flex h-6 w-6 items-center justify-center bg-red-500",
-              question.isMultiple ? "rounded-md" : "rounded-full",
-            )}
-          >
-            <svg
-              className="text-loops-light h-4 w-4"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                clipRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                fillRule="evenodd"
-              />
-            </svg>
-          </div>
-        )
+        return <XCircle className="mr-3 h-6 w-6 shrink-0 text-red-500" />
       } else {
         return (
           <div
             className={cn(
-              "mr-3 h-6 w-6 border-2 border-slate-400",
+              "mr-3 h-6 w-6 shrink-0 border-2 border-slate-600",
               question.isMultiple ? "rounded-md" : "rounded-full",
             )}
           />
@@ -280,6 +246,13 @@ export const ChoiceQuestionComponent = forwardRef<
             choice[0]?.content ||
             ""
 
+          const isCorrect = question.idealOptions?.includes(index)
+          const wasSelected =
+            completedQuestion?.userAnswer?.includes(index) ?? false
+          const isGoodSelection = isCorrect && wasSelected
+          const isMissedOption = isCorrect && !wasSelected
+          const isBadSelection = !isCorrect && wasSelected
+
           return (
             <div
               className={getChoiceStyle(index)}
@@ -287,9 +260,29 @@ export const ChoiceQuestionComponent = forwardRef<
               onClick={() => handleChoiceSelect(index)}
             >
               {getChoiceIcon(index)}
-              <span className="text-base">
+              <span className="text-base font-medium">
                 {String.fromCharCode(65 + index)}) {choiceText}
               </span>
+
+              {isValidated && (
+                <div className="ml-auto flex flex-col items-end gap-1">
+                  {isGoodSelection && (
+                    <span className="text-[10px] font-bold tracking-wider text-green-500 uppercase">
+                      {t("quiz.validation.well_chosen")}
+                    </span>
+                  )}
+                  {isMissedOption && (
+                    <span className="text-[10px] font-bold tracking-wider text-green-400 uppercase opacity-80">
+                      {t("quiz.validation.correct_answer")}
+                    </span>
+                  )}
+                  {isBadSelection && (
+                    <span className="text-[10px] font-bold tracking-wider text-red-500 uppercase">
+                      {t("quiz.validation.incorrect")}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           )
         })}
@@ -297,3 +290,5 @@ export const ChoiceQuestionComponent = forwardRef<
     </div>
   )
 })
+
+ChoiceQuestionComponent.displayName = "ChoiceQuestionComponent"

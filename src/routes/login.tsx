@@ -1,4 +1,4 @@
-import { Link, createFileRoute, redirect } from "@tanstack/react-router"
+import { createFileRoute, Link, redirect } from "@tanstack/react-router"
 
 import { LoginGoogle } from "@/modules/authentication/features/login/components/login-google"
 import { LoginForm } from "@/modules/authentication/features/login/services/login-form"

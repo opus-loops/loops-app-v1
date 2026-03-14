@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
+
 import { Button } from "@/modules/shared/components/ui/button"
-import { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useContentNavigation } from "@/modules/shared/navigation"
 import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
 import { useCompleteSkill } from "@/modules/shared/shell/category_selection/hooks/use-complete-skill"
+
 import { useSkillStepper } from "./skill-stepper"
 
 type SkillActionButtonProps = {

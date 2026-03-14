@@ -2,9 +2,11 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
-import { confirmAccountFn } from "./confirm-account-fn"
-import type { ConfirmAccountWire } from "./confirm-account-fn"
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+
+import type { ConfirmAccountWire } from "./confirm-account-fn"
+
+import { confirmAccountFn } from "./confirm-account-fn"
 
 export function useConfirmAccount() {
   const confirmAccountServer = useServerFn(confirmAccountFn)

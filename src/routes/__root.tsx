@@ -2,17 +2,17 @@
 import "@/lib/i18n"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
-  createRootRouteWithContext,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
+import { useServerFn } from "@tanstack/react-start"
 import { useEffect } from "react"
 import { getI18n, useTranslation } from "react-i18next"
 
 import type { RouterContext } from "@/router"
-import appCss from "../styles/app.css?url"
 
 import { updatePreferencesFn } from "@/modules/profile/services/update-preferences-fn"
 import { GlobalErrorComponent } from "@/modules/shared/components/common/global-error-component"
@@ -23,10 +23,10 @@ import { getPendingLanguageFn } from "@/modules/shared/shell/first_install/servi
 import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
 import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
 import { setUserTimezoneFn } from "@/modules/shared/shell/session/set-user-timezone-fn"
-import { useServerFn } from "@tanstack/react-start"
+
+import appCss from "../styles/app.css?url"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  errorComponent: GlobalErrorComponent,
   beforeLoad: async () => {
     const i18n = getI18n()
     const auth = await isAuthenticated()
@@ -108,10 +108,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       </html>
     )
   },
+  errorComponent: GlobalErrorComponent,
   head: () => ({
     links: [
       { href: appCss, rel: "stylesheet" },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { href: "/favicon.png", rel: "icon", type: "image/png" },
     ],
     meta: [
       { charSet: "utf-8" },

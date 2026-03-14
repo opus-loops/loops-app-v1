@@ -1,16 +1,17 @@
+import type { Effect } from "effect"
+
 import { Schema } from "effect"
 
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
 import { invalidFileErrorSchema } from "../../domain/errors/invalid-file"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import {
-  UseCaseErrorSchema,
   invalidInputFactory,
+  UseCaseErrorSchema,
 } from "../../domain/utils/invalid-input"
 import { instanceFactory } from "../../utils/axios"
 import { parseApiResponse } from "../../utils/parse-api-response"
 import { parseEffectSchema } from "../../utils/parse-effect-schema"
-import type { Effect } from "effect"
 
 export const uploadFileArgsSchema = Schema.Struct({
   formData: Schema.Any, // FormData type

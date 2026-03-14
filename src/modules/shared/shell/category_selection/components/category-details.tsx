@@ -1,16 +1,17 @@
 import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
 
-import type { User } from "@/modules/shared/domain/entities/user"
-import { BackButton } from "./back-button"
-import { CategoryActionButton } from "./category-action-button"
-import { CategoryItemCard } from "./category-item-card"
-
 import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
+import type { User } from "@/modules/shared/domain/entities/user"
+
 import { useCategoryContent } from "@/modules/content-management/features/content-list/services/use-category-content"
 import { DifficultyTag } from "@/modules/shared/components/common/difficulty-tag"
 import { CodeCircleIcon } from "@/modules/shared/components/icons/code-circle"
 import { DocumentCopyIcon } from "@/modules/shared/components/icons/document-copy"
+
+import { BackButton } from "./back-button"
+import { CategoryActionButton } from "./category-action-button"
+import { CategoryItemCard } from "./category-item-card"
 
 type CategoryDetailsProps = {
   category: CategoryWithStartedCategory

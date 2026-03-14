@@ -26,7 +26,6 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
 
   return (
     <motion.button
-      disabled={!category.isPublic}
       className={cn(
         "relative w-full overflow-hidden rounded-2xl p-4 text-left",
         "transition-all duration-200",
@@ -37,6 +36,7 @@ export function CategoryCard({ category, onClick }: CategoryCardProps) {
           ? "shadow-lg hover:shadow-xl"
           : "cursor-not-allowed opacity-60 grayscale",
       )}
+      disabled={!category.isPublic}
       onClick={onClick}
     >
       {!category.isPublic && (

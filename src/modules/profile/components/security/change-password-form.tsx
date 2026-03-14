@@ -2,7 +2,6 @@ import { useForm } from "@tanstack/react-form"
 import { useTranslation } from "react-i18next"
 
 import type { User } from "@/modules/shared/domain/entities/user"
-import { useUpdatePassword } from "../../hooks/use-update-password"
 
 import { DangerIcon } from "@/modules/shared/components/icons/danger"
 import { LockIcon } from "@/modules/shared/components/icons/lock"
@@ -10,6 +9,8 @@ import { UserIcon } from "@/modules/shared/components/icons/user"
 import { Button } from "@/modules/shared/components/ui/button"
 import { PasswordInput } from "@/modules/shared/components/ui/password-input"
 import { useToast } from "@/modules/shared/hooks/use-toast"
+
+import { useUpdatePassword } from "../../hooks/use-update-password"
 
 type ChangePasswordFormProps = {
   user: User

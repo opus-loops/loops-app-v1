@@ -1,9 +1,11 @@
 import { useTranslation } from "react-i18next"
+
+import { ClockIcon } from "@/modules/shared/components/icons/clock"
+import { Button } from "@/modules/shared/components/ui/button"
+
 import { OptionCard } from "../components/option-card"
 import { useOnboardingForm } from "../onboarding-context"
 import { useOnboardingStepper } from "../onboarding-stepper"
-import { Button } from "@/modules/shared/components/ui/button"
-import { ClockIcon } from "@/modules/shared/components/icons/clock"
 
 const goalOptions = [
   {
@@ -75,7 +77,9 @@ export function ChooseGoalsStep() {
                     isSelected={field.state.value === option.id}
                     key={option.id}
                     onClick={() => handleGoalSelect(option.id)}
-                    subtitle={t(`first_install.goals.options.${option.id}.subtitle`)}
+                    subtitle={t(
+                      `first_install.goals.options.${option.id}.subtitle`,
+                    )}
                     title={t(`first_install.goals.options.${option.id}.title`)}
                     variant={option.variant}
                   />

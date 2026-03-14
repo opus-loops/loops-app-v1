@@ -1,12 +1,13 @@
 import { useRouter } from "@tanstack/react-router"
 import { useTranslation } from "react-i18next"
 
-import { VoucherDialog } from "./voucher-dialog"
 import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import type { User } from "@/modules/shared/domain/entities/user"
 
 import { useUpdateCurrentCategory } from "@/modules/profile/hooks/use-update-current-category"
 import { Button } from "@/modules/shared/components/ui/button"
+
+import { VoucherDialog } from "./voucher-dialog"
 
 type CategoryActionButtonProps = {
   category: CategoryWithStartedCategory

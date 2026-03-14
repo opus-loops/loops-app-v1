@@ -1,11 +1,13 @@
-import { useTranslation } from "react-i18next"
-import { LoadingScreen } from "../../components/common/loading-screen"
-import { usePageLoading } from "../../hooks/use-page-loading"
 import type { ReactNode } from "react"
+
+import { useTranslation } from "react-i18next"
 
 import type { User } from "@/modules/shared/domain/entities/user"
 
 import { ConfirmAccountForm } from "@/modules/account-management/features/account-confirmation/services"
+
+import { LoadingScreen } from "../../components/common/loading-screen"
+import { usePageLoading } from "../../hooks/use-page-loading"
 
 type ConfirmationScreenProps = { user: User }
 

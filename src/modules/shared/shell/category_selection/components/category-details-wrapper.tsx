@@ -1,8 +1,9 @@
-import { CategoryDetails } from "./category-details"
+import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import type { User } from "@/modules/shared/domain/entities/user"
 
-import type { CategoryWithStartedCategory } from "@/modules/content-management/features/category-selection/services/explore-categories-fn"
 import { useExploreCategory } from "@/modules/content-management/features/content-detail/services/use-explore-category"
+
+import { CategoryDetails } from "./category-details"
 
 type CategoryDetailsWrapperProps = {
   categoryId: string

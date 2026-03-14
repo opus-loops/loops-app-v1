@@ -1,10 +1,12 @@
 import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
 
-import { ProgressCircle } from "./progress-circle"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import type { ProgressState } from "@/modules/shared/utils/types"
+
 import { cn } from "@/modules/shared/lib/utils"
+
+import { ProgressCircle } from "./progress-circle"
 
 type SkillCardProps = {
   index: number

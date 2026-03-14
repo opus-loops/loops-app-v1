@@ -3,9 +3,10 @@ import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
+import type { SubmitVoucherWire } from "./submit-voucher-fn"
+
 import { useGlobalError } from "../../session/global-error-provider"
 import { submitVoucherFn } from "./submit-voucher-fn"
-import type { SubmitVoucherWire } from "./submit-voucher-fn"
 
 export function useSubmitVoucher() {
   const submitVoucherServer = useServerFn(submitVoucherFn)

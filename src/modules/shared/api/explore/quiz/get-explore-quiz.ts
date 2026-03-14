@@ -1,5 +1,6 @@
-import { Schema } from "effect"
 import type { Effect } from "effect"
+
+import { Schema } from "effect"
 
 import { quizSchema } from "@/modules/shared/domain/entities/quiz"
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
@@ -8,8 +9,8 @@ import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-c
 import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not-found"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
-  UseCaseErrorSchema,
   invalidInputFactory,
+  UseCaseErrorSchema,
 } from "@/modules/shared/domain/utils/invalid-input"
 import { instanceFactory } from "@/modules/shared/utils/axios"
 import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"

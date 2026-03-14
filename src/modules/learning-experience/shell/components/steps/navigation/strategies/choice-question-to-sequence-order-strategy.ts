@@ -1,5 +1,6 @@
 import { Effect } from "effect"
 
+import type { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 
 import type {
@@ -7,7 +8,6 @@ import type {
   SubQuizNavigationContext,
   SubQuizNavigationError,
 } from "../../sub-quiz-navigation-types"
-import type { useStartSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-start-sequence-order"
 
 /**
  * Navigation strategy for transitioning from a Choice Question to a Sequence Order Question.

@@ -2,14 +2,14 @@ import { useForm } from "@tanstack/react-form"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
-import countriesCitiesData from "@/data/countries-cities.json"
 import type { User } from "@/modules/shared/domain/entities/user"
-import { useUpdatePreferences } from "../../hooks/use-update-preferences"
 
+import countriesCitiesData from "@/data/countries-cities.json"
 import { UserIcon } from "@/modules/shared/components/icons/user"
 import { Button } from "@/modules/shared/components/ui/button"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 
+import { useUpdatePreferences } from "../../hooks/use-update-preferences"
 import { BirthDateCalendar } from "./preferences/birth-date-calendar"
 import {
   backgroundOptions,
@@ -22,10 +22,6 @@ import { InlineSelect } from "./preferences/inline-select"
 import { LanguageSelectGroup } from "./preferences/language-select-group"
 import { PreferenceField } from "./preferences/preference-field"
 import { PreferencesGroup } from "./preferences/preferences-group"
-
-type PreferencesFormProps = {
-  user: User
-}
 
 type CountriesCities = {
   Countries: Array<{
@@ -40,6 +36,10 @@ type CountriesCities = {
 type FieldErrorProps = {
   errors: Array<unknown>
   isTouched?: boolean
+}
+
+type PreferencesFormProps = {
+  user: User
 }
 
 export function PreferencesForm({ user }: PreferencesFormProps) {
@@ -593,6 +593,12 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
   )
 }
 
+function dateToInputValue(date: Date | undefined) {
+  if (!date) return ""
+  const iso = date.toISOString()
+  return iso.split("T")[0] ?? ""
+}
+
 function getFieldError({ errors, isTouched }: FieldErrorProps) {
   if (!isTouched || !errors || errors.length === 0) return null
   return errors.filter((e): e is string => typeof e === "string").join(", ")
@@ -604,10 +610,4 @@ function sortStrings(values: Array<string>) {
 
 function toOptions(values: Array<string>) {
   return values.map((v) => ({ label: v, value: v }))
-}
-
-function dateToInputValue(date: Date | undefined) {
-  if (!date) return ""
-  const iso = date.toISOString()
-  return iso.split("T")[0] ?? ""
 }
