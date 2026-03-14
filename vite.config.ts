@@ -184,5 +184,9 @@ export default defineConfig({
   build: {
     sourcemap: true,
     emptyOutDir: true,
+    minify: "esbuild",
+    rollupOptions: {
+      maxParallelFileOps: 10,
+    },
   },
 })
