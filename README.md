@@ -192,8 +192,10 @@ The app supports multiple languages using React i18n:
 - **Input Validation**: All inputs validated with Zod schemas
 - **XSS Protection**: Sanitized user inputs
 - **CSRF Protection**: Secure API communication
-- **Secure Headers**: Security headers configured
+- **Secure Headers**: Configure them at the edge or app server before production
 - **Environment Variables**: Sensitive data in environment variables
+
+Use `docs/production-readiness-checklist.md` as the release gate before production deployments.
 
 ## 🚀 Deployment
 
@@ -208,7 +210,11 @@ yarn build
 Ensure production environment variables are configured:
 
 - `VITE_API_URL` - Production API endpoint
-- `VITE_SESSION_SECRET_KEY` - Strong secret key for sessions
+- `SESSION_SECRET_KEY` - Strong server-side secret key for sessions
+- `VITE_GOOGLE_CLIENT_ID` - Google Sign-In client ID when enabled
+- `VITE_SENTRY_DSN` - Optional browser Sentry DSN
+- `SENTRY_DSN` - Optional server Sentry DSN
+- `SENTRY_AUTH_TOKEN` - Optional build-time token for uploading source maps
 
 ### PWA Deployment
 

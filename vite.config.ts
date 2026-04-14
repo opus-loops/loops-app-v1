@@ -15,6 +15,7 @@ const nitroRawPrefix = "nitro:raw:"
 const nitroRawResolvedPrefix = "\0nitro:raw:"
 const nitroRawJsonProxyPrefix = "\0nitro-raw-json:"
 const nitroRawJsonProxySuffix = ".txt"
+const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN!
 
 export default defineConfig({
   build: {
@@ -85,7 +86,7 @@ export default defineConfig({
     tsConfigPaths(),
     tanstackStart(),
     sentryTanstackStart({
-      authToken: process.env.SENTRY_AUTH_TOKEN as string,
+      authToken: sentryAuthToken,
       org: "opuslab-edtech-95",
       project: "loops-app",
       sourcemaps: {

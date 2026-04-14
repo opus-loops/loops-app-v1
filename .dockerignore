@@ -1,0 +1,14 @@
+node_modules/
+.output/
+dist/
+dev-dist/
+.git/
+.github/
+.idea/
+.vscode/
+.tanstack/
+.figma/
+.trae/
+.DS_Store
+.env
+.staging.env

@@ -1,0 +1,36 @@
+services:
+  loops_web:
+    image: ${APP_IMAGE:-ghcr.io/opus-loops/loops-app-v1:staging}
+    networks:
+      - internal
+    ports:
+      - target: 3001
+        published: 11080
+        protocol: tcp
+        mode: ingress
+    environment:
+      ENV_FILE_PATH: /home/app/.env
+      HOST: 0.0.0.0
+      NODE_ENV: production
+      PORT: 3001
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+    configs:
+      - source: app_env
+        target: /home/app/.env
+
+networks:
+  internal:
+    driver: overlay
+
+configs:
+  app_env:
+    external: true
+    name: ${APP_ENV_CONFIG_NAME:-loops_client_env_staging}
+

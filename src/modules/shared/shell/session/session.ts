@@ -5,12 +5,14 @@ import {
 } from "@tanstack/react-start/server"
 import { jwtVerify, SignJWT } from "jose"
 
+import { serverEnv } from "@/lib/server-env"
+
 export type Session = {
   accessToken: string
   refreshToken: string
 }
 
-const secretKey = import.meta.env.VITE_SESSION_SECRET_KEY
+const secretKey = serverEnv.sessionSecretKey
 const encodedKey = new TextEncoder().encode(secretKey)
 
 export async function createSession(payload: Session) {
