@@ -3,8 +3,6 @@ import type { Effect } from "effect"
 import axios from "axios"
 import { Schema } from "effect"
 
-import { publicEnv } from "@/lib/public-env"
-
 import { invalidRefreshTokenErrorSchema } from "../../domain/errors/invalid-refresh-token"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import { loginTokensSchema } from "../../domain/types/login-tokens"
@@ -33,7 +31,8 @@ export function refreshAccessToken(args?: RefreshArgs): RefreshResult {
     ? parseEffectSchema(Schema.Struct({ refresh: Schema.String }), args)
     : undefined
 
-  const url = publicEnv.apiUrl + "/auth/refresh"
+  const apiUrl = import.meta.env.VITE_API_URL
+  const url = apiUrl + "/auth/refresh"
   const response = axios.post(url, {
     refreshToken: parsedArgs?.refresh,
   })

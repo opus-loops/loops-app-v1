@@ -1,8 +1,6 @@
 import axios from "axios"
 import { Effect } from "effect"
 
-import { publicEnv } from "@/lib/public-env"
-
 import { refreshAccessToken } from "../api/auth/refresh"
 import {
   deleteSession,
@@ -60,4 +58,4 @@ export const instanceFactory = async () => {
   })
 }
 
-export const baseApiURL = publicEnv.apiUrl
+export const baseApiURL = import.meta.env.VITE_API_URL

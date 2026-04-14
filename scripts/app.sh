@@ -40,11 +40,6 @@ remove_temporary_artifacts() {
     rm -rf dist
     log "Removed dist directory"
   fi
-
-  if [[ -d ".output" ]]; then
-    find .output -type f -name "*.map" -delete
-    log "Removed remaining .map files from .output"
-  fi
 }
 
 build_app() {
