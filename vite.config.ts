@@ -15,7 +15,6 @@ const nitroRawPrefix = "nitro:raw:"
 const nitroRawResolvedPrefix = "\0nitro:raw:"
 const nitroRawJsonProxyPrefix = "\0nitro-raw-json:"
 const nitroRawJsonProxySuffix = ".txt"
-const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN
 
 export default defineConfig({
   build: {
@@ -24,7 +23,7 @@ export default defineConfig({
     rollupOptions: {
       maxParallelFileOps: 10,
     },
-    sourcemap: "hidden",
+    sourcemap: true,
   },
   plugins: [
     {
@@ -85,6 +84,15 @@ export default defineConfig({
     }),
     tsConfigPaths(),
     tanstackStart(),
+    sentryTanstackStart({
+      authToken: process.env.SENTRY_AUTH_TOKEN as string,
+      org: "opuslab-edtech-95",
+      project: "loops-app",
+      sourcemaps: {
+        assets: ["./.output/**/*", "./dist/**/*"],
+      },
+      telemetry: false,
+    }),
     VitePWA({
       devOptions: {
         enabled: true,
@@ -180,22 +188,5 @@ export default defineConfig({
     }),
     tailwindcss(),
     viteReact(),
-    ...(sentryAuthToken
-      ? [
-          sentryTanstackStart({
-            authToken: sentryAuthToken,
-            org: "opuslab-edtech-95",
-            project: "loops-app",
-            sourcemaps: {
-              assets: ["./.output/**/*", "./dist/**/*"],
-              filesToDeleteAfterUpload: [
-                "./.output/**/*.map",
-                "./dist/**/*.map",
-              ],
-            },
-            telemetry: false,
-          }),
-        ]
-      : []),
   ],
 })

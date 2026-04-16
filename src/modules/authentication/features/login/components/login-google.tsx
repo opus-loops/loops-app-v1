@@ -93,6 +93,7 @@ interface PromptMomentNotification {
     | "browser_not_supported"
     | "invalid_client"
     | "missing_client_id"
+    | "missing_required_parameter"
     | "opt_out_or_no_session"
     | "secure_http_required"
     | "suppressed_by_user"
@@ -125,10 +126,8 @@ export function LoginGoogle() {
 
   useEffect(() => {
     const checkGoogleLoaded = () => {
-      if (window.google?.accounts?.id) {
-        setIsGoogleLoaded(true)
-        initializeGoogle()
-      } else setTimeout(checkGoogleLoaded, 100)
+      setIsGoogleLoaded(true)
+      initializeGoogle()
     }
 
     checkGoogleLoaded()
@@ -181,7 +180,11 @@ export function LoginGoogle() {
 
         if (reason === "browser_not_supported")
           toast.error("Your browser doesn't support Google Sign-In.")
-        else if (reason === "invalid_client" || reason === "missing_client_id")
+        else if (
+          reason === "invalid_client" ||
+          reason === "missing_client_id" ||
+          reason === "missing_required_parameter"
+        )
           toast.error("Google Sign-In is not properly configured.")
         else if (reason === "opt_out_or_no_session")
           toast.info("Please sign in to your Google account first.")

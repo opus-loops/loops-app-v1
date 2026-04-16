@@ -45,7 +45,7 @@ export const googleLoginFn = createServerFn({ method: "POST" })
     let wire: GoogleLoginWire
     if (exit._tag === "Success") {
       wire = { _tag: "Success", value: exit.value }
-      // 3) Server-side side-effects
+      // 3) Server-side side effects
       await createSession({
         accessToken: exit.value.access.token,
         refreshToken: exit.value.refresh.token,
