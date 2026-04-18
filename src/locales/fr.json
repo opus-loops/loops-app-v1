@@ -160,6 +160,25 @@
     "edit_profile": "Modifier le profil",
     "security": "Sécurité et mot de passe",
     "preferences": "Préférences",
+    "delete_account": "Supprimer le compte",
+    "delete_account_error_title": "Impossible de supprimer votre compte",
+    "delete_account_error_description": "Veuillez réessayer dans un instant.",
+    "delete_account_confirm": {
+      "title": "Voulez-vous vraiment partir ?",
+      "description_line_1": "La suppression du compte effacera votre progression et votre profil.",
+      "description_line_2": "Si vous le souhaitez, dites-nous pourquoi vous partez avant de partir.",
+      "mascot_alt": "Mascotte Loops triste",
+      "reason_label": "Pourquoi partez-vous ?",
+      "placeholder": "Dites-nous pourquoi vous partez (facultatif)",
+      "cancel": "Annuler",
+      "confirm": "Supprimer mon compte"
+    },
+    "delete_account_farewell": {
+      "title": "Vous allez nous manquer",
+      "description": "Nous sommes tristes de vous voir partir. À la prochaine.",
+      "mascot_alt": "Mascotte Loops triste qui dit au revoir",
+      "action": "À la prochaine"
+    },
     "logout_confirm": {
       "title": "Encore un petit effort !",
       "description_line_1": "Tu es super proche d’avancer !",

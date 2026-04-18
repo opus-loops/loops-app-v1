@@ -160,6 +160,25 @@
     "edit_profile": "Edit Profile",
     "security": "Security & Password",
     "preferences": "Preferences",
+    "delete_account": "Delete Account",
+    "delete_account_error_title": "Unable to delete your account",
+    "delete_account_error_description": "Please try again in a moment.",
+    "delete_account_confirm": {
+      "title": "Are you sure you want to leave?",
+      "description_line_1": "Deleting your account will remove your progress and profile.",
+      "description_line_2": "If you want, tell us why you are leaving before you go.",
+      "mascot_alt": "Sad Loops mascot",
+      "reason_label": "Why are you leaving?",
+      "placeholder": "Tell us why you are leaving (optional)",
+      "cancel": "Cancel",
+      "confirm": "Delete my account"
+    },
+    "delete_account_farewell": {
+      "title": "We will miss you",
+      "description": "We are sad to see you go. Until next time.",
+      "mascot_alt": "Sad Loops mascot waving goodbye",
+      "action": "See you next time"
+    },
     "logout_confirm": {
       "title": "Just a little more effort!",
       "description_line_1": "You are so close to advancing!",

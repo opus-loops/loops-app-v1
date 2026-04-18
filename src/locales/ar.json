@@ -154,6 +154,25 @@
     "edit_profile": "تعديل الملف الشخصي",
     "security": "الأمان وكلمة المرور",
     "preferences": "التفضيلات",
+    "delete_account": "حذف الحساب",
+    "delete_account_error_title": "تعذّر حذف حسابك",
+    "delete_account_error_description": "يرجى المحاولة مرة أخرى بعد قليل.",
+    "delete_account_confirm": {
+      "title": "هل أنت متأكد أنك تريد المغادرة؟",
+      "description_line_1": "حذف الحساب سيزيل تقدمك وملفك الشخصي.",
+      "description_line_2": "إذا أردت، أخبرنا لماذا ستغادر قبل الرحيل.",
+      "mascot_alt": "تميمة Loops حزينة",
+      "reason_label": "لماذا تريد المغادرة؟",
+      "placeholder": "أخبرنا لماذا ستغادر (اختياري)",
+      "cancel": "إلغاء",
+      "confirm": "احذف حسابي"
+    },
+    "delete_account_farewell": {
+      "title": "سنفتقدك",
+      "description": "نحن حزينون لرؤيتك تغادر. إلى لقاء قريب.",
+      "mascot_alt": "تميمة Loops حزينة تلوح مودعة",
+      "action": "إلى اللقاء"
+    },
     "logout_confirm": {
       "title": "مجهود قليل آخر!",
       "description_line_1": "أنت قريب جداً من التقدم!",

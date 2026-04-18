@@ -1,3 +1,4 @@
+import { useForm } from "@tanstack/react-form"
 import { Link } from "@tanstack/react-router"
 import { ChevronRight } from "lucide-react"
 import { useState } from "react"
@@ -6,14 +7,22 @@ import { useTranslation } from "react-i18next"
 import type { User } from "@/modules/shared/domain/entities/user"
 
 import { useLogout } from "@/modules/authentication/features/login/services/use-logout"
+import { useDeleteAccount } from "@/modules/profile/hooks/use-delete-account"
 import { ExitIcon } from "@/modules/shared/components/icons/exit"
 import { UserIcon } from "@/modules/shared/components/icons/user"
 import { OpenCategoriesButton } from "@/modules/shared/components/navigation/open-categories-button"
+import { useToast } from "@/modules/shared/hooks/use-toast"
 
+import type { DeleteAccountConfirmFormValues } from "./delete-account-confirm-dialog"
+
+import { DeleteAccountConfirmDialog } from "./delete-account-confirm-dialog"
 import { LogoutConfirmDialog } from "./logout-confirm-dialog"
+
+// TODO: Refactor by splitting the component to respect SRP principle
 
 type SettingsRowProps = {
   label: string
+  onClick?: () => void
   to?: string
 }
 
@@ -22,9 +31,35 @@ type SettingsScreenProps = {
 }
 
 export function SettingsScreen({ user }: SettingsScreenProps) {
+  const { handleDeleteAccount } = useDeleteAccount()
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
+  const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] =
+    useState(false)
   const { handleLogout } = useLogout()
+  const { error: toastError } = useToast()
   const { t } = useTranslation()
+
+  const deleteAccountForm = useForm({
+    defaultValues: {} as DeleteAccountConfirmFormValues,
+    onSubmit: async ({ value }) => {
+      const response = await handleDeleteAccount(value.reason)
+
+      if (response._tag === "Failure") {
+        if (response.error.code === "Unauthorized") {
+          setIsDeleteAccountDialogOpen(false)
+          return
+        }
+
+        toastError(t("profile.delete_account_error_title"), {
+          description: t("profile.delete_account_error_description"),
+        })
+        return
+      }
+
+      deleteAccountForm.reset()
+      setIsDeleteAccountDialogOpen(false)
+    },
+  })
 
   return (
     <div className="bg-loops-background w-full">
@@ -87,19 +122,25 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
             label={t("profile.preferences")}
             to="/profile/settings/preferences"
           />
+          <SettingsRow
+            label={t("profile.logout")}
+            onClick={() => setIsLogoutDialogOpen(true)}
+          />
         </div>
 
         <div className="mt-auto pt-10">
           <button
-            aria-label={t("profile.logout")}
-            className="flex items-center gap-3 px-1 text-[#ff3b3b]"
-            onClick={() => setIsLogoutDialogOpen(true)}
+            aria-label={t("profile.delete_account")}
+            className="flex w-full items-center justify-center gap-3 rounded-2xl border border-[#ff6265] bg-transparent px-4 py-3 text-[#ff6265] transition-colors hover:bg-[#ff6265]/10 focus-visible:ring-2 focus-visible:ring-[#ff6265]/40 focus-visible:outline-none"
+            onClick={() => setIsDeleteAccountDialogOpen(true)}
             type="button"
           >
             <div className="h-6 w-6">
               <ExitIcon />
             </div>
-            <span className="text-base font-medium">{t("profile.logout")}</span>
+            <span className="text-base font-medium">
+              {t("profile.delete_account")}
+            </span>
           </button>
 
           <LogoutConfirmDialog
@@ -109,13 +150,38 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
             onOpenChange={setIsLogoutDialogOpen}
             open={isLogoutDialogOpen}
           />
+
+          <DeleteAccountConfirmDialog
+            isSubmitting={deleteAccountForm.state.isSubmitting}
+            onOpenChange={(open) => {
+              setIsDeleteAccountDialogOpen(open)
+
+              if (!open) {
+                deleteAccountForm.reset()
+              }
+            }}
+            onReasonBlur={() => {
+              deleteAccountForm.setFieldMeta("reason", (prev) => ({
+                ...prev,
+                isTouched: true,
+              }))
+            }}
+            onReasonChange={(value) => {
+              deleteAccountForm.setFieldValue("reason", value)
+            }}
+            onSubmit={() => {
+              void deleteAccountForm.handleSubmit()
+            }}
+            open={isDeleteAccountDialogOpen}
+            reason={deleteAccountForm.state.values.reason}
+          />
         </div>
       </div>
     </div>
   )
 }
 
-function SettingsRow({ label, to }: SettingsRowProps) {
+function SettingsRow({ label, onClick, to }: SettingsRowProps) {
   const content = (
     <>
       <span className="text-loops-light text-base font-medium">{label}</span>
@@ -139,6 +205,7 @@ function SettingsRow({ label, to }: SettingsRowProps) {
   return (
     <button
       className="flex w-full items-center justify-between px-2 py-2 text-left"
+      onClick={onClick}
       type="button"
     >
       {content}
