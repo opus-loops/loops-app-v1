@@ -31,7 +31,7 @@ export type ExploreCategoryParams = {
 }
 
 export type ExploreCategorySuccess = {
-  category: CategoryWithStartedCategory
+  category: CategoryWithStartedCategory | null
 }
 
 // JSON-safe wire union
@@ -61,6 +61,8 @@ const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
     }
 
     const { category } = categoryExit.value
+    if (!category) return { category: null }
+
     const categoryWithStartedData: CategoryWithStartedCategory = { ...category }
 
     // 2) Try to fetch the started category data
@@ -74,10 +76,16 @@ const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
       ),
     )
 
+    if (startedCategoryExit._tag === "Failure") {
+      const failure = handleServerFnFailure(startedCategoryExit.cause)
+      return yield* Effect.fail(failure as ExploreCategoryErrors)
+    }
+
     // If started category exists, add it to the category data
-    if (startedCategoryExit._tag === "Success") {
-      categoryWithStartedData.startedCategory =
-        startedCategoryExit.value.startedCategory
+    const { startedCategory } = startedCategoryExit.value
+
+    if (startedCategory) {
+      categoryWithStartedData.startedCategory = startedCategory
 
       const getCertificate = yield* _(
         Effect.promise(() => getCertificateFactory()),
@@ -89,9 +97,13 @@ const fetchExploreCategoryEffect = (params: ExploreCategoryParams) =>
         ),
       )
 
-      if (certificateExit._tag === "Success") {
-        categoryWithStartedData.certificate = certificateExit.value.certificate
+      if (certificateExit._tag === "Failure") {
+        const failure = handleServerFnFailure(certificateExit.cause)
+        return yield* Effect.fail(failure as ExploreCategoryErrors)
       }
+
+      const { certificate } = certificateExit.value
+      if (certificate) categoryWithStartedData.certificate = certificate
     }
 
     // If it fails with category_not_started, that's expected - category not started yet
@@ -111,7 +123,8 @@ export const exploreCategoryFn = createServerFn({ method: "GET" })
   .handler(async (ctx): Promise<ExploreCategoryWire> => {
     const getLoggedUser = await getLoggedUserFactory()
     const userExit = await Effect.runPromiseExit(getLoggedUser())
-    const isAuthenticated = userExit._tag === "Success"
+    const isAuthenticated =
+      userExit._tag === "Success" && userExit.value.user !== null
 
     if (!isAuthenticated)
       return {

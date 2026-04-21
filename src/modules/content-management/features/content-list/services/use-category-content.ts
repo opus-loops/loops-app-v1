@@ -1,5 +1,4 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
-import { redirect } from "@tanstack/react-router"
 
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 
@@ -24,13 +23,11 @@ export const categoryContentQuery = (
       })
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") await handleSessionExpired()
-        if (response.error.code === "category_not_found")
-          throw redirect({ search: { category: "all" }, to: "/" })
         throw new Error("Failed to fetch category content")
       }
       return response.value
     },
-    queryKey: ["category-content", params.categoryId],
+    queryKey: ["category-content", params.categoryId, params.size],
   })
 
 export function useCategoryContent(params: CategoryContentParams) {

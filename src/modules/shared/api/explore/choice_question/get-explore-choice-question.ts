@@ -3,16 +3,7 @@ import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { choiceQuestionSchema } from "@/modules/shared/domain/entities/choice-question"
-import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
-import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
-import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
-import { notQuizQuestionErrorSchema } from "@/modules/shared/domain/errors/not-quiz-question"
-import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not-found"
-import { quizNotStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-not-started"
-import { subQuizNotFoundErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-not-found"
-import { subQuizNotStartedErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-not-started"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -40,23 +31,14 @@ export const getExploreChoiceQuestionErrorsSchema = Schema.Union(
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
-  categoryNotFoundErrorSchema,
-  categoryNotStartedErrorSchema,
-  quizNotFoundErrorSchema,
-  notCategoryItemErrorSchema,
-  quizNotStartedErrorSchema,
-  subQuizNotStartedErrorSchema,
-  subQuizNotFoundErrorSchema,
-  notQuizQuestionErrorSchema,
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type GetExploreChoiceQuestionErrors =
   typeof getExploreChoiceQuestionErrorsSchema.Type
 
 export const getExploreChoiceQuestionSuccessSchema = Schema.Struct({
-  choiceQuestion: choiceQuestionSchema,
+  choiceQuestion: Schema.NullOr(choiceQuestionSchema),
 })
 
 export type GetExploreChoiceQuestionSuccess =

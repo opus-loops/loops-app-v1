@@ -26,10 +26,18 @@ export const subQuizContentQuery = (
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") await handleSessionExpired()
-        if (response.error.code === "category_not_found")
-          throw redirect({ search: { category: "all" }, to: "/" })
         throw new Error("Failed to fetch sub-quiz content")
       }
+
+      if (response.value.subQuiz === null)
+        throw redirect({
+          search: {
+            category: params.categoryId,
+            contentId: params.quizId,
+            type: "content",
+          },
+          to: "/",
+        })
 
       return response.value
     },

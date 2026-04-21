@@ -3,11 +3,7 @@ import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { certificateSchema } from "@/modules/shared/domain/entities/certificate"
-import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
-import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
-import { certificateNotFoundErrorSchema } from "@/modules/shared/domain/errors/certificate-not-found"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -30,17 +26,13 @@ export const getCertificateErrorsSchema = Schema.Union(
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
-  certificateNotFoundErrorSchema,
-  categoryNotStartedErrorSchema,
-  categoryNotFoundErrorSchema,
-  userNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
 )
 
 export type GetCertificateErrors = typeof getCertificateErrorsSchema.Type
 
 export const getCertificateSuccessSchema = Schema.Struct({
-  certificate: certificateSchema,
+  certificate: Schema.NullOr(certificateSchema),
 })
 
 export type GetCertificateSuccess = typeof getCertificateSuccessSchema.Type

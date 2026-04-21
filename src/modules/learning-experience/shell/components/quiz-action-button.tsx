@@ -15,7 +15,7 @@ type QuizActionButtonProps = {
 export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { t } = useTranslation()
-  const { initializeQuiz } = useSubQuizNavigation({
+  const { initializeQuiz, startedQuiz } = useSubQuizNavigation({
     quizItem,
   })
 
@@ -26,8 +26,8 @@ export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
     setIsSubmitting(false)
   }
 
-  const isStarted = !!quizItem.itemProgress
-  const isCompleted = quizItem.itemProgress?.status === "completed"
+  const isStarted = startedQuiz !== undefined
+  const isCompleted = startedQuiz?.status === "completed"
 
   return (
     <Button

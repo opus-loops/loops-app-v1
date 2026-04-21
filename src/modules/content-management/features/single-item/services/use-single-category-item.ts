@@ -31,11 +31,18 @@ export const singleCategoryItemQuery = (
       })
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") await handleSessionExpired()
-        if (response.error.code === "category_not_found")
-          throw redirect({ search: { category: "all" }, to: "/" })
         throw new Error("Failed to fetch category item")
       }
-      return response.value
+
+      const { categoryItem } = response.value
+
+      if (categoryItem === null)
+        throw redirect({
+          search: { category: params.categoryId, type: "content" },
+          to: "/",
+        })
+
+      return { categoryItem }
     },
     queryKey: ["single-category-item", params.categoryId, params.itemId],
   })
@@ -49,7 +56,6 @@ export function useSingleCategoryItem(params: SingleCategoryItemParams) {
   )
 
   useEffect(() => {
-    if (!data?.categoryItem) return
     queryClient.setQueryData(
       ["category-content"],
       (old: Array<CategoryContentItem> | undefined) => {
@@ -61,7 +67,7 @@ export function useSingleCategoryItem(params: SingleCategoryItemParams) {
         )
       },
     )
-  }, [data?.categoryItem, params.itemId, queryClient])
+  }, [data.categoryItem, params.itemId, queryClient])
 
   return { categoryItem: data.categoryItem }
 }

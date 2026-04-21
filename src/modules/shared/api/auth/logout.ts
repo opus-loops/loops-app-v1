@@ -4,7 +4,6 @@ import { Schema } from "effect"
 
 import { internalErrorSchema } from "../../domain/errors/internal-error"
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
-import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import { successResponseSchema } from "../../domain/types/success-response"
 import {
   invalidInputFactory,
@@ -27,7 +26,6 @@ export const logoutErrorsSchema = Schema.Union(
   ),
   invalidExpiredTokenErrorSchema,
   internalErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type LogoutErrors = typeof logoutErrorsSchema.Type

@@ -4,7 +4,6 @@ import { Schema } from "effect"
 
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
 import { invalidFileErrorSchema } from "../../domain/errors/invalid-file"
-import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -27,7 +26,6 @@ export const uploadFileErrorsSchema = Schema.Union(
     }),
   ),
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
   invalidFileErrorSchema,
 )
 

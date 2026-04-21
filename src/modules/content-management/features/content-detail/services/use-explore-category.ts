@@ -21,11 +21,19 @@ export const exploreCategoryQuery = (
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") await handleSessionExpired()
-        if (response.error.code === "category_not_found")
-          throw redirect({ search: { category: "all" }, to: "/" })
         throw new Error("Failed to fetch explore category")
       }
-      return response.value
+
+      const { category } = response.value
+
+      if (category === null) {
+        throw redirect({
+          search: { category: "all" },
+          to: "/",
+        })
+      }
+
+      return { category }
     },
     queryKey: ["explore-category", params.categoryId],
   })

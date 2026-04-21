@@ -4,7 +4,6 @@ import { Schema } from "effect"
 
 import { userSchema } from "../../domain/entities/user"
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
-import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -20,7 +19,6 @@ export const getLoggedUserErrorsSchema = Schema.Union(
     }),
   ),
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type GetLoggedUserErrors = typeof getLoggedUserErrorsSchema.Type
@@ -30,7 +28,10 @@ type GetLoggedUserResult = Effect.Effect<
   GetLoggedUserErrors
 >
 
-export const getLoggedUserSuccessSchema = Schema.Struct({ user: userSchema })
+export const getLoggedUserSuccessSchema = Schema.Struct({
+  user: Schema.NullOr(userSchema),
+})
+
 export type GetLoggedUserSuccess = typeof getLoggedUserSuccessSchema.Type
 
 export const getLoggedUserFactory = async () => {

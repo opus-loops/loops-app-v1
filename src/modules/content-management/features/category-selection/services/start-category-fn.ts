@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type {
   startCategoryErrorsSchema,
@@ -35,7 +35,8 @@ export const startCategoryFn = createServerFn({ method: "POST" })
   .handler(async (ctx): Promise<StartCategoryWire> => {
     const getLoggedUser = await getLoggedUserFactory()
     const userExit = await Effect.runPromiseExit(getLoggedUser())
-    const isAuthenticated = userExit._tag === "Success"
+    const isAuthenticated =
+      userExit._tag === "Success" && userExit.value.user !== null
 
     if (!isAuthenticated)
       return {

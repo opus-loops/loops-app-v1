@@ -1,7 +1,8 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type { getExploreSubQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
+import type { SubQuiz } from "@/modules/shared/domain/entities/sub-quiz"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 import { getExploreSubQuizFactory } from "@/modules/shared/api/explore/quiz/get-explore-sub-quiz"
@@ -21,7 +22,7 @@ export type GetSubQuizContentParams = {
 }
 
 export type GetSubQuizContentSuccess = {
-  subQuiz: any // This will be the actual sub-quiz data from the API
+  subQuiz: null | SubQuiz
 }
 
 export type GetSubQuizContentWire =
@@ -55,7 +56,7 @@ const fetchSubQuizContentEffect = (params: GetSubQuizContentParams) =>
       return yield* Effect.fail(failure as GetSubQuizContentErrors)
     }
 
-    return { subQuiz: subQuizExit.value }
+    return { subQuiz: subQuizExit.value.subQuiz }
   })
 
 // --- SERVER FUNCTION ---------------------------------------------------------
@@ -73,7 +74,8 @@ export const getSubQuizContentFn = createServerFn({
   .handler(async (ctx): Promise<GetSubQuizContentWire> => {
     const getLoggedUser = await getLoggedUserFactory()
     const userExit = await Effect.runPromiseExit(getLoggedUser())
-    const isAuthenticated = userExit._tag === "Success"
+    const isAuthenticated =
+      userExit._tag === "Success" && userExit.value.user !== null
 
     if (!isAuthenticated)
       return {

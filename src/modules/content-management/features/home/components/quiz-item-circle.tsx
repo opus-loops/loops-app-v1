@@ -42,7 +42,7 @@ export function QuizItemCircle({
   const { t } = useTranslation()
 
   const getProgressState = (): ProgressState => {
-    if (item.itemProgress === undefined) return "locked"
+    if (!item.itemProgress) return "locked"
     if (item.itemProgress.status === "completed") return "completed"
     return "started"
   }

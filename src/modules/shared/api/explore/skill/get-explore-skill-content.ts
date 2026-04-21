@@ -3,14 +3,7 @@ import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { skillContentSchema } from "@/modules/shared/domain/entities/skill-content"
-import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
-import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
-import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
-import { skillContentNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-content-not-found"
-import { skillNotCompletedErrorSchema } from "@/modules/shared/domain/errors/skill-not-completed"
-import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -35,21 +28,14 @@ export const getExploreSkillContentErrorsSchema = Schema.Union(
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
-  skillContentNotFoundErrorSchema,
-  skillNotCompletedErrorSchema,
-  categoryNotStartedErrorSchema,
-  skillNotFoundErrorSchema,
-  notCategoryItemErrorSchema,
-  categoryNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type GetExploreSkillContentErrors =
   typeof getExploreSkillContentErrorsSchema.Type
 
 export const getExploreSkillContentSuccessSchema = Schema.Struct({
-  skillContent: skillContentSchema,
+  skillContent: Schema.NullOr(skillContentSchema),
 })
 
 export type GetExploreSkillContentSuccess =

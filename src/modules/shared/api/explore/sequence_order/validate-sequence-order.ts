@@ -13,7 +13,6 @@ import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not
 import { quizNotStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-not-started"
 import { subQuizNotFoundErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-not-found"
 import { subQuizNotStartedErrorSchema } from "@/modules/shared/domain/errors/sub-quiz-not-started"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -54,7 +53,6 @@ export const validateSequenceOrderErrorsSchema = Schema.Union(
   notQuizQuestionErrorSchema,
   questionAlreadyCompletedErrorSchema,
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
   internalErrorSchema,
 )
 

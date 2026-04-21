@@ -32,7 +32,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     const auth = await isAuthenticated()
     const pendingLanguage = await getPendingLanguageFn()
 
-    if (auth._tag === "Success") {
+    if (auth._tag === "Success" && auth.value.user !== null) {
       if (pendingLanguage) {
         await updatePreferencesFn({
           data: { language: pendingLanguage },

@@ -3,11 +3,7 @@ import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { quizSchema } from "@/modules/shared/domain/entities/quiz"
-import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
-import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
-import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not-found"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -32,17 +28,13 @@ export const getExploreQuizErrorsSchema = Schema.Union(
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
-  quizNotFoundErrorSchema,
-  notCategoryItemErrorSchema,
-  categoryNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type GetExploreQuizErrors = typeof getExploreQuizErrorsSchema.Type
 
 export const getExploreQuizSuccessSchema = Schema.Struct({
-  quiz: quizSchema,
+  quiz: Schema.NullOr(quizSchema),
 })
 
 export type GetExploreQuizSuccess = typeof getExploreQuizSuccessSchema.Type

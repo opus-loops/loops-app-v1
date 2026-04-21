@@ -10,7 +10,6 @@ import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-c
 import { previousItemNotCompletedErrorSchema } from "@/modules/shared/domain/errors/previous-item-not-completed"
 import { quizAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-already-started"
 import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not-found"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -44,7 +43,6 @@ export const startQuizErrorsSchema = Schema.Union(
   categoryNotFoundErrorSchema,
   categoryNotStartedErrorSchema,
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type StartQuizErrors = typeof startQuizErrorsSchema.Type

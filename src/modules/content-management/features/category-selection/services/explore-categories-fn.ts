@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type {
   listExploreCategoriesErrorsSchema,
@@ -73,14 +73,20 @@ const fetchExploreCategoriesEffect = () =>
         ),
       )
 
+      if (startedCategoryExit._tag === "Failure") {
+        const failure = handleServerFnFailure(startedCategoryExit.cause)
+        return yield* Effect.fail(failure as ExploreCategoriesErrors)
+      }
+
       const categoryWithStartedData: CategoryWithStartedCategory = {
         ...category,
       }
 
       // If started category exists, add it to the category data
-      if (startedCategoryExit._tag === "Success") {
-        categoryWithStartedData.startedCategory =
-          startedCategoryExit.value.startedCategory
+      const { startedCategory } = startedCategoryExit.value
+
+      if (startedCategory) {
+        categoryWithStartedData.startedCategory = startedCategory
 
         const getCertificate = yield* _(
           Effect.promise(() => getCertificateFactory()),
@@ -94,10 +100,13 @@ const fetchExploreCategoriesEffect = () =>
           ),
         )
 
-        if (certificateExit._tag === "Success") {
-          categoryWithStartedData.certificate =
-            certificateExit.value.certificate
+        if (certificateExit._tag === "Failure") {
+          const failure = handleServerFnFailure(certificateExit.cause)
+          return yield* Effect.fail(failure as ExploreCategoriesErrors)
         }
+
+        const { certificate } = certificateExit.value
+        if (certificate) categoryWithStartedData.certificate = certificate
       }
       // If it fails with category_not_started, that's expected - category not started yet
       // If it fails with other errors, we still include the category without started data
@@ -138,7 +147,8 @@ export const exploreCategoriesFn = createServerFn({
 }).handler(async (): Promise<ExploreCategoriesWire> => {
   const getLoggedUser = await getLoggedUserFactory()
   const userExit = await Effect.runPromiseExit(getLoggedUser())
-  const isAuthenticated = userExit._tag === "Success"
+  const isAuthenticated =
+    userExit._tag === "Success" && userExit.value.user !== null
 
   if (!isAuthenticated)
     return {

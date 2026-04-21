@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type {
   completeSkillErrorsSchema,
@@ -38,7 +38,8 @@ export const completeSkillFn = createServerFn({
   .handler(async (ctx): Promise<CompleteSkillWire> => {
     const getLoggedUser = await getLoggedUserFactory()
     const userExit = await Effect.runPromiseExit(getLoggedUser())
-    const isAuthenticated = userExit._tag === "Success"
+    const isAuthenticated =
+      userExit._tag === "Success" && userExit.value.user !== null
 
     if (!isAuthenticated)
       return {

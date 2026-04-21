@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type { getExploreCategoryItemErrorsSchema } from "@/modules/shared/api/explore/category/get-explore-category-item"
 import type { getExploreQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
@@ -36,7 +36,7 @@ export type SingleCategoryItemParams = {
 }
 
 export type SingleCategoryItemSuccess = {
-  categoryItem: CategoryContentItem
+  categoryItem: CategoryContentItem | null
 }
 
 export type SingleCategoryItemWire =
@@ -66,6 +66,8 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
 
     const categoryItem = categoryItemExit.value.categoryItem
 
+    if (categoryItem === null) return { categoryItem: null }
+
     // 2) Fetch the associated content (skill or quiz) and optional status
     if (categoryItem.itemType === "skills") {
       const getExploreSkill = yield* _(
@@ -83,16 +85,47 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
         ),
       )
 
-      if (skillExit._tag === "Success") {
-        // Try to fetch completed skill status (optional)
-        const getCompletedSkill = yield* _(
-          Effect.promise(() => getCompletedSkillFactory()),
+      if (skillExit._tag === "Failure") {
+        const failure = handleServerFnFailure(skillExit.cause)
+        return yield* Effect.fail(failure as SingleCategoryItemErrors)
+      }
+
+      const skill = skillExit.value.skill
+
+      if (skill === null) return { categoryItem: null }
+
+      const getCompletedSkill = yield* _(
+        Effect.promise(() => getCompletedSkillFactory()),
+      )
+
+      const completedSkillExit = yield* _(
+        Effect.promise(() =>
+          Effect.runPromiseExit(
+            getCompletedSkill({
+              categoryId,
+              skillId: categoryItem.itemId,
+            }),
+          ),
+        ),
+      )
+
+      if (completedSkillExit._tag === "Failure") {
+        const failure = handleServerFnFailure(completedSkillExit.cause)
+        return yield* Effect.fail(failure as SingleCategoryItemErrors)
+      }
+
+      const completedSkill = completedSkillExit.value.completedSkill
+
+      let skillContent = null
+      if (completedSkill !== null) {
+        const getExploreSkillContent = yield* _(
+          Effect.promise(() => getExploreSkillContentFactory()),
         )
 
-        const completedSkillExit = yield* _(
+        const skillContentExit = yield* _(
           Effect.promise(() =>
             Effect.runPromiseExit(
-              getCompletedSkill({
+              getExploreSkillContent({
                 categoryId,
                 skillId: categoryItem.itemId,
               }),
@@ -100,52 +133,32 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
           ),
         )
 
-        const completedSkill =
-          completedSkillExit._tag === "Success"
-            ? completedSkillExit.value.completedSkill
-            : undefined
-
-        // Try to fetch skill content if skill is completed (optional)
-        let skillContent = undefined
-        if (completedSkill) {
-          const getExploreSkillContent = yield* _(
-            Effect.promise(() => getExploreSkillContentFactory()),
-          )
-
-          const skillContentExit = yield* _(
-            Effect.promise(() =>
-              Effect.runPromiseExit(
-                getExploreSkillContent({
-                  categoryId,
-                  skillId: categoryItem.itemId,
-                }),
-              ),
-            ),
-          )
-
-          skillContent =
-            skillContentExit._tag === "Success"
-              ? skillContentExit.value.skillContent
-              : undefined
+        if (skillContentExit._tag === "Failure") {
+          const failure = handleServerFnFailure(skillContentExit.cause)
+          return yield* Effect.fail(failure as SingleCategoryItemErrors)
         }
 
-        const skillCategoryItem: CategoryContentItem = {
-          categoryId: categoryItem.categoryId,
-          categoryItemId: categoryItem.categoryItemId,
-          content: skillExit.value.skill,
-          contentType: "skills" as const,
-          itemId: categoryItem.itemId,
-          itemType: "skills" as const,
-          nextCategoryItem: categoryItem.nextCategoryItem,
-          previousCategoryItem: categoryItem.previousCategoryItem,
-        }
-
-        if (completedSkill) skillCategoryItem["itemProgress"] = completedSkill
-        if (skillContent) skillCategoryItem["skillContent"] = skillContent
-
-        return { categoryItem: skillCategoryItem }
+        skillContent = skillContentExit.value.skillContent
       }
-    } else if (categoryItem.itemType === "quizzes") {
+
+      const skillCategoryItem: CategoryContentItem = {
+        categoryId: categoryItem.categoryId,
+        categoryItemId: categoryItem.categoryItemId,
+        content: skill,
+        contentType: "skills" as const,
+        itemId: categoryItem.itemId,
+        itemType: "skills" as const,
+        nextCategoryItem: categoryItem.nextCategoryItem,
+        previousCategoryItem: categoryItem.previousCategoryItem,
+      }
+
+      if (completedSkill !== null)
+        skillCategoryItem["itemProgress"] = completedSkill
+      if (skillContent !== null)
+        skillCategoryItem["skillContent"] = skillContent
+
+      return { categoryItem: skillCategoryItem }
+    } else {
       const getExploreQuiz = yield* _(
         Effect.promise(() => getExploreQuizFactory()),
       )
@@ -162,6 +175,10 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
       )
 
       if (quizExit._tag === "Success") {
+        const quiz = quizExit.value.quiz
+
+        if (quiz === null) return { categoryItem: null }
+
         // Try to fetch started quiz status (optional)
         const getStartedQuiz = yield* _(
           Effect.promise(() => getStartedQuizFactory()),
@@ -178,15 +195,17 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
           ),
         )
 
-        const startedQuiz =
-          startedQuizExit._tag === "Success"
-            ? startedQuizExit.value.startedQuiz
-            : undefined
+        if (startedQuizExit._tag === "Failure") {
+          const failure = handleServerFnFailure(startedQuizExit.cause)
+          return yield* Effect.fail(failure as SingleCategoryItemErrors)
+        }
+
+        const startedQuiz = startedQuizExit.value.startedQuiz
 
         const quizCategoryItem: CategoryContentItem = {
           categoryId: categoryItem.categoryId,
           categoryItemId: categoryItem.categoryItemId,
-          content: quizExit.value.quiz,
+          content: quiz,
           contentType: "quizzes" as const,
           itemId: categoryItem.itemId,
           itemType: "quizzes" as const,
@@ -194,7 +213,7 @@ const fetchSingleCategoryItemEffect = (params: SingleCategoryItemParams) =>
           previousCategoryItem: categoryItem.previousCategoryItem,
         }
 
-        if (startedQuiz) quizCategoryItem["itemProgress"] = startedQuiz
+        if (startedQuiz !== null) quizCategoryItem["itemProgress"] = startedQuiz
 
         return { categoryItem: quizCategoryItem }
       }
@@ -220,7 +239,8 @@ export const singleCategoryItemFn = createServerFn({
   .handler(async (ctx): Promise<SingleCategoryItemWire> => {
     const getLoggedUser = await getLoggedUserFactory()
     const userExit = await Effect.runPromiseExit(getLoggedUser())
-    const isAuthenticated = userExit._tag === "Success"
+    const isAuthenticated =
+      userExit._tag === "Success" && userExit.value.user !== null
 
     if (!isAuthenticated)
       return {

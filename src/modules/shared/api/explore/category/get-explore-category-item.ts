@@ -3,10 +3,7 @@ import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { categoryItemSchema } from "@/modules/shared/domain/entities/category-item"
-import { categoryItemNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-item-not-found"
-import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -31,17 +28,14 @@ export const getExploreCategoryItemErrorsSchema = Schema.Union(
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
-  categoryNotFoundErrorSchema,
-  categoryItemNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type GetExploreCategoryItemErrors =
   typeof getExploreCategoryItemErrorsSchema.Type
 
 export const getExploreCategoryItemSuccessSchema = Schema.Struct({
-  categoryItem: categoryItemSchema,
+  categoryItem: Schema.NullOr(categoryItemSchema),
 })
 
 export type GetExploreCategoryItemSuccess =

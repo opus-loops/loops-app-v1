@@ -24,10 +24,18 @@ export const quizContentQuery = (
 
       if (response._tag === "Failure") {
         if (response.error.code === "Unauthorized") await handleSessionExpired()
-        if (response.error.code === "category_not_found")
-          throw redirect({ search: { category: "all" }, to: "/" })
         throw new Error("Failed to fetch quiz content")
       }
+
+      if (response.value.quiz === null)
+        throw redirect({
+          search: {
+            category: params.categoryId,
+            type: "content",
+          },
+          to: "/",
+        })
+
       return response.value
     },
     queryKey: ["quiz-content", params.categoryId, params.quizId],
@@ -38,5 +46,5 @@ export function useQuizContent(params: QuizContentParams) {
   const { data } = useSuspenseQuery(
     quizContentQuery(params, handleSessionExpired),
   )
-  return { subQuizzes: data.subQuizzes }
+  return { startedQuiz: data.startedQuiz, subQuizzes: data.subQuizzes }
 }

@@ -3,11 +3,7 @@ import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { skillSchema } from "@/modules/shared/domain/entities/skill"
-import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
-import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
-import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -32,17 +28,13 @@ export const getExploreSkillErrorsSchema = Schema.Union(
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
-  skillNotFoundErrorSchema,
-  notCategoryItemErrorSchema,
-  categoryNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type GetExploreSkillErrors = typeof getExploreSkillErrorsSchema.Type
 
 export const getExploreSkillSuccessSchema = Schema.Struct({
-  skill: skillSchema,
+  skill: Schema.NullOr(skillSchema),
 })
 
 export type GetExploreSkillSuccess = typeof getExploreSkillSuccessSchema.Type

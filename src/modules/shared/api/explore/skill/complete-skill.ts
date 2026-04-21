@@ -8,7 +8,6 @@ import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/i
 import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
 import { skillAlreadyCompletedErrorSchema } from "@/modules/shared/domain/errors/skill-already-completed"
 import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -40,7 +39,6 @@ export const completeSkillErrorsSchema = Schema.Union(
   skillNotFoundErrorSchema,
   notCategoryItemErrorSchema,
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type CompleteSkillErrors = typeof completeSkillErrorsSchema.Type

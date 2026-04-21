@@ -1,19 +1,25 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type { getCompletedChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-completed-choice-question"
 import type { getExploreChoiceQuestionErrorsSchema } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"
+import type { getExploreQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
+import type { getStartedQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-started-quiz"
 import type { listExploreSubQuizzesErrorsSchema } from "@/modules/shared/api/explore/quiz/list-explore-sub-quizzes"
 import type { getCompletedSequenceOrderErrorsSchema } from "@/modules/shared/api/explore/sequence_order/get-completed-sequence-order"
 import type { getExploreSequenceOrderErrorsSchema } from "@/modules/shared/api/explore/sequence_order/get-explore-sequence-order"
 import type { ChoiceQuestion } from "@/modules/shared/domain/entities/choice-question"
+import type { Quiz } from "@/modules/shared/domain/entities/quiz"
 import type { SequenceOrder } from "@/modules/shared/domain/entities/sequence-order"
+import type { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
 import type { SubQuiz } from "@/modules/shared/domain/entities/sub-quiz"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 import type { unknownErrorSchema } from "@/modules/shared/utils/types"
 
 import { getCompletedChoiceQuestionFactory } from "@/modules/shared/api/explore/choice_question/get-completed-choice-question"
 import { getExploreChoiceQuestionFactory } from "@/modules/shared/api/explore/choice_question/get-explore-choice-question"
+import { getExploreQuizFactory } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
+import { getStartedQuizFactory } from "@/modules/shared/api/explore/quiz/get-started-quiz"
 import { listExploreSubQuizzesFactory } from "@/modules/shared/api/explore/quiz/list-explore-sub-quizzes"
 import { getCompletedSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/get-completed-sequence-order"
 import { getExploreSequenceOrderFactory } from "@/modules/shared/api/explore/sequence_order/get-explore-sequence-order"
@@ -26,11 +32,15 @@ export type GetQuizContentErrors =
   | typeof getCompletedChoiceQuestionErrorsSchema.Type
   | typeof getCompletedSequenceOrderErrorsSchema.Type
   | typeof getExploreChoiceQuestionErrorsSchema.Type
+  | typeof getExploreQuizErrorsSchema.Type
   | typeof getExploreSequenceOrderErrorsSchema.Type
+  | typeof getStartedQuizErrorsSchema.Type
   | typeof listExploreSubQuizzesErrorsSchema.Type
   | typeof unknownErrorSchema.Type
 
 export type GetQuizContentSuccess = {
+  quiz: null | Quiz
+  startedQuiz?: StartedQuiz | undefined
   subQuizzes: Array<EnhancedSubQuiz>
 }
 
@@ -72,10 +82,15 @@ const fetchSubQuizContentEffect = (
           ),
         )
 
+        if (completedChoiceQuestionExit._tag === "Failure") {
+          const failure = handleServerFnFailure(
+            completedChoiceQuestionExit.cause,
+          )
+          return yield* Effect.fail(failure as GetQuizContentErrors)
+        }
+
         const completedChoiceQuestion =
-          completedChoiceQuestionExit._tag === "Success"
-            ? completedChoiceQuestionExit.value.completedChoiceQuestion
-            : undefined
+          completedChoiceQuestionExit.value.completedChoiceQuestion ?? undefined
 
         let choiceQuestionContent: ChoiceQuestion | undefined = undefined
         if (completedChoiceQuestion) {
@@ -95,10 +110,15 @@ const fetchSubQuizContentEffect = (
             ),
           )
 
-          if (choiceQuestionContentExit._tag === "Success") {
-            choiceQuestionContent =
-              choiceQuestionContentExit.value.choiceQuestion
+          if (choiceQuestionContentExit._tag === "Failure") {
+            const failure = handleServerFnFailure(
+              choiceQuestionContentExit.cause,
+            )
+            return yield* Effect.fail(failure as GetQuizContentErrors)
           }
+
+          choiceQuestionContent =
+            choiceQuestionContentExit.value.choiceQuestion ?? undefined
         }
 
         return {
@@ -128,10 +148,15 @@ const fetchSubQuizContentEffect = (
           ),
         )
 
+        if (completedSequenceOrderExit._tag === "Failure") {
+          const failure = handleServerFnFailure(
+            completedSequenceOrderExit.cause,
+          )
+          return yield* Effect.fail(failure as GetQuizContentErrors)
+        }
+
         const completedSequenceOrder =
-          completedSequenceOrderExit._tag === "Success"
-            ? completedSequenceOrderExit.value.completedSequenceOrder
-            : undefined
+          completedSequenceOrderExit.value.completedSequenceOrder ?? undefined
 
         // Fetch sequence order content if completed exists
         let sequenceOrderContent: SequenceOrder | undefined = undefined
@@ -152,9 +177,15 @@ const fetchSubQuizContentEffect = (
             ),
           )
 
-          if (sequenceOrderContentExit._tag === "Success") {
-            sequenceOrderContent = sequenceOrderContentExit.value.sequenceOrder
+          if (sequenceOrderContentExit._tag === "Failure") {
+            const failure = handleServerFnFailure(
+              sequenceOrderContentExit.cause,
+            )
+            return yield* Effect.fail(failure as GetQuizContentErrors)
           }
+
+          sequenceOrderContent =
+            sequenceOrderContentExit.value.sequenceOrder ?? undefined
         }
 
         return {
@@ -182,6 +213,52 @@ const fetchQuizContentEffect = (
   quizId: string,
 ): Effect.Effect<GetQuizContentSuccess, GetQuizContentErrors> =>
   Effect.gen(function* (_) {
+    const getExploreQuiz = yield* _(
+      Effect.promise(() => getExploreQuizFactory()),
+    )
+
+    const quizExit = yield* _(
+      Effect.promise(() =>
+        Effect.runPromiseExit(
+          getExploreQuiz({
+            categoryId,
+            quizId,
+          }),
+        ),
+      ),
+    )
+
+    if (quizExit._tag === "Failure") {
+      const failure = handleServerFnFailure(quizExit.cause)
+      return yield* Effect.fail(failure as GetQuizContentErrors)
+    }
+
+    const { quiz } = quizExit.value
+
+    if (quiz === null) return { quiz, subQuizzes: [] }
+
+    const getStartedQuiz = yield* _(
+      Effect.promise(() => getStartedQuizFactory()),
+    )
+
+    const startedQuizExit = yield* _(
+      Effect.promise(() =>
+        Effect.runPromiseExit(
+          getStartedQuiz({
+            categoryId,
+            quizId,
+          }),
+        ),
+      ),
+    )
+
+    if (startedQuizExit._tag === "Failure") {
+      const failure = handleServerFnFailure(startedQuizExit.cause)
+      return yield* Effect.fail(failure as GetQuizContentErrors)
+    }
+
+    const startedQuiz = startedQuizExit.value.startedQuiz ?? undefined
+
     // 1) First, get all sub quizzes
     const listExploreSubQuizzes = yield* _(
       Effect.promise(() => listExploreSubQuizzesFactory()),
@@ -218,12 +295,17 @@ const fetchQuizContentEffect = (
         ),
       )
 
-      if (enhancedSubQuizExit._tag === "Success") {
-        enhancedSubQuizzes.push(enhancedSubQuizExit.value)
+      if (enhancedSubQuizExit._tag === "Failure") {
+        const failure = handleServerFnFailure(enhancedSubQuizExit.cause)
+        return yield* Effect.fail(failure as GetQuizContentErrors)
       }
+
+      enhancedSubQuizzes.push(enhancedSubQuizExit.value)
     }
 
     return {
+      quiz,
+      startedQuiz,
       subQuizzes: enhancedSubQuizzes,
     }
   })
@@ -242,7 +324,8 @@ export const getQuizContentFn = createServerFn({
   .handler(async (ctx): Promise<GetQuizContentWire> => {
     const getLoggedUser = await getLoggedUserFactory()
     const userExit = await Effect.runPromiseExit(getLoggedUser())
-    const isAuthenticated = userExit._tag === "Success"
+    const isAuthenticated =
+      userExit._tag === "Success" && userExit.value.user !== null
 
     if (!isAuthenticated)
       return {

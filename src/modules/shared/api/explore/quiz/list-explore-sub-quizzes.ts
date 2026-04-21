@@ -3,13 +3,7 @@ import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { subQuizSchema } from "@/modules/shared/domain/entities/sub-quiz"
-import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
-import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
-import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
-import { quizNotFoundErrorSchema } from "@/modules/shared/domain/errors/quiz-not-found"
-import { quizNotStartedErrorSchema } from "@/modules/shared/domain/errors/quiz-not-started"
-import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -34,13 +28,7 @@ export const listExploreSubQuizzesErrorsSchema = Schema.Union(
       userId: Schema.optional(UseCaseErrorSchema),
     }),
   ),
-  categoryNotFoundErrorSchema,
-  categoryNotStartedErrorSchema,
-  quizNotStartedErrorSchema,
-  quizNotFoundErrorSchema,
-  notCategoryItemErrorSchema,
   invalidExpiredTokenErrorSchema,
-  userNotFoundErrorSchema,
 )
 
 export type ListExploreSubQuizzesErrors =

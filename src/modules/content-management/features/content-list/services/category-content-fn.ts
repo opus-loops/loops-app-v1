@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type { listExploreCategoryItemsErrorsSchema } from "@/modules/shared/api/explore/category/list-explore-category-items"
 import type { getExploreQuizErrorsSchema } from "@/modules/shared/api/explore/quiz/get-explore-quiz"
@@ -94,16 +94,47 @@ const fetchCategoryContentEffect = (params: CategoryContentParams) =>
           ),
         )
 
-        if (skillExit._tag === "Success") {
-          // Try to fetch completed skill status (optional)
-          const getCompletedSkill = yield* _(
-            Effect.promise(() => getCompletedSkillFactory()),
+        if (skillExit._tag === "Failure") {
+          const failure = handleServerFnFailure(skillExit.cause)
+          return yield* Effect.fail(failure as CategoryContentErrors)
+        }
+
+        const skill = skillExit.value.skill
+
+        if (skill === null) continue
+
+        const getCompletedSkill = yield* _(
+          Effect.promise(() => getCompletedSkillFactory()),
+        )
+
+        const completedSkillExit = yield* _(
+          Effect.promise(() =>
+            Effect.runPromiseExit(
+              getCompletedSkill({
+                categoryId,
+                skillId: categoryItem.itemId,
+              }),
+            ),
+          ),
+        )
+
+        if (completedSkillExit._tag === "Failure") {
+          const failure = handleServerFnFailure(completedSkillExit.cause)
+          return yield* Effect.fail(failure as CategoryContentErrors)
+        }
+
+        const completedSkill = completedSkillExit.value.completedSkill
+
+        let skillContent: SkillContent | undefined = undefined
+        if (completedSkill !== null) {
+          const getExploreSkillContent = yield* _(
+            Effect.promise(() => getExploreSkillContentFactory()),
           )
 
-          const completedSkillExit = yield* _(
+          const skillContentExit = yield* _(
             Effect.promise(() =>
               Effect.runPromiseExit(
-                getCompletedSkill({
+                getExploreSkillContent({
                   categoryId,
                   skillId: categoryItem.itemId,
                 }),
@@ -111,43 +142,23 @@ const fetchCategoryContentEffect = (params: CategoryContentParams) =>
             ),
           )
 
-          const completedSkill =
-            completedSkillExit._tag === "Success"
-              ? completedSkillExit.value.completedSkill
-              : undefined
-
-          // Fetch skill content if completedSkill exists
-          let skillContent: SkillContent | undefined = undefined
-          if (completedSkill) {
-            const getExploreSkillContent = yield* _(
-              Effect.promise(() => getExploreSkillContentFactory()),
-            )
-
-            const skillContentExit = yield* _(
-              Effect.promise(() =>
-                Effect.runPromiseExit(
-                  getExploreSkillContent({
-                    categoryId,
-                    skillId: categoryItem.itemId,
-                  }),
-                ),
-              ),
-            )
-
-            if (skillContentExit._tag === "Success") {
-              skillContent = skillContentExit.value.skillContent
-            }
+          if (skillContentExit._tag === "Failure") {
+            const failure = handleServerFnFailure(skillContentExit.cause)
+            return yield* Effect.fail(failure as CategoryContentErrors)
           }
 
-          categoryContentItems.push({
-            ...categoryItem,
-            content: skillExit.value.skill,
-            contentType: "skills" as const,
-            itemProgress: completedSkill,
-            skillContent,
-          } as CategoryContentItem)
+          if (skillContentExit.value.skillContent === null) continue
+          skillContent = skillContentExit.value.skillContent
         }
-      } else if (categoryItem.itemType === "quizzes") {
+
+        categoryContentItems.push({
+          ...categoryItem,
+          content: skill,
+          contentType: "skills" as const,
+          itemProgress: completedSkill ?? undefined,
+          skillContent,
+        } as CategoryContentItem)
+      } else {
         const getExploreQuiz = yield* _(
           Effect.promise(() => getExploreQuizFactory()),
         )
@@ -163,35 +174,44 @@ const fetchCategoryContentEffect = (params: CategoryContentParams) =>
           ),
         )
 
-        if (quizExit._tag === "Success") {
-          // Try to fetch started quiz status (optional)
-          const getStartedQuiz = yield* _(
-            Effect.promise(() => getStartedQuizFactory()),
-          )
-
-          const startedQuizExit = yield* _(
-            Effect.promise(() =>
-              Effect.runPromiseExit(
-                getStartedQuiz({
-                  categoryId,
-                  quizId: categoryItem.itemId,
-                }),
-              ),
-            ),
-          )
-
-          const startedQuiz =
-            startedQuizExit._tag === "Success"
-              ? startedQuizExit.value.startedQuiz
-              : undefined
-
-          categoryContentItems.push({
-            ...categoryItem,
-            content: quizExit.value.quiz,
-            contentType: "quizzes" as const,
-            itemProgress: startedQuiz,
-          } as CategoryContentItem)
+        if (quizExit._tag === "Failure") {
+          const failure = handleServerFnFailure(quizExit.cause)
+          return yield* Effect.fail(failure as CategoryContentErrors)
         }
+
+        const quiz = quizExit.value.quiz
+
+        if (quiz === null) continue
+
+        // Try to fetch started quiz status (optional)
+        const getStartedQuiz = yield* _(
+          Effect.promise(() => getStartedQuizFactory()),
+        )
+
+        const startedQuizExit = yield* _(
+          Effect.promise(() =>
+            Effect.runPromiseExit(
+              getStartedQuiz({
+                categoryId,
+                quizId: categoryItem.itemId,
+              }),
+            ),
+          ),
+        )
+
+        if (startedQuizExit._tag === "Failure") {
+          const failure = handleServerFnFailure(startedQuizExit.cause)
+          return yield* Effect.fail(failure as CategoryContentErrors)
+        }
+
+        const startedQuiz = startedQuizExit.value.startedQuiz
+
+        categoryContentItems.push({
+          ...categoryItem,
+          content: quizExit.value.quiz,
+          contentType: "quizzes" as const,
+          itemProgress: startedQuiz,
+        } as CategoryContentItem)
       }
     }
 
@@ -213,7 +233,8 @@ export const categoryContentFn = createServerFn({
   .handler(async (ctx): Promise<CategoryContentWire> => {
     const getLoggedUser = await getLoggedUserFactory()
     const userExit = await Effect.runPromiseExit(getLoggedUser())
-    const isAuthenticated = userExit._tag === "Success"
+    const isAuthenticated =
+      userExit._tag === "Success" && userExit.value.user !== null
 
     if (!isAuthenticated)
       return {

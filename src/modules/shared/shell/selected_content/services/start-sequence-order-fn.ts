@@ -40,7 +40,8 @@ export const startSequenceOrderFn = createServerFn({
   .handler(async (ctx): Promise<StartSequenceOrderWire> => {
     const getLoggedUser = await getLoggedUserFactory()
     const userExit = await Effect.runPromiseExit(getLoggedUser())
-    const isAuthenticated = userExit._tag === "Success"
+    const isAuthenticated =
+      userExit._tag === "Success" && userExit.value.user !== null
 
     if (!isAuthenticated)
       return {

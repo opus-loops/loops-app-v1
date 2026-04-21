@@ -2,7 +2,6 @@ import { Effect } from "effect"
 import { useCallback, useMemo } from "react"
 
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
-import type { StartedQuiz } from "@/modules/shared/domain/entities/started-quiz"
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 
 import { useSelectedSubQuiz } from "@/modules/learning-experience/contexts/selected-sub-quiz-context"
@@ -44,7 +43,7 @@ type UseSubQuizNavigationProps = {
  */
 export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
   const { currentStep, goToStep } = useQuizStepper()
-  const { subQuizzes } = useQuizContent({
+  const { startedQuiz, subQuizzes } = useQuizContent({
     categoryId: quizItem.categoryId,
     quizId: quizItem.itemId,
   })
@@ -139,15 +138,13 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
    * - Otherwise: starts the first sub-quiz then navigates into sub-quizzes.
    */
   const initializeQuiz = useCallback(async () => {
-    const itemProgress = quizItem.itemProgress as StartedQuiz
-
     const firstSubQuiz = subQuizzes.find(
       (subQuiz) => subQuiz.previousSubQuiz === undefined,
     )
 
     if (!firstSubQuiz) return
 
-    if (itemProgress.status === "completed") {
+    if (startedQuiz?.status === "completed") {
       navigateToSubQuiz({
         direction: "next",
         index: firstSubQuiz.index,
@@ -164,7 +161,7 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
           questionId: firstSubQuiz.questionId,
           quizId: quizItem.itemId,
         })
-      } else if (firstSubQuiz.questionType === "sequenceOrders") {
+      } else {
         await startSequenceOrder.handleStartSequenceOrder({
           categoryId: quizItem.categoryId,
           questionId: firstSubQuiz.questionId,
@@ -173,9 +170,9 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
       }
     }
 
-    if (itemProgress.progressPointer) {
+    if (startedQuiz?.progressPointer) {
       const lastStartedSubQuiz = subQuizzes.find(
-        (sq) => sq.subQuizId === itemProgress.progressPointer,
+        (sq) => sq.subQuizId === startedQuiz.progressPointer,
       )
       if (lastStartedSubQuiz) {
         navigateToSubQuiz({
@@ -188,14 +185,14 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
       }
     }
 
-    if (!itemProgress.progressPointer) {
+    if (!startedQuiz?.progressPointer) {
       await startFirstSubQuiz()
       navigateToSubQuiz({ direction: "next", index: firstSubQuiz.index })
       goToStep("sub-quizzes")
       resetNavigationState()
     }
   }, [
-    quizItem,
+    startedQuiz,
     subQuizzes,
     startChoiceQuestion,
     startSequenceOrder,
@@ -313,5 +310,6 @@ export function useSubQuizNavigation({ quizItem }: UseSubQuizNavigationProps) {
     navigatePrevious,
     navigationState,
     selectedSubQuiz,
+    startedQuiz,
   }
 }

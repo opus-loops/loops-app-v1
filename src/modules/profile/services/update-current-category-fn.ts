@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { Cause, Effect, Option } from "effect"
+import { Effect } from "effect"
 
 import type { updateCurrentCategoryErrorsSchema } from "@/modules/shared/api/profile/update-current-category"
 import type { successResponseSchema } from "@/modules/shared/domain/types/success-response"
@@ -33,7 +33,8 @@ export const updateCurrentCategoryFn = createServerFn({ method: "POST" })
   .handler(async (ctx): Promise<UpdateCurrentCategoryWire> => {
     const getLoggedUser = await getLoggedUserFactory()
     const userExit = await Effect.runPromiseExit(getLoggedUser())
-    const isAuthenticated = userExit._tag === "Success"
+    const isAuthenticated =
+      userExit._tag === "Success" && userExit.value.user !== null
 
     if (!isAuthenticated)
       return {

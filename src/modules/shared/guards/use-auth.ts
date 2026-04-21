@@ -8,7 +8,8 @@ export const authenticatedQuery = queryOptions({
   queryFn: async () => {
     const response = await isAuthenticated()
 
-    if (response._tag === "Failure") throw redirect({ to: "/login" })
+    if (response._tag === "Failure" || response.value.user === null)
+      throw redirect({ to: "/login" })
 
     if (response.value.user.role !== "user") {
       await sessionCleanupFn()
