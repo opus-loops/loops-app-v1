@@ -70,7 +70,7 @@ function AuthScreen() {
 
   if (screen === "login")
     if (redirect) return <LoginScreen redirect={redirect} />
-    else <LoginScreen />
+    else return <LoginScreen />
 
   if (screen === "register")
     if (redirect) return <RegisterScreen redirect={redirect} />
