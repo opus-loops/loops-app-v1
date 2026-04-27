@@ -18,18 +18,9 @@ type Slide = {
 }
 
 const slides: Array<Slide> = [
-  {
-    id: 1,
-    image: "/onboarding/1.svg",
-  },
-  {
-    id: 2,
-    image: "/onboarding/2.svg",
-  },
-  {
-    id: 3,
-    image: "/onboarding/3.svg",
-  },
+  { id: 1, image: "/onboarding/1.svg" },
+  { id: 2, image: "/onboarding/2.svg" },
+  { id: 3, image: "/onboarding/3.svg" },
 ]
 
 type WelcomeScreenProps = { skipHandler: () => void }
@@ -90,7 +81,7 @@ export function WelcomeScreen({ skipHandler }: WelcomeScreenProps) {
       <div className="flex min-h-screen w-full flex-col items-center px-8 py-6">
         <div className="flex w-full justify-end">
           <button
-            className="font-outfit text-loops-white text-base font-bold"
+            className="font-outfit text-loops-light text-base font-bold"
             onClick={skipHandler}
           >
             {t("first_install.welcome.skip")}
@@ -98,7 +89,7 @@ export function WelcomeScreen({ skipHandler }: WelcomeScreenProps) {
         </div>
 
         <div
-          className="relative flex w-full flex-1 flex-col overflow-hidden py-10"
+          className="relative flex w-full flex-1 flex-col items-center justify-center overflow-hidden"
           ref={containerRef}
         >
           <div className="flex h-full w-full flex-col justify-center">

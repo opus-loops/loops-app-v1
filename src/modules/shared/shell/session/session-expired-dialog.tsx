@@ -3,6 +3,7 @@ import { useRouter } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { buildAuthSearch } from "@/modules/authentication/lib/auth-search"
 import { cn } from "@/modules/shared/lib/utils"
 
 interface SessionExpiredDialogProps {
@@ -34,8 +35,8 @@ export function SessionExpiredDialog({
           const redirectTo = `${pathname}${search}${hash}`
 
           router.navigate({
-            search: { redirect: redirectTo },
-            to: "/login",
+            search: buildAuthSearch("login", redirectTo),
+            to: "/auth",
           })
           return 0
         }
@@ -57,8 +58,8 @@ export function SessionExpiredDialog({
     onClose()
     const redirectTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
     router.navigate({
-      search: { redirect: redirectTo },
-      to: "/login",
+      search: buildAuthSearch("login", redirectTo),
+      to: "/auth",
     })
   }
 

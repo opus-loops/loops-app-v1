@@ -116,7 +116,9 @@ interface RevocationResponse {
   successful: boolean
 }
 
-export function LoginGoogle() {
+export function LoginGoogle({
+  redirect,
+}: { redirect?: string | undefined } = {}) {
   const { t } = useTranslation()
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -153,7 +155,7 @@ export function LoginGoogle() {
     if (isSubmitting) return
 
     setIsSubmitting(true)
-    const response = await handleGoogleLogin(credential)
+    const response = await handleGoogleLogin(credential, redirect)
 
     if (response._tag === "Failure") {
       if (response.error.code === "invalid_token")
@@ -179,22 +181,22 @@ export function LoginGoogle() {
         const reason = notification.getNotDisplayedReason()
 
         if (reason === "browser_not_supported")
-          toast.error("Your browser doesn't support Google Sign-In.")
+          toast.error(t("auth.login.google.browser_not_supported"))
         else if (
           reason === "invalid_client" ||
           reason === "missing_client_id" ||
           reason === "missing_required_parameter"
         )
-          toast.error("Google Sign-In is not properly configured.")
+          toast.error(t("auth.login.google.not_configured"))
         else if (reason === "opt_out_or_no_session")
-          toast.info("Please sign in to your Google account first.")
+          toast.info(t("auth.login.google.sign_in_first"))
         else if (reason === "secure_http_required")
-          toast.error("Google Sign-In requires a secure connection (HTTPS).")
+          toast.error(t("auth.login.google.https_required"))
         else if (reason === "suppressed_by_user")
-          toast.info("Google Sign-In was disabled by user preference.")
+          toast.info(t("auth.login.google.disabled_by_user"))
         else if (reason === "unregistered_origin")
-          toast.error("This domain is not authorized for Google Sign-In.")
-        else toast.error("Google Sign-In is not available right now.")
+          toast.error(t("auth.login.google.unauthorized_domain"))
+        else toast.error(t("auth.login.google.unavailable"))
 
         setIsSubmitting(false)
       } else if (notification.getMomentType() === "skipped") {

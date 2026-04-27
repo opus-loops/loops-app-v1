@@ -60,7 +60,7 @@ export function DeleteAccountConfirmDialog({
               <DialogPrimitive.Title className="text-center text-2xl font-semibold text-[#ff8d4d]">
                 {t("profile.delete_account_confirm.title")}
               </DialogPrimitive.Title>
-              <DialogPrimitive.Description className="text-center text-sm leading-6 text-white/80">
+              <DialogPrimitive.Description className="text-loops-light/80 text-center text-sm leading-6">
                 {t("profile.delete_account_confirm.description_line_1")}
                 <br />
                 {t("profile.delete_account_confirm.description_line_2")}
@@ -82,7 +82,7 @@ export function DeleteAccountConfirmDialog({
                 {t("profile.delete_account_confirm.reason_label")}
               </label>
               <Textarea
-                className="min-h-28 rounded-2xl border border-white/15 bg-white/8 px-4 py-3 text-base text-white shadow-none placeholder:text-white/45 focus-visible:border-[#ff6265] focus-visible:ring-[#ff6265]/25"
+                className="text-loops-light placeholder:text-loops-light/45 min-h-28 rounded-2xl border border-white/15 bg-white/8 px-4 py-3 text-base shadow-none focus-visible:border-[#ff6265] focus-visible:ring-[#ff6265]/25"
                 disabled={isSubmitting}
                 id="delete-account-reason"
                 maxLength={500}

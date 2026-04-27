@@ -32,7 +32,7 @@ export function useDeleteAccount() {
         queryClient.invalidateQueries({
           queryKey: ["authenticated"],
         })
-        router.navigate({ to: "/login" })
+        router.navigate({ to: "/auth" })
       }
 
       return response

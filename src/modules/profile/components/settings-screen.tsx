@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form"
 import { Link } from "@tanstack/react-router"
 import { ChevronRight } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import type { User } from "@/modules/shared/domain/entities/user"
@@ -15,6 +15,7 @@ import { useToast } from "@/modules/shared/hooks/use-toast"
 
 import type { DeleteAccountConfirmFormValues } from "./delete-account-confirm-dialog"
 
+import { ConfirmAccountDialog } from "./confirm-account-dialog"
 import { DeleteAccountConfirmDialog } from "./delete-account-confirm-dialog"
 import { LogoutConfirmDialog } from "./logout-confirm-dialog"
 
@@ -30,14 +31,36 @@ type SettingsScreenProps = {
   user: User
 }
 
+export function getShouldKeepConfirmAccountDialogOpen({
+  canConfirmAccount,
+  isDialogOpen,
+}: {
+  canConfirmAccount: boolean
+  isDialogOpen: boolean
+}) {
+  return canConfirmAccount && isDialogOpen
+}
+
 export function SettingsScreen({ user }: SettingsScreenProps) {
   const { handleDeleteAccount } = useDeleteAccount()
+  const [isConfirmAccountDialogOpen, setIsConfirmAccountDialogOpen] =
+    useState(false)
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
   const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] =
     useState(false)
   const { handleLogout } = useLogout()
   const { error: toastError } = useToast()
   const { t } = useTranslation()
+  const canConfirmAccount = shouldShowConfirmAccountAction(user)
+
+  useEffect(() => {
+    setIsConfirmAccountDialogOpen((previousState) =>
+      getShouldKeepConfirmAccountDialogOpen({
+        canConfirmAccount,
+        isDialogOpen: previousState,
+      }),
+    )
+  }, [canConfirmAccount, user.userId])
 
   const deleteAccountForm = useForm({
     defaultValues: {} as DeleteAccountConfirmFormValues,
@@ -118,6 +141,12 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
             label={t("profile.security")}
             to="/profile/settings/security"
           />
+          {canConfirmAccount ? (
+            <SettingsRow
+              label={t("profile.confirm_account")}
+              onClick={() => setIsConfirmAccountDialogOpen(true)}
+            />
+          ) : null}
           <SettingsRow
             label={t("profile.preferences")}
             to="/profile/settings/preferences"
@@ -151,6 +180,15 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
             open={isLogoutDialogOpen}
           />
 
+          {canConfirmAccount ? (
+            <ConfirmAccountDialog
+              email={user.email}
+              onOpenChange={setIsConfirmAccountDialogOpen}
+              open={isConfirmAccountDialogOpen}
+              userId={user.userId}
+            />
+          ) : null}
+
           <DeleteAccountConfirmDialog
             isSubmitting={deleteAccountForm.state.isSubmitting}
             onOpenChange={(open) => {
@@ -179,6 +217,10 @@ export function SettingsScreen({ user }: SettingsScreenProps) {
       </div>
     </div>
   )
+}
+
+export function shouldShowConfirmAccountAction(user: User) {
+  return !user.confirmationDate
 }
 
 function SettingsRow({ label, onClick, to }: SettingsRowProps) {

@@ -11,7 +11,9 @@ import { Input } from "@/modules/shared/components/ui/input"
 import { PasswordInput } from "@/modules/shared/components/ui/password-input"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 
-export function LoginForm() {
+export function LoginForm({
+  redirect,
+}: { redirect?: string | undefined } = {}) {
   const { handleLogin } = useLogin()
   const { error: toastError } = useToast()
   const { t } = useTranslation()
@@ -21,7 +23,11 @@ export function LoginForm() {
     onSubmit: async ({ formApi, value }) => {
       if (!formApi.state.isSubmitting) return
 
-      const response = await handleLogin(value.username, value.password)
+      const response = await handleLogin(
+        value.username,
+        value.password,
+        redirect,
+      )
 
       if (response._tag === "Failure") {
         // Handle invalid_input errors by setting field-specific errors
@@ -80,17 +86,17 @@ export function LoginForm() {
             return (
               <div className="flex w-full flex-col items-start gap-y-1">
                 <label
-                  className="font-outfit text-loops-white text-sm leading-5 font-normal"
+                  className="font-outfit text-loops-light text-sm leading-5 font-normal"
                   htmlFor={field.name}
                 >
                   {t("auth.login.username_label")}
                 </label>
-                <div className="bg-loops-card flex w-full items-center gap-x-2 rounded-sm px-5 py-4">
+                <div className="bg-loops-auth-card flex w-full items-center gap-x-2 rounded-sm px-5 py-4">
                   <div className="text-loops-cyan size-6 shrink-0 grow-0">
                     <UserIcon />
                   </div>
                   <Input
-                    className="font-outfit placeholder:font-outfit text-loops-text border-none bg-transparent font-semibold shadow-none focus:outline-none"
+                    className="font-outfit placeholder:font-outfit text-loops-light border-none bg-transparent font-semibold shadow-none focus:outline-none"
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
@@ -120,13 +126,13 @@ export function LoginForm() {
             return (
               <div className="flex w-full flex-col items-start gap-y-1">
                 <label
-                  className="font-outfit text-loops-white text-sm leading-5 font-normal"
+                  className="font-outfit text-loops-light text-sm leading-5 font-normal"
                   htmlFor={field.name}
                 >
                   {t("auth.login.password_label")}
                 </label>
                 <PasswordInput
-                  className="bg-loops-card"
+                  className="bg-loops-auth-card"
                   id={field.name}
                   leftIcon={<LockIcon />}
                   name={field.name}
@@ -165,13 +171,13 @@ export function LoginForm() {
       <form.Subscribe selector={(state) => [state.isSubmitting]}>
         {([isSubmitting]) => (
           <Button
-            className="font-outfit text-loops-light hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="font-outfit text-loops-text hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isSubmitting}
             type="submit"
           >
             {isSubmitting ? (
               <svg
-                className="h-6 w-6 animate-spin text-white"
+                className="text-loops-light h-6 w-6 animate-spin"
                 fill="none"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"

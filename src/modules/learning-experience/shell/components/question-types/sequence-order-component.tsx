@@ -196,8 +196,8 @@ export const SequenceOrderComponent = forwardRef<
                   !isValidated
                     ? "bg-slate-700 text-slate-300"
                     : isCorrect
-                      ? "bg-green-500 text-white"
-                      : "bg-red-500 text-white",
+                      ? "text-loops-light bg-green-500"
+                      : "text-loops-light bg-red-500",
                 )}
               >
                 {String.fromCharCode(65 + itemIndex)}

@@ -15,7 +15,7 @@ export function useLogout() {
 
     if (response._tag === "Success") {
       await queryClient.invalidateQueries({ queryKey: ["authenticated"] })
-      await router.navigate({ to: "/login" })
+      await router.navigate({ to: "/auth" })
     }
 
     return response

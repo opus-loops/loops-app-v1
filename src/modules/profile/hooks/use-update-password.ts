@@ -30,7 +30,7 @@ export function useUpdatePassword() {
           queryKey: ["authenticated"],
         })
 
-        await router.navigate({ to: "/login" })
+        await router.navigate({ to: "/auth" })
       }
 
       return response

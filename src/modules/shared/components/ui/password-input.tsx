@@ -29,7 +29,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
         )}
         <Input
           className={cn(
-            "font-outfit placeholder:font-outfit text-loops-text border-none bg-transparent font-semibold shadow-none focus:outline-none focus-visible:ring-0",
+            "font-outfit placeholder:font-outfit placeholder:text-loops-light/90 text-loops-light border-none bg-transparent font-semibold shadow-none focus:outline-none focus-visible:ring-0",
             inputClassName,
           )}
           ref={ref}
