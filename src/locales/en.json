@@ -364,17 +364,30 @@
   },
   "voucher": {
     "dialog": {
-      "title": "Free trial limit reached",
-      "description": "Your 3 free trials are over. Submit a voucher code to continue learning. Contact the admin for a code.",
+      "title": "Oops…",
+      "description": "the free trial is over!",
       "default_title": "Unlock Category",
       "default_description": "Enter your voucher code to unlock this category and start your learning journey!",
-      "start_now": "Start now",
-      "or": "Or",
+      "unlock_method_title": "How do you want to unlock this category?",
+      "voucher_title": "I have a code",
+      "voucher_description": "Use the code provided by your school or your parents.",
+      "enter_my_code": "Enter my code",
+      "free_trial_title": "I want a free trial",
+      "free_trial_description": "Unlock this category right away with a free trial.",
+        "step_badge": "Step {{current}}/{{total}}",
+        "step_two_title": "Enter the code",
+        "step_two_image_alt": "Loops voucher illustration",
+        "voucher_only_image_alt": "Loops key illustration",
+        "close": "Close",
+        "start_now": "Start now",
+        "or": "Or",
       "starting": "Starting...",
       "start_free_trial": "Start Free Trial"
     },
     "form": {
       "submit": "Submit Voucher",
+      "submit_code": "Validate code",
+      "retry_code": "Try voucher code again",
       "submitting": "Submitting..."
     },
     "errors": {

@@ -6,7 +6,7 @@ import type { CategoryContentItem } from "@/modules/shared/domain/entities/categ
 import { Button } from "@/modules/shared/components/ui/button"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { useContentNavigation } from "@/modules/shared/navigation"
-import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
+import { FreeTrialDialog } from "@/modules/shared/shell/category_selection/components/free-trial-dialog"
 import { useCompleteSkill } from "@/modules/shared/shell/category_selection/hooks/use-complete-skill"
 
 import { useSkillStepper } from "./skill-stepper"
@@ -106,14 +106,10 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
             : t("common.validate")}
       </Button>
 
-      <VoucherDialog
+      <FreeTrialDialog
         categoryId={skillItem.categoryId}
-        description="Your 3 free trials are over. Submit a voucher code to continue learning. Contact the admin for a code."
         onOpenChange={setIsVoucherDialogOpen}
         open={isVoucherDialogOpen}
-        showFreeTrial={false}
-        showTrigger={false}
-        title="Free trial limit reached"
       />
     </>
   )

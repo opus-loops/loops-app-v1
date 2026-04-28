@@ -11,11 +11,13 @@ import { useSubmitVoucher } from "../services/use-submit-voucher"
 type VoucherSubmissionFormProps = {
   categoryId: string
   onSuccess: () => void
+  submitLabelKey?: string | undefined
 }
 
 export function VoucherSubmissionForm({
   categoryId,
   onSuccess,
+  submitLabelKey = "voucher.form.submit",
 }: VoucherSubmissionFormProps) {
   const { error } = useToast()
   const { handleSubmitVoucher } = useSubmitVoucher()
@@ -86,13 +88,11 @@ export function VoucherSubmissionForm({
       <form.Subscribe selector={(state) => [state.isSubmitting]}>
         {([isSubmitting]) => (
           <Button
-            className="font-outfit text-loops-light hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-6 text-base leading-5 font-semibold capitalize shadow-none transition-all duration-200"
+            className="font-outfit text-loops-text hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-6 text-base leading-5 font-semibold capitalize shadow-none transition-all duration-200"
             disabled={isSubmitting}
             type="submit"
           >
-            {isSubmitting
-              ? t("voucher.form.submitting")
-              : t("voucher.form.submit")}
+            {isSubmitting ? t("voucher.form.submitting") : t(submitLabelKey)}
           </Button>
         )}
       </form.Subscribe>

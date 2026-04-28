@@ -1,6 +1,5 @@
 import { useRouter } from "@tanstack/react-router"
 import { useState } from "react"
-import { useTranslation } from "react-i18next"
 
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 import type { ProgressState } from "@/modules/shared/utils/types"
@@ -10,7 +9,7 @@ import { LockIcon } from "@/modules/shared/components/icons/lock"
 import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
 import { useToast } from "@/modules/shared/hooks/use-toast"
 import { cn } from "@/modules/shared/lib/utils"
-import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
+import { FreeTrialDialog } from "@/modules/shared/shell/category_selection/components/free-trial-dialog"
 import { useStartSkill } from "@/modules/shared/shell/category_selection/services/use-start-skill"
 
 import { BaseItemCircle } from "./shared/item-circle-base"
@@ -39,7 +38,6 @@ export function SkillItemCircle({
   const [isLoading, setIsLoading] = useState(false)
   const [isVoucherDialogOpen, setIsVoucherDialogOpen] = useState(false)
   const { setSelectedContent } = useSelectedContent()
-  const { t } = useTranslation()
 
   const getProgressState = (): ProgressState => {
     if (item.itemProgress === undefined) return "locked"
@@ -129,14 +127,10 @@ export function SkillItemCircle({
           </div>
         )}
       </BaseItemCircle>
-      <VoucherDialog
+      <FreeTrialDialog
         categoryId={categoryId}
-        description={t("voucher.dialog.description")}
         onOpenChange={setIsVoucherDialogOpen}
         open={isVoucherDialogOpen}
-        showFreeTrial={false}
-        showTrigger={false}
-        title={t("voucher.dialog.title")}
       />
     </>
   )

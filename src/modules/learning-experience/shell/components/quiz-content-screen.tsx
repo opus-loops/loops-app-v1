@@ -4,27 +4,42 @@ import type { CategoryContentItem } from "@/modules/shared/domain/entities/categ
 
 import { ContentSkeleton } from "@/components/ui/content-skeleton"
 import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
-import { BackButton } from "@/modules/shared/shell/category_selection/components/back-button"
+import { useContentNavigation } from "@/modules/shared/navigation"
 
 import { SelectedSubQuizProvider } from "../../contexts/selected-sub-quiz-context"
+import { CategoryContentNavigationHeader } from "./category-content-navigation-header"
 import { QuizStepper } from "./quiz-stepper"
 import { QuizStatisticsScreen } from "./steps/quiz-statistics-screen"
 import { QuizWelcomeScreen } from "./steps/quiz-welcome-screen"
 import { SubQuizzesNavigator } from "./steps/sub-quizzes-navigator"
 
 type QuizContentScreenProps = {
-  onBack: () => void
   quizItem: { contentType: "quizzes" } & CategoryContentItem
 }
 
-export function QuizContentScreen({
-  onBack,
-  quizItem,
-}: QuizContentScreenProps) {
+export function QuizContentScreen({ quizItem }: QuizContentScreenProps) {
+  const title = quizItem.content.label[0].content
+
+  const {
+    canNavigateNext,
+    canNavigatePrevious,
+    navigateToNext,
+    navigateToPrevious,
+  } = useContentNavigation({
+    categoryId: quizItem.categoryId,
+  })
+
   return (
     <div className="bg-loops-background flex h-full flex-col">
-      <div className="relative flex items-center justify-center px-4 py-6">
-        <BackButton onBack={onBack} />
+      <div className="px-4 py-6">
+        <CategoryContentNavigationHeader
+          canNavigateNext={canNavigateNext}
+          canNavigatePrevious={canNavigatePrevious}
+          contentType="quizzes"
+          onNext={navigateToNext}
+          onPrevious={navigateToPrevious}
+          title={title}
+        />
       </div>
 
       <div className="mb-10 flex-1 overflow-y-auto px-7 pb-20">

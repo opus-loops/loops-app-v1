@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next"
 
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 
+import { getChoiceReviewState } from "@/modules/learning-experience/shell/components/question-types/choice-review-state"
 import { QuestionValidationPopup } from "@/modules/learning-experience/shell/components/question-types/question-validation-popup"
 import { cn } from "@/modules/shared/lib/utils"
 import { useValidateChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-validate-choice-question"
@@ -109,7 +110,7 @@ export const ChoiceQuestionComponent = forwardRef<
     if (idealOptions.length !== userAnswer.length) return false
     const toCounts = (values: ReadonlyArray<number>) => {
       const map = new Map<number, number>()
-      for (const v of values) map.set(v, (map.get(v) ?? 0) + 1)
+      for (const value of values) map.set(value, (map.get(value) ?? 0) + 1)
       return map
     }
     const idealCounts = toCounts(idealOptions)
@@ -138,6 +139,13 @@ export const ChoiceQuestionComponent = forwardRef<
     } else setSelectedChoices([index])
   }
 
+  const getValidatedChoiceReviewState = (index: number) =>
+    getChoiceReviewState({
+      idealOptions: question.idealOptions,
+      index,
+      userAnswer: completedQuestion?.userAnswer,
+    })
+
   const getChoiceStyle = (index: number) => {
     if (!isValidated) {
       // Non-validated state
@@ -148,28 +156,23 @@ export const ChoiceQuestionComponent = forwardRef<
         isSelected && "border-cyan-400 bg-slate-700",
       )
     } else {
-      // Validated state - show correct/incorrect
-      const isCorrect = question.idealOptions?.includes(index)
-      const wasSelected = completedQuestion.userAnswer?.includes(index) ?? false
+      const choiceReviewState = getValidatedChoiceReviewState(index)
 
-      if (isCorrect) {
-        return cn(
-          "flex items-center p-4 w-full rounded-lg border-2 transition-colors",
-          wasSelected
-            ? "bg-green-900/40 border-green-500 text-green-400"
-            : "bg-yellow-900/20 border-yellow-700 text-yellow-500 opacity-90",
-        )
-      } else if (wasSelected) {
-        return cn(
-          "flex items-center p-4 rounded-lg w-full border-2",
-          "bg-red-900/40 border-red-500 text-red-400",
-        )
-      } else {
-        return cn(
-          "flex items-center p-4 rounded-lg w-full border-2",
+      return cn(
+        "flex items-center p-4 rounded-lg w-full border-2 transition-colors duration-300",
+        choiceReviewState === "selected-correct" &&
+          "bg-green-900 border-green-500 text-green-400",
+        choiceReviewState === "selected-incorrect" &&
+          "bg-red-900 border-red-500 text-red-400",
+        choiceReviewState === "unanswered-correct" &&
+          "bg-slate-800 border-green-500 text-loops-light",
+        choiceReviewState === "missed-correct-no-wrong" &&
+          "bg-slate-800 border-orange-500 text-loops-light",
+        choiceReviewState === "missed-correct-with-wrong" &&
+          "bg-slate-800 border-green-500 text-loops-light",
+        choiceReviewState === "neutral" &&
           "bg-slate-800 border-slate-700 text-loops-light opacity-50",
-        )
-      }
+      )
     }
   }
 
@@ -204,32 +207,28 @@ export const ChoiceQuestionComponent = forwardRef<
             ))}
         </div>
       )
-    } else {
-      const isCorrect = question.idealOptions?.includes(index)
-      const wasSelected = completedQuestion.userAnswer?.includes(index) ?? false
-
-      if (isCorrect) {
-        return (
-          <CheckCircle2
-            className={cn(
-              "mr-3 h-6 w-6 shrink-0",
-              wasSelected ? "text-green-500" : "text-yellow-500",
-            )}
-          />
-        )
-      } else if (wasSelected) {
-        return <XCircle className="mr-3 h-6 w-6 shrink-0 text-red-500" />
-      } else {
-        return (
-          <div
-            className={cn(
-              "mr-3 h-6 w-6 shrink-0 border-2 border-slate-600",
-              question.isMultiple ? "rounded-md" : "rounded-full",
-            )}
-          />
-        )
-      }
     }
+
+    const choiceReviewState = getValidatedChoiceReviewState(index)
+
+    if (choiceReviewState === "selected-correct")
+      return <CheckCircle2 className="mr-3 h-6 w-6 shrink-0 text-green-500" />
+    if (choiceReviewState === "selected-incorrect")
+      return <XCircle className="mr-3 h-6 w-6 shrink-0 text-red-500" />
+    if (choiceReviewState === "missed-correct-no-wrong")
+      return <CheckCircle2 className="mr-3 h-6 w-6 shrink-0 text-orange-500" />
+
+    if (choiceReviewState === "missed-correct-with-wrong")
+      return <CheckCircle2 className="mr-3 h-6 w-6 shrink-0 text-green-500" />
+
+    return (
+      <div
+        className={cn(
+          "mr-3 h-6 w-6 shrink-0 border-2 border-slate-600",
+          question.isMultiple ? "rounded-md" : "rounded-full",
+        )}
+      />
+    )
   }
 
   return (
@@ -257,18 +256,9 @@ export const ChoiceQuestionComponent = forwardRef<
 
       <div className="w-full space-y-4">
         {question.choices.map((choice, index) => {
-          const choiceText =
-            choice.find((c) => c.language === question.defaultLanguage)
-              ?.content ||
-            choice[0]?.content ||
-            ""
-
-          const isCorrect = question.idealOptions?.includes(index)
-          const wasSelected =
-            completedQuestion?.userAnswer?.includes(index) ?? false
-          const isGoodSelection = isCorrect && wasSelected
-          const isMissedOption = isCorrect && !wasSelected
-          const isBadSelection = !isCorrect && wasSelected
+          const choiceReviewState = isValidated
+            ? getValidatedChoiceReviewState(index)
+            : "neutral"
 
           return (
             <div
@@ -278,22 +268,27 @@ export const ChoiceQuestionComponent = forwardRef<
             >
               {getChoiceIcon(index)}
               <span className="text-base font-medium">
-                {String.fromCharCode(65 + index)}) {choiceText}
+                {String.fromCharCode(65 + index)}) {choice[0].content}
               </span>
 
               {isValidated && (
                 <div className="ml-auto flex flex-col items-end gap-1">
-                  {isGoodSelection && (
+                  {choiceReviewState === "selected-correct" && (
                     <span className="text-[10px] font-bold tracking-wider text-green-500 uppercase">
                       {t("quiz.validation.well_chosen")}
                     </span>
                   )}
-                  {isMissedOption && (
-                    <span className="text-[10px] font-bold tracking-wider text-yellow-500 uppercase opacity-80">
+                  {choiceReviewState === "missed-correct-no-wrong" && (
+                    <span className="text-[10px] font-bold tracking-wider text-orange-500 uppercase opacity-80">
                       {t("quiz.validation.correct_answer")}
                     </span>
                   )}
-                  {isBadSelection && (
+                  {choiceReviewState === "missed-correct-with-wrong" && (
+                    <span className="text-[10px] font-bold tracking-wider text-green-500 uppercase opacity-80">
+                      {t("quiz.validation.correct_answer")}
+                    </span>
+                  )}
+                  {choiceReviewState === "selected-incorrect" && (
                     <span className="text-[10px] font-bold tracking-wider text-red-500 uppercase">
                       {t("quiz.validation.incorrect")}
                     </span>

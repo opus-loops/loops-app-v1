@@ -1,3 +1,5 @@
+import type { ReactNode } from "react"
+
 import { ImageIcon, Play } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
@@ -5,19 +7,23 @@ import type { SkillContent } from "@/modules/learning-experience/domain/entities
 
 import { cn } from "@/modules/shared/lib/utils"
 
+type BulletContent = NonNullable<SkillContentElement["bullet"]>
 type BulletElementProps = {
-  data: NonNullable<SkillContent["content"]["elements"][number]["bullet"]>
-  index: number
+  data: BulletContent
 }
+
+type BulletGroupProps = { bullets: Array<BulletContent> }
+
 type CTAElementProps = {
   data: NonNullable<SkillContent["content"]["elements"][number]["cta"]>
 }
-
 type ImageElementProps = {
   data: NonNullable<SkillContent["content"]["elements"][number]["image"]>
 }
 
 type SkillContentDisplayProps = { data: SkillContent }
+
+type SkillContentElement = SkillContent["content"]["elements"][number]
 
 type VideoElementProps = {
   data: NonNullable<SkillContent["content"]["elements"][number]["video"]>
@@ -26,7 +32,10 @@ type VideoElementProps = {
 export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
   const { t } = useTranslation()
   const { content, metadata } = data
-  const coverUrlJson = metadata.cover_image?.url_json
+  const coverUrlJson = metadata.cover_image.url_json
+  const hasVideoElement = content.elements.some(
+    (element) => element.kind === "video",
+  )
 
   return (
     <div className="font-outfit text-loops-light flex min-h-screen flex-col items-center bg-[#000016] p-4">
@@ -36,7 +45,7 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
           <span>{metadata.title}</span>
         </h1>
 
-        {coverUrlJson && (
+        {coverUrlJson && !hasVideoElement && (
           <div className="w-full overflow-hidden rounded-2xl">
             <img
               alt={metadata.cover_image.alt}
@@ -57,54 +66,45 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
       </div>
 
       <div className="mt-10 flex w-full max-w-md flex-col space-y-10">
-        {content.elements.map((element, index) => {
-          switch (element.kind) {
-            case "bullet":
-              return (
-                <BulletElement
-                  data={element.bullet!}
-                  index={index}
-                  key={index}
-                />
-              )
-            case "cta":
-              return <CTAElement data={element.cta!} key={index} />
-            case "image":
-              return <ImageElement data={element.image!} key={index} />
-            case "video":
-              return <VideoElement data={element.video!} key={index} />
-            default:
-              return null
-          }
-        })}
+        {renderSkillElements(content.elements)}
       </div>
     </div>
   )
 }
 
-function BulletElement({ data, index }: BulletElementProps) {
-  const isEven = index % 2 === 0
+function BulletElement({ data }: BulletElementProps) {
+  return (
+    <p
+      className={cn(
+        "text-center text-lg leading-relaxed text-[#dee2e6]",
+        data.bold && "font-bold",
+        data.italic && "italic",
+        data.strike && "line-through",
+      )}
+      style={{ color: data.color ? data.color : "white" }}
+    >
+      {data.text}
+    </p>
+  )
+}
 
+function BulletGroup({ bullets }: BulletGroupProps) {
   return (
     <div
-      className={cn(
-        "flex w-full items-center justify-center rounded-lg bg-[#15153a] p-6 shadow-[0px_4px_0px_0px_#ff4900]",
-        isEven ? "w-11/12 self-start" : "w-11/12 self-end",
-      )}
+      className="w-full rounded-3xl bg-[#15153a]/30 p-6"
+      data-testid="skill-bullet-group"
     >
-      <p
-        className={cn(
-          "text-center text-lg leading-relaxed text-[#dee2e6]",
-          data.bold && "font-bold",
-          data.italic && "italic",
-          data.strike && "line-through",
-        )}
-        style={{
-          color: data.color ? data.color : "white",
-        }}
-      >
-        {data.text}
-      </p>
+      <div className="flex flex-col gap-4">
+        {bullets.map((bullet, index) => (
+          <div
+            className={cn(index > 0 && "border-t border-white/10 pt-4")}
+            data-testid="skill-bullet-item"
+            key={`${bullet.text}-${index}`}
+          >
+            <BulletElement data={bullet} />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -159,6 +159,73 @@ function ImageElement({ data }: ImageElementProps) {
       )}
     </div>
   )
+}
+
+function renderSkillElements(elements: ReadonlyArray<SkillContentElement>) {
+  const renderedElements: Array<ReactNode> = []
+  let pendingBullets: Array<BulletContent> = []
+  let bulletGroupIndex = 0
+
+  const flushBulletGroup = () => {
+    if (pendingBullets.length === 0) return
+
+    renderedElements.push(
+      <BulletGroup
+        bullets={pendingBullets}
+        key={`bullet-group-${bulletGroupIndex}`}
+      />,
+    )
+
+    pendingBullets = []
+    bulletGroupIndex += 1
+  }
+
+  elements.forEach((element, index) => {
+    switch (element.kind) {
+      case "bullet": {
+        if (element.bullet) {
+          pendingBullets.push(element.bullet)
+        }
+        break
+      }
+      case "cta": {
+        flushBulletGroup()
+
+        if (element.cta) {
+          renderedElements.push(
+            <CTAElement data={element.cta} key={`cta-${index}`} />,
+          )
+        }
+        break
+      }
+      case "image": {
+        flushBulletGroup()
+
+        if (element.image) {
+          renderedElements.push(
+            <ImageElement data={element.image} key={`image-${index}`} />,
+          )
+        }
+        break
+      }
+      case "video": {
+        flushBulletGroup()
+
+        if (element.video) {
+          renderedElements.push(
+            <VideoElement data={element.video} key={`video-${index}`} />,
+          )
+        }
+        break
+      }
+      default:
+        break
+    }
+  })
+
+  flushBulletGroup()
+
+  return renderedElements
 }
 
 function VideoElement({ data }: VideoElementProps) {

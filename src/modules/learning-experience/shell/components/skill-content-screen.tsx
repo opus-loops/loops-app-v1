@@ -5,30 +5,44 @@ import type { SkillContent } from "@/modules/shared/domain/entities/skill-conten
 
 import { ContentSkeleton } from "@/components/ui/content-skeleton"
 import { BottomTabNavigator } from "@/modules/shared/components/navigation/bottom-tab-navigator"
-import { BackButton } from "@/modules/shared/shell/category_selection/components/back-button"
+import { useContentNavigation } from "@/modules/shared/navigation"
 
+import { CategoryContentNavigationHeader } from "./category-content-navigation-header"
 import { SkillActionButton } from "./skill-action-button"
 import { SkillContentRenderer } from "./skill-content-renderer"
 import { SkillStepper } from "./skill-stepper"
 import { SkillWelcomeScreen } from "./steps/skill-welcome-screen"
 
 type SkillContentScreenProps = {
-  onBack: () => void
   skillItem: { contentType: "skills" } & CategoryContentItem
 }
 
-export function SkillContentScreen({
-  onBack,
-  skillItem,
-}: SkillContentScreenProps) {
+export function SkillContentScreen({ skillItem }: SkillContentScreenProps) {
   const skillContent = skillItem.skillContent as SkillContent
 
   const contentUrl = skillContent.contentURL[0].content
+  const title = skillItem.content.label[0].content
+
+  const {
+    canNavigateNext,
+    canNavigatePrevious,
+    navigateToNext,
+    navigateToPrevious,
+  } = useContentNavigation({
+    categoryId: skillItem.categoryId,
+  })
 
   return (
     <div className="bg-loops-background flex h-full flex-col">
-      <div className="relative flex items-center justify-center px-4 py-6">
-        <BackButton onBack={onBack} />
+      <div className="px-4 py-6">
+        <CategoryContentNavigationHeader
+          canNavigateNext={canNavigateNext}
+          canNavigatePrevious={canNavigatePrevious}
+          contentType="skills"
+          onNext={navigateToNext}
+          onPrevious={navigateToPrevious}
+          title={title}
+        />
       </div>
 
       <div className="mx-auto mb-28 w-full max-w-sm flex-1 overflow-y-auto px-4">

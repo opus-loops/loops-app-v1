@@ -358,17 +358,30 @@
   },
   "voucher": {
     "dialog": {
-      "title": "وصلت إلى حد التجربة المجانية",
-      "description": "انتهت تجاربك المجانية الثلاث. أرسل رمز القسيمة لمتابعة التعلم. اتصل بالمسؤول للحصول على رمز.",
+      "title": "عذرًا…",
+      "description": "انتهت التجربة المجانية!",
       "default_title": "فتح الفئة",
       "default_description": "أدخل رمز القسيمة لفتح هذه الفئة وبدء رحلة التعلم الخاصة بك!",
-      "start_now": "ابدأ الآن",
-      "or": "أو",
+      "unlock_method_title": "كيف تريد فتح هذه الفئة؟",
+      "voucher_title": "لديّ رمز",
+      "voucher_description": "استخدم الرمز الذي قدمته لك مدرستك أو والداك.",
+      "enter_my_code": "أدخل رمزي",
+      "free_trial_title": "أريد تجربة مجانية",
+      "free_trial_description": "افتح هذه الفئة فورًا من خلال تجربة مجانية.",
+        "step_badge": "الخطوة {{current}}/{{total}}",
+        "step_two_title": "أدخل الرمز",
+        "step_two_image_alt": "صورة قسيمة Loops",
+        "voucher_only_image_alt": "صورة مفتاح Loops",
+        "close": "إغلاق",
+        "start_now": "ابدأ الآن",
+        "or": "أو",
       "starting": "جار البدء...",
       "start_free_trial": "ابدأ التجربة المجانية"
     },
     "form": {
       "submit": "إرسال القسيمة",
+      "submit_code": "تأكيد الرمز",
+      "retry_code": "أعد المحاولة بالرمز",
       "submitting": "جار الإرسال..."
     },
     "errors": {

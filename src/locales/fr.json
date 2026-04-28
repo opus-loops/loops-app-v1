@@ -364,17 +364,30 @@
   },
   "voucher": {
     "dialog": {
-      "title": "Limite d'essai gratuit atteinte",
-      "description": "Vos 3 essais gratuits sont terminés. Soumettez un code de bon pour continuer à apprendre. Contactez l'administrateur pour obtenir un code.",
+      "title": "Oups…",
+      "description": "l’essai gratuit est terminé !",
       "default_title": "Débloquer la catégorie",
       "default_description": "Entrez votre code de bon pour débloquer cette catégorie et commencer votre parcours d'apprentissage !",
-      "start_now": "Commencer maintenant",
-      "or": "Ou",
+      "unlock_method_title": "Comment veux-tu débloquer cette catégorie ?",
+      "voucher_title": "J’ai un code",
+      "voucher_description": "Utilise le code fourni par ton école ou tes parents.",
+      "enter_my_code": "Entrer mon code",
+      "free_trial_title": "Je veux un essai gratuit",
+      "free_trial_description": "Débloque cette catégorie tout de suite avec un essai gratuit.",
+        "step_badge": "Étape {{current}}/{{total}}",
+        "step_two_title": "Entre Le code",
+        "step_two_image_alt": "Illustration du bon Loops",
+        "voucher_only_image_alt": "Illustration de la clé Loops",
+        "close": "Fermer",
+        "start_now": "Commencer maintenant",
+        "or": "Ou",
       "starting": "Démarrage...",
       "start_free_trial": "Commencer l'essai gratuit"
     },
     "form": {
       "submit": "Soumettre le bon",
+      "submit_code": "Valider le code",
+      "retry_code": "Réessayer le code",
       "submitting": "Envoi en cours..."
     },
     "errors": {

@@ -8,7 +8,7 @@ import { HalfStarIcon } from "@/modules/shared/components/icons/half-star"
 import { NoteIcon } from "@/modules/shared/components/icons/note"
 import { TimerIcon } from "@/modules/shared/components/icons/timer"
 import { useContentNavigation } from "@/modules/shared/navigation"
-import { VoucherDialog } from "@/modules/shared/shell/category_selection/components/voucher-dialog"
+import { FreeTrialDialog } from "@/modules/shared/shell/category_selection/components/free-trial-dialog"
 
 import { useQuizStepper } from "../quiz-stepper"
 
@@ -46,7 +46,9 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
     isNextItemCompleted,
     navigateToNext,
     validateAndStartItem,
-  } = useContentNavigation({ categoryId: quizItem.categoryId })
+  } = useContentNavigation({
+    categoryId: quizItem.categoryId,
+  })
 
   const { goToStep } = useQuizStepper()
 
@@ -108,14 +110,10 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   return (
     <div className="font-outfit relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#000016] px-9">
       <CelebrationParticles isActive={isCelebrationActive} />
-      <VoucherDialog
+      <FreeTrialDialog
         categoryId={quizItem.categoryId}
-        description={t("voucher.dialog.description")}
         onOpenChange={setIsVoucherDialogOpen}
         open={isVoucherDialogOpen}
-        showFreeTrial={false}
-        showTrigger={false}
-        title={t("voucher.dialog.title")}
       />
       {/* Container matching Figma frame1000009848 */}
       <div className="flex w-full max-w-[390px] flex-col items-center gap-10">

@@ -6,8 +6,9 @@ import type { User } from "@/modules/shared/domain/entities/user"
 
 import { useUpdateCurrentCategory } from "@/modules/profile/hooks/use-update-current-category"
 import { Button } from "@/modules/shared/components/ui/button"
+import { VoucherStepperDialog } from "@/modules/shared/shell/category_selection/components/voucher-stepper-dialog"
 
-import { VoucherDialog } from "./voucher-dialog"
+import { FreeTrialDialog } from "./free-trial-dialog"
 
 type CategoryActionButtonProps = {
   category: CategoryWithStartedCategory
@@ -36,7 +37,7 @@ export function CategoryActionButton({
 
   // For non-started categories, show voucher dialog
   if (category.startedCategory === undefined)
-    return <VoucherDialog categoryId={category.categoryId} />
+    return <VoucherStepperDialog categoryId={category.categoryId} />
 
   // For started categories, show continue button
   return (
