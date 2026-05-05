@@ -44,6 +44,7 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
     canNavigateNext,
     exitContent,
     isNextItemCompleted,
+    isNextItemStarted,
     navigateToNext,
     validateAndStartItem,
   } = useContentNavigation({
@@ -75,10 +76,11 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
     setIsSubmitting(true)
 
     // Check if we can navigate to next item
-    const canNavigate = canNavigateNext && isNextItemCompleted
+    const canNavigate =
+      canNavigateNext && (isNextItemCompleted || isNextItemStarted)
 
     if (canNavigate) {
-      // Normal navigation - next item is already started
+      // Normal navigation - next item already has progress
       setIsSubmitting(false)
       return await navigateToNext()
     }
@@ -100,7 +102,14 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
     if (response._tag === "Success") {
       await navigateToNext()
       goToStep("welcome")
+      return
     }
+
+    if (
+      response._tag === "Skipped" &&
+      response.reason === "AlreadyStartedOrCompleted"
+    )
+      await navigateToNext()
   }
 
   const handleBackToHome = () => {

@@ -34,16 +34,22 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
     if (auth._tag === "Success" && auth.value.user !== null) {
       if (pendingLanguage) {
-        await updatePreferencesFn({
+        const result = await updatePreferencesFn({
           data: { language: pendingLanguage },
         })
 
-        await deletePendingLanguageFn()
-        return
+        if (result._tag === "Success") {
+          await i18n.changeLanguage(pendingLanguage)
+          await deletePendingLanguageFn()
+          return
+        }
       }
 
-      const language = auth.value.user.language
-      i18n.changeLanguage(language)
+      const language = pendingLanguage
+        ? pendingLanguage
+        : auth.value.user.language
+
+      await i18n.changeLanguage(language)
     }
   },
   component: function RootComponent() {

@@ -33,6 +33,7 @@ export const quizContentQuery = (
             category: params.categoryId,
             type: "content",
           },
+          throw: false,
           to: "/",
         })
 

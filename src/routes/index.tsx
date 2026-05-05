@@ -28,9 +28,9 @@ export const Route = createFileRoute("/")({
 
     return (
       <SelectedContentProvider>
-        <ConfirmationShell
+        <OnboardingShell
           target={
-            <OnboardingShell
+            <ConfirmationShell
               target={
                 <CategorySelectionShell
                   searchParams={search}

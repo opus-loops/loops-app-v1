@@ -11,7 +11,7 @@ type QuestionValidationPopupProps = {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
   subtitle?: string
-  variant: "correct" | "incorrect" | "time-up"
+  variant: "correct" | "incomplete" | "incorrect" | "time-up"
 }
 
 // TODO: use shadcn component instead of custom radix dialog
@@ -23,20 +23,25 @@ export function QuestionValidationPopup({
 }: QuestionValidationPopupProps) {
   const { t } = useTranslation()
   const isCorrect = variant === "correct"
+  const isIncomplete = variant === "incomplete"
   const isTimeUp = variant === "time-up"
 
-  const accentColor = isCorrect ? "#34c759" : isTimeUp ? "#ff9500" : "#ff383c"
+  const accentColor =
+    isCorrect || isIncomplete ? "#34c759" : isTimeUp ? "#ff9500" : "#ff383c"
   const dialogTitle = isCorrect
     ? "Excellent !"
-    : isTimeUp
-      ? t("quiz.validation.time_up")
-      : "Not this time..."
+    : isIncomplete
+      ? t("quiz.validation.good")
+      : isTimeUp
+        ? t("quiz.validation.time_up")
+        : "Not this time..."
 
   const mascotSrc = useMemo(() => {
-    const mascotPool = isCorrect ? mascotLinks.happyLoo : mascotLinks.sadLoo
+    const mascotPool =
+      isCorrect || isIncomplete ? mascotLinks.happyLoo : mascotLinks.sadLoo
     const randomIndex = Math.floor(Math.random() * mascotPool.length)
     return mascotPool[randomIndex]
-  }, [isCorrect])
+  }, [isCorrect, isIncomplete])
 
   return (
     <DialogPrimitive.Root onOpenChange={onOpenChange} open={isOpen}>
@@ -59,7 +64,8 @@ export function QuestionValidationPopup({
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   className={cn(
                     "fixed bottom-0 left-1/2 z-50 w-[425px] max-w-[calc(100vw-2rem)] -translate-x-1/2 rounded-none border-0 bg-[#15153a] px-4 py-3 outline-none",
-                    isCorrect && "shadow-[0_-4px_0_0_#34c759]",
+                    (isCorrect || isIncomplete) &&
+                      "shadow-[0_-4px_0_0_#34c759]",
                   )}
                   exit={{ opacity: 0, scale: 0.98, y: 24 }}
                   initial={{ opacity: 0, scale: 0.98, y: 24 }}
@@ -94,7 +100,11 @@ export function QuestionValidationPopup({
 
                     {mascotSrc ? (
                       <img
-                        alt={isCorrect ? "Happy mascot" : "Sad mascot"}
+                        alt={
+                          isCorrect || isIncomplete
+                            ? "Happy mascot"
+                            : "Sad mascot"
+                        }
                         className="pointer-events-none absolute -top-20 right-0 h-[168px] w-[161px] -rotate-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.1)]"
                         draggable={false}
                         src={mascotSrc}

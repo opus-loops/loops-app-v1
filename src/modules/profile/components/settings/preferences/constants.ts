@@ -1,3 +1,5 @@
+import type { AppLanguage } from "@/modules/shared/i18n/languages"
+
 export const durationOptions = [
   { label: "5 minutes", value: 5 },
   { label: "10 minutes", value: 10 },
@@ -32,7 +34,7 @@ export const backgroundOptions = [
 ]
 
 export const languageOptions = [
-  { label: "🇸🇦 ar", value: "ar" as const },
-  { label: "🇫🇷 fr", value: "fr" as const },
-  { label: "🇬🇧 en", value: "en" as const },
+  { label: "🇸🇦 ar", value: "ar" satisfies AppLanguage },
+  { label: "🇫🇷 fr", value: "fr" satisfies AppLanguage },
+  { label: "🇬🇧 en", value: "en" satisfies AppLanguage },
 ]

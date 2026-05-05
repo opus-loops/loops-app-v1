@@ -50,7 +50,7 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
   const dataset = countriesCitiesData as CountriesCities
 
   const countryOptions = useMemo(() => {
-    const countries = dataset?.Countries ?? []
+    const countries = dataset.Countries
     return toOptions(sortStrings(countries.map((c) => c.CountryName)))
   }, [dataset])
 
@@ -111,7 +111,7 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
       duration: user.duration != null ? String(user.duration) : "",
       gender: user.gender ?? "",
       goals: normalizeGoals(user.goals),
-      language: user.language ?? "en",
+      language: user.language,
       state: user.state ?? "",
     }
   }, [
@@ -374,7 +374,7 @@ export function PreferencesForm({ user }: PreferencesFormProps) {
         >
           {(values) => {
             const [country, stateName] = values as [string, string]
-            const selectedCountry = (dataset.Countries ?? []).find(
+            const selectedCountry = dataset.Countries.find(
               (c) => c.CountryName === country,
             )
             const stateOptions = toOptions(
@@ -600,7 +600,7 @@ function dateToInputValue(date: Date | undefined) {
 }
 
 function getFieldError({ errors, isTouched }: FieldErrorProps) {
-  if (!isTouched || !errors || errors.length === 0) return null
+  if (!isTouched || errors.length === 0) return null
   return errors.filter((e): e is string => typeof e === "string").join(", ")
 }
 

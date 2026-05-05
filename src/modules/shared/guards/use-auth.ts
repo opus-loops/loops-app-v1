@@ -9,11 +9,11 @@ export const authenticatedQuery = queryOptions({
     const response = await isAuthenticated()
 
     if (response._tag === "Failure" || response.value.user === null)
-      throw redirect({ to: "/auth" })
+      throw redirect({ throw: false, to: "/auth" })
 
     if (response.value.user.role !== "user") {
       await sessionCleanupFn()
-      throw redirect({ to: "/auth" })
+      throw redirect({ throw: false, to: "/auth" })
     }
     return { user: response.value.user }
   },

@@ -125,23 +125,23 @@ function CategorySelectionScreen({
 
   const handleCategorySelect = (category: CategoryWithStartedCategory) =>
     router.navigate({
-      search: (prev: any) => ({
+      search: (prev) => ({
         ...prev,
         category: category.categoryId,
         type: "details",
       }),
       to: location.pathname,
-    } as any)
+    })
 
   const handleViewAllContent = (category: CategoryWithStartedCategory) =>
     router.navigate({
-      search: (prev: any) => ({
+      search: (prev) => ({
         ...prev,
         category: category.categoryId,
         type: "content",
       }),
       to: location.pathname,
-    } as any)
+    })
 
   return (
     <div className="relative flex-1 overflow-hidden">

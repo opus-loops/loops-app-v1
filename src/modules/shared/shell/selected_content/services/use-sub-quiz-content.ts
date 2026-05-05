@@ -36,6 +36,7 @@ export const subQuizContentQuery = (
             contentId: params.quizId,
             type: "content",
           },
+          throw: false,
           to: "/",
         })
 

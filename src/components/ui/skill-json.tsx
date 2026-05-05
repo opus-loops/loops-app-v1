@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 
-import { ImageIcon, Play } from "lucide-react"
-import { useTranslation } from "react-i18next"
+import { ImageIcon, Minus, Play, Plus, Search, X } from "lucide-react"
+import { useEffect, useState } from "react"
 
 import type { SkillContent } from "@/modules/learning-experience/domain/entities/skill-content"
 
@@ -29,8 +29,15 @@ type VideoElementProps = {
   data: NonNullable<SkillContent["content"]["elements"][number]["video"]>
 }
 
+type ZoomableImageProps = {
+  alt: string
+  className?: string
+  description?: null | string
+  src: string
+  title?: null | string
+}
+
 export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
-  const { t } = useTranslation()
   const { content, metadata } = data
   const coverUrlJson = metadata.cover_image.url_json
   const hasVideoElement = content.elements.some(
@@ -47,22 +54,15 @@ export function SkillContentDisplay({ data }: SkillContentDisplayProps) {
 
         {coverUrlJson && !hasVideoElement && (
           <div className="w-full overflow-hidden rounded-2xl">
-            <img
+            <ZoomableImage
               alt={metadata.cover_image.alt}
-              aria-description={metadata.cover_image.description}
               className="h-auto w-full object-cover"
+              description={metadata.cover_image.description}
               src={coverUrlJson["100"]}
               title={metadata.cover_image.title}
             />
           </div>
         )}
-
-        {/* Lesson Heading */}
-        <div className="text-2xl leading-tight font-semibold">
-          <span className="text-[#31bce6]">{t("skill.lesson")}</span>
-          <br />
-          <span className="text-[#dee2e6]">{content.heading}</span>
-        </div>
       </div>
 
       <div className="mt-10 flex w-full max-w-md flex-col space-y-10">
@@ -140,10 +140,10 @@ function ImageElement({ data }: ImageElementProps) {
   return (
     <div className="w-full overflow-hidden rounded-lg border border-[#31bce6]/20 bg-[#15153a]/50">
       {imageUrlJson ? (
-        <img
+        <ZoomableImage
           alt={data.alt}
-          aria-description={data.description}
           className="h-auto w-full object-contain"
+          description={data.description}
           src={imageUrlJson["100"]}
           title={data.title}
         />
@@ -265,5 +265,121 @@ function VideoElement({ data }: VideoElementProps) {
       {/* Divider */}
       <div className="h-px w-3/4 bg-[#ff4900] shadow-[0px_0px_0px_0px_#ff4900]" />
     </div>
+  )
+}
+
+function ZoomableImage({
+  alt,
+  className,
+  description,
+  src,
+  title,
+}: ZoomableImageProps) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [zoom, setZoom] = useState(1)
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false)
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [isOpen])
+
+  const closeViewer = () => {
+    setIsOpen(false)
+    setZoom(1)
+  }
+
+  const zoomIn = () => setZoom((currentZoom) => Math.min(currentZoom + 0.25, 3))
+  const zoomOut = () =>
+    setZoom((currentZoom) => Math.max(currentZoom - 0.25, 1))
+
+  return (
+    <>
+      <button
+        aria-label={`Open ${alt || "image"} fullscreen`}
+        className="group relative block w-full cursor-zoom-in overflow-hidden text-left"
+        onClick={() => setIsOpen(true)}
+        type="button"
+      >
+        <img
+          alt={alt}
+          aria-description={description ?? undefined}
+          className={className}
+          src={src}
+          title={title ?? undefined}
+        />
+        <span className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white shadow-lg ring-1 ring-white/20 backdrop-blur transition-transform group-hover:scale-105">
+          <Search aria-hidden="true" size={18} />
+        </span>
+      </button>
+
+      {isOpen ? (
+        <div
+          aria-label={title || alt || "Fullscreen image"}
+          aria-modal="true"
+          className="fixed inset-0 z-[60] flex flex-col bg-black/95"
+          role="dialog"
+        >
+          <div className="flex shrink-0 items-center justify-end gap-2 p-3">
+            <button
+              aria-label="Zoom out"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/15 transition hover:bg-white/20 disabled:opacity-40"
+              disabled={zoom <= 1}
+              onClick={zoomOut}
+              type="button"
+            >
+              <Minus aria-hidden="true" size={20} />
+            </button>
+            <button
+              aria-label="Zoom in"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/15 transition hover:bg-white/20 disabled:opacity-40"
+              disabled={zoom >= 3}
+              onClick={zoomIn}
+              type="button"
+            >
+              <Plus aria-hidden="true" size={20} />
+            </button>
+            <button
+              aria-label="Close fullscreen image"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/15 transition hover:bg-white/20"
+              onClick={closeViewer}
+              type="button"
+            >
+              <X aria-hidden="true" size={22} />
+            </button>
+          </div>
+
+          <button
+            aria-label="Close fullscreen image"
+            className="flex min-h-0 flex-1 cursor-zoom-out items-center overflow-auto p-4"
+            onClick={closeViewer}
+            type="button"
+          >
+            <img
+              alt={alt}
+              className="m-auto max-h-[85vh] max-w-full object-contain transition-transform"
+              onClick={(event) => event.stopPropagation()}
+              src={src}
+              style={{ transform: `scale(${zoom})` }}
+              title={title ?? undefined}
+            />
+          </button>
+        </div>
+      ) : null}
+    </>
   )
 }

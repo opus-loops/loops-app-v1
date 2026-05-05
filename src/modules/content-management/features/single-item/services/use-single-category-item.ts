@@ -3,7 +3,6 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query"
-import { redirect } from "@tanstack/react-router"
 import { useEffect } from "react"
 
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
@@ -11,6 +10,7 @@ import type { CategoryContentItem } from "@/modules/shared/domain/entities/categ
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 
 import { singleCategoryItemFn } from "./single-category-item-fn"
+import { redirect } from "@tanstack/react-router"
 
 interface SingleCategoryItemParams {
   categoryId: string
@@ -36,9 +36,13 @@ export const singleCategoryItemQuery = (
 
       const { categoryItem } = response.value
 
-      if (categoryItem === null)
+      if (categoryItem === null || !categoryItem.itemProgress)
         throw redirect({
-          search: { category: params.categoryId, type: "content" },
+          search: {
+            category: params.categoryId,
+            type: "content",
+          },
+          throw: false,
           to: "/",
         })
 

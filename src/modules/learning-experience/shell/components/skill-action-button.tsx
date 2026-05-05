@@ -23,6 +23,7 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
   const {
     canNavigateNext,
     isNextItemCompleted,
+    isNextItemStarted,
     navigateToNext,
     validateAndStartItem,
   } = useContentNavigation({ categoryId: skillItem.categoryId })
@@ -58,10 +59,11 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
     setIsSubmitting(true)
 
     // Check if we can navigate to next item
-    const canNavigate = canNavigateNext && isNextItemCompleted
+    const canNavigate =
+      canNavigateNext && (isNextItemCompleted || isNextItemStarted)
 
     if (canNavigate) {
-      // Normal navigation - next item is already started
+      // Normal navigation - next item already has progress
       setIsSubmitting(false)
       return await navigateToNext()
     }
@@ -83,7 +85,14 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
     if (response._tag === "Success") {
       await navigateToNext()
       goToStep("welcome")
+      return
     }
+
+    if (
+      response._tag === "Skipped" &&
+      response.reason === "AlreadyStartedOrCompleted"
+    )
+      await navigateToNext()
   }
 
   const handleButtonClick = () => {

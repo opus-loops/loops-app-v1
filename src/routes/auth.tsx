@@ -18,7 +18,10 @@ export const Route = createFileRoute("/auth")({
   beforeLoad: async () => {
     const response = await isAuthenticated()
     if (response._tag === "Success") {
-      throw redirect({ to: "/" })
+      throw redirect({
+        throw: false,
+        to: "/",
+      })
     }
   },
   component: function Auth() {

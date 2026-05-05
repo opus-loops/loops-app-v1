@@ -29,6 +29,7 @@ export const exploreCategoryQuery = (
       if (category === null) {
         throw redirect({
           search: { category: "all" },
+          throw: false,
           to: "/",
         })
       }

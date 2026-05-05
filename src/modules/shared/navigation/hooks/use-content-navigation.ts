@@ -322,6 +322,25 @@ export function useContentNavigation({
     return completionService.isItemCompleted(nextItem)
   }, [completionService, selectedItem, categoryItems])
 
+  /**
+   * Checks if the next item is started.
+   * Returns a boolean indicating if the next item has progress.
+   */
+  const isNextItemStarted = useMemo(() => {
+    if (!selectedItem) return false
+
+    const nextItemId = selectedItem.nextCategoryItem
+    if (!nextItemId) return false
+
+    const nextItem = categoryItems.find(
+      (item) => item.categoryItemId === nextItemId,
+    )
+
+    if (!nextItem) return false
+
+    return completionService.isItemStarted(nextItem)
+  }, [completionService, selectedItem, categoryItems])
+
   return {
     canGoBack,
     canNavigateNext,
@@ -329,6 +348,7 @@ export function useContentNavigation({
     exitContent,
     handleBackNavigation,
     isNextItemCompleted,
+    isNextItemStarted,
     navigateToNext,
     navigateToPrevious,
     navigationState,

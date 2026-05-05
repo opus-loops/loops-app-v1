@@ -7,6 +7,7 @@ export const Route = createFileRoute("/register")({
   beforeLoad: ({ search }) => {
     throw redirect({
       search: buildAuthSearch("register", search.redirect),
+      throw: false,
       to: "/auth",
     })
   },

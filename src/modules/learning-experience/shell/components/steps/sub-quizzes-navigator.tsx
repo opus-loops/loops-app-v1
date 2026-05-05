@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 
@@ -18,9 +19,16 @@ type SubQuizzesNavigatorProps = {
 // TODO: disable the button when navigating, question not validated, validating...
 export function SubQuizzesNavigator({ quizItem }: SubQuizzesNavigatorProps) {
   const subQuizRef = useRef<SubQuizRef>(null)
+  const { t } = useTranslation()
 
-  const { canNavigateNext, navigateNext, navigationState, selectedSubQuiz } =
-    useSubQuizNavigation({ quizItem })
+  const {
+    canNavigateNext,
+    canNavigatePrevious,
+    navigateNext,
+    navigatePrevious,
+    navigationState,
+    selectedSubQuiz,
+  } = useSubQuizNavigation({ quizItem })
 
   const estimatedTime = selectedSubQuiz?.content?.estimatedTime ?? 0
   const [timeLeft, setTimeLeft] = useState(estimatedTime)
@@ -28,21 +36,25 @@ export function SubQuizzesNavigator({ quizItem }: SubQuizzesNavigatorProps) {
   const [isValidating, setIsValidating] = useState(false)
 
   const isCompleted = selectedSubQuiz?.completedQuestion?.status === "completed"
+  const isBusy = isValidating || navigationState.isNavigating
+  const hasPreviousSubQuiz = selectedSubQuiz?.previousSubQuiz !== undefined
 
   const handleButtonClicked = async () => {
+    if (isBusy) return
+
     if (isCompleted) {
-      if (canNavigateNext) {
-        await navigateNext()
-      }
+      if (canNavigateNext) await navigateNext()
+      return
     }
 
-    if (!isCompleted) {
-      if (isValidating) return
+    setIsValidating(true)
+    await subQuizRef.current?.validate(timeLeft)
+    setIsValidating(false)
+  }
 
-      setIsValidating(true)
-      await subQuizRef.current?.validate(timeLeft)
-      setIsValidating(false)
-    }
+  const handlePreviousClicked = async () => {
+    if (isBusy || !isCompleted || !canNavigatePrevious) return
+    await navigatePrevious()
   }
 
   return (
@@ -80,18 +92,29 @@ export function SubQuizzesNavigator({ quizItem }: SubQuizzesNavigatorProps) {
         )}
 
       {selectedSubQuiz && (
-        <div className="mx-auto mt-8 flex w-full max-w-2xl justify-end px-2">
+        <div className="mx-auto mt-8 flex w-full max-w-2xl justify-end gap-3 px-2">
+          {hasPreviousSubQuiz && (
+            <Button
+              className="px-8"
+              disabled={isBusy || !isCompleted || !canNavigatePrevious}
+              onClick={handlePreviousClicked}
+              variant="secondary"
+            >
+              {t("quiz.previous_question")}
+            </Button>
+          )}
           <Button
             className="text-loops-light bg-cyan-500 px-8 hover:bg-cyan-600"
+            disabled={isBusy || (isCompleted && !canNavigateNext)}
             onClick={handleButtonClicked}
           >
             {isCompleted
               ? navigationState.isNavigating
-                ? "Starting..."
-                : "Next Question"
+                ? t("common.starting")
+                : t("quiz.next_question")
               : isValidating
-                ? "Checking..."
-                : "Check Answer"}
+                ? t("quiz.checking_answer")
+                : t("quiz.check_answer")}
           </Button>
         </div>
       )}

@@ -17,6 +17,7 @@
     "verify": "تحقق",
     "start": "بدء",
     "starting": "جاري البدء...",
+    "validate": "تحقق",
     "minutes": "دقائق",
     "min": "دقيقة",
     "sec": "ث",
@@ -368,13 +369,13 @@
       "enter_my_code": "أدخل رمزي",
       "free_trial_title": "أريد تجربة مجانية",
       "free_trial_description": "افتح هذه الفئة فورًا من خلال تجربة مجانية.",
-        "step_badge": "الخطوة {{current}}/{{total}}",
-        "step_two_title": "أدخل الرمز",
-        "step_two_image_alt": "صورة قسيمة Loops",
-        "voucher_only_image_alt": "صورة مفتاح Loops",
-        "close": "إغلاق",
-        "start_now": "ابدأ الآن",
-        "or": "أو",
+      "step_badge": "الخطوة {{current}}/{{total}}",
+      "step_two_title": "أدخل الرمز",
+      "step_two_image_alt": "صورة قسيمة Loops",
+      "voucher_only_image_alt": "صورة مفتاح Loops",
+      "close": "إغلاق",
+      "start_now": "ابدأ الآن",
+      "or": "أو",
       "starting": "جار البدء...",
       "start_free_trial": "ابدأ التجربة المجانية"
     },
@@ -416,6 +417,10 @@
     "content_list_title": "المحتوى",
     "view_all": "عرض الكل"
   },
+  "skill": {
+    "completed": "تم إكمال المهارة بنجاح!",
+    "failed": "فشل إكمال المهارة"
+  },
   "quiz": {
     "stats": {
       "quizzes": "الاختبارات",
@@ -432,10 +437,16 @@
     "single_answer": "إجابة صحيحة واحدة",
     "arrange_items": "رتب العناصر بالترتيب",
     "question": "سؤال",
+    "previous_question": "السؤال السابق",
+    "next_question": "السؤال التالي",
+    "check_answer": "تحقق من الإجابة",
+    "checking_answer": "جارٍ التحقق...",
     "validation": {
       "should_be": "يجب أن يكون:",
       "well_chosen": "اختيار موفق!",
       "correct_answer": "إجابة صحيحة",
+      "good": "جيد!",
+      "incomplete_answer": "إجابتك غير مكتملة.",
       "incorrect": "غير صحيح",
       "time_up": "انتهى الوقت!"
     },

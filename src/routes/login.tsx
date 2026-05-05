@@ -7,6 +7,7 @@ export const Route = createFileRoute("/login")({
   beforeLoad: ({ search }) => {
     throw redirect({
       search: buildAuthSearch("login", search.redirect),
+      throw: false,
       to: "/auth",
     })
   },

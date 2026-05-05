@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next"
 
 import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/types/enhanced-sub-quiz"
 
+import { getChoiceAnswerFeedbackVariant } from "@/modules/learning-experience/shell/components/question-types/choice-answer-feedback"
 import { getChoiceReviewState } from "@/modules/learning-experience/shell/components/question-types/choice-review-state"
 import { QuestionValidationPopup } from "@/modules/learning-experience/shell/components/question-types/question-validation-popup"
 import { cn } from "@/modules/shared/lib/utils"
@@ -104,28 +105,12 @@ export const ChoiceQuestionComponent = forwardRef<
   // TODO: REFACTOR NEEDED: Get it from api response
   const idealOptions = question.idealOptions
   const userAnswer = completedQuestion?.userAnswer
-  const isCorrectAnswer = (() => {
-    if (!isValidated) return false
-    if (!idealOptions || !userAnswer) return false
-    if (idealOptions.length !== userAnswer.length) return false
-    const toCounts = (values: ReadonlyArray<number>) => {
-      const map = new Map<number, number>()
-      for (const value of values) map.set(value, (map.get(value) ?? 0) + 1)
-      return map
-    }
-    const idealCounts = toCounts(idealOptions)
-    const userCounts = toCounts(userAnswer)
-    if (idealCounts.size !== userCounts.size) return false
-    for (const [value, count] of idealCounts)
-      if (userCounts.get(value) !== count) return false
-    return true
-  })()
+  const answerFeedbackVariant = getChoiceAnswerFeedbackVariant({
+    idealOptions,
+    userAnswer,
+  })
 
-  const popupVariant = isTimeUpSkip
-    ? "time-up"
-    : isCorrectAnswer
-      ? "correct"
-      : "incorrect"
+  const popupVariant = isTimeUpSkip ? "time-up" : answerFeedbackVariant
 
   const handleChoiceSelect = (index: number) => {
     if (isValidated) return
@@ -240,9 +225,11 @@ export const ChoiceQuestionComponent = forwardRef<
           subtitle={
             popupVariant === "time-up"
               ? t("quiz.time_up_message")
-              : popupVariant === "correct"
-                ? subQuiz.content.congratulatoryMessage[0].content
-                : subQuiz.content.consolidationMessage[0].content
+              : popupVariant === "incomplete"
+                ? t("quiz.validation.incomplete_answer")
+                : popupVariant === "correct"
+                  ? subQuiz.content.congratulatoryMessage[0].content
+                  : subQuiz.content.consolidationMessage[0].content
           }
           variant={popupVariant}
         />
