@@ -31,7 +31,7 @@ export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
 
   return (
     <Button
-      className="font-outfit text-loops-light hover:bg-loops-cyan/90 bg-loops-cyan flex w-full max-w-sm items-center justify-center rounded-xl px-6 py-3 text-lg font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
+      className="font-outfit text-loops-light hover:bg-loops-cyan/90 bg-loops-cyan flex w-full max-w-sm items-center justify-center rounded-xl px-6 py-3 text-lg font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 rtl:flex-row-reverse"
       disabled={isSubmitting}
       onClick={handleStartQuiz}
       type="button"
@@ -43,7 +43,9 @@ export function QuizActionButton({ quizItem }: QuizActionButtonProps) {
           : isStarted
             ? t("common.continue")
             : t("common.start")}
-      {!isSubmitting && <ChevronRight className="text-loops-main h-5 w-5" />}
+      {!isSubmitting && (
+        <ChevronRight className="text-loops-main h-5 w-5 rtl:rotate-180" />
+      )}
     </Button>
   )
 }

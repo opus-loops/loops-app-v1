@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 
 import type { SkillContent } from "@/modules/learning-experience/domain/entities/skill-content"
 
+import { BidirectionalText } from "@/modules/shared/components/common/bidirectional-text"
 import { cn } from "@/modules/shared/lib/utils"
 
 type BulletContent = NonNullable<SkillContentElement["bullet"]>
@@ -81,9 +82,13 @@ function BulletElement({ data }: BulletElementProps) {
         data.italic && "italic",
         data.strike && "line-through",
       )}
-      style={{ color: data.color ? data.color : "white" }}
+      dir="auto"
+      style={{
+        color: data.color ? data.color : "white",
+        unicodeBidi: "plaintext",
+      }}
     >
-      {data.text}
+      <BidirectionalText text={data.text} />
     </p>
   )
 }

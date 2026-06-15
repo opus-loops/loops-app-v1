@@ -114,7 +114,7 @@ export function RegisterSuccessView({
           type="button"
         >
           <span className="bg-loops-cyan flex h-6 w-6 items-center justify-center rounded-full">
-            <ChevronLeft className="text-loops-main h-4 w-4" />
+            <ChevronLeft className="text-loops-main h-4 w-4 rtl:rotate-180" />
           </span>
         </button>
       </div>
@@ -141,7 +141,7 @@ export function RegisterSuccessView({
         </div>
 
         <Button
-          className="font-outfit text-loops-text hover:bg-loops-cyan/90 bg-loops-cyan flex min-h-14 w-full items-center justify-center rounded-xl px-6 py-4 text-lg leading-5 font-semibold shadow-none disabled:cursor-not-allowed disabled:opacity-50"
+          className="font-outfit text-loops-text hover:bg-loops-cyan/90 bg-loops-cyan flex min-h-14 w-full items-center justify-center rounded-xl px-6 py-4 text-lg leading-5 font-semibold shadow-none disabled:cursor-not-allowed disabled:opacity-50 rtl:flex-row-reverse"
           disabled={isSubmitting}
           onClick={onContinue}
           type="button"
@@ -170,7 +170,7 @@ export function RegisterSuccessView({
           ) : (
             <>
               <span>{ctaLabel}</span>
-              <ChevronRight className="text-loops-text h-5 w-5" />
+              <ChevronRight className="text-loops-text h-5 w-5 rtl:rotate-180" />
             </>
           )}
         </Button>

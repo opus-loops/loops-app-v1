@@ -16,6 +16,7 @@ import {
   getSequenceReviewedOrder,
   getSequenceReviewState,
 } from "@/modules/learning-experience/shell/components/question-types/sequence-review-state"
+import { BidirectionalText } from "@/modules/shared/components/common/bidirectional-text"
 import { cn } from "@/modules/shared/lib/utils"
 import { useValidateSequenceOrder } from "@/modules/shared/shell/selected_content/services/use-validate-sequence-order"
 
@@ -117,12 +118,12 @@ export const SequenceOrderComponent = forwardRef<
   ) => {
     if (!isValidated)
       return cn(
-        "flex items-center gap-3 p-4 rounded-lg border-2 bg-slate-800 border-slate-600 text-loops-light cursor-grab active:cursor-grabbing",
+        "flex flex-wrap items-center gap-3 rounded-lg border-2 bg-slate-800 p-4 text-loops-light cursor-grab active:cursor-grabbing border-slate-600",
         "hover:border-slate-500 transition-colors duration-300",
       )
 
     return cn(
-      "flex items-center gap-3 p-4 rounded-lg border-2 transition-colors duration-300",
+      "flex flex-wrap items-center gap-3 rounded-lg border-2 p-4 transition-colors duration-300",
       sequenceReviewState === "correct" &&
         "bg-green-900 border-green-500 text-green-400",
       sequenceReviewState === "incorrect" &&
@@ -217,14 +218,31 @@ export const SequenceOrderComponent = forwardRef<
                 {String.fromCharCode(65 + itemIndex)}
               </span>
               {subQuiz.content && (
-                <span className="text-base font-medium">
-                  {subQuiz.content.sequence[itemIndex][0].content}
+                <span
+                  className="min-w-48 flex-[1_1_12rem] text-base font-medium break-words"
+                  dir="auto"
+                  style={{ unicodeBidi: "plaintext" }}
+                >
+                  <BidirectionalText
+                    text={subQuiz.content.sequence[itemIndex][0].content}
+                  />
                 </span>
               )}
               {sequenceReviewState === "incorrect" && (
-                <div className="ml-auto text-xs font-semibold text-red-400 opacity-80">
+                <div
+                  className="ms-auto min-w-48 flex-[1_1_12rem] text-start text-xs font-semibold break-words text-red-400 opacity-80 sm:text-end"
+                  dir="auto"
+                  style={{ unicodeBidi: "plaintext" }}
+                >
                   {t("quiz.validation.should_be")}{" "}
-                  {subQuiz.content?.sequence[idealOrder[position]][0].content}
+                  {subQuiz.content ? (
+                    <BidirectionalText
+                      text={
+                        subQuiz.content.sequence[idealOrder[position]][0]
+                          .content
+                      }
+                    />
+                  ) : null}
                 </div>
               )}
             </Reorder.Item>

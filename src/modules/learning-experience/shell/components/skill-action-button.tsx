@@ -22,6 +22,7 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
 
   const {
     canNavigateNext,
+    hasNextItem,
     isNextItemCompleted,
     isNextItemStarted,
     navigateToNext,
@@ -99,6 +100,8 @@ export function SkillActionButton({ skillItem }: SkillActionButtonProps) {
     if (isCompleted) handleCompletedItemClick()
     else if (isStarted) validateSkill()
   }
+
+  if (isCompleted && !hasNextItem) return null
 
   return (
     <>

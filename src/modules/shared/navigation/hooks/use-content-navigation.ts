@@ -239,6 +239,14 @@ export function useContentNavigation({
     )
   }, [selectedItem, categoryItems, navigationManager])
 
+  const hasNextItem = useMemo((): boolean => {
+    if (!selectedItem?.nextCategoryItem) return false
+
+    return categoryItems.some(
+      (item) => item.categoryItemId === selectedItem.nextCategoryItem,
+    )
+  }, [selectedItem, categoryItems])
+
   /**
    * Handles back navigation (e.g. back button in header).
    * Uses router history or clears selection if no history.
@@ -347,6 +355,7 @@ export function useContentNavigation({
     canNavigatePrevious,
     exitContent,
     handleBackNavigation,
+    hasNextItem,
     isNextItemCompleted,
     isNextItemStarted,
     navigateToNext,

@@ -1,9 +1,7 @@
-import { Link } from "@tanstack/react-router"
 import { motion } from "framer-motion"
-import { Download, Eye, Sparkles, Trophy } from "lucide-react"
+import { Sparkles, Trophy } from "lucide-react"
 import { Trans, useTranslation } from "react-i18next"
 
-import { buttonVariants } from "@/modules/shared/components/ui/button"
 import {
   Card,
   CardContent,
@@ -12,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/modules/shared/components/ui/card"
-import { cn } from "@/modules/shared/lib/utils"
 
 interface CertificateCardProps {
   categoryName: string
@@ -89,55 +86,30 @@ export function CertificateCard({
 
           <CardContent className="relative px-6 py-2">
             <div className="group relative overflow-hidden rounded-xl border-2 border-white/10 bg-black/40 p-1 shadow-inner transition-all hover:border-[#FFCE51]/30">
-              <div className="relative aspect-[1.414/1] w-full overflow-hidden rounded-lg bg-white">
-                <object
-                  aria-label={t("home.certificate.preview_aria_label")}
-                  className="h-full w-full"
-                  data={`${certificate.pdfURL}#view=Fit&toolbar=0&navpanes=0&scrollbar=0`}
-                  type="application/pdf"
-                >
-                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-slate-100 p-4 text-center">
-                    <Trophy className="size-12 text-slate-300" />
-                    <p className="text-sm font-medium text-slate-500">
-                      {t("home.certificate.preview_title")}
-                    </p>
-                  </div>
-                </object>
+              <a
+                aria-label={t("home.certificate.preview_aria_label")}
+                className="relative flex aspect-[1.414/1] w-full items-center justify-center overflow-hidden rounded-lg bg-slate-100 text-center transition-transform hover:scale-[1.01] focus-visible:ring-2 focus-visible:ring-[#FFCE51] focus-visible:outline-none"
+                href={certificate.pdfURL}
+                rel="noreferrer noopener"
+                target="_blank"
+              >
+                <div className="absolute inset-4 rounded-lg border-2 border-[#FFCE51]/50" />
+                <div className="absolute top-5 right-5 left-5 h-2 rounded-full bg-slate-200" />
+                <div className="absolute top-11 right-10 left-10 h-1.5 rounded-full bg-slate-200" />
+                <div className="absolute right-8 bottom-8 left-8 h-16 rounded-lg bg-slate-200/70" />
+                <div className="relative flex flex-col items-center justify-center gap-2 p-4">
+                  <Trophy className="size-12 text-[#F59E0B]" />
+                  <p className="text-sm font-medium text-slate-600">
+                    {t("home.certificate.preview_title")}
+                  </p>
+                </div>
 
-                {/* Overlay on hover/interaction hint */}
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/10" />
-              </div>
+              </a>
             </div>
           </CardContent>
 
-          <CardFooter className="flex flex-col gap-3 pt-6 pb-8">
-            <div className="grid w-full grid-cols-2 gap-3">
-              <Link
-                className={cn(
-                  buttonVariants({ variant: "secondary" }),
-                  "bg-loops-background-secondary text-loops-light hover:bg-loops-background-secondary/80 h-12 border-none font-semibold transition-transform hover:scale-[1.02] active:scale-[0.98]",
-                )}
-                rel="noreferrer noopener"
-                target="_blank"
-                to={certificate.pdfURL}
-              >
-                <Eye className="mr-2 size-4" />
-                {t("home.certificate.view_pdf")}
-              </Link>
-
-              <Link
-                className={cn(
-                  buttonVariants({ variant: "secondary" }),
-                  "bg-loops-background-secondary text-loops-light hover:bg-loops-background-secondary/80 h-12 border-none font-semibold transition-transform hover:scale-[1.02] active:scale-[0.98]",
-                )}
-                download
-                to={certificate.pdfURL}
-              >
-                <Download className="mr-2 size-4" />
-                {t("home.certificate.download_pdf")}
-              </Link>
-            </div>
-
+          <CardFooter className="flex flex-col gap-3 pt-4 pb-8">
             <p className="font-outfit mt-2 flex items-center gap-2 text-xs font-medium text-slate-400">
               <motion.span
                 animate={{ opacity: [0.5, 1, 0.5] }}

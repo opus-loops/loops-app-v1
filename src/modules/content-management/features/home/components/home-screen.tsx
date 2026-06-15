@@ -83,7 +83,7 @@ export function HomeScreen({ categoryId }: HomeScreenProps) {
           />
 
           {category.startedCategory &&
-            category.startedCategory.status !== "completed" &&
+            category.startedCategory.status === "completed" &&
             certificate && (
               <CertificateCard
                 categoryName={category.name[0]?.content || ""}

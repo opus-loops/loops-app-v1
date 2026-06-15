@@ -38,13 +38,13 @@ export function SkillWelcomeScreen({ skillItem }: SkillWelcomeScreenProps) {
         </div>
 
         <button
-          className="font-outfit flex w-full items-center justify-center gap-1 rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium text-[#15153a] transition-all duration-200 hover:bg-cyan-500"
+          className="font-outfit flex w-full items-center justify-center gap-1 rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium text-[#15153a] transition-all duration-200 hover:bg-cyan-500 rtl:flex-row-reverse"
           onClick={() => goToStep("content")}
         >
           <span className="text-[18px] font-medium">
             {isStarted ? t("common.continue") : t("common.start")}
           </span>
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-5 w-5 rtl:rotate-180" />
         </button>
       </div>
     </div>

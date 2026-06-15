@@ -43,6 +43,7 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
   const {
     canNavigateNext,
     exitContent,
+    hasNextItem,
     isNextItemCompleted,
     isNextItemStarted,
     navigateToNext,
@@ -199,13 +200,15 @@ export function QuizStatisticsScreen({ quizItem }: QuizStatisticsScreenProps) {
         {/* CTA Buttons */}
         <div className="flex w-full flex-col items-start gap-4">
           {/* Primary Button */}
-          <button
-            className="font-outfit text-loops-light w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isSubmitting}
-            onClick={handleNextClick}
-          >
-            {isSubmitting ? t("common.loading") : t("quiz.next")}
-          </button>
+          {hasNextItem ? (
+            <button
+              className="font-outfit text-loops-light w-full max-w-sm rounded-xl bg-cyan-400 px-6 py-3 text-lg font-medium transition-all duration-200 hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={isSubmitting}
+              onClick={handleNextClick}
+            >
+              {isSubmitting ? t("common.loading") : t("quiz.next")}
+            </button>
+          ) : null}
 
           {/* Secondary Button */}
           <button

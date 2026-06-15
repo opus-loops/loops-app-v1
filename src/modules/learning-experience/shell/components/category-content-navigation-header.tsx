@@ -31,7 +31,7 @@ export function CategoryContentNavigationHeader({
           onClick={onPrevious}
           type="button"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-5 w-5 rtl:rotate-180" />
         </Button>
       ) : (
         <div aria-hidden className="h-11 w-11" />
@@ -58,7 +58,7 @@ export function CategoryContentNavigationHeader({
           onClick={onNext}
           type="button"
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-5 w-5 rtl:rotate-180" />
         </Button>
       ) : (
         <div aria-hidden className="h-11 w-11" />

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { ChevronLeft } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import z from "zod"
 
 import { PreferencesForm } from "@/modules/profile/components/settings/preferences-form"
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/profile_/settings_/preferences")({
   beforeLoad: async ({ context }) =>
     await context.queryClient.ensureQueryData(authenticatedQuery),
   component: function RouteComponent() {
+    const { t } = useTranslation()
     const { user } = useAuth()
     const search = Route.useSearch()
 
@@ -35,7 +37,7 @@ export const Route = createFileRoute("/profile_/settings_/preferences")({
                             <ChevronLeft className="text-loops-light h-6 w-6" />
                           </Link>
                           <h1 className="text-loops-light text-xl font-semibold">
-                            Preferences
+                            {t("profile.preferences")}
                           </h1>
                         </div>
 

@@ -13,6 +13,7 @@ import type { EnhancedSubQuiz } from "@/modules/shared/shell/selected_content/ty
 import { getChoiceAnswerFeedbackVariant } from "@/modules/learning-experience/shell/components/question-types/choice-answer-feedback"
 import { getChoiceReviewState } from "@/modules/learning-experience/shell/components/question-types/choice-review-state"
 import { QuestionValidationPopup } from "@/modules/learning-experience/shell/components/question-types/question-validation-popup"
+import { BidirectionalText } from "@/modules/shared/components/common/bidirectional-text"
 import { cn } from "@/modules/shared/lib/utils"
 import { useValidateChoiceQuestion } from "@/modules/shared/shell/selected_content/services/use-validate-choice-question"
 
@@ -136,7 +137,7 @@ export const ChoiceQuestionComponent = forwardRef<
       // Non-validated state
       const isSelected = selectedChoices.includes(index)
       return cn(
-        "flex items-center p-4 w-full rounded-lg border-2 cursor-pointer transition-all",
+        "flex w-full cursor-pointer items-center gap-3 rounded-lg border-2 p-4 transition-all",
         "bg-slate-800 border-slate-600 text-loops-light hover:border-slate-500",
         isSelected && "border-cyan-400 bg-slate-700",
       )
@@ -144,7 +145,7 @@ export const ChoiceQuestionComponent = forwardRef<
       const choiceReviewState = getValidatedChoiceReviewState(index)
 
       return cn(
-        "flex items-center p-4 rounded-lg w-full border-2 transition-colors duration-300",
+        "flex w-full items-center gap-3 rounded-lg border-2 p-4 transition-colors duration-300",
         choiceReviewState === "selected-correct" &&
           "bg-green-900 border-green-500 text-green-400",
         choiceReviewState === "selected-incorrect" &&
@@ -167,7 +168,7 @@ export const ChoiceQuestionComponent = forwardRef<
       return (
         <div
           className={cn(
-            "mr-3 flex h-6 w-6 shrink-0 items-center justify-center border-2",
+            "flex h-6 w-6 shrink-0 items-center justify-center border-2",
             question.isMultiple ? "rounded-md" : "rounded-full",
             isSelected ? "border-cyan-400 bg-cyan-400" : "border-slate-400",
           )}
@@ -197,19 +198,19 @@ export const ChoiceQuestionComponent = forwardRef<
     const choiceReviewState = getValidatedChoiceReviewState(index)
 
     if (choiceReviewState === "selected-correct")
-      return <CheckCircle2 className="mr-3 h-6 w-6 shrink-0 text-green-500" />
+      return <CheckCircle2 className="h-6 w-6 shrink-0 text-green-500" />
     if (choiceReviewState === "selected-incorrect")
-      return <XCircle className="mr-3 h-6 w-6 shrink-0 text-red-500" />
+      return <XCircle className="h-6 w-6 shrink-0 text-red-500" />
     if (choiceReviewState === "missed-correct-no-wrong")
-      return <CheckCircle2 className="mr-3 h-6 w-6 shrink-0 text-orange-500" />
+      return <CheckCircle2 className="h-6 w-6 shrink-0 text-orange-500" />
 
     if (choiceReviewState === "missed-correct-with-wrong")
-      return <CheckCircle2 className="mr-3 h-6 w-6 shrink-0 text-green-500" />
+      return <CheckCircle2 className="h-6 w-6 shrink-0 text-green-500" />
 
     return (
       <div
         className={cn(
-          "mr-3 h-6 w-6 shrink-0 border-2 border-slate-600",
+          "h-6 w-6 shrink-0 border-2 border-slate-600",
           question.isMultiple ? "rounded-md" : "rounded-full",
         )}
       />
@@ -254,12 +255,17 @@ export const ChoiceQuestionComponent = forwardRef<
               onClick={() => handleChoiceSelect(index)}
             >
               {getChoiceIcon(index)}
-              <span className="text-base font-medium">
-                {String.fromCharCode(65 + index)}) {choice[0].content}
+              <span
+                className="min-w-0 flex-1 text-base font-medium"
+                dir="auto"
+                style={{ unicodeBidi: "plaintext" }}
+              >
+                {String.fromCharCode(65 + index)}){" "}
+                <BidirectionalText text={choice[0].content} />
               </span>
 
               {isValidated && (
-                <div className="ml-auto flex flex-col items-end gap-1">
+                <div className="ms-auto flex shrink-0 flex-col items-end gap-1">
                   {choiceReviewState === "selected-correct" && (
                     <span className="text-[10px] font-bold tracking-wider text-green-500 uppercase">
                       {t("quiz.validation.well_chosen")}
