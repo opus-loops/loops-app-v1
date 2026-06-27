@@ -24,6 +24,17 @@ export const instanceFactory = async () => {
     })
   }
 
+  if (session.accessToken) {
+    return axios.create({
+      baseURL: baseApiURL,
+      headers: {
+        Authorization: `Bearer ${session.accessToken}`,
+        "X-User-Timezone": userTimezone ?? "UTC",
+      },
+      withCredentials: true,
+    })
+  }
+
   const response = await Effect.runPromiseExit(
     refreshAccessToken({ refresh: session.refreshToken }),
   )
