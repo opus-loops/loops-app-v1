@@ -9,30 +9,35 @@ import {
   updateTokens,
 } from "../shell/session/session"
 
+export const baseApiURL = import.meta.env.VITE_API_URL
+
+const appUserAgent = "loops-client/1.0.0"
+
+const createInstanceConfig = (
+  authorization: string,
+  userTimezone?: string,
+) => ({
+  baseURL: baseApiURL,
+  headers: {
+    Authorization: authorization,
+    "X-User-Timezone": userTimezone ?? "UTC",
+    ...(typeof window === "undefined" && { "User-Agent": appUserAgent }),
+  },
+  withCredentials: true,
+})
+
 export const instanceFactory = async () => {
   const session = await getSession()
   const userTimezone = getUserTimezone()
 
   if (!session) {
-    return axios.create({
-      baseURL: baseApiURL,
-      headers: {
-        Authorization: "",
-        "X-User-Timezone": userTimezone ?? "UTC",
-      },
-      withCredentials: true,
-    })
+    return axios.create(createInstanceConfig("", userTimezone))
   }
 
   if (session.accessToken) {
-    return axios.create({
-      baseURL: baseApiURL,
-      headers: {
-        Authorization: `Bearer ${session.accessToken}`,
-        "X-User-Timezone": userTimezone ?? "UTC",
-      },
-      withCredentials: true,
-    })
+    return axios.create(
+      createInstanceConfig(`Bearer ${session.accessToken}`, userTimezone),
+    )
   }
 
   const response = await Effect.runPromiseExit(
@@ -42,14 +47,7 @@ export const instanceFactory = async () => {
   if (response._tag === "Failure") {
     deleteSession()
 
-    return axios.create({
-      baseURL: baseApiURL,
-      headers: {
-        Authorization: "",
-        "X-User-Timezone": userTimezone ?? "UTC",
-      },
-      withCredentials: true,
-    })
+    return axios.create(createInstanceConfig("", userTimezone))
   }
 
   const tokens = {
@@ -59,14 +57,7 @@ export const instanceFactory = async () => {
 
   await updateTokens(tokens)
 
-  return axios.create({
-    baseURL: baseApiURL,
-    headers: {
-      Authorization: `Bearer ${tokens.accessToken}`,
-      "X-User-Timezone": userTimezone ?? "UTC",
-    },
-    withCredentials: true,
-  })
+  return axios.create(
+    createInstanceConfig(`Bearer ${tokens.accessToken}`, userTimezone),
+  )
 }
-
-export const baseApiURL = import.meta.env.VITE_API_URL

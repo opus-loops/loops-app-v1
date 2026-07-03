@@ -10,6 +10,8 @@ import { invalidInputFactory } from "../../domain/utils/invalid-input"
 import { parseApiResponse } from "../../utils/parse-api-response"
 import { parseEffectSchema } from "../../utils/parse-effect-schema"
 
+const appUserAgent = "loops-client/1.0.0"
+
 const refreshArgsSchema = Schema.Struct({ refresh: Schema.String })
 type RefreshArgs = Schema.Schema.Type<typeof refreshArgsSchema>
 
@@ -31,11 +33,15 @@ export function refreshAccessToken(args?: RefreshArgs): RefreshResult {
     ? parseEffectSchema(Schema.Struct({ refresh: Schema.String }), args)
     : undefined
 
-  const apiUrl = import.meta.env.VITE_API_URL
-  const url = apiUrl + "/auth/refresh"
-  const response = axios.post(url, {
-    refreshToken: parsedArgs?.refresh,
-  })
+  const url = import.meta.env.VITE_API_URL + "/auth/refresh"
+  const response = axios.post(
+    url,
+    { refreshToken: parsedArgs?.refresh },
+    {
+      headers:
+        typeof window === "undefined" ? { "User-Agent": appUserAgent } : undefined,
+    },
+  )
 
   return parseApiResponse({
     error: {
