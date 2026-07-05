@@ -12,7 +12,10 @@
     "build:instrument": "esbuild src/server/telemetry/instrument.ts --bundle --platform=node --format=esm --outfile=instrument.server.mjs --packages=external",
     "build": "pnpm run build:instrument && NODE_OPTIONS='--max-old-space-size=4096' bash ./scripts/app.sh build",
     "dev": "pnpm run build:instrument && NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3001",
-    "start": "PORT=3001 node --import ./.output/server/instrument.server.mjs .output/server/index.mjs",
+    "start": "NODE_ENV=production PORT=3001 node --import ./.output/server/instrument.server.mjs .output/server/index.mjs",
+    "pm2:start": "pm2 start ecosystem.config.cjs",
+    "pm2:reload": "pm2 reload ecosystem.config.cjs --update-env",
+    "pm2:stop": "pm2 stop loops-app",
     "build:raw": "vite build",
     "typecheck": "tsc --noEmit"
   },
