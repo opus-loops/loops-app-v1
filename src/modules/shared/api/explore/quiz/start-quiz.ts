@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { maxFreeItemsReachedErrorSchema } from "@/modules/shared/domain/errors/max-free-items-reached"
 import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
@@ -43,6 +44,7 @@ export const startQuizErrorsSchema = Schema.Union(
   categoryNotFoundErrorSchema,
   categoryNotStartedErrorSchema,
   invalidExpiredTokenErrorSchema,
+  internalErrorSchema,
 )
 
 export type StartQuizErrors = typeof startQuizErrorsSchema.Type
