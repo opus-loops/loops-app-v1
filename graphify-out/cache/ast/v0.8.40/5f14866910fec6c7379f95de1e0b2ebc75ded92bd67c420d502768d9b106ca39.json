@@ -1,1 +1,159 @@
-{"nodes": [{"id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_project_rules_md", "label": "project_rules.md", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L1"}, {"id": "rules_project_rules_loops_pwa_project_rules", "label": "Loops PWA Project Rules", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L1"}, {"id": "rules_project_rules_1_language_and_style", "label": "1. Language and Style", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L3"}, {"id": "rules_project_rules_2_ui_components_forms", "label": "2. UI Components & Forms", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L9"}, {"id": "rules_project_rules_3_internationalization_i18n", "label": "3. Internationalization (i18n)", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L15"}, {"id": "rules_project_rules_4_error_handling", "label": "4. Error Handling", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L20"}, {"id": "rules_project_rules_5_performance_data_caching", "label": "5. Performance & Data Caching", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L26"}, {"id": "rules_project_rules_6_pwa_best_practices", "label": "6. PWA Best Practices", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L32"}, {"id": "rules_project_rules_7_layer_interaction_modularity", "label": "7. Layer Interaction & Modularity", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L37"}, {"id": "rules_project_rules_8_testing_maintainability", "label": "8. Testing & Maintainability", "file_type": "document", "source_file": ".trae/rules/project_rules.md", "source_location": "L43"}], "edges": [{"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_project_rules_md", "target": "rules_project_rules_loops_pwa_project_rules", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/project_rules.md", "source_location": "L1", "weight": 1.0}, {"source": "rules_project_rules_loops_pwa_project_rules", "target": "rules_project_rules_1_language_and_style", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/project_rules.md", "source_location": "L3", "weight": 1.0}, {"source": "rules_project_rules_loops_pwa_project_rules", "target": "rules_project_rules_2_ui_components_forms", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/project_rules.md", "source_location": "L9", "weight": 1.0}, {"source": "rules_project_rules_loops_pwa_project_rules", "target": "rules_project_rules_3_internationalization_i18n", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/project_rules.md", "source_location": "L15", "weight": 1.0}, {"source": "rules_project_rules_loops_pwa_project_rules", "target": "rules_project_rules_4_error_handling", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/project_rules.md", "source_location": "L20", "weight": 1.0}, {"source": "rules_project_rules_loops_pwa_project_rules", "target": "rules_project_rules_5_performance_data_caching", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/project_rules.md", "source_location": "L26", "weight": 1.0}, {"source": "rules_project_rules_loops_pwa_project_rules", "target": "rules_project_rules_6_pwa_best_practices", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/project_rules.md", "source_location": "L32", "weight": 1.0}, {"source": "rules_project_rules_loops_pwa_project_rules", "target": "rules_project_rules_7_layer_interaction_modularity", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/project_rules.md", "source_location": "L37", "weight": 1.0}, {"source": "rules_project_rules_loops_pwa_project_rules", "target": "rules_project_rules_8_testing_maintainability", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/project_rules.md", "source_location": "L43", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_project_rules_md",
+      "label": "project_rules.md",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "rules_project_rules_loops_pwa_project_rules",
+      "label": "Loops PWA Project Rules",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "rules_project_rules_1_language_and_style",
+      "label": "1. Language and Style",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "rules_project_rules_2_ui_components_forms",
+      "label": "2. UI Components & Forms",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L9"
+    },
+    {
+      "id": "rules_project_rules_3_internationalization_i18n",
+      "label": "3. Internationalization (i18n)",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L15"
+    },
+    {
+      "id": "rules_project_rules_4_error_handling",
+      "label": "4. Error Handling",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L20"
+    },
+    {
+      "id": "rules_project_rules_5_performance_data_caching",
+      "label": "5. Performance & Data Caching",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L26"
+    },
+    {
+      "id": "rules_project_rules_6_pwa_best_practices",
+      "label": "6. PWA Best Practices",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L32"
+    },
+    {
+      "id": "rules_project_rules_7_layer_interaction_modularity",
+      "label": "7. Layer Interaction & Modularity",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L37"
+    },
+    {
+      "id": "rules_project_rules_8_testing_maintainability",
+      "label": "8. Testing & Maintainability",
+      "file_type": "document",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L43"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_project_rules_md",
+      "target": "rules_project_rules_loops_pwa_project_rules",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_project_rules_loops_pwa_project_rules",
+      "target": "rules_project_rules_1_language_and_style",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_project_rules_loops_pwa_project_rules",
+      "target": "rules_project_rules_2_ui_components_forms",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_project_rules_loops_pwa_project_rules",
+      "target": "rules_project_rules_3_internationalization_i18n",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_project_rules_loops_pwa_project_rules",
+      "target": "rules_project_rules_4_error_handling",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_project_rules_loops_pwa_project_rules",
+      "target": "rules_project_rules_5_performance_data_caching",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_project_rules_loops_pwa_project_rules",
+      "target": "rules_project_rules_6_pwa_best_practices",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_project_rules_loops_pwa_project_rules",
+      "target": "rules_project_rules_7_layer_interaction_modularity",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_project_rules_loops_pwa_project_rules",
+      "target": "rules_project_rules_8_testing_maintainability",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/project_rules.md",
+      "source_location": "L43",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

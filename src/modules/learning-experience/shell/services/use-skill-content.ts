@@ -1,5 +1,7 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 
+import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
+
 import { fetchContentFn } from "./fetch-content-fn"
 
 export const skillContentQuery = (url: string) =>
@@ -19,6 +21,8 @@ export const skillContentQuery = (url: string) =>
   })
 
 export function useSkillContent(url: string) {
+  useCallPathSegment("hook", "useSkillContent")
+
   const { data, isError, isLoading } = useSuspenseQuery(skillContentQuery(url))
 
   return {

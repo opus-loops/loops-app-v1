@@ -122,6 +122,8 @@ The shared module contains:
    ```env
    VITE_API_URL="http://localhost:8080/api"
    VITE_SESSION_SECRET_KEY="your-secret-key"
+   TELEMETRY_ENABLED=false
+   APPLICATIONINSIGHTS_CONNECTION_STRING=""
    ```
 
 4. **Start the development server**
@@ -197,6 +199,13 @@ The app supports multiple languages using React i18n:
 
 Use `docs/production-readiness-checklist.md` as the release gate before production deployments.
 
+**Observability docs:**
+
+- `docs/telemetry-reference.md` — **start here** — architecture, pipeline, module map, metrics, usage
+- `docs/azure-monitor-opentelemetry.md` — Azure Monitor setup and metrics catalog
+- `docs/api-call-tracing.md` — outbound API caller tracing and Log Analytics KQL queries
+- `docs/call-path-instrumentation.md` — where to add `TraceRegion` and hook frames
+
 ## 🚀 Deployment
 
 ### Build for Production
@@ -212,9 +221,8 @@ Ensure production environment variables are configured:
 - `VITE_API_URL` - Production API endpoint
 - `SESSION_SECRET_KEY` - Strong server-side secret key for sessions
 - `VITE_GOOGLE_CLIENT_ID` - Google Sign-In client ID when enabled
-- `VITE_SENTRY_DSN` - Optional browser Sentry DSN
-- `SENTRY_DSN` - Optional server Sentry DSN
-- `SENTRY_AUTH_TOKEN` - Optional build-time token for uploading source maps
+- `TELEMETRY_ENABLED` - Optional server-only Azure Monitor kill switch (`true` / `false`)
+- `APPLICATIONINSIGHTS_CONNECTION_STRING` - **Required in development and production** when telemetry is enabled
 
 ### PWA Deployment
 

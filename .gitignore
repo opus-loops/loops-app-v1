@@ -6,4 +6,6 @@ dev-dist/
 .nitro/
 .output/
 .env
+!.env.example
 dist/
+instrument.server.mjs

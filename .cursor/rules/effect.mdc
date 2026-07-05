@@ -1,0 +1,97 @@
+---
+description: Use Effect for errors, async, and validation across the codebase
+alwaysApply: true
+---
+
+# Effect
+
+This project uses the [Effect](https://effect.website/) library for typed errors, async control flow, and validation. Prefer Effect over `try/catch` unless a framework API leaves no alternative.
+
+## When to use what
+
+| Situation | Prefer |
+| --- | --- |
+| Server fn / API call with typed errors | `Effect.runPromiseExit` + `Cause` / `handleServerFnFailure` |
+| Composing multiple async steps | `Effect.gen`, `Effect.flatMap`, `pipe` |
+| Single promise that may reject | `Effect.tryPromise` |
+| Sync code that may throw | `Effect.try` + `Effect.runSyncExit` / `Effect.runSync` |
+| Unknown JSON / wire input | `Schema.decodeUnknownEither` (Effect Schema) |
+| Optional decode | `Option` + `Either`, not manual `typeof` checks |
+| Fallback when sync work throws | `runSyncOrElse(thunk, fallback)` in `src/modules/shared/telemetry/effect.ts` |
+
+## Server functions
+
+Follow existing handlers under `src/modules/**/services/*-fn.ts`:
+
+1. Build an `Effect` (often via API factory + `parseApiResponse`).
+2. Run with `Effect.runPromiseExit`.
+3. Map `Exit` to a JSON-safe wire union (`Success` / `Failure`).
+4. Use `handleServerFnFailure` for unexpected defects — not bare `try/catch`.
+
+## API layer
+
+- Factories in `src/modules/shared/api/**` return `Effect.Effect<Success, Errors>`.
+- HTTP parsing goes through `parseApiResponse` — do not wrap axios in ad-hoc try/catch.
+- Error shapes are Effect `Schema` unions, not thrown exceptions for domain failures.
+
+## Validation
+
+- Define schemas with `Schema.Struct`, `Schema.Literal`, `Schema.Union`, etc.
+- Decode with `Schema.decodeUnknownEither` or project helpers like `parseEffectSchema`.
+- Do not hand-roll JSON parsing with `typeof`, `as` casts, or try/catch.
+
+## Examples
+
+```typescript
+// Bad — untyped catch
+try {
+  const data = JSON.parse(raw)
+  if (typeof data.id !== "string") throw new Error("invalid")
+} catch {
+  return undefined
+}
+
+// Good — Schema decode
+const result = Schema.decodeUnknownEither(userSchema)(raw)
+if (Either.isLeft(result)) return undefined
+return result.right
+```
+
+```typescript
+// Bad — try/catch around async handler
+try {
+  return await apiCall()
+} catch (e) {
+  return { _tag: "Failure", error: mapError(e) }
+}
+
+// Good — Exit at the boundary
+const exit = await Effect.runPromiseExit(apiCall())
+if (exit._tag === "Success") return { _tag: "Success", value: exit.value }
+return { _tag: "Failure", error: handleServerFnFailure(exit.cause) }
+```
+
+```typescript
+// Bad — sync throw for storage
+try {
+  sessionStorage.setItem(key, value)
+} catch {
+  /* ignore */
+}
+
+// Good — Effect.try via helper
+runSyncOrElse(() => sessionStorage.setItem(key, value), undefined)
+```
+
+## Avoid
+
+- `try/catch` for control flow in new application code
+- Throwing for expected domain errors (use typed `Effect` failures or wire `Failure` tags)
+- Mixing raw promises and Effect in the same pipeline without `Effect.tryPromise`
+- Importing server-only modules into client bundles (keep Effect usage isomorphic where the file runs on both)
+
+## Reference locations
+
+- API + Schema: `src/modules/shared/api/**`, `src/modules/shared/utils/parse-api-response.ts`
+- Server fn pattern: `src/modules/shared/guards/is-authenticated.ts`, `src/modules/**/services/*-fn.ts`
+- Sync Effect helpers: `src/modules/shared/telemetry/effect.ts` (`runSyncOrElse`, `runSyncExitOrElse`)

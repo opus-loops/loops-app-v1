@@ -3,10 +3,13 @@ import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
 import { getSafeRedirectPath } from "@/modules/authentication/lib/auth-search"
+import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import { googleLoginFn } from "./google-login-fn"
 
 export function useGoogleLogin() {
+  useCallPathSegment("hook", "useGoogleLogin")
+
   const logUser = useServerFn(googleLoginFn)
   const router = useRouter()
 

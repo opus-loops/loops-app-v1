@@ -1,0 +1,575 @@
+{
+  "nodes": [
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_docs_azure_monitor_opentelemetry_md",
+      "label": "azure-monitor-opentelemetry.md",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "label": "Azure Monitor OpenTelemetry (server-only)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_summary",
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L11"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_architecture",
+      "label": "Architecture",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L23"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_changed_files",
+      "label": "Changed files",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L76"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_dependencies_and_build",
+      "label": "Dependencies and build",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L78"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_new_server_telemetry_module_src_server_telemetry",
+      "label": "New server telemetry module (`src/server/telemetry/`)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L88"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_call_context_modules_src_modules_shared_telemetry_query_client",
+      "label": "Call context modules (`src/modules/shared/telemetry/` + query client)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L105"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_server_wiring",
+      "label": "Server wiring",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L116"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_sentry_removal_client_shared",
+      "label": "Sentry removal (client + shared)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L124"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_incidental_fixes_same_branch",
+      "label": "Incidental fixes (same branch)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L132"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_configuration_and_docs",
+      "label": "Configuration and docs",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L141"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_not_tracked_generated",
+      "label": "Not tracked / generated",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L150"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_environment_variables",
+      "label": "Environment variables",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L159"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_custom_metrics",
+      "label": "Custom metrics",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L175"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_http_server_incoming_ui_page_requests",
+      "label": "HTTP server (incoming UI page requests)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L179"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_http_client_outgoing_api_dependencies",
+      "label": "HTTP client (outgoing API dependencies)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L198"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_tanstack_server_functions",
+      "label": "TanStack server functions",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L214"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_logging",
+      "label": "Logging",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L226"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_log_levels",
+      "label": "Log levels",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L230"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_how_logs_are_stored",
+      "label": "How logs are stored",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L245"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_public_logging_api",
+      "label": "Public logging API",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L262"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_automatic_log_events",
+      "label": "Automatic log events",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L269"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_redaction_redact_ts",
+      "label": "Redaction (`redact.ts`)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L278"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_traces_and_spans",
+      "label": "Traces and spans",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L293"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_span_creation",
+      "label": "Span creation",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L295"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_span_status_http_responses",
+      "label": "Span status (HTTP responses)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L307"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_exceptions_on_spans",
+      "label": "Exceptions on spans",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L315"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_auto_instrumentation_disabled_for_incoming_http",
+      "label": "Auto-instrumentation disabled for incoming HTTP",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L329"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_trace_propagation",
+      "label": "Trace propagation",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L333"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_route_filtering_ispageroute",
+      "label": "Route filtering (`isPageRoute`)",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L343"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_health_endpoints",
+      "label": "Health endpoints",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L358"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_telemetry_status",
+      "label": "Telemetry status",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L369"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_build_and_runtime",
+      "label": "Build and runtime",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L379"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_verification",
+      "label": "Verification",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L400"
+    },
+    {
+      "id": "docs_azure_monitor_opentelemetry_known_gaps_and_risks",
+      "label": "Known gaps and risks",
+      "file_type": "document",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L412"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_docs_azure_monitor_opentelemetry_md",
+      "target": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_summary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_architecture",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_changed_files",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_changed_files",
+      "target": "docs_azure_monitor_opentelemetry_dependencies_and_build",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_changed_files",
+      "target": "docs_azure_monitor_opentelemetry_new_server_telemetry_module_src_server_telemetry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_changed_files",
+      "target": "docs_azure_monitor_opentelemetry_call_context_modules_src_modules_shared_telemetry_query_client",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_changed_files",
+      "target": "docs_azure_monitor_opentelemetry_server_wiring",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L116",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_changed_files",
+      "target": "docs_azure_monitor_opentelemetry_sentry_removal_client_shared",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L124",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_changed_files",
+      "target": "docs_azure_monitor_opentelemetry_incidental_fixes_same_branch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L132",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_changed_files",
+      "target": "docs_azure_monitor_opentelemetry_configuration_and_docs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L141",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_changed_files",
+      "target": "docs_azure_monitor_opentelemetry_not_tracked_generated",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_environment_variables",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L159",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_custom_metrics",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L175",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_custom_metrics",
+      "target": "docs_azure_monitor_opentelemetry_http_server_incoming_ui_page_requests",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L179",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_custom_metrics",
+      "target": "docs_azure_monitor_opentelemetry_http_client_outgoing_api_dependencies",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L198",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_custom_metrics",
+      "target": "docs_azure_monitor_opentelemetry_tanstack_server_functions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L214",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_logging",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L226",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_logging",
+      "target": "docs_azure_monitor_opentelemetry_log_levels",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L230",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_logging",
+      "target": "docs_azure_monitor_opentelemetry_how_logs_are_stored",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L245",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_logging",
+      "target": "docs_azure_monitor_opentelemetry_public_logging_api",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L262",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_logging",
+      "target": "docs_azure_monitor_opentelemetry_automatic_log_events",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L269",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_logging",
+      "target": "docs_azure_monitor_opentelemetry_redaction_redact_ts",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L278",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_traces_and_spans",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L293",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_traces_and_spans",
+      "target": "docs_azure_monitor_opentelemetry_span_creation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L295",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_traces_and_spans",
+      "target": "docs_azure_monitor_opentelemetry_span_status_http_responses",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L307",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_traces_and_spans",
+      "target": "docs_azure_monitor_opentelemetry_exceptions_on_spans",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L315",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_traces_and_spans",
+      "target": "docs_azure_monitor_opentelemetry_auto_instrumentation_disabled_for_incoming_http",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L329",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_traces_and_spans",
+      "target": "docs_azure_monitor_opentelemetry_trace_propagation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L333",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_route_filtering_ispageroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L343",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_health_endpoints",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L358",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_telemetry_status",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L369",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_build_and_runtime",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L379",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_verification",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L400",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_azure_monitor_opentelemetry_azure_monitor_opentelemetry_server_only",
+      "target": "docs_azure_monitor_opentelemetry_known_gaps_and_risks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/azure-monitor-opentelemetry.md",
+      "source_location": "L412",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

@@ -4,6 +4,7 @@ Input: A description of a UI component or feature using Shadcn UI.
 Output: Well-structured, accessible, and optimized Shadcn UI component implementation with TypeScript.
 
 Code Style and Structure:
+
 - Write concise, type-safe TypeScript with proper component interfaces
 - Follow functional programming patterns; avoid classes
 - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError)
@@ -12,6 +13,7 @@ Code Style and Structure:
 - Document component props with JSDoc comments
 
 Shadcn UI Implementation:
+
 - Use the CLI correctly to add components)
 - Customize components in the components/ui directory
 - Follow the styling conventions of Shadcn UI (cn utility for class merging)
@@ -19,12 +21,14 @@ Shadcn UI Implementation:
 - Use the provided hooks and utilities from Shadcn UI
 
 Component Composition:
+
 - Compose components using the Shadcn UI pattern
 - Build compound components using React's composition model
 - Utilize the slot pattern for flexible component layouts
 - Create reusable component variants using cva from class-variance-authority
 
 Accessibility:
+
 - Ensure all components are fully accessible (WCAG standards)
 - Maintain proper focus management
 - Use appropriate ARIA attributes
@@ -32,6 +36,7 @@ Accessibility:
 - Test with screen readers
 
 Theming and Styling:
+
 - Use the Shadcn UI theming system via globals.css
 - Implement both light and dark mode support
 - Create custom color schemes following the Shadcn pattern
@@ -39,6 +44,7 @@ Theming and Styling:
 - Follow the Tailwind utility-first approach
 
 Performance:
+
 - Minimize re-renders by using memo where appropriate
 - Implement proper state management
 - Use React Server Components when possible
@@ -46,6 +52,7 @@ Performance:
 - Optimize for Core Web Vitals
 
 Important Implementation Notes:
+
 1. The component follows Shadcn UI patterns with proper composition
 2. Uses the "use client" directive for client-side interactivity
 3. Implements form validation with react-hook-form and zod

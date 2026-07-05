@@ -33,4 +33,3 @@ configs:
   app_env:
     external: true
     name: ${APP_ENV_CONFIG_NAME:-loops_client_env_staging}
-

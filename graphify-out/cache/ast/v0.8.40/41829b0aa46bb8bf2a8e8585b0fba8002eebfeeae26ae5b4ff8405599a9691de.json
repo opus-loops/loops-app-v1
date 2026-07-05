@@ -1,1 +1,255 @@
-{"nodes": [{"id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_html_and_css_best_practices_md", "label": "html-and-css-best-practices.md", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L1"}, {"id": "rules_html_and_css_best_practices_key_principles", "label": "Key Principles", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L3"}, {"id": "rules_html_and_css_best_practices_html_best_practices", "label": "HTML Best Practices", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L11"}, {"id": "rules_html_and_css_best_practices_semantic_structure", "label": "Semantic Structure", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L13"}, {"id": "rules_html_and_css_best_practices_forms", "label": "Forms", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L22"}, {"id": "rules_html_and_css_best_practices_media", "label": "Media", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L30"}, {"id": "rules_html_and_css_best_practices_accessibility", "label": "Accessibility", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L38"}, {"id": "rules_html_and_css_best_practices_performance", "label": "Performance", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L46"}, {"id": "rules_html_and_css_best_practices_css_best_practices", "label": "CSS Best Practices", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L54"}, {"id": "rules_html_and_css_best_practices_organization", "label": "Organization", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L56"}, {"id": "rules_html_and_css_best_practices_selectors", "label": "Selectors", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L64"}, {"id": "rules_html_and_css_best_practices_layout", "label": "Layout", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L72"}, {"id": "rules_html_and_css_best_practices_typography", "label": "Typography", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L80"}, {"id": "rules_html_and_css_best_practices_media_queries", "label": "Media Queries", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L88"}, {"id": "rules_html_and_css_best_practices_performance_96", "label": "Performance", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L96"}, {"id": "rules_html_and_css_best_practices_animations_and_transitions", "label": "Animations and Transitions", "file_type": "document", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L104"}], "edges": [{"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_html_and_css_best_practices_md", "target": "rules_html_and_css_best_practices_key_principles", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L3", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_html_and_css_best_practices_md", "target": "rules_html_and_css_best_practices_html_best_practices", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L11", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_html_best_practices", "target": "rules_html_and_css_best_practices_semantic_structure", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L13", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_html_best_practices", "target": "rules_html_and_css_best_practices_forms", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L22", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_html_best_practices", "target": "rules_html_and_css_best_practices_media", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L30", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_html_best_practices", "target": "rules_html_and_css_best_practices_accessibility", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L38", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_html_best_practices", "target": "rules_html_and_css_best_practices_performance", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L46", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_html_and_css_best_practices_md", "target": "rules_html_and_css_best_practices_css_best_practices", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L54", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_css_best_practices", "target": "rules_html_and_css_best_practices_organization", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L56", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_css_best_practices", "target": "rules_html_and_css_best_practices_selectors", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L64", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_css_best_practices", "target": "rules_html_and_css_best_practices_layout", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L72", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_css_best_practices", "target": "rules_html_and_css_best_practices_typography", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L80", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_css_best_practices", "target": "rules_html_and_css_best_practices_media_queries", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L88", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_css_best_practices", "target": "rules_html_and_css_best_practices_performance_96", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L96", "weight": 1.0}, {"source": "rules_html_and_css_best_practices_css_best_practices", "target": "rules_html_and_css_best_practices_animations_and_transitions", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/html-and-css-best-practices.md", "source_location": "L104", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_html_and_css_best_practices_md",
+      "label": "html-and-css-best-practices.md",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_key_principles",
+      "label": "Key Principles",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_html_best_practices",
+      "label": "HTML Best Practices",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L11"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_semantic_structure",
+      "label": "Semantic Structure",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L13"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_forms",
+      "label": "Forms",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L22"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_media",
+      "label": "Media",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L30"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_accessibility",
+      "label": "Accessibility",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L38"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_performance",
+      "label": "Performance",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L46"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_css_best_practices",
+      "label": "CSS Best Practices",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L54"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_organization",
+      "label": "Organization",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L56"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_selectors",
+      "label": "Selectors",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L64"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_layout",
+      "label": "Layout",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L72"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_typography",
+      "label": "Typography",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L80"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_media_queries",
+      "label": "Media Queries",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L88"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_performance_96",
+      "label": "Performance",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L96"
+    },
+    {
+      "id": "rules_html_and_css_best_practices_animations_and_transitions",
+      "label": "Animations and Transitions",
+      "file_type": "document",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L104"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_html_and_css_best_practices_md",
+      "target": "rules_html_and_css_best_practices_key_principles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_html_and_css_best_practices_md",
+      "target": "rules_html_and_css_best_practices_html_best_practices",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_html_best_practices",
+      "target": "rules_html_and_css_best_practices_semantic_structure",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_html_best_practices",
+      "target": "rules_html_and_css_best_practices_forms",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_html_best_practices",
+      "target": "rules_html_and_css_best_practices_media",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_html_best_practices",
+      "target": "rules_html_and_css_best_practices_accessibility",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_html_best_practices",
+      "target": "rules_html_and_css_best_practices_performance",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_html_and_css_best_practices_md",
+      "target": "rules_html_and_css_best_practices_css_best_practices",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_css_best_practices",
+      "target": "rules_html_and_css_best_practices_organization",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L56",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_css_best_practices",
+      "target": "rules_html_and_css_best_practices_selectors",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_css_best_practices",
+      "target": "rules_html_and_css_best_practices_layout",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_css_best_practices",
+      "target": "rules_html_and_css_best_practices_typography",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_css_best_practices",
+      "target": "rules_html_and_css_best_practices_media_queries",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_css_best_practices",
+      "target": "rules_html_and_css_best_practices_performance_96",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_html_and_css_best_practices_css_best_practices",
+      "target": "rules_html_and_css_best_practices_animations_and_transitions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/html-and-css-best-practices.md",
+      "source_location": "L104",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

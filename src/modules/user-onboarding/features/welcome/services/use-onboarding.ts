@@ -3,12 +3,15 @@ import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import type { OnboardingWire } from "./onboarding-fn"
 
 import { onboardingFn } from "./onboarding-fn"
 
 export function useOnboarding() {
+  useCallPathSegment("hook", "useOnboarding")
+
   const onboardingServer = useServerFn(onboardingFn)
   const { handleSessionExpired } = useGlobalError()
 

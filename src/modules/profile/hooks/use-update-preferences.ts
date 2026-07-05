@@ -3,12 +3,15 @@ import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import type { UpdatePreferencesFnArgs } from "../services/update-preferences-fn"
 
 import { updatePreferencesFn } from "../services/update-preferences-fn"
 
 export function useUpdatePreferences() {
+  useCallPathSegment("hook", "useUpdatePreferences")
+
   const runUpdatePreferences = useServerFn(updatePreferencesFn)
   const { handleSessionExpired } = useGlobalError()
   const queryClient = useQueryClient()

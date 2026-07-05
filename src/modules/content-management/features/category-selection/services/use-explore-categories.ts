@@ -1,6 +1,7 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
+import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import { exploreCategoriesFn } from "./explore-categories-fn"
 
@@ -21,6 +22,8 @@ export const exploreCategoriesQuery = (
   })
 
 export function useExploreCategories() {
+  useCallPathSegment("hook", "useExploreCategories")
+
   const { handleSessionExpired } = useGlobalError()
   const {
     data: { categories },

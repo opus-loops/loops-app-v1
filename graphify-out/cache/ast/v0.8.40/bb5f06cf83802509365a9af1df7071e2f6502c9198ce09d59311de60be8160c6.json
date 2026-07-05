@@ -1,0 +1,287 @@
+{
+  "nodes": [
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_cursor_plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_md",
+      "label": "replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "label": "Replace Sentry with Azure Monitor (server-only OTel)",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L26"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_current_state_inspected",
+      "label": "Current state (inspected)",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L28"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_architecture_decisions",
+      "label": "Architecture decisions",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L75"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_package_changes",
+      "label": "Package changes",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L84"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_new_server_only_module_layout",
+      "label": "New server-only module layout",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L96"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_environment_variables",
+      "label": "Environment variables",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L125"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_instrumentation_map",
+      "label": "Instrumentation map",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L150"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_incoming_http",
+      "label": "Incoming HTTP",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L152"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_start_middleware_src_start_ts_src_start_ts",
+      "label": "Start middleware ([`src/start.ts`](src/start.ts))",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L164"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_server_function_failures",
+      "label": "Server function failures",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L171"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_outgoing_axios",
+      "label": "Outgoing axios",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L175"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_logs",
+      "label": "Logs",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L184"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_lifecycle",
+      "label": "Lifecycle",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L200"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_files_to_change",
+      "label": "Files to change",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L206"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_tests_new_none_exist_today",
+      "label": "Tests (new; none exist today)",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L226"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_verification_commands",
+      "label": "Verification commands",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L239"
+    },
+    {
+      "id": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_unresolved_risks_call_out_in_final_report",
+      "label": "Unresolved risks (call out in final report)",
+      "file_type": "document",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L254"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_cursor_plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_md",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_current_state_inspected",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_architecture_decisions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L75",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_package_changes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_new_server_only_module_layout",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_environment_variables",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L125",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_instrumentation_map",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_instrumentation_map",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_incoming_http",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L152",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_instrumentation_map",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_start_middleware_src_start_ts_src_start_ts",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L164",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_instrumentation_map",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_server_function_failures",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L171",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_instrumentation_map",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_outgoing_axios",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L175",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_instrumentation_map",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_logs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L184",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_instrumentation_map",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_lifecycle",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L200",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_files_to_change",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L206",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_tests_new_none_exist_today",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L226",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_verification_commands",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L239",
+      "weight": 1.0
+    },
+    {
+      "source": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_replace_sentry_with_azure_monitor_server_only_otel",
+      "target": "plans_replace_sentry_with_azure_monitor_server_only_otel_ae96c1ee_plan_unresolved_risks_call_out_in_final_report",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".cursor/plans/replace_sentry_with_azure_monitor_(server-only_otel)_ae96c1ee.plan.md",
+      "source_location": "L254",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

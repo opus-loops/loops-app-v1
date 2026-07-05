@@ -1,7 +1,4 @@
-export type SequenceReviewState =
-  | "correct"
-  | "incorrect"
-  | "unanswered-correct"
+export type SequenceReviewState = "correct" | "incorrect" | "unanswered-correct"
 
 export function getSequenceReviewedOrder({
   idealOrder,

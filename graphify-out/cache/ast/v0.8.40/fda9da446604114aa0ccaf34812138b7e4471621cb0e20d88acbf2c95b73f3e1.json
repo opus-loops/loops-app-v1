@@ -1,1 +1,191 @@
-{"nodes": [{"id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_tasks_md", "label": "tasks.md", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L1"}, {"id": "rules_tasks_loops_pwa_sprint_planning_task_management", "label": "Loops PWA - Sprint Planning & Task Management", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L1"}, {"id": "rules_tasks_recently_completed_work", "label": "Recently Completed Work", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L3"}, {"id": "rules_tasks_sub_quiz_navigation_refactoring_completed", "label": "\u2705 Sub-Quiz Navigation Refactoring (Completed)", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L5"}, {"id": "rules_tasks_current_sprint_authentication_account_management", "label": "Current Sprint \u2013 Authentication & Account Management", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L38"}, {"id": "rules_tasks_future_sprints_planned_features", "label": "Future Sprints \u2013 Planned Features", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L70"}, {"id": "rules_tasks_sprint_2_category_content_exploration", "label": "Sprint 2 \u2013 Category & Content Exploration", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L72"}, {"id": "rules_tasks_sprint_3_voucher_submission", "label": "Sprint 3 \u2013 Voucher Submission", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L90"}, {"id": "rules_tasks_sprint_4_content_progress_flow", "label": "Sprint 4 \u2013 Content Progress Flow", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L104"}, {"id": "rules_tasks_sprint_5_quiz_room_participation", "label": "Sprint 5 \u2013 Quiz Room Participation", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L126"}, {"id": "rules_tasks_sprint_6_stats_gamification_dashboard", "label": "Sprint 6 \u2013 Stats & Gamification Dashboard", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L147"}, {"id": "rules_tasks_technical_debt_improvements", "label": "Technical Debt & Improvements", "file_type": "document", "source_file": ".trae/rules/tasks.md", "source_location": "L174"}], "edges": [{"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_tasks_md", "target": "rules_tasks_loops_pwa_sprint_planning_task_management", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L1", "weight": 1.0}, {"source": "rules_tasks_loops_pwa_sprint_planning_task_management", "target": "rules_tasks_recently_completed_work", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L3", "weight": 1.0}, {"source": "rules_tasks_recently_completed_work", "target": "rules_tasks_sub_quiz_navigation_refactoring_completed", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L5", "weight": 1.0}, {"source": "rules_tasks_loops_pwa_sprint_planning_task_management", "target": "rules_tasks_current_sprint_authentication_account_management", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L38", "weight": 1.0}, {"source": "rules_tasks_loops_pwa_sprint_planning_task_management", "target": "rules_tasks_future_sprints_planned_features", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L70", "weight": 1.0}, {"source": "rules_tasks_future_sprints_planned_features", "target": "rules_tasks_sprint_2_category_content_exploration", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L72", "weight": 1.0}, {"source": "rules_tasks_future_sprints_planned_features", "target": "rules_tasks_sprint_3_voucher_submission", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L90", "weight": 1.0}, {"source": "rules_tasks_future_sprints_planned_features", "target": "rules_tasks_sprint_4_content_progress_flow", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L104", "weight": 1.0}, {"source": "rules_tasks_future_sprints_planned_features", "target": "rules_tasks_sprint_5_quiz_room_participation", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L126", "weight": 1.0}, {"source": "rules_tasks_future_sprints_planned_features", "target": "rules_tasks_sprint_6_stats_gamification_dashboard", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L147", "weight": 1.0}, {"source": "rules_tasks_loops_pwa_sprint_planning_task_management", "target": "rules_tasks_technical_debt_improvements", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/tasks.md", "source_location": "L174", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_tasks_md",
+      "label": "tasks.md",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "rules_tasks_loops_pwa_sprint_planning_task_management",
+      "label": "Loops PWA - Sprint Planning & Task Management",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "rules_tasks_recently_completed_work",
+      "label": "Recently Completed Work",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "rules_tasks_sub_quiz_navigation_refactoring_completed",
+      "label": "\u2705 Sub-Quiz Navigation Refactoring (Completed)",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L5"
+    },
+    {
+      "id": "rules_tasks_current_sprint_authentication_account_management",
+      "label": "Current Sprint \u2013 Authentication & Account Management",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L38"
+    },
+    {
+      "id": "rules_tasks_future_sprints_planned_features",
+      "label": "Future Sprints \u2013 Planned Features",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L70"
+    },
+    {
+      "id": "rules_tasks_sprint_2_category_content_exploration",
+      "label": "Sprint 2 \u2013 Category & Content Exploration",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L72"
+    },
+    {
+      "id": "rules_tasks_sprint_3_voucher_submission",
+      "label": "Sprint 3 \u2013 Voucher Submission",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L90"
+    },
+    {
+      "id": "rules_tasks_sprint_4_content_progress_flow",
+      "label": "Sprint 4 \u2013 Content Progress Flow",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L104"
+    },
+    {
+      "id": "rules_tasks_sprint_5_quiz_room_participation",
+      "label": "Sprint 5 \u2013 Quiz Room Participation",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L126"
+    },
+    {
+      "id": "rules_tasks_sprint_6_stats_gamification_dashboard",
+      "label": "Sprint 6 \u2013 Stats & Gamification Dashboard",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L147"
+    },
+    {
+      "id": "rules_tasks_technical_debt_improvements",
+      "label": "Technical Debt & Improvements",
+      "file_type": "document",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L174"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_tasks_md",
+      "target": "rules_tasks_loops_pwa_sprint_planning_task_management",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_loops_pwa_sprint_planning_task_management",
+      "target": "rules_tasks_recently_completed_work",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_recently_completed_work",
+      "target": "rules_tasks_sub_quiz_navigation_refactoring_completed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_loops_pwa_sprint_planning_task_management",
+      "target": "rules_tasks_current_sprint_authentication_account_management",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_loops_pwa_sprint_planning_task_management",
+      "target": "rules_tasks_future_sprints_planned_features",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L70",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_future_sprints_planned_features",
+      "target": "rules_tasks_sprint_2_category_content_exploration",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_future_sprints_planned_features",
+      "target": "rules_tasks_sprint_3_voucher_submission",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_future_sprints_planned_features",
+      "target": "rules_tasks_sprint_4_content_progress_flow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L104",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_future_sprints_planned_features",
+      "target": "rules_tasks_sprint_5_quiz_room_participation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L126",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_future_sprints_planned_features",
+      "target": "rules_tasks_sprint_6_stats_gamification_dashboard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L147",
+      "weight": 1.0
+    },
+    {
+      "source": "rules_tasks_loops_pwa_sprint_planning_task_management",
+      "target": "rules_tasks_technical_debt_improvements",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/tasks.md",
+      "source_location": "L174",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

@@ -1,5 +1,8 @@
+import { getRequestHeaders } from "@tanstack/react-start/server"
 import axios from "axios"
 import { Effect } from "effect"
+
+import { runWithCallContext } from "@/modules/shared/telemetry/run-with-call-context"
 
 import { refreshAccessToken } from "../api/auth/refresh"
 import {
@@ -11,17 +14,18 @@ import {
 
 export const baseApiURL = import.meta.env.VITE_API_URL
 
-const appUserAgent = "loops-client/1.0.0"
-
 const createInstanceConfig = (
   authorization: string,
   userTimezone?: string,
+  userAgent?: string,
 ) => ({
   baseURL: baseApiURL,
   headers: {
     Authorization: authorization,
+    ...(userAgent && {
+      "User-Agent": userAgent,
+    }),
     "X-User-Timezone": userTimezone ?? "UTC",
-    ...(typeof window === "undefined" && { "User-Agent": appUserAgent }),
   },
   withCredentials: true,
 })
@@ -29,25 +33,40 @@ const createInstanceConfig = (
 export const instanceFactory = async () => {
   const session = await getSession()
   const userTimezone = getUserTimezone()
+  const headers = getRequestHeaders()
+  const userAgent = headers.get("user-agent") ?? undefined
 
   if (!session) {
-    return axios.create(createInstanceConfig("", userTimezone))
+    return axios.create(createInstanceConfig("", userTimezone, userAgent))
   }
 
   if (session.accessToken) {
     return axios.create(
-      createInstanceConfig(`Bearer ${session.accessToken}`, userTimezone),
+      createInstanceConfig(
+        `Bearer ${session.accessToken}`,
+        userTimezone,
+        userAgent,
+      ),
     )
   }
 
-  const response = await Effect.runPromiseExit(
-    refreshAccessToken({ refresh: session.refreshToken }),
+  const response = await runWithCallContext(
+    {
+      name: "instanceFactory",
+      type: "tokenRefresh",
+    },
+    () =>
+      Effect.runPromiseExit(
+        refreshAccessToken({
+          refresh: session.refreshToken,
+        }),
+      ),
   )
 
   if (response._tag === "Failure") {
     deleteSession()
 
-    return axios.create(createInstanceConfig("", userTimezone))
+    return axios.create(createInstanceConfig("", userTimezone, userAgent))
   }
 
   const tokens = {
@@ -58,6 +77,10 @@ export const instanceFactory = async () => {
   await updateTokens(tokens)
 
   return axios.create(
-    createInstanceConfig(`Bearer ${tokens.accessToken}`, userTimezone),
+    createInstanceConfig(
+      `Bearer ${tokens.accessToken}`,
+      userTimezone,
+      userAgent,
+    ),
   )
 }

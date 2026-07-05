@@ -1,1 +1,190 @@
-{"nodes": [{"id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh", "label": "deploy-staging.sh", "file_type": "code", "source_file": "scripts/deploy-staging.sh", "source_location": "L1", "metadata": {"language": "bash", "kind": "file"}}, {"id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh__entry", "label": "deploy-staging.sh script", "file_type": "code", "source_file": "scripts/deploy-staging.sh", "source_location": "L1", "metadata": {"language": "bash", "kind": "bash_entrypoint"}}, {"id": "scripts_deploy_staging_main", "label": "main()", "file_type": "code", "source_file": "scripts/deploy-staging.sh", "source_location": "L15", "metadata": {"language": "bash", "kind": "bash_function"}}, {"id": "scripts_deploy_staging_ensure_app_env_config", "label": "ensure_app_env_config()", "file_type": "code", "source_file": "scripts/deploy-staging.sh", "source_location": "L50", "metadata": {"language": "bash", "kind": "bash_function"}}, {"id": "scripts_deploy_staging_write_env_file", "label": "write_env_file()", "file_type": "code", "source_file": "scripts/deploy-staging.sh", "source_location": "L64", "metadata": {"language": "bash", "kind": "bash_function"}}, {"id": "scripts_deploy_staging_cleanup", "label": "cleanup()", "file_type": "code", "source_file": "scripts/deploy-staging.sh", "source_location": "L82", "metadata": {"language": "bash", "kind": "bash_function"}}, {"id": "scripts_deploy_staging_ensure_swarm_manager", "label": "ensure_swarm_manager()", "file_type": "code", "source_file": "scripts/deploy-staging.sh", "source_location": "L88", "metadata": {"language": "bash", "kind": "bash_function"}}, {"id": "scripts_deploy_staging_login_to_ghcr_if_needed", "label": "login_to_ghcr_if_needed()", "file_type": "code", "source_file": "scripts/deploy-staging.sh", "source_location": "L111", "metadata": {"language": "bash", "kind": "bash_function"}}, {"id": "scripts_deploy_staging_sha256_file", "label": "sha256_file()", "file_type": "code", "source_file": "scripts/deploy-staging.sh", "source_location": "L121", "metadata": {"language": "bash", "kind": "bash_function"}}], "edges": [{"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh", "target": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh__entry", "relation": "contains", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L1", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh", "target": "scripts_deploy_staging_main", "relation": "defines", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L15", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh", "target": "scripts_deploy_staging_ensure_app_env_config", "relation": "defines", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L50", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh", "target": "scripts_deploy_staging_write_env_file", "relation": "defines", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L64", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh", "target": "scripts_deploy_staging_cleanup", "relation": "defines", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L82", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh", "target": "scripts_deploy_staging_ensure_swarm_manager", "relation": "defines", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L88", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh", "target": "scripts_deploy_staging_login_to_ghcr_if_needed", "relation": "defines", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L111", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh", "target": "scripts_deploy_staging_sha256_file", "relation": "defines", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L121", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh__entry", "target": "scripts_deploy_staging_main", "relation": "calls", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L130", "weight": 1.0, "context": "call"}, {"source": "scripts_deploy_staging_main", "target": "scripts_deploy_staging_write_env_file", "relation": "calls", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L32", "weight": 1.0, "context": "call"}, {"source": "scripts_deploy_staging_main", "target": "scripts_deploy_staging_login_to_ghcr_if_needed", "relation": "calls", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L34", "weight": 1.0, "context": "call"}, {"source": "scripts_deploy_staging_main", "target": "scripts_deploy_staging_ensure_swarm_manager", "relation": "calls", "confidence": "EXTRACTED", "source_file": "scripts/deploy-staging.sh", "source_location": "L35", "weight": 1.0, "context": "call"}]}
+{
+  "nodes": [
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh",
+      "label": "deploy-staging.sh",
+      "file_type": "code",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L1",
+      "metadata": { "language": "bash", "kind": "file" }
+    },
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh__entry",
+      "label": "deploy-staging.sh script",
+      "file_type": "code",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L1",
+      "metadata": { "language": "bash", "kind": "bash_entrypoint" }
+    },
+    {
+      "id": "scripts_deploy_staging_main",
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L15",
+      "metadata": { "language": "bash", "kind": "bash_function" }
+    },
+    {
+      "id": "scripts_deploy_staging_ensure_app_env_config",
+      "label": "ensure_app_env_config()",
+      "file_type": "code",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L50",
+      "metadata": { "language": "bash", "kind": "bash_function" }
+    },
+    {
+      "id": "scripts_deploy_staging_write_env_file",
+      "label": "write_env_file()",
+      "file_type": "code",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L64",
+      "metadata": { "language": "bash", "kind": "bash_function" }
+    },
+    {
+      "id": "scripts_deploy_staging_cleanup",
+      "label": "cleanup()",
+      "file_type": "code",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L82",
+      "metadata": { "language": "bash", "kind": "bash_function" }
+    },
+    {
+      "id": "scripts_deploy_staging_ensure_swarm_manager",
+      "label": "ensure_swarm_manager()",
+      "file_type": "code",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L88",
+      "metadata": { "language": "bash", "kind": "bash_function" }
+    },
+    {
+      "id": "scripts_deploy_staging_login_to_ghcr_if_needed",
+      "label": "login_to_ghcr_if_needed()",
+      "file_type": "code",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L111",
+      "metadata": { "language": "bash", "kind": "bash_function" }
+    },
+    {
+      "id": "scripts_deploy_staging_sha256_file",
+      "label": "sha256_file()",
+      "file_type": "code",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L121",
+      "metadata": { "language": "bash", "kind": "bash_function" }
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh",
+      "target": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh__entry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh",
+      "target": "scripts_deploy_staging_main",
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh",
+      "target": "scripts_deploy_staging_ensure_app_env_config",
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh",
+      "target": "scripts_deploy_staging_write_env_file",
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh",
+      "target": "scripts_deploy_staging_cleanup",
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L82",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh",
+      "target": "scripts_deploy_staging_ensure_swarm_manager",
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh",
+      "target": "scripts_deploy_staging_login_to_ghcr_if_needed",
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L111",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh",
+      "target": "scripts_deploy_staging_sha256_file",
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L121",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_scripts_deploy_staging_sh__entry",
+      "target": "scripts_deploy_staging_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L130",
+      "weight": 1.0,
+      "context": "call"
+    },
+    {
+      "source": "scripts_deploy_staging_main",
+      "target": "scripts_deploy_staging_write_env_file",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L32",
+      "weight": 1.0,
+      "context": "call"
+    },
+    {
+      "source": "scripts_deploy_staging_main",
+      "target": "scripts_deploy_staging_login_to_ghcr_if_needed",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L34",
+      "weight": 1.0,
+      "context": "call"
+    },
+    {
+      "source": "scripts_deploy_staging_main",
+      "target": "scripts_deploy_staging_ensure_swarm_manager",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/deploy-staging.sh",
+      "source_location": "L35",
+      "weight": 1.0,
+      "context": "call"
+    }
+  ]
+}

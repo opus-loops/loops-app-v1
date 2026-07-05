@@ -1,4 +1,3 @@
-import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite"
 import tailwindcss from "@tailwindcss/vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import viteReact from "@vitejs/plugin-react"
@@ -84,15 +83,6 @@ export default defineConfig({
     }),
     tsConfigPaths(),
     tanstackStart(),
-    sentryTanstackStart({
-      authToken: process.env.SENTRY_AUTH_TOKEN as string,
-      org: "opuslab-edtech-95",
-      project: "loops-app",
-      sourcemaps: {
-        assets: ["./.output/**/*", "./dist/**/*"],
-      },
-      telemetry: false,
-    }),
     VitePWA({
       devOptions: {
         enabled: true,
@@ -184,6 +174,8 @@ export default defineConfig({
       workbox: {
         globDirectory: ".output/public",
         globIgnores: ["**/country-codes.json"],
+        // Avoid workbox's terser worker path, which can exit early in constrained CI/sandbox builds.
+        mode: "development",
       },
     }),
     tailwindcss(),

@@ -1,12 +1,13 @@
-import {
-  sentryGlobalFunctionMiddleware,
-  sentryGlobalRequestMiddleware,
-} from "@sentry/tanstackstart-react"
+/**
+ * TanStack Start instance configuration.
+ *
+ * Registers server-only telemetry middleware (replaces former Sentry global middleware).
+ */
 import { createStart } from "@tanstack/react-start"
 
-export const startInstance = createStart(() => {
-  return {
-    functionMiddleware: [sentryGlobalFunctionMiddleware],
-    requestMiddleware: [sentryGlobalRequestMiddleware],
-  }
-})
+import { telemetryFunctionMiddleware } from "@/server/telemetry/middleware"
+
+/** Start instance with Azure Monitor server function middleware. */
+export const startInstance = createStart(() => ({
+  functionMiddleware: [telemetryFunctionMiddleware],
+}))

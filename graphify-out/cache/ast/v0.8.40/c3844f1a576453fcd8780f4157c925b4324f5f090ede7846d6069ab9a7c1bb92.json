@@ -1,0 +1,303 @@
+{
+  "nodes": [
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_docs_auth_redirect_telemetry_md",
+      "label": "auth-redirect-telemetry.md",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "label": "Auth redirect telemetry",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_summary",
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L12"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_why_record_it",
+      "label": "Why record it?",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L25"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_what_triggers_it_today",
+      "label": "What triggers it today",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L40"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_signals_emitted",
+      "label": "Signals emitted",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L77"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_counter",
+      "label": "Counter",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L79"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_log",
+      "label": "Log",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L84"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_server_only",
+      "label": "Server-only",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L99"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_what_it_is_not",
+      "label": "What it is not",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L105"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_how_to_use_in_azure_monitor_today",
+      "label": "How to use in Azure Monitor (today)",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L115"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_what_to_do_next",
+      "label": "What to do next",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L131"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_track_a_ship_azure_monitor_ops",
+      "label": "Track A \u2014 Ship Azure Monitor (ops)",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L135"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_track_b_auth_telemetry_and_behavior_engineering",
+      "label": "Track B \u2014 Auth telemetry and behavior (engineering)",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L144"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_phase_1_instrumentation_completeness",
+      "label": "Phase 1 \u2014 Instrumentation completeness",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L156"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_phase_2_proactive_refresh_on_401",
+      "label": "Phase 2 \u2014 Proactive refresh on 401",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L167"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_phase_3_alerting_and_slos_after_phase_2",
+      "label": "Phase 3 \u2014 Alerting and SLOs (after Phase 2)",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L175"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_file_reference",
+      "label": "File reference",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L188"
+    },
+    {
+      "id": "docs_auth_redirect_telemetry_changelog",
+      "label": "Changelog",
+      "file_type": "document",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L200"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_docs_auth_redirect_telemetry_md",
+      "target": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "target": "docs_auth_redirect_telemetry_summary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "target": "docs_auth_redirect_telemetry_why_record_it",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "target": "docs_auth_redirect_telemetry_what_triggers_it_today",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "target": "docs_auth_redirect_telemetry_signals_emitted",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_signals_emitted",
+      "target": "docs_auth_redirect_telemetry_counter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_signals_emitted",
+      "target": "docs_auth_redirect_telemetry_log",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_signals_emitted",
+      "target": "docs_auth_redirect_telemetry_server_only",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "target": "docs_auth_redirect_telemetry_what_it_is_not",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "target": "docs_auth_redirect_telemetry_how_to_use_in_azure_monitor_today",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L115",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "target": "docs_auth_redirect_telemetry_what_to_do_next",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_what_to_do_next",
+      "target": "docs_auth_redirect_telemetry_track_a_ship_azure_monitor_ops",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L135",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_what_to_do_next",
+      "target": "docs_auth_redirect_telemetry_track_b_auth_telemetry_and_behavior_engineering",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L144",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_track_b_auth_telemetry_and_behavior_engineering",
+      "target": "docs_auth_redirect_telemetry_phase_1_instrumentation_completeness",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L156",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_track_b_auth_telemetry_and_behavior_engineering",
+      "target": "docs_auth_redirect_telemetry_phase_2_proactive_refresh_on_401",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L167",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_track_b_auth_telemetry_and_behavior_engineering",
+      "target": "docs_auth_redirect_telemetry_phase_3_alerting_and_slos_after_phase_2",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L175",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "target": "docs_auth_redirect_telemetry_file_reference",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L188",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_auth_redirect_telemetry_auth_redirect_telemetry",
+      "target": "docs_auth_redirect_telemetry_changelog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/auth-redirect-telemetry.md",
+      "source_location": "L200",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

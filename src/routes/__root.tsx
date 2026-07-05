@@ -12,10 +12,9 @@ import { useServerFn } from "@tanstack/react-start"
 import { useEffect } from "react"
 import { getI18n, useTranslation } from "react-i18next"
 
-import type { RouterContext } from "@/router"
+import type { RouterContext } from "@/router-context"
 
 import { updatePreferencesFn } from "@/modules/profile/services/update-preferences-fn"
-import { GlobalErrorComponent } from "@/modules/shared/components/common/global-error-component"
 import { Toaster } from "@/modules/shared/components/ui/sonner"
 import { isAuthenticated } from "@/modules/shared/guards/is-authenticated"
 import { deletePendingLanguageFn } from "@/modules/shared/shell/first_install/services/delete-pending-language-fn"
@@ -23,35 +22,47 @@ import { getPendingLanguageFn } from "@/modules/shared/shell/first_install/servi
 import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
 import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
 import { setUserTimezoneFn } from "@/modules/shared/shell/session/set-user-timezone-fn"
+import { BROWSER_SESSION_META_NAME } from "@/modules/shared/telemetry/browser-session"
+import { getBrowserSessionId } from "@/modules/shared/telemetry/browser-session-client"
+import { isBrowserRuntime } from "@/modules/shared/telemetry/runtime"
+import { TraceRegion } from "@/modules/shared/telemetry/trace-region"
+import { instrumentBeforeLoad } from "@/server/telemetry/helpers"
+import { getTelemetry } from "@/server/telemetry/registry"
 
 import appCss from "../styles/app.css?url"
 
+function resolveHeadBrowserSessionId(): string | undefined {
+  if (isBrowserRuntime()) return getBrowserSessionId()
+  return getTelemetry().getContext()?.browserSessionId
+}
+
 export const Route = createRootRouteWithContext<RouterContext>()({
-  beforeLoad: async () => {
-    const i18n = getI18n()
-    const auth = await isAuthenticated()
-    const pendingLanguage = await getPendingLanguageFn()
+  beforeLoad: async () =>
+    instrumentBeforeLoad("__root", async () => {
+      const i18n = getI18n()
+      const auth = await isAuthenticated()
+      const pendingLanguage = await getPendingLanguageFn()
 
-    if (auth._tag === "Success" && auth.value.user !== null) {
-      if (pendingLanguage) {
-        const result = await updatePreferencesFn({
-          data: { language: pendingLanguage },
-        })
+      if (auth._tag === "Success" && auth.value.user !== null) {
+        if (pendingLanguage) {
+          const result = await updatePreferencesFn({
+            data: { language: pendingLanguage },
+          })
 
-        if (result._tag === "Success") {
-          await i18n.changeLanguage(pendingLanguage)
-          await deletePendingLanguageFn()
-          return
+          if (result._tag === "Success") {
+            await i18n.changeLanguage(pendingLanguage)
+            await deletePendingLanguageFn()
+            return
+          }
         }
+
+        const language = pendingLanguage
+          ? pendingLanguage
+          : auth.value.user.language
+
+        await i18n.changeLanguage(language)
       }
-
-      const language = pendingLanguage
-        ? pendingLanguage
-        : auth.value.user.language
-
-      await i18n.changeLanguage(language)
-    }
-  },
+    }),
   component: function RootComponent() {
     const { i18n } = useTranslation()
     const dir = i18n.dir()
@@ -77,9 +88,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
                 />
 
                 <div className="bg-loops-background w-full">
-                  <div className="relative mx-auto w-full overflow-x-hidden sm:max-w-[425px]">
-                    <Outlet />
-                  </div>
+                  <TraceRegion name="__root" type="route">
+                    <div className="relative mx-auto w-full overflow-x-hidden sm:max-w-[425px]">
+                      <Outlet />
+                    </div>
+                  </TraceRegion>
                 </div>
                 <Toaster
                   closeButton={true}
@@ -114,28 +127,38 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       </html>
     )
   },
-  errorComponent: GlobalErrorComponent,
-  head: () => ({
-    links: [
-      { href: appCss, rel: "stylesheet" },
-      { href: "/favicon.png", rel: "icon", type: "image/png" },
-    ],
-    meta: [
-      { charSet: "utf-8" },
-      {
-        content: "width=device-width, initial-scale=1",
-        name: "viewport",
-      },
-      {
-        title: "Loops",
-      },
-    ],
-    scripts: [
-      {
-        async: true,
-        defer: true,
-        src: "https://accounts.google.com/gsi/client",
-      },
-    ],
-  }),
+  head: () => {
+    const browserSessionId = resolveHeadBrowserSessionId()
+    return {
+      links: [
+        { href: appCss, rel: "stylesheet" },
+        { href: "/favicon.png", rel: "icon", type: "image/png" },
+      ],
+      meta: [
+        { charSet: "utf-8" },
+        {
+          content: "width=device-width, initial-scale=1",
+          name: "viewport",
+        },
+        {
+          title: "Loops",
+        },
+        ...(browserSessionId
+          ? [
+              {
+                content: browserSessionId,
+                name: BROWSER_SESSION_META_NAME,
+              },
+            ]
+          : []),
+      ],
+      scripts: [
+        {
+          async: true,
+          defer: true,
+          src: "https://accounts.google.com/gsi/client",
+        },
+      ],
+    }
+  },
 })

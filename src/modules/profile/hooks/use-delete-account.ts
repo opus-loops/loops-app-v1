@@ -5,10 +5,13 @@ import { useCallback } from "react"
 
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
 import { sessionCleanupFn } from "@/modules/shared/shell/session/session-cleanup-fn"
+import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import { deleteAccountFn } from "../services/delete-account-fn"
 
 export function useDeleteAccount() {
+  useCallPathSegment("hook", "useDeleteAccount")
+
   const cleanupSession = useServerFn(sessionCleanupFn)
   const runDeleteAccount = useServerFn(deleteAccountFn)
   const { handleSessionExpired } = useGlobalError()

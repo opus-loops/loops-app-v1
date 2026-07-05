@@ -13,19 +13,33 @@ import {
 } from "@/modules/authentication/lib/auth-search"
 import { isAuthenticated } from "@/modules/shared/guards/is-authenticated"
 import { FirstInstallShell } from "@/modules/shared/shell/first_install/first-install"
+import { TraceRegion } from "@/modules/shared/telemetry/trace-region"
+import {
+  instrumentBeforeLoad,
+  recordAuthRedirect,
+} from "@/server/telemetry/helpers"
 
 export const Route = createFileRoute("/auth")({
-  beforeLoad: async () => {
-    const response = await isAuthenticated()
-    if (response._tag === "Success") {
-      throw redirect({
-        throw: false,
-        to: "/",
-      })
-    }
-  },
+  beforeLoad: async () =>
+    instrumentBeforeLoad("/auth", async () => {
+      const response = await isAuthenticated()
+      if (response._tag === "Success") {
+        recordAuthRedirect({
+          reason: "already_authenticated",
+          routeId: "/auth",
+        })
+        throw redirect({
+          throw: false,
+          to: "/",
+        })
+      }
+    }),
   component: function Auth() {
-    return <FirstInstallShell target={<AuthScreen />} />
+    return (
+      <TraceRegion name="Auth" type="route">
+        <FirstInstallShell target={<AuthScreen />} />
+      </TraceRegion>
+    )
   },
   validateSearch: authSearchSchema,
 })

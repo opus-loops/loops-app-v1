@@ -1,1 +1,143 @@
-{"nodes": [{"id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md", "label": "web-internationalization-best-practices.md", "file_type": "document", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L1"}, {"id": "rules_web_internationalization_best_practices_character_encoding", "label": "Character Encoding", "file_type": "document", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L8"}, {"id": "rules_web_internationalization_best_practices_language_declaration", "label": "Language Declaration", "file_type": "document", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L15"}, {"id": "rules_web_internationalization_best_practices_text_direction", "label": "Text Direction", "file_type": "document", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L24"}, {"id": "rules_web_internationalization_best_practices_semantic_structure", "label": "Semantic Structure", "file_type": "document", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L33"}, {"id": "rules_web_internationalization_best_practices_form_internationalization", "label": "Form Internationalization", "file_type": "document", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L41"}, {"id": "rules_web_internationalization_best_practices_css_and_layout", "label": "CSS and Layout", "file_type": "document", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L48"}, {"id": "rules_web_internationalization_best_practices_images_and_media", "label": "Images and Media", "file_type": "document", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L70"}, {"id": "rules_web_internationalization_best_practices_numbers_dates_and_currencies", "label": "Numbers, Dates, and Currencies", "file_type": "document", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L76"}], "edges": [{"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md", "target": "rules_web_internationalization_best_practices_character_encoding", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L8", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md", "target": "rules_web_internationalization_best_practices_language_declaration", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L15", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md", "target": "rules_web_internationalization_best_practices_text_direction", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L24", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md", "target": "rules_web_internationalization_best_practices_semantic_structure", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L33", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md", "target": "rules_web_internationalization_best_practices_form_internationalization", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L41", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md", "target": "rules_web_internationalization_best_practices_css_and_layout", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L48", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md", "target": "rules_web_internationalization_best_practices_images_and_media", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L70", "weight": 1.0}, {"source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md", "target": "rules_web_internationalization_best_practices_numbers_dates_and_currencies", "relation": "contains", "confidence": "EXTRACTED", "source_file": ".trae/rules/web-internationalization-best-practices.md", "source_location": "L76", "weight": 1.0}], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md",
+      "label": "web-internationalization-best-practices.md",
+      "file_type": "document",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "rules_web_internationalization_best_practices_character_encoding",
+      "label": "Character Encoding",
+      "file_type": "document",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L8"
+    },
+    {
+      "id": "rules_web_internationalization_best_practices_language_declaration",
+      "label": "Language Declaration",
+      "file_type": "document",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L15"
+    },
+    {
+      "id": "rules_web_internationalization_best_practices_text_direction",
+      "label": "Text Direction",
+      "file_type": "document",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L24"
+    },
+    {
+      "id": "rules_web_internationalization_best_practices_semantic_structure",
+      "label": "Semantic Structure",
+      "file_type": "document",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L33"
+    },
+    {
+      "id": "rules_web_internationalization_best_practices_form_internationalization",
+      "label": "Form Internationalization",
+      "file_type": "document",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L41"
+    },
+    {
+      "id": "rules_web_internationalization_best_practices_css_and_layout",
+      "label": "CSS and Layout",
+      "file_type": "document",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L48"
+    },
+    {
+      "id": "rules_web_internationalization_best_practices_images_and_media",
+      "label": "Images and Media",
+      "file_type": "document",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L70"
+    },
+    {
+      "id": "rules_web_internationalization_best_practices_numbers_dates_and_currencies",
+      "label": "Numbers, Dates, and Currencies",
+      "file_type": "document",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L76"
+    }
+  ],
+  "edges": [
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md",
+      "target": "rules_web_internationalization_best_practices_character_encoding",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md",
+      "target": "rules_web_internationalization_best_practices_language_declaration",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md",
+      "target": "rules_web_internationalization_best_practices_text_direction",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md",
+      "target": "rules_web_internationalization_best_practices_semantic_structure",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md",
+      "target": "rules_web_internationalization_best_practices_form_internationalization",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md",
+      "target": "rules_web_internationalization_best_practices_css_and_layout",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md",
+      "target": "rules_web_internationalization_best_practices_images_and_media",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L70",
+      "weight": 1.0
+    },
+    {
+      "source": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_web_internationalization_best_practices_md",
+      "target": "rules_web_internationalization_best_practices_numbers_dates_and_currencies",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".trae/rules/web-internationalization-best-practices.md",
+      "source_location": "L76",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

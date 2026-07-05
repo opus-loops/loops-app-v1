@@ -1,1 +1,14 @@
-{"nodes": [{"id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_markdown_task_list_management_md", "label": "markdown-task-list-management.md", "file_type": "document", "source_file": ".trae/rules/markdown-task-list-management.md", "source_location": "L1"}], "edges": [], "input_tokens": 0, "output_tokens": 0}
+{
+  "nodes": [
+    {
+      "id": "users_fedi_it_apps_loops_loops_app_loops_app_v1_trae_rules_markdown_task_list_management_md",
+      "label": "markdown-task-list-management.md",
+      "file_type": "document",
+      "source_file": ".trae/rules/markdown-task-list-management.md",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

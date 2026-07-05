@@ -3,9 +3,13 @@ import { useRouter } from "@tanstack/react-router"
 import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
+import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
+
 import { logoutFn } from "./logout-fn"
 
 export function useLogout() {
+  useCallPathSegment("hook", "useLogout")
+
   const runLogout = useServerFn(logoutFn)
   const queryClient = useQueryClient()
   const router = useRouter()

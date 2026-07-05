@@ -33,8 +33,11 @@ export const backgroundOptions = [
   { label: "Passionate", value: "passionate" },
 ]
 
-export const languageOptions = [
-  { label: "🇸🇦 ar", value: "ar" satisfies AppLanguage },
-  { label: "🇫🇷 fr", value: "fr" satisfies AppLanguage },
-  { label: "🇬🇧 en", value: "en" satisfies AppLanguage },
+export const languageOptions: ReadonlyArray<{
+  label: string
+  value: AppLanguage
+}> = [
+  { label: "🇸🇦 ar", value: "ar" },
+  { label: "🇫🇷 fr", value: "fr" },
+  { label: "🇬🇧 en", value: "en" },
 ]

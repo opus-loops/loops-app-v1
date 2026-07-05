@@ -2,6 +2,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { redirect } from "@tanstack/react-router"
 
 import { useGlobalError } from "../../session/global-error-provider"
+import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 import { getQuizContentFn } from "./get-quiz-content-fn"
 
 interface QuizContentParams {
@@ -43,6 +44,8 @@ export const quizContentQuery = (
   })
 
 export function useQuizContent(params: QuizContentParams) {
+  useCallPathSegment("hook", "useQuizContent")
+
   const { handleSessionExpired } = useGlobalError()
   const { data } = useSuspenseQuery(
     quizContentQuery(params, handleSessionExpired),
