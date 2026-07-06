@@ -5,6 +5,7 @@ import { Schema } from "effect"
 import { expiredInvalidCodeErrorSchema } from "@/modules/shared/domain/errors/expired-invalid-code"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -32,6 +33,7 @@ export const confirmAccountErrorsSchema = Schema.Union(
   invalidExpiredTokenErrorSchema,
   userNotFoundErrorSchema,
   expiredInvalidCodeErrorSchema,
+  internalErrorSchema,
 )
 
 export type ConfirmAccountErrors = typeof confirmAccountErrorsSchema.Type

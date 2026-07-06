@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { startedQuizSchema } from "@/modules/shared/domain/entities/started-quiz"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -29,6 +30,7 @@ export const getStartedQuizErrorsSchema = Schema.Union(
     }),
   ),
   invalidExpiredTokenErrorSchema,
+  internalErrorSchema,
 )
 
 export type GetStartedQuizErrors = typeof getStartedQuizErrorsSchema.Type

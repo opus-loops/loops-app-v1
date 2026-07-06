@@ -3,6 +3,7 @@ import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { emailNotFoundErrorSchema } from "@/modules/shared/domain/errors/email-not-found"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -19,6 +20,7 @@ export const requestResetPasswordErrorsSchema = Schema.Union(
     }),
   ),
   emailNotFoundErrorSchema,
+  internalErrorSchema,
 )
 
 export type RequestResetPasswordErrors =

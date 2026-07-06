@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { choiceQuestionSchema } from "@/modules/shared/domain/entities/choice-question"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -32,6 +33,7 @@ export const getExploreChoiceQuestionErrorsSchema = Schema.Union(
     }),
   ),
   invalidExpiredTokenErrorSchema,
+  internalErrorSchema,
 )
 
 export type GetExploreChoiceQuestionErrors =

@@ -3,6 +3,7 @@ import type { Effect } from "effect"
 import { Schema } from "effect"
 
 import { invalidTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-token"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import { loginTokensSchema } from "@/modules/shared/domain/types/login-tokens"
 import {
   invalidInputFactory,
@@ -25,6 +26,7 @@ export const googleLoginErrorsSchema = Schema.Union(
     }),
   ),
   invalidTokenErrorSchema,
+  internalErrorSchema,
 )
 
 export type GoogleLoginErrors = typeof googleLoginErrorsSchema.Type

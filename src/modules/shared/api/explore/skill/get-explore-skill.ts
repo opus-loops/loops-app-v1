@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { skillSchema } from "@/modules/shared/domain/entities/skill"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -29,6 +30,7 @@ export const getExploreSkillErrorsSchema = Schema.Union(
     }),
   ),
   invalidExpiredTokenErrorSchema,
+  internalErrorSchema,
 )
 
 export type GetExploreSkillErrors = typeof getExploreSkillErrorsSchema.Type

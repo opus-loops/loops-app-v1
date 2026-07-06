@@ -6,6 +6,7 @@ import { invalidTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-
 import { phoneNumberAlreadyUsedErrorSchema } from "@/modules/shared/domain/errors/phone-number-already-used"
 import { takenUsernameErrorSchema } from "@/modules/shared/domain/errors/taken-username"
 import { userAlreadyExistErrorSchema } from "@/modules/shared/domain/errors/user-already-exist"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -39,6 +40,7 @@ export const registerErrorsSchema = Schema.Union(
   takenUsernameErrorSchema,
   phoneNumberAlreadyUsedErrorSchema,
   invalidTokenErrorSchema,
+  internalErrorSchema,
 )
 
 export type RegisterErrors = typeof registerErrorsSchema.Type

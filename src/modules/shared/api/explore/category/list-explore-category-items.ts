@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { categoryItemSchema } from "@/modules/shared/domain/entities/category-item"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -36,6 +37,7 @@ export const listExploreCategoryItemsErrorsSchema = Schema.Union(
     }),
   ),
   invalidExpiredTokenErrorSchema,
+  internalErrorSchema,
 )
 
 export type ListExploreCategoryItemsErrors =

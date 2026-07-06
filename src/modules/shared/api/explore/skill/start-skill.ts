@@ -10,6 +10,7 @@ import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-c
 import { previousItemNotCompletedErrorSchema } from "@/modules/shared/domain/errors/previous-item-not-completed"
 import { skillAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/skill-already-started"
 import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -43,6 +44,7 @@ export const startSkillErrorsSchema = Schema.Union(
   skillNotFoundErrorSchema,
   notCategoryItemErrorSchema,
   invalidExpiredTokenErrorSchema,
+  internalErrorSchema,
 )
 
 export type StartSkillErrors = typeof startSkillErrorsSchema.Type

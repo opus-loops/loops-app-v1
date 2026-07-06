@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { userSchema } from "../../domain/entities/user"
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
+import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -19,6 +20,7 @@ export const getLoggedUserErrorsSchema = Schema.Union(
     }),
   ),
   invalidExpiredTokenErrorSchema,
+  internalErrorSchema,
 )
 
 export type GetLoggedUserErrors = typeof getLoggedUserErrorsSchema.Type
