@@ -4,6 +4,7 @@ import { useCallback } from "react"
 
 import { useGlobalError } from "../../session/global-error-provider"
 import { submitVoucherRequestFn } from "./submit-voucher-request-fn"
+import { voucherRequestQueryKey } from "./use-get-voucher-request"
 
 export function useSubmitVoucherRequest() {
   const submitVoucherRequestServer = useServerFn(submitVoucherRequestFn)
@@ -20,11 +21,17 @@ export function useSubmitVoucherRequest() {
         if (response.error.code === "Unauthorized") {
           await handleSessionExpired()
         }
+
+        if (response.error.code === "voucher_request_already_pending") {
+          await queryClient.invalidateQueries({
+            queryKey: voucherRequestQueryKey(categoryId),
+          })
+        }
       }
 
       if (response._tag === "Success") {
         await queryClient.invalidateQueries({
-          queryKey: ["voucher-request", categoryId],
+          queryKey: voucherRequestQueryKey(categoryId),
         })
       }
 

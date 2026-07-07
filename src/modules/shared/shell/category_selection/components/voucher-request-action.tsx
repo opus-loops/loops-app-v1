@@ -39,7 +39,7 @@ export function VoucherRequestAction({
 
   return (
     <Button
-      className="font-outfit text-loops-light border-loops-light/20 mt-2 w-full rounded-xl border-2 bg-transparent py-6 text-base leading-5 font-semibold capitalize transition-all duration-200 hover:bg-white/5"
+      className="font-outfit text-loops-light border-loops-light/20 mt-2 w-full rounded-xl border-2 bg-transparent py-6 text-base leading-5 font-semibold capitalize transition-all duration-200"
       disabled={isSubmitting}
       onClick={() => requestVoucher()}
       type="button"

@@ -9,6 +9,9 @@ interface VoucherRequestParams {
   categoryId: string
 }
 
+export const voucherRequestQueryKey = (categoryId: string) =>
+  ["voucher-request", categoryId] as const
+
 export const voucherRequestQuery = (
   params: VoucherRequestParams,
   handleSessionExpired: () => Promise<void>,
@@ -27,7 +30,7 @@ export const voucherRequestQuery = (
 
       return response.value.payload
     },
-    queryKey: ["voucher-request", params.categoryId],
+    queryKey: voucherRequestQueryKey(params.categoryId),
   })
 
 export function useGetVoucherRequest(params: VoucherRequestParams) {
