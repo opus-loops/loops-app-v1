@@ -392,6 +392,32 @@
     "errors": {
       "invalid_code": "رمز القسيمة غير صالح.",
       "invalid_format": "الرجاء إدخال رمز قسيمة مكون من 5 أرقام."
+    },
+    "request": {
+      "selection_title": "طلب قسيمة",
+      "selection_description": "اطلب من المسؤول إرسال رمز قسيمة لهذه الفئة.",
+      "selection_cta": "طلب قسيمة",
+      "step_title": "طلب قسيمة",
+      "description": "أرسل طلبًا وسيراجعه المسؤول. ستتلقى رمزًا عبر البريد الإلكتروني إذا تمت الموافقة.",
+      "submit": "إرسال الطلب",
+      "submit_again": "إرسال طلب جديد",
+      "loading": "جار التحقق من طلبك...",
+      "already_sent_title": "تم إرسال الطلب بالفعل",
+      "already_sent_description": "طلب القسيمة الخاص بك بانتظار مراجعة المسؤول.",
+      "success": {
+        "submitted": "تم إرسال طلب القسيمة."
+      },
+      "errors": {
+        "already_pending": "لديك بالفعل طلب قيد الانتظار لهذه الفئة.",
+        "submit_failed": "تعذر إرسال طلب القسيمة."
+      },
+      "status": {
+        "pending_title": "الطلب قيد الانتظار",
+        "pending_description": "طلبك بانتظار مراجعة المسؤول.",
+        "accepted_title": "تمت الموافقة على الطلب",
+        "accepted_description": "أدخل رمز القسيمة الذي استلمته لفتح هذه الفئة.",
+        "rejected_title": "تم رفض الطلب"
+      }
     }
   },
   "navigation": {

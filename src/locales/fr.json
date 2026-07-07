@@ -397,6 +397,32 @@
     "errors": {
       "invalid_code": "Code de bon invalide.",
       "invalid_format": "Veuillez entrer un code à 5 chiffres valide."
+    },
+    "request": {
+      "selection_title": "Demander un bon",
+      "selection_description": "Demandez à un administrateur de vous envoyer un code pour cette catégorie.",
+      "selection_cta": "Demander un bon",
+      "step_title": "Demander un bon",
+      "description": "Soumettez une demande et un administrateur l'examinera. Vous recevrez un code par e-mail si elle est approuvée.",
+      "submit": "Envoyer la demande",
+      "submit_again": "Envoyer une nouvelle demande",
+      "loading": "Vérification de votre demande...",
+      "already_sent_title": "Demande déjà envoyée",
+      "already_sent_description": "Votre demande de bon est en attente de validation par un administrateur.",
+      "success": {
+        "submitted": "Demande de bon envoyée."
+      },
+      "errors": {
+        "already_pending": "Vous avez déjà une demande en attente pour cette catégorie.",
+        "submit_failed": "Impossible d'envoyer la demande de bon."
+      },
+      "status": {
+        "pending_title": "Demande en attente",
+        "pending_description": "Votre demande attend l'examen d'un administrateur.",
+        "accepted_title": "Demande approuvée",
+        "accepted_description": "Entrez le code reçu pour débloquer cette catégorie.",
+        "rejected_title": "Demande refusée"
+      }
     }
   },
   "navigation": {

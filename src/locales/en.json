@@ -397,6 +397,32 @@
     "errors": {
       "invalid_code": "Invalid voucher code.",
       "invalid_format": "Please enter a valid 5-digit voucher code."
+    },
+    "request": {
+      "selection_title": "Request a voucher",
+      "selection_description": "Ask an admin to send you a voucher code for this category.",
+      "selection_cta": "Request voucher",
+      "step_title": "Request voucher",
+      "description": "Submit a request and an admin will review it. You will receive a code by email if approved.",
+      "submit": "Submit request",
+      "submit_again": "Submit new request",
+      "loading": "Checking your request...",
+      "already_sent_title": "Request already sent",
+      "already_sent_description": "Your voucher request is waiting for admin review.",
+      "success": {
+        "submitted": "Voucher request submitted."
+      },
+      "errors": {
+        "already_pending": "You already have a pending request for this category.",
+        "submit_failed": "Could not submit voucher request."
+      },
+      "status": {
+        "pending_title": "Request pending",
+        "pending_description": "Your request is waiting for admin review.",
+        "accepted_title": "Request approved",
+        "accepted_description": "Enter the voucher code you received to unlock this category.",
+        "rejected_title": "Request rejected"
+      }
     }
   },
   "navigation": {

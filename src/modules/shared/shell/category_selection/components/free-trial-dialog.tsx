@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from "@/modules/shared/components/ui/dialog"
 
+import { VoucherRequestAction } from "./voucher-request-action"
 import { VoucherSubmissionForm } from "./voucher-submission-form"
 
 type FreeTrialDialogProps = {
@@ -21,8 +22,6 @@ type FreeTrialDialogProps = {
   showTrigger?: boolean
 }
 
-type FreeTrialDialogStep = "selection" | "voucher"
-
 export function FreeTrialDialog({
   categoryId,
   onOpenChange,
@@ -30,22 +29,15 @@ export function FreeTrialDialog({
   showTrigger = false,
 }: FreeTrialDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false)
-  const [currentStep, setCurrentStep] =
-    useState<FreeTrialDialogStep>("selection")
   const { t } = useTranslation()
 
   const open = externalOpen !== undefined ? externalOpen : internalOpen
   const setOpen = onOpenChange ?? setInternalOpen
 
-  const handleOpenChange = (nextOpen: boolean) => {
-    if (!nextOpen) setCurrentStep("selection")
-    setOpen(nextOpen)
-  }
-
-  const closeDialog = () => handleOpenChange(false)
+  const closeDialog = () => setOpen(false)
 
   return (
-    <Dialog onOpenChange={handleOpenChange} open={open}>
+    <Dialog onOpenChange={setOpen} open={open}>
       {showTrigger ? (
         <DialogTrigger asChild>
           <Button className="font-outfit text-loops-light hover:bg-loops-info bg-loops-cyan w-full rounded-xl py-7 text-lg leading-5 font-semibold capitalize shadow-none transition-all duration-200">
@@ -75,7 +67,6 @@ export function FreeTrialDialog({
               scale: 0.8,
               y: 20,
             }}
-            key={currentStep}
             transition={{
               damping: 30,
               stiffness: 300,
@@ -110,8 +101,10 @@ export function FreeTrialDialog({
               <VoucherSubmissionForm
                 categoryId={categoryId}
                 onSuccess={closeDialog}
-                submitLabelKey={t("voucher.form.submit_code")}
+                submitLabelKey="voucher.form.submit_code"
               />
+
+              <VoucherRequestAction categoryId={categoryId} />
             </div>
           </motion.div>
         </AnimatePresence>
