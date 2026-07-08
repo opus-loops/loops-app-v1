@@ -6,6 +6,7 @@ import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/i
 import { takenUsernameErrorSchema } from "@/modules/shared/domain/errors/taken-username"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -40,6 +41,7 @@ export const updatePreferencesErrorsSchema = Schema.Union(
   takenUsernameErrorSchema,
   userNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

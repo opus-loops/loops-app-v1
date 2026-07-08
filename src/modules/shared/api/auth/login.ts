@@ -13,6 +13,7 @@ import { parseApiResponse } from "@/modules/shared/utils/parse-api-response"
 import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 
 import { internalErrorSchema } from "../../domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "../../domain/errors/resource-access-forbidden"
 import { userPasswordNotSetOrInvalidProviderErrorSchema } from "../../domain/errors/user-password-not-set-or-invalid-provider"
 
 const loginArgsSchema = Schema.Struct({
@@ -31,6 +32,7 @@ export const loginErrorsSchema = Schema.Union(
   ),
   invalidCredentialsErrorSchema,
   userPasswordNotSetOrInvalidProviderErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

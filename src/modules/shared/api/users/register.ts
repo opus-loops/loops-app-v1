@@ -7,6 +7,7 @@ import { phoneNumberAlreadyUsedErrorSchema } from "@/modules/shared/domain/error
 import { takenUsernameErrorSchema } from "@/modules/shared/domain/errors/taken-username"
 import { userAlreadyExistErrorSchema } from "@/modules/shared/domain/errors/user-already-exist"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -40,6 +41,7 @@ export const registerErrorsSchema = Schema.Union(
   takenUsernameErrorSchema,
   phoneNumberAlreadyUsedErrorSchema,
   invalidTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

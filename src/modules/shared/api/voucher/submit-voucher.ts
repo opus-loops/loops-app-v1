@@ -19,6 +19,7 @@ import { parseEffectSchema } from "@/modules/shared/utils/parse-effect-schema"
 import { categoryAlreadyStartedWithSubscriptionErrorSchema } from "../../domain/errors/category-already-started-with-subscription"
 import { categoryNotPublicErrorSchema } from "../../domain/errors/category-not-public"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 
 const submitVoucherArgsSchema = Schema.Struct({
   categoryId: Schema.String,
@@ -43,6 +44,7 @@ export const submitVoucherErrorsSchema = Schema.Union(
   categoryNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
   userNotFoundErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

@@ -7,6 +7,7 @@ import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/cate
 import { categoryNotPublicErrorSchema } from "@/modules/shared/domain/errors/category-not-public"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { successResponseWithPayloadSchemaFactory } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -34,6 +35,7 @@ export const startCategoryErrorsSchema = Schema.Union(
   categoryAlreadyStartedErrorSchema,
   categoryNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

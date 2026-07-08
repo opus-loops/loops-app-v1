@@ -11,6 +11,7 @@ import { previousItemNotCompletedErrorSchema } from "@/modules/shared/domain/err
 import { skillAlreadyStartedErrorSchema } from "@/modules/shared/domain/errors/skill-already-started"
 import { skillNotFoundErrorSchema } from "@/modules/shared/domain/errors/skill-not-found"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -44,6 +45,7 @@ export const startSkillErrorsSchema = Schema.Union(
   skillNotFoundErrorSchema,
   notCategoryItemErrorSchema,
   invalidExpiredTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

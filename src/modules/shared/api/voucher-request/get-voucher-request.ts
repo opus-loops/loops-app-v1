@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { voucherRequestSchema } from "@/modules/shared/domain/entities/voucher-request"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { voucherRequestNotFoundErrorSchema } from "@/modules/shared/domain/errors/voucher-request-not-found"
 import { successResponseWithPayloadSchemaFactory } from "@/modules/shared/domain/types/success-response"
@@ -31,6 +32,7 @@ export const getVoucherRequestErrorsSchema = Schema.Union(
   ),
   voucherRequestNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

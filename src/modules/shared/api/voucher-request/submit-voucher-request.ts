@@ -6,6 +6,7 @@ import { categoryAlreadyStartedErrorSchema } from "@/modules/shared/domain/error
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { categoryNotPublicErrorSchema } from "@/modules/shared/domain/errors/category-not-public"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { voucherRequestAlreadyPendingErrorSchema } from "@/modules/shared/domain/errors/voucher-request-already-pending"
@@ -38,6 +39,7 @@ export const submitVoucherRequestErrorsSchema = Schema.Union(
   voucherRequestAlreadyPendingErrorSchema,
   invalidExpiredTokenErrorSchema,
   userNotFoundErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

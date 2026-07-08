@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { categoryItemSchema } from "@/modules/shared/domain/entities/category-item"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import {
   invalidInputFactory,
@@ -30,6 +31,7 @@ export const getExploreCategoryItemErrorsSchema = Schema.Union(
     }),
   ),
   invalidExpiredTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

@@ -5,6 +5,7 @@ import { Schema } from "effect"
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
 import { invalidFileErrorSchema } from "../../domain/errors/invalid-file"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -28,6 +29,7 @@ export const uploadFileErrorsSchema = Schema.Union(
   ),
   invalidExpiredTokenErrorSchema,
   invalidFileErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

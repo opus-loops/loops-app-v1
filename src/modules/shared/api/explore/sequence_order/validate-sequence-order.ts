@@ -5,6 +5,7 @@ import { Schema } from "effect"
 import { categoryNotFoundErrorSchema } from "@/modules/shared/domain/errors/category-not-found"
 import { categoryNotStartedErrorSchema } from "@/modules/shared/domain/errors/category-not-started"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { notCategoryItemErrorSchema } from "@/modules/shared/domain/errors/not-category-item"
 import { notQuizQuestionErrorSchema } from "@/modules/shared/domain/errors/not-quiz-question"
@@ -53,6 +54,7 @@ export const validateSequenceOrderErrorsSchema = Schema.Union(
   notQuizQuestionErrorSchema,
   questionAlreadyCompletedErrorSchema,
   invalidExpiredTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

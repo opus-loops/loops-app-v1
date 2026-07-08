@@ -5,6 +5,7 @@ import { Schema } from "effect"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { invalidOperationErrorSchema } from "@/modules/shared/domain/errors/invalid-operation"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { successResponseWithPayloadSchemaFactory } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -23,6 +24,7 @@ export const requestConfirmErrorsSchema = Schema.Union(
   ),
   invalidExpiredTokenErrorSchema,
   invalidOperationErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

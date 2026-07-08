@@ -5,6 +5,7 @@ import { Schema } from "effect"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -23,6 +24,7 @@ export const deleteAccountErrorsSchema = Schema.Union(
   ),
   userNotFoundErrorSchema,
   invalidExpiredTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

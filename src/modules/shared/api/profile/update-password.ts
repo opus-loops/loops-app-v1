@@ -7,6 +7,7 @@ import { unmatchedPasswordErrorSchema } from "@/modules/shared/domain/errors/unm
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { userPasswordNotSetOrInvalidProviderErrorSchema } from "@/modules/shared/domain/errors/user-password-not-set-or-invalid-provider"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -29,6 +30,7 @@ export const updatePasswordErrorsSchema = Schema.Union(
   userNotFoundErrorSchema,
   userPasswordNotSetOrInvalidProviderErrorSchema,
   invalidExpiredTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

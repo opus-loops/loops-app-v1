@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { emailNotFoundErrorSchema } from "@/modules/shared/domain/errors/email-not-found"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -20,6 +21,7 @@ export const requestResetPasswordErrorsSchema = Schema.Union(
     }),
   ),
   emailNotFoundErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

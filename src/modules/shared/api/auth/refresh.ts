@@ -9,6 +9,7 @@ import { logServerError, recordMetric } from "@/server/telemetry/helpers"
 import { invalidRefreshTokenErrorSchema } from "../../domain/errors/invalid-refresh-token"
 import { userNotFoundErrorSchema } from "../../domain/errors/user-not-found"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { loginTokensSchema } from "../../domain/types/login-tokens"
 import { invalidInputFactory } from "../../domain/utils/invalid-input"
 import { parseApiResponse } from "../../utils/parse-api-response"
@@ -23,6 +24,7 @@ const refreshErrorsSchema = Schema.Union(
   ),
   invalidRefreshTokenErrorSchema,
   userNotFoundErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

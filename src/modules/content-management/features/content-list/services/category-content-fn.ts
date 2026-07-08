@@ -253,7 +253,7 @@ export const categoryContentFn = createServerFn({
       wire = { _tag: "Success", value: exit.value }
     } else {
       const failure = handleServerFnFailure(exit.cause)
-      wire = { _tag: "Failure", error: failure as CategoryContentErrors }
+      wire = { _tag: "Failure", error: failure }
     }
 
     // 3) Return JSON-serializable value (Start will serialize it)

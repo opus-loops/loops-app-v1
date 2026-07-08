@@ -5,6 +5,7 @@ import { Schema } from "effect"
 import { expiredInvalidCodeErrorSchema } from "@/modules/shared/domain/errors/expired-invalid-code"
 import { userNotFoundErrorSchema } from "@/modules/shared/domain/errors/user-not-found"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { successResponseSchema } from "@/modules/shared/domain/types/success-response"
 import {
   invalidInputFactory,
@@ -30,6 +31,7 @@ export const confirmResetPasswordErrorsSchema = Schema.Union(
   expiredInvalidCodeErrorSchema,
   userNotFoundErrorSchema,
   confirmResetPasswordUnmatchedPasswordErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

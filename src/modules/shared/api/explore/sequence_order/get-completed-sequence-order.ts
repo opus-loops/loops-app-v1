@@ -5,6 +5,7 @@ import { Schema } from "effect"
 import { completedSequenceOrderSchema } from "@/modules/shared/domain/entities/completed-sequence-order"
 import { invalidExpiredTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-expired-token"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import {
   invalidInputFactory,
   UseCaseErrorSchema,
@@ -33,6 +34,7 @@ export const getCompletedSequenceOrderErrorsSchema = Schema.Union(
     }),
   ),
   invalidExpiredTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 

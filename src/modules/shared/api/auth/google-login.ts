@@ -4,6 +4,7 @@ import { Schema } from "effect"
 
 import { invalidTokenErrorSchema } from "@/modules/shared/domain/errors/invalid-token"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
+import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 import { loginTokensSchema } from "@/modules/shared/domain/types/login-tokens"
 import {
   invalidInputFactory,
@@ -26,6 +27,7 @@ export const googleLoginErrorsSchema = Schema.Union(
     }),
   ),
   invalidTokenErrorSchema,
+  resourceAccessForbiddenErrorSchema,
   internalErrorSchema,
 )
 
