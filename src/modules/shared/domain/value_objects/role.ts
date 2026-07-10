@@ -1,5 +1,9 @@
 import { Schema } from "effect"
 
-export const roleSchema = Schema.Literal("admin", "content_creator", "user")
+export const roleIdSchema = Schema.String
 
-export type Role = typeof roleSchema.Type
+export const roleSlugSchema = Schema.String
+
+export type RoleId = typeof roleIdSchema.Type
+
+export type RoleSlug = typeof roleSlugSchema.Type

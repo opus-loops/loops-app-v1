@@ -1,33 +1,39 @@
 import { Schema } from "effect"
 
-import { roleSchema } from "../value_objects/role"
+const StringField = Schema.String
+const NumberField = Schema.Number.pipe(Schema.int())
+const BooleanField = Schema.Boolean
 
-export const userSchema = Schema.Struct({
-  avatarURL: Schema.String,
-  background: Schema.optional(Schema.String),
+export const User = Schema.Struct({
+  avatarURL: StringField,
+  background: Schema.optional(StringField),
   birthDate: Schema.optional(Schema.DateFromString),
-  city: Schema.optional(Schema.String),
-  codingExperience: Schema.optional(Schema.String),
+  city: Schema.optional(StringField),
+  codingExperience: Schema.optional(StringField),
   confirmationDate: Schema.optional(Schema.DateFromString),
-  country: Schema.optional(Schema.String),
+  country: Schema.optional(StringField),
   createdAt: Schema.DateFromString,
-  currentCategory: Schema.optional(Schema.String),
-  duration: Schema.optional(Schema.Number.pipe(Schema.int())),
-  email: Schema.String.pipe(Schema.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)),
-  fullName: Schema.String,
-  gender: Schema.optional(Schema.String),
-  globalXP: Schema.Number.pipe(Schema.int()),
-  goals: Schema.optional(Schema.String),
-  interests: Schema.optional(Schema.String),
-  isFirstTime: Schema.Boolean,
-  isProfileCompleted: Schema.Boolean,
+  currentCategory: Schema.optional(StringField),
+  deletedAt: Schema.optional(Schema.DateFromString),
+  duration: Schema.optional(NumberField),
+  email: StringField,
+  fullName: StringField,
+  gender: Schema.optional(StringField),
+  globalXP: NumberField,
+  goals: Schema.optional(StringField),
+  interests: Schema.optional(StringField),
+  isFirstTime: BooleanField,
+  isProfileCompleted: BooleanField,
   language: Schema.Literal("en", "fr", "ar"),
-  phoneNumber: Schema.optional(Schema.String),
-  role: roleSchema,
-  state: Schema.optional(Schema.String),
+  password: Schema.optional(StringField),
+  phoneNumber: Schema.optional(StringField),
+  provider: StringField,
+  resetPasswordToken: Schema.optional(StringField),
+  state: Schema.optional(StringField),
+  timeZone: Schema.optional(StringField),
   updatedAt: Schema.DateFromString,
-  userId: Schema.String,
-  username: Schema.String,
+  userId: StringField,
+  username: StringField,
 })
 
-export type User = typeof userSchema.Type
+export type User = typeof User.Type

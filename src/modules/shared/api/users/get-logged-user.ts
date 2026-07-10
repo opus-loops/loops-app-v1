@@ -5,7 +5,7 @@ import { Schema } from "effect"
 import { internalErrorSchema } from "@/modules/shared/domain/errors/internal-error"
 import { resourceAccessForbiddenErrorSchema } from "@/modules/shared/domain/errors/resource-access-forbidden"
 
-import { userSchema } from "../../domain/entities/user"
+import { User } from "../../domain/entities/user"
 import { invalidExpiredTokenErrorSchema } from "../../domain/errors/invalid-expired-token"
 import {
   invalidInputFactory,
@@ -34,7 +34,7 @@ type GetLoggedUserResult = Effect.Effect<
 >
 
 export const getLoggedUserSuccessSchema = Schema.Struct({
-  user: Schema.NullOr(userSchema),
+  user: Schema.NullOr(User),
 })
 
 export type GetLoggedUserSuccess = typeof getLoggedUserSuccessSchema.Type

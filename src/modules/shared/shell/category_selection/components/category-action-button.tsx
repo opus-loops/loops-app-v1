@@ -8,8 +8,6 @@ import { useUpdateCurrentCategory } from "@/modules/profile/hooks/use-update-cur
 import { Button } from "@/modules/shared/components/ui/button"
 import { VoucherStepperDialog } from "@/modules/shared/shell/category_selection/components/voucher-stepper-dialog"
 
-import { FreeTrialDialog } from "./free-trial-dialog"
-
 type CategoryActionButtonProps = {
   category: CategoryWithStartedCategory
   user: User
