@@ -2,8 +2,6 @@ import { getRequestHeaders } from "@tanstack/react-start/server"
 import axios from "axios"
 import { Effect } from "effect"
 
-import { runWithCallContext } from "@/modules/shared/telemetry/run-with-call-context"
-
 import { refreshAccessToken } from "../api/auth/refresh"
 import {
   deleteSession,
@@ -50,17 +48,10 @@ export const instanceFactory = async () => {
     )
   }
 
-  const response = await runWithCallContext(
-    {
-      name: "instanceFactory",
-      type: "tokenRefresh",
-    },
-    () =>
-      Effect.runPromiseExit(
-        refreshAccessToken({
-          refresh: session.refreshToken,
-        }),
-      ),
+  const response = await Effect.runPromiseExit(
+    refreshAccessToken({
+      refresh: session.refreshToken,
+    }),
   )
 
   if (response._tag === "Failure") {

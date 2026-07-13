@@ -31,12 +31,6 @@ export type TelemetryRegistry = {
   markHttpResponse: (statusCode: number) => void
   metrics: {
     recordApiClient: (input: {
-      "api.caller.name"?: string | undefined
-      "api.caller.path"?: string | undefined
-      "api.caller.query_key"?: string | undefined
-      "api.caller.route_id"?: string | undefined
-      "api.caller.triggered_by"?: string | undefined
-      "api.caller.type"?: string | undefined
       "browser.session.id"?: string | undefined
       durationMs: number
       error: boolean

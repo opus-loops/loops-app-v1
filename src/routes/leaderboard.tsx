@@ -7,7 +7,6 @@ import { authenticatedQuery, useAuth } from "@/modules/shared/guards/use-auth"
 import { CategorySelectionShell } from "@/modules/shared/shell/category_selection/category-selection-shell"
 import { ConfirmationShell } from "@/modules/shared/shell/confirmation/confirmation-shell"
 import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-shell"
-import { TraceRegion } from "@/modules/shared/telemetry/trace-region"
 import { instrumentBeforeLoad } from "@/server/telemetry/helpers"
 
 export const Route = createFileRoute("/leaderboard")({
@@ -20,29 +19,27 @@ export const Route = createFileRoute("/leaderboard")({
     const search = Route.useSearch()
 
     return (
-      <TraceRegion name="Leaderboard" type="route">
-        <ConfirmationShell
-          target={
-            <OnboardingShell
-              target={
-                <CategorySelectionShell
-                  searchParams={search}
-                  target={
-                    <ComingSoonScreen>
-                      <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-sm -translate-x-1/2">
-                        <BottomTabNavigator />
-                      </div>
-                    </ComingSoonScreen>
-                  }
-                  user={user}
-                />
-              }
-              user={user}
-            />
-          }
-          user={user}
-        />
-      </TraceRegion>
+      <ConfirmationShell
+        target={
+          <OnboardingShell
+            target={
+              <CategorySelectionShell
+                searchParams={search}
+                target={
+                  <ComingSoonScreen>
+                    <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-sm -translate-x-1/2">
+                      <BottomTabNavigator />
+                    </div>
+                  </ComingSoonScreen>
+                }
+                user={user}
+              />
+            }
+            user={user}
+          />
+        }
+        user={user}
+      />
     )
   },
   validateSearch: z.object({

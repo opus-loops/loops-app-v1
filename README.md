@@ -203,8 +203,6 @@ Use `docs/production-readiness-checklist.md` as the release gate before producti
 
 - `docs/telemetry-reference.md` — **start here** — architecture, pipeline, module map, metrics, usage
 - `docs/azure-monitor-opentelemetry.md` — Azure Monitor setup and metrics catalog
-- `docs/api-call-tracing.md` — outbound API caller tracing and Log Analytics KQL queries
-- `docs/call-path-instrumentation.md` — where to add `TraceRegion` and hook frames
 
 ## 🚀 Deployment
 

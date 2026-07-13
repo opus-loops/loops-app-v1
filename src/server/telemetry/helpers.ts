@@ -1,8 +1,3 @@
-import { getCallStackAttributes } from "@/modules/shared/telemetry/call-context-path"
-import {
-  readCallContextStack,
-  runWithCallContext,
-} from "@/modules/shared/telemetry/run-with-call-context"
 import { isServerRuntime } from "@/modules/shared/telemetry/runtime"
 
 import type { TelemetryAttributes } from "./types"
@@ -49,15 +44,10 @@ export async function instrumentBeforeLoad<T>(
   fn: () => Promise<T> | T,
 ): Promise<T> {
   const id = normalizeRouteId(routeId)
-  return runWithCallContext({ name: id, routeId: id, type: "beforeLoad" }, () =>
-    withServerSpan(
-      `beforeLoad.${id}`,
-      {
-        routeId: id,
-        ...getCallStackAttributes(readCallContextStack()),
-      },
-      async () => await fn(),
-    ),
+  return withServerSpan(
+    `beforeLoad.${id}`,
+    { routeId: id },
+    async () => await fn(),
   )
 }
 

@@ -3,9 +3,6 @@ import type { trace } from "@opentelemetry/api"
 import { context as otelContext } from "@opentelemetry/api"
 import axios from "axios"
 
-import { getCallStackAttributes } from "@/modules/shared/telemetry/call-context-path"
-import { readCallContextStack } from "@/modules/shared/telemetry/run-with-call-context"
-
 import type { TelemetryRegistry } from "./types"
 
 import { getBrowserSessionAttributes } from "./browser-session"
@@ -50,7 +47,6 @@ export function installAxiosHooks(
     requestHeaders["x-request-start"] = String(performance.now())
 
     const { method, resource } = resolveAxiosRequest(config)
-    const callerAttributes = getCallStackAttributes(readCallContextStack())
     const sessionAttributes = getBrowserSessionAttributes(
       registry.getContext()?.browserSessionId,
     )
@@ -60,7 +56,6 @@ export function installAxiosHooks(
         attributes: {
           "http.method": method,
           resource,
-          ...callerAttributes,
           ...sessionAttributes,
         },
       },
@@ -85,10 +80,6 @@ export function installAxiosHooks(
       const durationMs = Number.isFinite(start) ? performance.now() - start : 0
       const { method, resource } = resolveAxiosRequest(response.config)
       const isError = isServerErrorStatus(response.status)
-      const callerAttributes = getCallStackAttributes(readCallContextStack(), {
-        name: resource,
-        type: "api",
-      })
       const sessionAttributes = getBrowserSessionAttributes(
         registry.getContext()?.browserSessionId,
       )
@@ -100,7 +91,6 @@ export function installAxiosHooks(
         resource,
         statusCode: response.status,
         timedOut: false,
-        ...callerAttributes,
         ...sessionAttributes,
       })
       registry.metrics.recordDependency({
@@ -131,10 +121,6 @@ export function installAxiosHooks(
       const timedOut = code === "ECONNABORTED" || code === "ETIMEDOUT"
       const { method, resource } = resolveAxiosRequest(config ?? {})
       const isError = isServerErrorStatus(statusCode)
-      const callerAttributes = getCallStackAttributes(readCallContextStack(), {
-        name: resource,
-        type: "api",
-      })
       const sessionAttributes = getBrowserSessionAttributes(
         registry.getContext()?.browserSessionId,
       )
@@ -146,7 +132,6 @@ export function installAxiosHooks(
         resource,
         statusCode,
         timedOut,
-        ...callerAttributes,
         ...sessionAttributes,
       })
       registry.metrics.recordDependency({

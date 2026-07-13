@@ -1,7 +1,6 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
-import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import { getVoucherRequestFn } from "./get-voucher-request-fn"
 
@@ -34,8 +33,6 @@ export const voucherRequestQuery = (
   })
 
 export function useGetVoucherRequest(params: VoucherRequestParams) {
-  useCallPathSegment("hook", "useGetVoucherRequest")
-
   const { handleSessionExpired } = useGlobalError()
   const { data: voucherRequest } = useSuspenseQuery(
     voucherRequestQuery(params, handleSessionExpired),

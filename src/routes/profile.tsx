@@ -7,7 +7,6 @@ import { authenticatedQuery, useAuth } from "@/modules/shared/guards/use-auth"
 import { CategorySelectionShell } from "@/modules/shared/shell/category_selection/category-selection-shell"
 import { ConfirmationShell } from "@/modules/shared/shell/confirmation/confirmation-shell"
 import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-shell"
-import { TraceRegion } from "@/modules/shared/telemetry/trace-region"
 import { instrumentBeforeLoad } from "@/server/telemetry/helpers"
 
 export const Route = createFileRoute("/profile")({
@@ -20,32 +19,30 @@ export const Route = createFileRoute("/profile")({
     const search = Route.useSearch()
 
     return (
-      <TraceRegion name="Profile" type="route">
-        <ConfirmationShell
-          target={
-            <OnboardingShell
-              target={
-                <CategorySelectionShell
-                  searchParams={search}
-                  target={
-                    <div className="relative min-h-screen">
-                      <div className="relative z-0">
-                        <ProfileScreen user={user} />
-                      </div>
-                      <div className="fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
-                        <BottomTabNavigator />
-                      </div>
+      <ConfirmationShell
+        target={
+          <OnboardingShell
+            target={
+              <CategorySelectionShell
+                searchParams={search}
+                target={
+                  <div className="relative min-h-screen">
+                    <div className="relative z-0">
+                      <ProfileScreen user={user} />
                     </div>
-                  }
-                  user={user}
-                />
-              }
-              user={user}
-            />
-          }
-          user={user}
-        />
-      </TraceRegion>
+                    <div className="fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
+                      <BottomTabNavigator />
+                    </div>
+                  </div>
+                }
+                user={user}
+              />
+            }
+            user={user}
+          />
+        }
+        user={user}
+      />
     )
   },
   validateSearch: z.object({

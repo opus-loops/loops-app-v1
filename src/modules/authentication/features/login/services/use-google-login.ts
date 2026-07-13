@@ -3,13 +3,10 @@ import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
 import { getSafeRedirectPath } from "@/modules/authentication/lib/auth-search"
-import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import { googleLoginFn } from "./google-login-fn"
 
 export function useGoogleLogin() {
-  useCallPathSegment("hook", "useGoogleLogin")
-
   const logUser = useServerFn(googleLoginFn)
   const router = useRouter()
 
@@ -22,6 +19,7 @@ export function useGoogleLogin() {
 
       if (response._tag === "Success") {
         const safeRedirect = getSafeRedirectPath(redirectTo)
+        console.log("safeRedirect", safeRedirect)
 
         if (safeRedirect) {
           window.location.assign(safeRedirect)

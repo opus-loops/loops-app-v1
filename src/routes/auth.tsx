@@ -13,7 +13,6 @@ import {
 } from "@/modules/authentication/lib/auth-search"
 import { isAuthenticated } from "@/modules/shared/guards/is-authenticated"
 import { FirstInstallShell } from "@/modules/shared/shell/first_install/first-install"
-import { TraceRegion } from "@/modules/shared/telemetry/trace-region"
 import {
   instrumentBeforeLoad,
   recordAuthRedirect,
@@ -35,11 +34,7 @@ export const Route = createFileRoute("/auth")({
       }
     }),
   component: function Auth() {
-    return (
-      <TraceRegion name="Auth" type="route">
-        <FirstInstallShell target={<AuthScreen />} />
-      </TraceRegion>
-    )
+    return <FirstInstallShell target={<AuthScreen />} />
   },
   validateSearch: authSearchSchema,
 })

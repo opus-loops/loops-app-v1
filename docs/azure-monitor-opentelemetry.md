@@ -8,8 +8,6 @@ This document describes the migration from Sentry to **server-only** Azure Monit
 
 Aligned with [TanStack Start Observability](https://tanstack.com/start/v0/docs/framework/react/guide/observability). No client-side telemetry, RUM, or browser error reporting.
 
-**API call tracing:** Outbound axios calls include caller context (`beforeLoad`, `query.fetch`, `serverFn`, etc.). See [api-call-tracing.md](./api-call-tracing.md) for how it works, Azure portal navigation, and Log Analytics KQL examples.
-
 ---
 
 ## Summary
@@ -68,7 +66,6 @@ flowchart TB
   mwFn --> callCtx
 ```
 
-**Call context:** Route hooks, React Query, and server functions push caller metadata onto an AsyncLocalStorage stack (server) or client stack. Axios interceptors read it and attach `api.caller.*` to dependency spans and metrics. Details: [api-call-tracing.md](./api-call-tracing.md).
 
 **Startup:** `instrument.server.mjs` (bundled from `src/server/telemetry/instrument.ts:L1–L20`) runs via `NODE_OPTIONS='--import ./instrument.server.mjs'` (`package.json`) before the app loads. It calls `startTelemetry()` (`setup.ts:65-131`), which initializes Azure Monitor and sets `globalThis.__LOOPS_TELEMETRY__` (`registry-factory.ts:37-313`, `registry.ts:120-128`).
 
@@ -98,25 +95,20 @@ flowchart TB
 | `registry.ts`     | L18–L141 | Global accessor (`getTelemetry`, `setTelemetry`, `logTelemetry`, `recordServerException`).              |
 | `types.ts`        | —       | `TelemetryRegistry`, log levels, request context types.                                                 |
 | `request.ts`      | L31–L108 | `handleInstrumentedRequest`: probes, page-route filter, request metrics/spans, correlation header.      |
-| `middleware.ts`   | L49–L119 | TanStack function middleware; replays call stack, serverFn spans.                        |
+| `middleware.ts`   | —       | TanStack function middleware; serverFn spans + `tanstack.server_fn.*` metrics.           |
 | `page-route.ts`   | L37–L43 | `isPageRoute()` — UI routes vs static assets / `/_serverFn` / tooling.                                  |
 | `health.ts`       | L31–L47 | `/health` and `/ready` JSON payloads.                                                                   |
 | `redact.ts`       | L11–L87 | Sensitive key/value redaction for attributes and messages.                                              |
 | `effect.ts`       | L24–L40 | Effect-based `runTelemetryExit`, `runSyncOrElse`, `runSyncExitOrElse` (no try/catch in telemetry code). |
-| `call-context.ts` | L7–L40  | Server AsyncLocalStorage stack for caller context.                                                      |
 | `axios-hooks.ts`  | L31–L165 | Global axios interceptors.                                                                              |
 | `registry-factory.ts` | L37–L313 | Meter/tracer/registry implementation.                                                              |
 
-### Call context modules (`src/modules/shared/telemetry/` + query client)
+### Client session modules (`src/modules/shared/telemetry/`)
 
 | File                                   | Lines   | Purpose                                                       |
 | -------------------------------------- | ------- | ------------------------------------------------------------- |
-| `call-context.types.ts`                | —       | `ApiCallSource`, `ApiCallContext` types                       |
-| `call-context-path.ts`                 | L6–L46  | Maps context stack → OTel span/metric attribute keys            |
-| `call-context-wire.ts`                 | L4–L60  | Effect Schema encode/decode for `x-loops-call-stack` header     |
-| `run-with-call-context.ts`             | L33–L108 | Isomorphic context runner + server bridge registration          |
-| `install-client-telemetry-fetch.ts`    | L17–L80 | Patches browser `fetch` for session + call stack propagation  |
-| `create-instrumented-query-client.ts`  | —       | Tags React Query fetch/invalidate/mutation paths              |
+| `install-client-telemetry-fetch.ts`    | —       | Patches browser `fetch` for `x-loops-session-id` propagation  |
+| `browser-session.ts` / `browser-session-client.ts` | — | Tab session UUID (sessionStorage + response header sync) |
 
 ### Server wiring
 
@@ -206,15 +198,14 @@ Recorded in axios response/error interceptors (`axios-hooks.ts:74-120`; installe
 
 | Metric name                       | Type      | Unit | Attributes                                                                                                                       | When recorded                                                       | Source |
 | --------------------------------- | --------- | ---- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ------ |
-| `http.client.request.duration`    | Histogram | `ms` | `method`, `resource`, `status_class`, `caller_type`, `caller_name`, `caller_query_key`, `caller_route_id`, `caller_triggered_by` | Every axios response or error (app-level)                           | `registry-factory.ts:69-74`, `151-179` |
+| `http.client.request.duration`    | Histogram | `ms` | `method`, `resource`, `status_class`, `browser_session_id` | Every axios response or error (app-level)                           | `registry-factory.ts:69-74`, `151-179` |
 | `http.client.dependency.duration` | Histogram | `ms` | `status_class`: `2xx`–`5xx` or `none` if no response                                                                             | Every axios response or error (generic dependency)                  | `registry-factory.ts:58-61`, `180-183` |
-| `http.client.errors`              | Counter   | —    | `status_class` (+ caller dims on app-level counter)                                                                              | Response/error where status is **5xx or missing** (network/timeout) | `registry-factory.ts:62-63`, `184-189`; check `isServerErrorStatus` `http-status.ts:5-8` |
+| `http.client.errors`              | Counter   | —    | `status_class`                                                                                                                   | Response/error where status is **5xx or missing** (network/timeout) | `registry-factory.ts:62-63`, `184-189`; check `isServerErrorStatus` `http-status.ts:5-8` |
 | `http.client.timeouts`            | Counter   | —    | —                                                                                                                                | Axios error code `ECONNABORTED` or `ETIMEDOUT`                      | `registry-factory.ts:63`, `191` |
 | `http.client.retries`             | Counter   | —    | —                                                                                                                                | Reserved; currently always `retried: false`                         | `registry-factory.ts:64`, `216` |
 
 **Error semantics:** Only **5xx** and **missing status** (network failure) count as dependency errors. **4xx** are logical/client errors and do not increment `http.client.errors`.
 
-**Caller dimensions** on `http.client.request.duration` are documented in [api-call-tracing.md](./api-call-tracing.md).
 
 ### TanStack server functions
 
@@ -302,11 +293,11 @@ Applied to all log messages and span attributes:
 | Span name pattern                       | Where                            | Attributes                                                                                                                                                    | Lines |
 | --------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `METHOD /pathname`                      | `request.ts`                     | `http.method`, `http.route` (pathname only — never query string), `correlation.id` (request wrapper)                                                          | `request.ts:89-96` |
-| `beforeLoad.{routeId}`                  | `instrumentBeforeLoad()`         | `routeId`, `api.caller.*`                                                                                                                                     | `helpers.ts:47-62` |
-| `auth.sessionCheck` / `serverFn.{name}` | `telemetryFunctionMiddleware`    | `serverFunctionName`, `api.caller.*`                                                                                                                          | `middleware.ts:104-111`, `helpers.ts:120-122` |
-| `apiClient.{METHOD}.{resource}`         | axios interceptors               | `http.method`, `resource`, **`api.caller.*`**, `browser.session.id`                                                                                           | `axios-hooks.ts:57-64` |
+| `beforeLoad.{routeId}`                  | `instrumentBeforeLoad()`         | `routeId`                                                                                                                                     | `helpers.ts:47-62` |
+| `auth.sessionCheck` / `serverFn.{name}` | `telemetryFunctionMiddleware`    | `serverFunctionName`                                                                                                                          | `middleware.ts:104-111`, `helpers.ts:120-122` |
+| `apiClient.{METHOD}.{resource}`         | axios interceptors               | `http.method`, `resource`, `browser.session.id`                                                                                           | `axios-hooks.ts:57-64` |
 
-**Log Analytics:** Filter `dependencies | where name startswith "apiClient."`. Full query guide: [api-call-tracing.md](./api-call-tracing.md).
+**Log Analytics:** Filter `dependencies | where name startswith "apiClient."`.
 
 ### Span status (HTTP responses)
 

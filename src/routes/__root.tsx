@@ -25,7 +25,6 @@ import { setUserTimezoneFn } from "@/modules/shared/shell/session/set-user-timez
 import { BROWSER_SESSION_META_NAME } from "@/modules/shared/telemetry/browser-session"
 import { getBrowserSessionId } from "@/modules/shared/telemetry/browser-session-client"
 import { isBrowserRuntime } from "@/modules/shared/telemetry/runtime"
-import { TraceRegion } from "@/modules/shared/telemetry/trace-region"
 import { instrumentBeforeLoad } from "@/server/telemetry/helpers"
 import { getTelemetry } from "@/server/telemetry/registry"
 
@@ -88,11 +87,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
                 />
 
                 <div className="bg-loops-background w-full">
-                  <TraceRegion name="__root" type="route">
-                    <div className="relative mx-auto w-full overflow-x-hidden sm:max-w-[425px]">
-                      <Outlet />
-                    </div>
-                  </TraceRegion>
+                  <div className="relative mx-auto w-full overflow-x-hidden sm:max-w-[425px]">
+                    <Outlet />
+                  </div>
                 </div>
                 <Toaster
                   closeButton={true}

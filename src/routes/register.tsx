@@ -2,7 +2,6 @@ import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
 
 import { buildAuthSearch } from "@/modules/authentication/lib/auth-search"
-import { TraceRegion } from "@/modules/shared/telemetry/trace-region"
 import { instrumentBeforeLoad } from "@/server/telemetry/helpers"
 
 export const Route = createFileRoute("/register")({
@@ -15,11 +14,7 @@ export const Route = createFileRoute("/register")({
       })
     }),
   component: function RegisterRoute() {
-    return (
-      <TraceRegion name="Register" type="route">
-        {null}
-      </TraceRegion>
-    )
+    return null
   },
   validateSearch: z.object({
     redirect: z.string().optional(),

@@ -1,7 +1,7 @@
+import { QueryClient } from "@tanstack/react-query"
 import { createRouter as createTanStackRouter } from "@tanstack/react-router"
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query"
 
-import { createInstrumentedQueryClient } from "@/modules/shared/query/create-instrumented-query-client"
 import { installClientTelemetryFetch } from "@/modules/shared/telemetry/install-client-telemetry-fetch"
 
 import type { RouterContext } from "./router-context"
@@ -16,7 +16,7 @@ export type { RouterContext } from "./router-context"
 
 export function createRouter() {
   installClientTelemetryFetch()
-  const queryClient = createInstrumentedQueryClient()
+  const queryClient = new QueryClient()
   const router = createTanStackRouter({
     context: {
       queryClient,

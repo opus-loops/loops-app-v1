@@ -7,17 +7,9 @@
 import { useAzureMonitor } from "@azure/monitor-opentelemetry"
 import { Effect } from "effect"
 
-import { registerServerCallContextBridge } from "@/modules/shared/telemetry/run-with-call-context"
-
 import type { TelemetryConfig } from "./config"
 import type { TelemetryRegistry } from "./types"
 
-import {
-  getCallContext,
-  getCallContextStack,
-  runWithCallContextStack,
-  runWithCallContext as runWithServerCallContext,
-} from "./call-context"
 import { parseTelemetryConfig } from "./config"
 import { runSyncExitOrElse } from "./effect"
 import { createNoopTelemetryRegistry, setTelemetry } from "./registry"
@@ -65,13 +57,6 @@ export function buildAzureMonitorOptions({
 export function startTelemetry(
   env: NodeJS.ProcessEnv = process.env,
 ): TelemetryRegistry {
-  registerServerCallContextBridge({
-    get: getCallContext,
-    getStack: getCallContextStack,
-    run: runWithServerCallContext,
-    runWithStack: runWithCallContextStack,
-  })
-
   if (started && globalThis.__LOOPS_TELEMETRY__) {
     return globalThis.__LOOPS_TELEMETRY__
   }

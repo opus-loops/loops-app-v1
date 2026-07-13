@@ -9,7 +9,6 @@ import { useEffect } from "react"
 import type { CategoryContentItem } from "@/modules/shared/domain/entities/category-content-item"
 
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
-import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import { singleCategoryItemFn } from "./single-category-item-fn"
 
@@ -53,8 +52,6 @@ export const singleCategoryItemQuery = (
   })
 
 export function useSingleCategoryItem(params: SingleCategoryItemParams) {
-  useCallPathSegment("hook", "useSingleCategoryItem")
-
   const queryClient = useQueryClient()
   const { handleSessionExpired } = useGlobalError()
 

@@ -1,7 +1,6 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { redirect } from "@tanstack/react-router"
 
-import { useCallPathSegment } from "../telemetry/use-call-path-segment"
 import { isAuthenticated } from "./is-authenticated"
 
 export const authenticatedQuery = queryOptions({
@@ -17,8 +16,6 @@ export const authenticatedQuery = queryOptions({
 })
 
 export function useAuth() {
-  useCallPathSegment("hook", "useAuth")
-
   const {
     data: { user },
   } = useSuspenseQuery(authenticatedQuery)

@@ -4,13 +4,10 @@ import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
 import { useGlobalError } from "@/modules/shared/shell/session/global-error-provider"
-import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import { updatePasswordFn } from "../services/update-password-fn"
 
 export function useUpdatePassword() {
-  useCallPathSegment("hook", "useUpdatePassword")
-
   const runUpdatePassword = useServerFn(updatePasswordFn)
   const { handleSessionExpired } = useGlobalError()
   const queryClient = useQueryClient()

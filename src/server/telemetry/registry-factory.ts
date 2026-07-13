@@ -149,12 +149,6 @@ export function createActiveRegistry(
     },
     metrics: {
       recordApiClient: ({
-        "api.caller.name": callerName,
-        "api.caller.path": callerPath,
-        "api.caller.query_key": callerQueryKey,
-        "api.caller.route_id": callerRouteId,
-        "api.caller.triggered_by": callerTriggeredBy,
-        "api.caller.type": callerType,
         "browser.session.id": browserSessionId,
         durationMs,
         error,
@@ -168,12 +162,6 @@ export function createActiveRegistry(
           resource,
           status_class:
             statusCode === undefined ? "none" : statusClass(statusCode),
-          ...(callerPath && { caller_path: callerPath }),
-          ...(callerType && { caller_type: callerType }),
-          ...(callerName && { caller_name: callerName }),
-          ...(callerQueryKey && { caller_query_key: callerQueryKey }),
-          ...(callerRouteId && { caller_route_id: callerRouteId }),
-          ...(callerTriggeredBy && { caller_triggered_by: callerTriggeredBy }),
           ...(browserSessionId && { browser_session_id: browserSessionId }),
         }
         apiClientDuration.record(durationMs, attrs)

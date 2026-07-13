@@ -11,7 +11,6 @@ import { CategorySelectionShell } from "@/modules/shared/shell/category_selectio
 import { ConfirmationShell } from "@/modules/shared/shell/confirmation/confirmation-shell"
 import { OnboardingShell } from "@/modules/shared/shell/onboarding/onboarding-shell"
 import { SelectedContentShell } from "@/modules/shared/shell/selected_content/selected-content-shell"
-import { TraceRegion } from "@/modules/shared/telemetry/trace-region"
 import { instrumentBeforeLoad } from "@/server/telemetry/helpers"
 
 export const Route = createFileRoute("/")({
@@ -31,45 +30,41 @@ export const Route = createFileRoute("/")({
     //   * If type is "content" and itemId is defined: Show the specific content item from the selected content shell
 
     return (
-      <TraceRegion name="Home" type="route">
-        <SelectedContentProvider>
-          <OnboardingShell
-            target={
-              <ConfirmationShell
-                target={
-                  <CategorySelectionShell
-                    searchParams={search}
-                    target={
-                      <SelectedContentShell
-                        searchParams={search}
-                        target={
-                          <div className="relative min-h-screen">
-                            {user.currentCategory && (
-                              <div className="relative z-0">
-                                <Suspense fallback={<HomeSkeleton />}>
-                                  <HomeScreen
-                                    categoryId={user.currentCategory}
-                                  />
-                                </Suspense>
-                              </div>
-                            )}
-                            <div className="fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
-                              <BottomTabNavigator />
+      <SelectedContentProvider>
+        <OnboardingShell
+          target={
+            <ConfirmationShell
+              target={
+                <CategorySelectionShell
+                  searchParams={search}
+                  target={
+                    <SelectedContentShell
+                      searchParams={search}
+                      target={
+                        <div className="relative min-h-screen">
+                          {user.currentCategory && (
+                            <div className="relative z-0">
+                              <Suspense fallback={<HomeSkeleton />}>
+                                <HomeScreen categoryId={user.currentCategory} />
+                              </Suspense>
                             </div>
+                          )}
+                          <div className="fixed bottom-0 left-1/2 z-10 w-full max-w-sm -translate-x-1/2">
+                            <BottomTabNavigator />
                           </div>
-                        }
-                      />
-                    }
-                    user={user}
-                  />
-                }
-                user={user}
-              />
-            }
-            user={user}
-          />
-        </SelectedContentProvider>
-      </TraceRegion>
+                        </div>
+                      }
+                    />
+                  }
+                  user={user}
+                />
+              }
+              user={user}
+            />
+          }
+          user={user}
+        />
+      </SelectedContentProvider>
     )
   },
   validateSearch: z.object({

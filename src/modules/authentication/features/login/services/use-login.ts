@@ -3,13 +3,10 @@ import { useServerFn } from "@tanstack/react-start"
 import { useCallback } from "react"
 
 import { getSafeRedirectPath } from "@/modules/authentication/lib/auth-search"
-import { useCallPathSegment } from "@/modules/shared/telemetry/use-call-path-segment"
 
 import { loginFn } from "./login-fn"
 
 export function useLogin() {
-  useCallPathSegment("hook", "useLogin")
-
   const logUser = useServerFn(loginFn)
   const router = useRouter()
 
