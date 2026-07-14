@@ -28,10 +28,6 @@ export function buildCorrelationAttributes(
   if (ctx?.routeId) attrs.routeId = ctx.routeId
   if (ctx?.method) attrs.httpMethod = ctx.method
   if (ctx?.userId) attrs.userId = ctx.userId
-  if (ctx?.browserSessionId) {
-    attrs.browserSessionId = ctx.browserSessionId
-    attrs["browser.session.id"] = ctx.browserSessionId
-  }
   if (ctx?.sessionPresent !== undefined) {
     attrs.sessionPresent = ctx.sessionPresent
   }

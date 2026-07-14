@@ -122,10 +122,6 @@ export function createActiveRegistry(
       if (store?.routeId) eventAttributes.routeId = store.routeId
       if (store?.method) eventAttributes.httpMethod = store.method
       if (store?.userId) eventAttributes.userId = store.userId
-      if (store?.browserSessionId) {
-        eventAttributes.browserSessionId = store.browserSessionId
-        eventAttributes["browser.session.id"] = store.browserSessionId
-      }
 
       for (const [key, value] of Object.entries(
         collectTelemetryPrimitives(safeAttributes),
@@ -149,7 +145,6 @@ export function createActiveRegistry(
     },
     metrics: {
       recordApiClient: ({
-        "browser.session.id": browserSessionId,
         durationMs,
         error,
         method,
@@ -162,7 +157,6 @@ export function createActiveRegistry(
           resource,
           status_class:
             statusCode === undefined ? "none" : statusClass(statusCode),
-          ...(browserSessionId && { browser_session_id: browserSessionId }),
         }
         apiClientDuration.record(durationMs, attrs)
         dependencyDuration.record(durationMs, {

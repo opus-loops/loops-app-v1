@@ -31,7 +31,6 @@ export type TelemetryRegistry = {
   markHttpResponse: (statusCode: number) => void
   metrics: {
     recordApiClient: (input: {
-      "browser.session.id"?: string | undefined
       durationMs: number
       error: boolean
       method: string
@@ -85,7 +84,6 @@ export type TelemetryRegistry = {
 }
 
 export type TelemetryRequestContext = {
-  browserSessionId?: string | undefined
   correlationId: string
   method: string
   path: string

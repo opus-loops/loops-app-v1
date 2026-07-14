@@ -5,7 +5,6 @@ import axios from "axios"
 
 import type { TelemetryRegistry } from "./types"
 
-import { getBrowserSessionAttributes } from "./browser-session"
 import { isServerErrorStatus } from "./http-status"
 import { normalizeApiResource } from "./resource"
 import { decodeAxiosErrorTelemetry, decodeRequestStartMs } from "./schema"
@@ -47,16 +46,12 @@ export function installAxiosHooks(
     requestHeaders["x-request-start"] = String(performance.now())
 
     const { method, resource } = resolveAxiosRequest(config)
-    const sessionAttributes = getBrowserSessionAttributes(
-      registry.getContext()?.browserSessionId,
-    )
     const span = tracer.startSpan(
       `apiClient.${method}.${resource}`,
       {
         attributes: {
           "http.method": method,
           resource,
-          ...sessionAttributes,
         },
       },
       otelContext.active(),
@@ -80,9 +75,6 @@ export function installAxiosHooks(
       const durationMs = Number.isFinite(start) ? performance.now() - start : 0
       const { method, resource } = resolveAxiosRequest(response.config)
       const isError = isServerErrorStatus(response.status)
-      const sessionAttributes = getBrowserSessionAttributes(
-        registry.getContext()?.browserSessionId,
-      )
 
       registry.metrics.recordApiClient({
         durationMs,
@@ -91,7 +83,6 @@ export function installAxiosHooks(
         resource,
         statusCode: response.status,
         timedOut: false,
-        ...sessionAttributes,
       })
       registry.metrics.recordDependency({
         durationMs,
@@ -121,9 +112,6 @@ export function installAxiosHooks(
       const timedOut = code === "ECONNABORTED" || code === "ETIMEDOUT"
       const { method, resource } = resolveAxiosRequest(config ?? {})
       const isError = isServerErrorStatus(statusCode)
-      const sessionAttributes = getBrowserSessionAttributes(
-        registry.getContext()?.browserSessionId,
-      )
 
       registry.metrics.recordApiClient({
         durationMs,
@@ -132,7 +120,6 @@ export function installAxiosHooks(
         resource,
         statusCode,
         timedOut,
-        ...sessionAttributes,
       })
       registry.metrics.recordDependency({
         durationMs,

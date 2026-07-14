@@ -22,18 +22,9 @@ import { getPendingLanguageFn } from "@/modules/shared/shell/first_install/servi
 import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
 import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
 import { setUserTimezoneFn } from "@/modules/shared/shell/session/set-user-timezone-fn"
-import { BROWSER_SESSION_META_NAME } from "@/modules/shared/telemetry/browser-session"
-import { getBrowserSessionId } from "@/modules/shared/telemetry/browser-session-client"
-import { isBrowserRuntime } from "@/modules/shared/telemetry/runtime"
 import { instrumentBeforeLoad } from "@/server/telemetry/helpers"
-import { getTelemetry } from "@/server/telemetry/registry"
 
 import appCss from "../styles/app.css?url"
-
-function resolveHeadBrowserSessionId(): string | undefined {
-  if (isBrowserRuntime()) return getBrowserSessionId()
-  return getTelemetry().getContext()?.browserSessionId
-}
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   beforeLoad: async () =>
@@ -125,7 +116,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     )
   },
   head: () => {
-    const browserSessionId = resolveHeadBrowserSessionId()
     return {
       links: [
         { href: appCss, rel: "stylesheet" },
@@ -140,14 +130,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         {
           title: "Loops",
         },
-        ...(browserSessionId
-          ? [
-              {
-                content: browserSessionId,
-                name: BROWSER_SESSION_META_NAME,
-              },
-            ]
-          : []),
       ],
       scripts: [
         {

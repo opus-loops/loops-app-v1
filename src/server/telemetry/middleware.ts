@@ -7,12 +7,6 @@ import { createMiddleware } from "@tanstack/react-start"
 import { getRequestHeaders } from "@tanstack/react-start/server"
 import { randomUUID } from "node:crypto"
 
-import { BROWSER_SESSION_ID_HEADER } from "@/modules/shared/telemetry/browser-session"
-
-import {
-  getBrowserSessionAttributes,
-  resolveBrowserSessionIdFromHeader,
-} from "./browser-session"
 import { runTelemetryExit } from "./effect"
 import { serverFunctionSpanName } from "./helpers"
 import { getTelemetry } from "./registry"
@@ -21,12 +15,7 @@ import { decodeAbortSignal } from "./schema"
 /**
  * Function middleware that instruments TanStack Start server function calls.
  *
- * Reads inbound correlation from request headers:
- *
- * - `x-loops-session-id` — normalized, or a new id is generated
- * - `x-correlation-id` — trimmed, or a new UUID is generated
- *
- * Then:
+ * Reads inbound `x-correlation-id` (or generates a UUID), then:
  *
  * - Runs the handler inside telemetry context (`path: "/_serverFn"`)
  * - Creates a span via {@link serverFunctionSpanName}
@@ -40,20 +29,15 @@ export const telemetryFunctionMiddleware = createMiddleware({
   const serverFunctionName = serverFnMeta.name
   const startedAt = performance.now()
   const requestHeaders = getRequestHeaders()
-  const browserSessionId = resolveBrowserSessionIdFromHeader(
-    requestHeaders.get(BROWSER_SESSION_ID_HEADER),
-  )
   const correlationId =
     requestHeaders.get("x-correlation-id")?.trim() || randomUUID()
   const spanAttributes = {
     httpMethod: method,
     serverFunctionName,
-    ...getBrowserSessionAttributes(browserSessionId),
   }
 
   return telemetry.runWithContext(
     {
-      browserSessionId,
       correlationId,
       method,
       path: "/_serverFn",

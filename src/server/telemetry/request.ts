@@ -9,11 +9,6 @@ import { randomUUID } from "node:crypto"
 
 import type { TelemetryRequestContext } from "./types"
 
-import {
-  BROWSER_SESSION_ID_HEADER,
-  getBrowserSessionAttributes,
-  resolveBrowserSessionId,
-} from "./browser-session"
 import { runTelemetryExit } from "./effect"
 import { getLivenessResponse, getReadinessResponse } from "./health"
 import { isPageRoute } from "./page-route"
@@ -73,7 +68,6 @@ export async function handleInstrumentedRequest(
         "correlation.id": requestContext.correlationId,
         "http.method": request.method,
         "http.route": url.pathname,
-        ...getBrowserSessionAttributes(requestContext.browserSessionId),
       },
       onFinally: () => {
         signal.removeEventListener("abort", onAbort)
@@ -92,16 +86,12 @@ export async function handleInstrumentedRequest(
             "correlation.id": requestContext.correlationId,
             "http.method": request.method,
             "http.route": url.pathname,
-            ...getBrowserSessionAttributes(requestContext.browserSessionId),
           },
           async () => await fetchHandler(request),
         )
         statusCode = response.status
         telemetry.markHttpResponse(statusCode)
-        return withBrowserSessionHeader(
-          withCorrelationHeader(response, requestContext.correlationId),
-          requestContext.browserSessionId,
-        )
+        return withCorrelationHeader(response, requestContext.correlationId)
       },
     })
   })
@@ -110,9 +100,7 @@ export async function handleInstrumentedRequest(
 /** Build request context from headers and URL (pathname only for path). */
 function createRequestContext(request: Request): TelemetryRequestContext {
   const url = new URL(request.url)
-  const browserSessionId = resolveBrowserSessionId(request)
   return {
-    browserSessionId,
     correlationId:
       request.headers.get("x-correlation-id")?.trim() || randomUUID(),
     method: request.method,
@@ -136,21 +124,6 @@ function jsonResponse(
     headers.set("x-correlation-id", correlationId)
   }
   return new Response(JSON.stringify(body), { headers, status })
-}
-
-/** Clone response with `x-loops-session-id` for client tab session bootstrap. */
-function withBrowserSessionHeader(
-  response: Response,
-  browserSessionId: string | undefined,
-): Response {
-  if (!browserSessionId) return response
-  const headers = new Headers(response.headers)
-  headers.set(BROWSER_SESSION_ID_HEADER, browserSessionId)
-  return new Response(response.body, {
-    headers,
-    status: response.status,
-    statusText: response.statusText,
-  })
 }
 
 /** Clone response with `x-correlation-id` set for downstream clients. */
