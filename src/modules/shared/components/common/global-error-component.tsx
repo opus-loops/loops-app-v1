@@ -17,8 +17,6 @@ export function GlobalErrorComponent({
   const { t } = useTranslation()
   const router = useRouter()
 
-  console.log("error", error)
-
   const handleReset = () => {
     reset()
     router.invalidate()

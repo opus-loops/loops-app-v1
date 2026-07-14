@@ -51,7 +51,6 @@ export const isAuthenticated = createServerFn({ method: "GET" }).handler(
 
     const payload = decodeAccessTokenPayload(session.accessToken)
     const hasAccessToApp = payload?.permissions.includes(Permission.AppAccess)
-    console.log("payload", payload)
 
     if (!hasAccessToApp) {
       deleteSession()

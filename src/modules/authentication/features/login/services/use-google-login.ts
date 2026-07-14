@@ -19,7 +19,6 @@ export function useGoogleLogin() {
 
       if (response._tag === "Success") {
         const safeRedirect = getSafeRedirectPath(redirectTo)
-        console.log("safeRedirect", safeRedirect)
 
         if (safeRedirect) {
           window.location.assign(safeRedirect)
