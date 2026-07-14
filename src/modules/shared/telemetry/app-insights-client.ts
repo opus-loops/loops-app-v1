@@ -1,5 +1,3 @@
-import type { ITelemetryItem } from "@microsoft/applicationinsights-web"
-
 /**
  * Browser RUM via Application Insights JavaScript SDK.
  *
@@ -7,13 +5,12 @@ import type { ITelemetryItem } from "@microsoft/applicationinsights-web"
  * (Microsoft-recommended split). Connection string is public — never put
  * secrets, tokens, passwords, form bodies, or PII in custom properties.
  */
-import { ApplicationInsights } from "@microsoft/applicationinsights-web"
+import {
+  ApplicationInsights,
+  type ITelemetryItem,
+} from "@microsoft/applicationinsights-web"
 import { Predicate, Schema } from "effect"
 
-import {
-  ensureBrowserSessionId,
-  getBrowserSessionId,
-} from "./browser-session-client"
 import { isBrowserRuntime } from "./runtime"
 
 declare global {
@@ -109,8 +106,6 @@ export function scrubBrowserTelemetryValue(value: unknown): unknown {
 }
 
 function applyPrivacyInitializer(item: ITelemetryItem): boolean {
-  const sessionId = getBrowserSessionId() ?? ensureBrowserSessionId()
-
   if (isPlainObject(item.baseData)) {
     const base = item.baseData
     if (isString(base.uri))
@@ -129,9 +124,7 @@ function applyPrivacyInitializer(item: ITelemetryItem): boolean {
 
   const data = isPlainObject(item.data) ? item.data : {}
   const scrubbed = scrubBrowserTelemetryValue(data)
-  const nextData = isPlainObject(scrubbed) ? scrubbed : {}
-  nextData["browser.session.id"] = sessionId
-  item.data = nextData
+  item.data = isPlainObject(scrubbed) ? scrubbed : {}
 
   return true
 }
@@ -139,47 +132,8 @@ function applyPrivacyInitializer(item: ITelemetryItem): boolean {
 const REDACT_QUERY_PATTERN =
   /([?&])(token|access_token|refresh_token|id_token|password|passwd|secret|code|email|authorization|auth|session|api_key|apikey|sig|signature)=[^&#]*/gi
 
-/** Active browser SDK instance, if started. */
-export function getBrowserAppInsights(): ApplicationInsights | undefined {
-  return globalThis.__LOOPS_BROWSER_APP_INSIGHTS__
-}
-
-/**
- * Start browser RUM once per tab when `VITE_TELEMETRY_ENABLED=true` and a
- * valid public connection string is set. Safe to call from shared router boot.
- */
-export function installBrowserTelemetry(): void {
-  if (!isBrowserRuntime()) return
-  if (globalThis.__LOOPS_BROWSER_APP_INSIGHTS__) return
-
-  const { connectionString, enabled } = readBrowserTelemetryConfig()
-  if (!enabled || !connectionString) return
-
-  ensureBrowserSessionId()
-  globalThis.__LOOPS_BROWSER_APP_INSIGHTS__ = startAppInsights(connectionString)
-}
-
-/**
- * Track a custom client event. Properties are scrubbed; do not pass passwords,
- * tokens, form contents, or PII.
- */
-export function trackBrowserEvent(
-  name: string,
-  properties?: Record<string, boolean | number | string>,
-): void {
-  const appInsights = getBrowserAppInsights()
-  if (!appInsights) return
-
-  if (properties)
-    return appInsights.trackEvent(
-      { name },
-      scrubBrowserTelemetryValue(properties) as Record<
-        string,
-        boolean | number | string
-      >,
-    )
-
-  appInsights.trackEvent({ name })
+function stripSensitiveQuery(url: string): string {
+  return url.replace(REDACT_QUERY_PATTERN, `$1$2=${REDACTED}`)
 }
 
 function startAppInsights(connectionString: string): ApplicationInsights {
@@ -210,6 +164,44 @@ function startAppInsights(connectionString: string): ApplicationInsights {
   return appInsights
 }
 
-function stripSensitiveQuery(url: string): string {
-  return url.replace(REDACT_QUERY_PATTERN, `$1$2=${REDACTED}`)
+/**
+ * Start browser RUM once per tab when `VITE_TELEMETRY_ENABLED=true` and a
+ * valid public connection string is set. Safe to call from shared router boot.
+ */
+export function installBrowserTelemetry(): void {
+  if (!isBrowserRuntime()) return
+  if (globalThis.__LOOPS_BROWSER_APP_INSIGHTS__) return
+
+  const { connectionString, enabled } = readBrowserTelemetryConfig()
+  if (!enabled || !connectionString) return
+
+  globalThis.__LOOPS_BROWSER_APP_INSIGHTS__ = startAppInsights(connectionString)
+}
+
+/** Active browser SDK instance, if started. */
+export function getBrowserAppInsights(): ApplicationInsights | undefined {
+  return globalThis.__LOOPS_BROWSER_APP_INSIGHTS__
+}
+
+/**
+ * Track a custom client event. Properties are scrubbed; do not pass passwords,
+ * tokens, form contents, or PII.
+ */
+export function trackBrowserEvent(
+  name: string,
+  properties?: Record<string, boolean | number | string>,
+): void {
+  const appInsights = getBrowserAppInsights()
+  if (!appInsights) return
+
+  if (properties)
+    return appInsights.trackEvent(
+      { name },
+      scrubBrowserTelemetryValue(properties) as Record<
+        string,
+        boolean | number | string
+      >,
+    )
+
+  appInsights.trackEvent({ name })
 }

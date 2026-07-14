@@ -10,7 +10,7 @@
  * - `TELEMETRY_DEBUG` — startup diagnostics without logging secrets
  * - `APPLICATIONINSIGHTS_CONNECTION_STRING` — Azure App Insights connection string
  * - `TELEMETRY_PROVIDER` — `"azure"` (default) or `"otlp"` (placeholder)
- * - `OTEL_SERVICE_NAME` — OTel resource / meter name (default `loops-dashboard`)
+ * - `OTEL_SERVICE_NAME` — OTel resource / meter name (default `loops-app`)
  * - `TELEMETRY_SAMPLING_RATIO` / `TELEMETRY_TRACES_SAMPLE_RATE` — trace sampling `0.0`–`1.0`
  * - `TELEMETRY_LOG_LEVEL` — minimum span log level (default `info`)
  *
@@ -82,7 +82,7 @@ export function createTelemetryConfig(
   const enabled = parseBoolean(processEnv.TELEMETRY_ENABLED)
   const debug = parseBoolean(processEnv.TELEMETRY_DEBUG)
   const provider = processEnv.TELEMETRY_PROVIDER ?? "azure"
-  const serviceName = processEnv.OTEL_SERVICE_NAME ?? "loops-dashboard"
+  const serviceName = processEnv.OTEL_SERVICE_NAME ?? "loops-app"
   const logLevel = parseLogLevel(processEnv.TELEMETRY_LOG_LEVEL)
 
   const connectionStringResult = parseConnectionString(
