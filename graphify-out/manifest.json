@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1783417024.3775642,
-    "ast_hash": "3f85de512db1c777ca0c376fc945ed40",
+    "mtime": 1784027651.8323376,
+    "ast_hash": "f34bb88be375a2d954805a0848721b64",
     "semantic_hash": ""
   },
   "scripts/app.sh": {
@@ -220,12 +220,12 @@
     "semantic_hash": ""
   },
   "src/modules/authentication/features/login/services/use-google-login.ts": {
-    "mtime": 1783953402.1416647,
+    "mtime": 1784027480.921776,
     "ast_hash": "56d79b964a9ed01d5677bf1cd1487699",
     "semantic_hash": ""
   },
   "src/modules/authentication/features/login/services/use-login.ts": {
-    "mtime": 1783953402.1407628,
+    "mtime": 1784027480.9217465,
     "ast_hash": "653a89d8027af1d71c8737f6ddb96e63",
     "semantic_hash": ""
   },
@@ -1480,7 +1480,7 @@
     "semantic_hash": ""
   },
   "src/modules/shared/guards/use-auth.ts": {
-    "mtime": 1783953402.1419458,
+    "mtime": 1784027480.9217453,
     "ast_hash": "bf7038081a82c249775a64483aa1aa12",
     "semantic_hash": ""
   },
@@ -1930,8 +1930,8 @@
     "semantic_hash": ""
   },
   "src/routes/__root.tsx": {
-    "mtime": 1783953450.4320934,
-    "ast_hash": "1702d1c71712d461b21559697b333ddd",
+    "mtime": 1783955243.7615037,
+    "ast_hash": "c7554a0bdc0e4a3fcd8a01cd2ff60040",
     "semantic_hash": ""
   },
   "src/routes/auth.tsx": {
@@ -1940,7 +1940,7 @@
     "semantic_hash": ""
   },
   "src/routes/explore.tsx": {
-    "mtime": 1783953450.3996446,
+    "mtime": 1784027480.9217272,
     "ast_hash": "4ca16911974cc7f83554507edeff9370",
     "semantic_hash": ""
   },
@@ -1950,7 +1950,7 @@
     "semantic_hash": ""
   },
   "src/routes/leaderboard.tsx": {
-    "mtime": 1783953450.481475,
+    "mtime": 1784027480.9217427,
     "ast_hash": "a85cf1f673d2309927f11602a8bf4a34",
     "semantic_hash": ""
   },
@@ -1970,17 +1970,17 @@
     "semantic_hash": ""
   },
   "src/routes/profile_.settings_.edit-profile.tsx": {
-    "mtime": 1783953450.4643962,
+    "mtime": 1784027480.9217758,
     "ast_hash": "b4a4f581dbaf934b3b4211d44b8c5a45",
     "semantic_hash": ""
   },
   "src/routes/profile_.settings_.preferences.tsx": {
-    "mtime": 1783953450.4698942,
+    "mtime": 1784027480.9217255,
     "ast_hash": "8e4b681c970cec8c3d5d945e4ed11a0d",
     "semantic_hash": ""
   },
   "src/routes/profile_.settings_.security.tsx": {
-    "mtime": 1783953450.4767606,
+    "mtime": 1784027480.9217222,
     "ast_hash": "bf692725a1c623625969f6f3a48e0105",
     "semantic_hash": ""
   },
@@ -1995,8 +1995,8 @@
     "semantic_hash": ""
   },
   "src/server/telemetry/config.ts": {
-    "mtime": 1783415412.5136344,
-    "ast_hash": "87183f7f047ce7677c5854bd2f55ba28",
+    "mtime": 1784027849.7597067,
+    "ast_hash": "ceb98b02fbb3e8ec43533153a8b459f0",
     "semantic_hash": ""
   },
   "src/server/telemetry/effect.ts": {
@@ -2015,8 +2015,8 @@
     "semantic_hash": ""
   },
   "src/server/telemetry/instrument.ts": {
-    "mtime": 1783415412.5146432,
-    "ast_hash": "b4388135dae9f05396595854f4373cb2",
+    "mtime": 1784027851.2396755,
+    "ast_hash": "98a08c95bd53dd8602afe8c28a9fab67",
     "semantic_hash": ""
   },
   "src/server/telemetry/middleware.ts": {
@@ -2050,13 +2050,13 @@
     "semantic_hash": ""
   },
   "src/server/telemetry/schema.ts": {
-    "mtime": 1783415412.5162182,
-    "ast_hash": "74d81beeb7052abff4114ba9c103433c",
+    "mtime": 1784027893.2079504,
+    "ast_hash": "2984b08f5c56b59b660505f20c5f0793",
     "semantic_hash": ""
   },
   "src/server/telemetry/setup.ts": {
-    "mtime": 1783953428.6433332,
-    "ast_hash": "c3eb14c323e40545722d2d5819211f49",
+    "mtime": 1784027865.8881342,
+    "ast_hash": "c2074ff691de72b782b39217ee77b394",
     "semantic_hash": ""
   },
   "src/server/telemetry/types.ts": {
@@ -2150,8 +2150,8 @@
     "semantic_hash": ""
   },
   "docs/azure-monitor-opentelemetry.md": {
-    "mtime": 1783953531.311649,
-    "ast_hash": "a0c327c3398023670ee1f143f5ae92e2",
+    "mtime": 1783953551.1989205,
+    "ast_hash": "0d5cfe195444e7114f496ab93a464bf5",
     "semantic_hash": ""
   },
   "docs/production-readiness-checklist.md": {
@@ -2500,13 +2500,13 @@
     "semantic_hash": ""
   },
   "src/server/telemetry/axios-hooks.ts": {
-    "mtime": 1783953424.1362417,
+    "mtime": 1783954494.7795184,
     "ast_hash": "cfce9bf4b60e607bd14c8b4fbb793de1",
     "semantic_hash": ""
   },
   "src/server/telemetry/registry-factory.ts": {
-    "mtime": 1783953431.5442412,
-    "ast_hash": "6694a6d6dcc3c6e2368117125cd32ef6",
+    "mtime": 1784027851.0382197,
+    "ast_hash": "61a6c045b32218c659ba1c3a2ec2ff9b",
     "semantic_hash": ""
   },
   "docs/telemetry-reference.md": {

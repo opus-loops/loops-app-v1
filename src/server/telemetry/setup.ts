@@ -4,13 +4,14 @@
  * Initializes SDK via Node preload (`instrument.ts` → `instrument.server.mjs`).
  * Registry construction lives in {@link ./registry-factory}; axios hooks in {@link ./axios-hooks}.
  */
+import { DefaultAzureCredential } from "@azure/identity"
 import { useAzureMonitor } from "@azure/monitor-opentelemetry"
 import { Effect } from "effect"
 
 import type { TelemetryConfig } from "./config"
 import type { TelemetryRegistry } from "./types"
 
-import { parseTelemetryConfig } from "./config"
+import { createTelemetryConfig, describeTelemetryBootstrap } from "./config"
 import { runSyncExitOrElse } from "./effect"
 import { createNoopTelemetryRegistry, setTelemetry } from "./registry"
 import { createActiveRegistry } from "./registry-factory"
@@ -19,21 +20,27 @@ let started = false
 
 type AzureMonitorBootstrap = {
   connectionString: string
-  tracesSampleRate: number
+  isProduction: boolean
+  samplingRatio: number
 }
 
 /**
  * Build {@link useAzureMonitor} options from validated bootstrap fields.
  *
  * Disables browser SDK and auto incoming HTTP spans (page routes instrumented manually).
+ * Production uses {@link DefaultAzureCredential} for AAD auth.
  */
 export function buildAzureMonitorOptions({
   connectionString,
-  tracesSampleRate,
+  isProduction,
+  samplingRatio,
 }: AzureMonitorBootstrap) {
   return {
     azureMonitorExporterOptions: {
       connectionString,
+      ...(isProduction && {
+        credential: new DefaultAzureCredential(),
+      }),
     },
     browserSdkLoaderOptions: {
       enabled: false,
@@ -45,7 +52,7 @@ export function buildAzureMonitorOptions({
         enabled: true,
       },
     },
-    samplingRatio: tracesSampleRate,
+    samplingRatio,
   }
 }
 
@@ -61,20 +68,27 @@ export function startTelemetry(
     return globalThis.__LOOPS_TELEMETRY__
   }
 
-  const config = parseTelemetryConfig(env)
+  const config = createTelemetryConfig(env)
+
+  if (config.debug)
+    console.info(
+      "[telemetry] bootstrap",
+      describeTelemetryBootstrap(config, env),
+    )
 
   if (!config.enabled || config.connectionString === undefined) {
     const registry = createNoopTelemetryRegistry("disabled")
     setTelemetry(registry)
     started = true
-    logServerLifecycle(registry, config, config.reason)
+    logServerLifecycle(registry, config, disabledReason(config))
     return registry
   }
 
   const bootstrap = {
     connectionString: config.connectionString,
+    isProduction: config.isProduction,
+    samplingRatio: config.samplingRatio,
     serviceName: config.serviceName,
-    tracesSampleRate: config.tracesSampleRate,
   }
 
   return runSyncExitOrElse(
@@ -99,7 +113,7 @@ export function startTelemetry(
 
       void registry.withSpan("telemetry.startup", undefined, () => {
         registry.log("info", "Telemetry started", {
-          sampleRate: bootstrap.tracesSampleRate,
+          sampleRate: bootstrap.samplingRatio,
           serviceName: bootstrap.serviceName,
         })
       })
@@ -113,6 +127,18 @@ export function startTelemetry(
       return registry
     },
   )
+}
+
+function disabledReason(config: TelemetryConfig): string {
+  if (!config.enabled) return "TELEMETRY_ENABLED is false"
+
+  if (config.missingConnectionString)
+    return "APPLICATIONINSIGHTS_CONNECTION_STRING is missing"
+
+  if (config.invalidConnectionString)
+    return "APPLICATIONINSIGHTS_CONNECTION_STRING is malformed"
+
+  return "Telemetry disabled"
 }
 
 function logServerLifecycle(
