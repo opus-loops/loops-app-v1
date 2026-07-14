@@ -6,6 +6,7 @@ import { installClientTelemetryFetch } from "@/modules/shared/telemetry/install-
 
 import type { RouterContext } from "./router-context"
 
+import { installBrowserTelemetry } from "./modules/shared/telemetry/app-insights-client"
 import {
   DefaultErrorComponent,
   DefaultNotFoundComponent,
@@ -16,6 +17,7 @@ export type { RouterContext } from "./router-context"
 
 export function createRouter() {
   installClientTelemetryFetch()
+  installBrowserTelemetry()
   const queryClient = new QueryClient()
   const router = createTanStackRouter({
     context: {
