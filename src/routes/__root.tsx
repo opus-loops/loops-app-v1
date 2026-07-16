@@ -145,7 +145,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           src: "https://accounts.google.com/gsi/client",
         },
         {
-          async: true,
           defer: true,
           src: "https://t.contentsquare.net/uxa/6d471f5fb0a19.js",
         },
