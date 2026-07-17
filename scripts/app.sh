@@ -9,12 +9,18 @@
 #   4. Ensure Nginx can traverse and read .output/public.
 #   5. Create one immutable success or error log per build.
 #   6. Include an artifact-size report only for successful builds.
+#   7. Write the Azure record timestamp only on the first line of each log.
 #
 # Successful log:
 #   /var/log/loops/build/loops-app-<BUILD_ID>-success.log
 #
 # Failed log:
 #   /var/log/loops/build/loops-app-<BUILD_ID>-error.log
+#
+# Azure Monitor multiline behavior:
+#   The first line contains only an ISO 8601 datetime.
+#   No subsequent line starts with a datetime, allowing the complete file
+#   to be ingested as one multiline record when using the timestamp delimiter.
 #
 
 set -Eeuo pipefail
@@ -34,23 +40,13 @@ readonly GIT_SHA="$(
     printf 'unknown'
 )"
 
-# Temporary files intentionally don't end with .log, so AMA doesn't ingest
-# incomplete builds.
+# Temporary files intentionally do not end with .log, so Azure Monitor Agent
+# does not ingest incomplete build output.
 readonly RAW_BUILD_LOG="${LOG_DIR}/.${APP_NAME}-${BUILD_ID}.build.tmp"
 readonly FINAL_TEMP_LOG="${LOG_DIR}/.${APP_NAME}-${BUILD_ID}.final.tmp"
 
 readonly SUCCESS_LOG="${LOG_DIR}/${APP_NAME}-${BUILD_ID}-success.log"
 readonly ERROR_LOG="${LOG_DIR}/${APP_NAME}-${BUILD_ID}-error.log"
-
-timestamp_stream() {
-  local line
-
-  while IFS= read -r line || [[ -n "$line" ]]; do
-    printf '%s %s\n' \
-      "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-      "$line"
-  done
-}
 
 log() {
   printf '%s\n' "$1"
@@ -71,6 +67,15 @@ log_event() {
   fi
 
   printf '\n'
+}
+
+write_log_record() {
+  # The timestamp appears only on the first line and contains no other data.
+  #
+  # Azure Monitor uses this line as the beginning of the multiline record.
+  # Everything received through stdin is written afterward without timestamps.
+  printf '%s\n' "$BUILD_STARTED_AT"
+  cat
 }
 
 require_command() {
@@ -182,7 +187,7 @@ grant_nginx_public_access() {
     -type f \
     -exec chmod 0644 {} +
 
-  # Explicit ACLs protect access even when inherited directory modes change.
+  # Explicit ACLs preserve Nginx access even if inherited modes change.
   find "$public_dir" \
     -type d \
     -exec setfacl \
@@ -327,7 +332,7 @@ write_success_log() {
       "build_finished" \
       "status=success exit_code=0"
   } |
-    timestamp_stream >"$FINAL_TEMP_LOG"
+    write_log_record >"$FINAL_TEMP_LOG"
 
   mv "$FINAL_TEMP_LOG" "$SUCCESS_LOG"
 
@@ -358,7 +363,7 @@ write_error_log() {
       "build_finished" \
       "status=error exit_code=${exit_code}"
   } |
-    timestamp_stream >"$FINAL_TEMP_LOG"
+    write_log_record >"$FINAL_TEMP_LOG"
 
   mv "$FINAL_TEMP_LOG" "$ERROR_LOG"
 
@@ -369,12 +374,14 @@ write_error_log() {
 cleanup_temporary_files() {
   rm -f \
     "$RAW_BUILD_LOG" \
-    "$FINAL_TEMP_LOG"
+    "$FINAL_TEMP_LOG" \
+    "${RAW_BUILD_LOG}.signal"
 }
 
 handle_signal() {
   local signal_name="$1"
   local exit_code="$2"
+  local signal_temp_log="${RAW_BUILD_LOG}.signal"
 
   set +e
 
@@ -384,9 +391,9 @@ handle_signal() {
     if [[ -f "$RAW_BUILD_LOG" ]]; then
       cat "$RAW_BUILD_LOG"
     fi
-  } >"$RAW_BUILD_LOG.signal"
+  } >"$signal_temp_log"
 
-  mv "$RAW_BUILD_LOG.signal" "$RAW_BUILD_LOG"
+  mv "$signal_temp_log" "$RAW_BUILD_LOG"
 
   write_error_log "$exit_code"
   cleanup_temporary_files
@@ -429,7 +436,10 @@ find "$LOG_DIR" \
 # Remove abandoned temporary files after two days.
 find "$LOG_DIR" \
   -type f \
-  -name ".${APP_NAME}-*.tmp" \
+  \( \
+    -name ".${APP_NAME}-*.tmp" \
+    -o -name ".${APP_NAME}-*.tmp.signal" \
+  \) \
   -mtime +2 \
   -delete
 
