@@ -22,7 +22,7 @@ export default defineConfig({
     rollupOptions: {
       maxParallelFileOps: 10,
     },
-    sourcemap: true,
+    sourcemap: false,
   },
   plugins: [
     {
@@ -79,7 +79,7 @@ export default defineConfig({
           assetsImport: false,
         },
       },
-      sourcemap: true,
+      sourcemap: false,
     }),
     tsConfigPaths(),
     tanstackStart(),
