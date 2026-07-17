@@ -173,7 +173,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       workbox: {
         globDirectory: ".output/public",
-        globIgnores: ["**/country-codes.json"],
+        globIgnores: ["**/*.map", "**/country-codes.json"],
         // Avoid workbox's terser worker path, which can exit early in constrained CI/sandbox builds.
         mode: "development",
       },
