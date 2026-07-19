@@ -34,7 +34,14 @@ export const Route = createFileRoute("/auth")({
       }
     }),
   component: function Auth() {
-    return <FirstInstallShell target={<AuthScreen />} />
+    const { pendingLanguage } = Route.useRouteContext()
+
+    return (
+      <FirstInstallShell
+        pendingLanguage={pendingLanguage}
+        target={<AuthScreen />}
+      />
+    )
   },
   validateSearch: authSearchSchema,
 })

@@ -14,9 +14,6 @@ import {
   DialogTitle,
 } from "@/modules/shared/components/ui/dialog"
 
-import { LoadingScreen } from "../../components/common/loading-screen"
-import { usePageLoading } from "../../hooks/use-page-loading"
-
 const confirmationDialogOpenedSessionPrefix = "loops-confirmation-dialog-opened"
 const twentyFourHoursInMs = 24 * 60 * 60 * 1000
 
@@ -24,7 +21,6 @@ type ConfirmationShellProps = { target: ReactNode; user: User }
 
 export function ConfirmationShell({ target, user }: ConfirmationShellProps) {
   const { t } = useTranslation()
-  const isLoading = usePageLoading()
   const [hasReachedDeadline, setHasReachedDeadline] = useState(() =>
     hasReachedConfirmationDeadline(user),
   )
@@ -89,8 +85,6 @@ export function ConfirmationShell({ target, user }: ConfirmationShellProps) {
     if (!nextOpen && isLocked) return
     setIsDialogOpen(nextOpen)
   }
-
-  if (isLoading) return <LoadingScreen />
 
   return (
     <>

@@ -10,8 +10,6 @@ import { useExploreCategories } from "@/modules/content-management/features/cate
 import { CategoriesListSkeleton } from "@/modules/shared/components/common/categories-list-skeleton"
 import { CategoryContentSkeleton } from "@/modules/shared/components/common/category-content-skeleton"
 import { CategoryDetailsSkeleton } from "@/modules/shared/components/common/category-details-skeleton"
-import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
-import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
 
 import { CategoriesList } from "./components/categories-list"
 import { CategoryDetails } from "./components/category-details"
@@ -34,8 +32,6 @@ export function CategorySelectionShell({
   target,
   user,
 }: CategorySelectionShellProps) {
-  const isLoading = usePageLoading()
-
   const getSkeleton = useCallback(() => {
     if (!searchParams.category || searchParams.category === "all")
       return <CategoriesListSkeleton />
@@ -45,8 +41,6 @@ export function CategorySelectionShell({
       return <CategoryContentSkeleton />
     return <CategoriesListSkeleton />
   }, [searchParams])
-
-  if (isLoading) return <LoadingScreen />
 
   const noCurrentCategory = !user.currentCategory
   const isCategoryPage = searchParams.category !== undefined

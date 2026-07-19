@@ -3,9 +3,7 @@ import type { ReactNode } from "react"
 import { Suspense } from "react"
 
 import { ContentScreenSkeleton } from "@/modules/shared/components/common/content-screen-skeleton"
-import { LoadingScreen } from "@/modules/shared/components/common/loading-screen"
 import { useSelectedContent } from "@/modules/shared/contexts/selected-content-context"
-import { usePageLoading } from "@/modules/shared/hooks/use-page-loading"
 
 import { SelectedContentScreen } from "./components/selected-content-screen"
 import { SelectedContentWrapper } from "./components/selected-content-wrapper"
@@ -23,10 +21,7 @@ export function SelectedContentShell({
   searchParams,
   target,
 }: SelectedContentShellProps) {
-  const isLoading = usePageLoading()
   const { selectedItem } = useSelectedContent()
-
-  if (isLoading) return <LoadingScreen />
 
   const cachedItemMatchesRequest =
     selectedItem &&
