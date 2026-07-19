@@ -4,6 +4,7 @@ import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query
 
 import type { RouterContext } from "./router-context"
 
+import { LoadingScreen } from "./modules/shared/components/common/loading-screen"
 import { installBrowserTelemetry } from "./modules/shared/telemetry/app-insights-client"
 import {
   DefaultErrorComponent,
@@ -22,6 +23,9 @@ export function createRouter() {
     } satisfies RouterContext,
     defaultErrorComponent: DefaultErrorComponent,
     defaultNotFoundComponent: DefaultNotFoundComponent,
+    defaultPendingComponent: LoadingScreen,
+    defaultPendingMinMs: 300,
+    defaultPendingMs: 150,
     routeTree,
     scrollRestoration: true,
   })

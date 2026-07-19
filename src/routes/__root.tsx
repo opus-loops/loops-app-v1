@@ -12,6 +12,7 @@ import { useServerFn } from "@tanstack/react-start"
 import { useEffect } from "react"
 import { getI18n, useTranslation } from "react-i18next"
 
+import type { SupportedLanguage } from "@/modules/shared/shell/first_install/constants"
 import type { RouterContext } from "@/router-context"
 
 import { updatePreferencesFn } from "@/modules/profile/services/update-preferences-fn"
@@ -22,16 +23,36 @@ import { getPendingLanguageFn } from "@/modules/shared/shell/first_install/servi
 import { GlobalErrorProvider } from "@/modules/shared/shell/session/global-error-provider"
 import { SessionExpiredDialog } from "@/modules/shared/shell/session/session-expired-dialog"
 import { setUserTimezoneFn } from "@/modules/shared/shell/session/set-user-timezone-fn"
-import { instrumentBeforeLoad } from "@/server/telemetry/helpers"
+import {
+  instrumentBeforeLoad,
+  logServerError,
+} from "@/server/telemetry/helpers"
 
 import appCss from "../styles/app.css?url"
 
+type RootRouteContext = {
+  pendingLanguage?: SupportedLanguage | undefined
+}
+
 export const Route = createRootRouteWithContext<RouterContext>()({
   beforeLoad: async () =>
-    instrumentBeforeLoad("__root", async () => {
+    instrumentBeforeLoad("__root", async (): Promise<RootRouteContext> => {
       const i18n = getI18n()
+      const pendingLanguagePromise = getPendingLanguageFn().catch(() => {
+        logServerError("Pending language lookup failed", {
+          routeId: "__root",
+          source: "first_install",
+        })
+
+        return undefined
+      })
+
       const auth = await isAuthenticated()
-      const pendingLanguage = await getPendingLanguageFn()
+
+      let pendingLanguage: SupportedLanguage | undefined =
+        await pendingLanguagePromise
+
+      if (pendingLanguage) await i18n.changeLanguage(pendingLanguage)
 
       if (auth._tag === "Success" && auth.value.user !== null) {
         if (pendingLanguage) {
@@ -40,18 +61,16 @@ export const Route = createRootRouteWithContext<RouterContext>()({
           })
 
           if (result._tag === "Success") {
-            await i18n.changeLanguage(pendingLanguage)
             await deletePendingLanguageFn()
-            return
+            pendingLanguage = undefined
           }
+        } else {
+          const userLanguage = auth.value.user.language
+          await i18n.changeLanguage(userLanguage)
         }
-
-        const language = pendingLanguage
-          ? pendingLanguage
-          : auth.value.user.language
-
-        await i18n.changeLanguage(language)
       }
+
+      return { pendingLanguage }
     }),
   component: function RootComponent() {
     const { i18n } = useTranslation()
